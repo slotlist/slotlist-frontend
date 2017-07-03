@@ -9,6 +9,6 @@ export default new Router({
   mode: 'hash',
   routes: [
     { path: '/', component: Home },
-    { path: '/missions/:mission_id', component: Mission}
+    { path: '/missions/:missionId', component: Mission}
   ]
 })
