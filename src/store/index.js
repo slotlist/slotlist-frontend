@@ -4,17 +4,21 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const state = {
-  missionDetails: {}
+  missionDetails: {},
+  loggedIn: true
 }
 
 const getters = {
-  slots () {
+  slotlist() {
     return state.missionDetails.slots
+  },
+  loggedIn() {
+    return state.loggedIn
   }
 }
 
 const actions = {
-  getMissionDetails ({commit, state}, payload) {
+  getMissionDetails({ commit, state }, payload) {
     var mockData = {
       id: 12345,
       name: 'Mock Mission',
@@ -40,10 +44,10 @@ const actions = {
 }
 
 const mutations = {
-  setMissionDetails (state, payload) {
+  setMissionDetails(state, payload) {
     state.missionDetails = payload.content
   },
-  clearMissionDetails (state, payload) {
+  clearMissionDetails(state, payload) {
     state.missionDetails = {}
   }
 }

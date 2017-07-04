@@ -1,8 +1,9 @@
 <template>
   <div>
     <p>
-      HEY! It is the home page! :D
+      HEY! It is the mission list page! :D
     </p>
+    <router-link to="/missions/12345">Mission #12345</router-link>
   </div>
 </template>
 
@@ -11,7 +12,7 @@ import utils from '../utils'
 
 export default {
   created: function () {
-    utils.clearTitle()
+    utils.setTitle('Missions')
   }
 }
 </script>

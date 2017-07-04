@@ -1,18 +1,22 @@
 <template>
   <div>
-    <mission-slots></mission-slots>
+    <mission-slotlist></mission-slotlist>
   </div>
 </template>
 
 <script>
-import MissionSlots from 'components/MissionSlots.vue'
+import MissionSlotlist from 'components/MissionSlotlist.vue'
+import utils from '../utils'
 
 export default {
   components: {
-    MissionSlots
+    MissionSlotlist
   },
   beforeCreate: function () {
     this.$store.dispatch('getMissionDetails', this.$route.params.missionId)
+  },
+  created: function () {
+    utils.setTitle('Testmission')
   },
   beforeDestroy: function () {
     this.$store.commit('clearMissionDetails')

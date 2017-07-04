@@ -9,7 +9,7 @@
           <th>Comment</th>
         </tr>
       </thead>
-        <mission-slots-row v-for="slot in slots" :info="slot" :key="slot.id"></mission-slots-row>
+        <mission-slotlist-row v-for="slot in slotlist" :info="slot" :key="slot.id"></mission-slotlist-row>
       <tbody>
       </tbody>
     </table>
@@ -17,15 +17,15 @@
 </template>
 
 <script>
-import MissionSlotsRow from './MissionSlotsRow.vue'
+import MissionSlotlistRow from './MissionSlotlistRow.vue'
 
 export default {
   components: {
-    MissionSlotsRow
+    MissionSlotlistRow
   },
   computed: {
-    slots() {
-      return this.$store.getters.slots
+    slotlist() {
+      return this.$store.getters.slotlist
     }
   }
 }

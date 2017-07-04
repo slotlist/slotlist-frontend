@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>
-      HEY! It is the home page! :D
+      HEY! It is the api page! :D
     </p>
   </div>
 </template>
@@ -11,7 +11,7 @@ import utils from '../utils'
 
 export default {
   created: function () {
-    utils.clearTitle()
+    utils.setTitle('API')
   }
 }
 </script>
