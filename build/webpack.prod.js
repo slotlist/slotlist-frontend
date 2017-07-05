@@ -22,7 +22,10 @@ base.output.filename = '[name].[chunkhash:8].js'
 base.plugins.push(
   new ExtractTextPlugin('styles.[contenthash:8].css'),
   new webpack.DefinePlugin({
-    'process.env.NODE_ENV': JSON.stringify('production')
+    'process.env': {
+      NODE_ENV: JSON.stringify('production'),
+      BASE_API_URL: JSON.stringify('https://slotlist.info/api')
+    }
   }),
   new webpack.optimize.UglifyJsPlugin({
     sourceMap: true,

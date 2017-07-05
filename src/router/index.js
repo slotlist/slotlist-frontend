@@ -6,6 +6,7 @@ import MissionDetails from '../views/MissionDetails'
 import CommunityList from '../views/CommunityList'
 import CommunityDetails from '../views/CommunityDetails'
 import Account from '../views/account'
+import Login from '../views/login'
 import AdminPanel from '../views/AdminPanel'
 import About from '../views/About'
 import Privacy from '../views/Privacy'
@@ -22,6 +23,7 @@ export default new Router({
     { path: '/communities', component: CommunityList },
     { path: '/communities/:communityId', component: CommunityDetails },
     { path: '/account', component: Account },
+    { path: '/login', component: Login },
     { path: '/admin', component: AdminPanel },
     { path: '/about', component: About },
     { path: '/privacy', component: Privacy },

@@ -91,7 +91,7 @@ html {
 
 body {
   /* Margin bottom by footer height */
-  margin-bottom: 60px;
+  margin-bottom: 75px;
 }
 
 .footer {

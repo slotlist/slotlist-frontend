@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 const state = {
   missionDetails: {},
-  loggedIn: true
+  loggedIn: false
 }
 
 const getters = {
