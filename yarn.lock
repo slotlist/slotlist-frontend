@@ -5408,9 +5408,17 @@ vue-loader@^11.0.0:
     vue-style-loader "^2.0.0"
     vue-template-es2015-compiler "^1.2.2"
 
+vue-ls@^2.2.18:
+  version "2.2.18"
+  resolved "https://registry.yarnpkg.com/vue-ls/-/vue-ls-2.2.18.tgz#bb18e7f98e228f7db6d0dc168fa2a98e866ba82e"
+
 vue-router@^2.0.0:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-2.7.0.tgz#16d424493aa51c3c8cce8b7c7210ea4c3a89aff1"
+
+vue-simple-spinner@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/vue-simple-spinner/-/vue-simple-spinner-1.2.1.tgz#14da4648ecef9c9674845c39316ed7dac1086879"
 
 vue-style-loader@^2.0.0:
   version "2.0.5"

@@ -25,7 +25,7 @@
             <router-link class="nav-link" to="/account">Account</router-link>
           </li>
           <li class="nav-item" v-if="loggedIn">
-            <router-link class="nav-link text-danger" to="/logout">Logout</router-link>
+            <router-link class="nav-link text-danger" to="/" @click.native="logout">Logout</router-link>
           </li>
           <li class="nav-item" v-if="hasPermission('admin.panel')">
             <router-link class="nav-link text-warning" to="/admin">Admin Panel</router-link>
@@ -63,6 +63,8 @@
 </template>
 
 <script>
+import * as _ from 'lodash'
+
 import utils from '../utils'
 
 export default {
@@ -75,11 +77,23 @@ export default {
     hasPermission(permission) {
       console.log(`hasPermission check for ${permission}`)
       return true
+    },
+    logout() {
+      this.$store.dispatch('performLogout')
+        .then(() => {
+          this.$router.push({ path: '/', query: { logout: true } })
+        })
+    }
+  },
+  beforeCreate: function () {
+    const token = this.$ls.get('token')
+    if (!_.isNull(token)) {
+      this.$store.dispatch("setTokenFromLocalStorage", token)
     }
   },
   created: function () {
     utils.clearTitle()
-  }
+  },
 }
 </script>
 
