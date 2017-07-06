@@ -11,6 +11,7 @@ base.plugins.push(
   new webpack.DefinePlugin({
     'process.env': {
       NODE_ENV: JSON.stringify('development'),
+      BASE_URL: JSON.stringify('http://localhost:4000'),
       BASE_API_URL: JSON.stringify('http://localhost:3000')
     }
   }),

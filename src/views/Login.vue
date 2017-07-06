@@ -13,7 +13,7 @@
       <br> More information regarding the privacy policy of this site can be found
       <router-link to="/privacy">here</router-link>.
     </p>
-    <p class="lead text-center">
+    <p v-if="loginRedirectUrl" class="lead text-center">
       <a :href="loginRedirectUrl">
         <img src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_01.png" alt="Sign in through Steam" title="Yes, this login banner looks atrocious, unfortunately Valve forces us to use it >.< Anyways, click to sign in through Steam">
       </a>
@@ -22,16 +22,25 @@
 </template>
 
 <script>
+import * as _ from 'lodash'
+
 import utils from '../utils'
 
 export default {
   computed: {
     loginRedirectUrl() {
-      return process.env.BASE_API_URL + "/v1/auth/steam"
+      return this.$store.getters.loginRedirectUrl
+    }
+  },
+  beforeCreate: function () {
+    this.$store.dispatch('getLoginRedirectUrl')
+
+    if (_.has(this.$route.query, 'openid.claimed_id')) {
+      this.$store.dispatch('performLogin', { router: this.$router, url: process.env.BASE_URL + this.$route.fullPath })
     }
   },
   created: function () {
-    utils.setTitle('About')
+    utils.setTitle('Login')
   }
 }
 </script>
