@@ -13,7 +13,7 @@ export default {
     MissionSlotlist
   },
   beforeCreate: function () {
-    this.$store.dispatch('getMissionDetails', this.$route.params.missionId)
+    this.$store.dispatch('getMissionDetails', this.$route.params.missionUid)
   },
   created: function () {
     utils.setTitle('Testmission')

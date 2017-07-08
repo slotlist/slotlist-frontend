@@ -1,9 +1,9 @@
 import * as _ from 'lodash'
 
-import AuthApi from '../../api/auth'
+import MissionsApi from '../../api/missions'
 
 const state = {
-  missionDetails: {}
+  missions: []
 }
 
 const getters = {
@@ -13,8 +13,41 @@ const getters = {
 }
 
 const actions = {
+  getMissions({ commit }, payload) {
+    return MissionsApi.getMissions()
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Retrieving missions failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+        console.log(response)
+
+        return response.data.missions
+      })
+  },
   getMissionDetails({ commit, state }, payload) {
-    var mockData = {
+    return MissionsApi.getMissionDetails(payload)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Retrieving missions failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+        console.log(response)
+
+        return response.data.mission
+      })
+
+    /*var mockData = {
       id: 12345,
       name: 'Mock Mission',
       slots: [
@@ -34,7 +67,7 @@ const actions = {
     commit({
       type: 'setMissionDetails',
       content: mockData
-    })
+    })*/
   }
 }
 

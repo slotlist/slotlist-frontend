@@ -38,6 +38,7 @@
     "axios": "^0.16.2",
     "babel-runtime": "^6.18.0",
     "lodash": "^4.17.4",
+    "slug": "^0.9.1",
     "vue": "^2.2.0",
     "vue-ls": "^2.2.18",
     "vue-router": "^2.0.0",
@@ -47,6 +48,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",
+    "axios-mock-adapter": "^1.9.0",
     "babel-core": "^6.16.0",
     "babel-loader": "^6.2.4",
     "babel-preset-vue-app": "^1.1.1",

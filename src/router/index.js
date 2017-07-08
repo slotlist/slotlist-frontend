@@ -19,7 +19,7 @@ export default new Router({
   routes: [
     { path: '/', component: Home },
     { path: '/missions', component: MissionList },
-    { path: '/missions/:missionId', component: MissionDetails },
+    { path: '/missions/:missionUid', component: MissionDetails },
     { path: '/communities', component: CommunityList },
     { path: '/communities/:communityId', component: CommunityDetails },
     { path: '/account', component: Account },

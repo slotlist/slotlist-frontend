@@ -87,7 +87,7 @@ export default {
   },
   beforeCreate: function () {
     const token = this.$ls.get('token')
-    if (!_.isNull(token)) {
+    if (!_.isNil(token)) {
       this.$store.dispatch("setTokenFromLocalStorage", token)
     }
   },
