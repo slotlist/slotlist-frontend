@@ -17,17 +17,17 @@ Vue.use(Router)
 export default new Router({
   mode: 'hash',
   routes: [
-    { path: '/', component: Home },
-    { path: '/missions', component: MissionList },
-    { path: '/missions/:missionUid', component: MissionDetails },
-    { path: '/communities', component: CommunityList },
-    { path: '/communities/:communityId', component: CommunityDetails },
-    { path: '/account', component: Account },
-    { path: '/login', component: Login },
-    { path: '/admin', component: AdminPanel },
-    { path: '/about', component: About },
-    { path: '/privacy', component: Privacy },
-    { path: '/api', component: Api },
+    { path: '/', name: 'home', component: Home },
+    { path: '/missions', name: 'missionList', component: MissionList },
+    { path: '/missions/:slug', name: 'missionDetails', component: MissionDetails, props: true },
+    { path: '/communities', name: 'communityList', component: CommunityList },
+    { path: '/communities/:communityId', name: 'communityDetails', component: CommunityDetails },
+    { path: '/account', name: 'account', component: Account },
+    { path: '/login', name: 'login', component: Login },
+    { path: '/admin', name: 'name', component: AdminPanel },
+    { path: '/about', name: 'about', component: About },
+    { path: '/privacy', name: 'privacy', component: Privacy },
+    { path: '/api', name: 'api', component: Api },
   ],
   linkExactActiveClass: "active"
 })

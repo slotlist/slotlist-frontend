@@ -7,13 +7,13 @@ const state = {
 }
 
 const getters = {
-  slotlist() {
-    return state.missionDetails.slots
+  missionList() {
+    return state.missions
   }
 }
 
 const actions = {
-  getMissions({ commit }, payload) {
+  getMissions({ commit, state }, payload) {
     return MissionsApi.getMissions()
       .then(function (response) {
         if (response.status !== 200) {
@@ -25,9 +25,11 @@ const actions = {
           console.error(response)
           throw "Received empty response"
         }
-        console.log(response)
 
-        return response.data.missions
+        commit({
+          type: 'setMissions',
+          missions: response.data.missions
+        })
       })
   },
   getMissionDetails({ commit, state }, payload) {
@@ -42,7 +44,6 @@ const actions = {
           console.error(response)
           throw "Received empty response"
         }
-        console.log(response)
 
         return response.data.mission
       })
@@ -72,6 +73,12 @@ const actions = {
 }
 
 const mutations = {
+  setMissions(state, payload) {
+    state.missions = payload.missions
+  },
+  clearMissions(state, payload) {
+    state.missions = []
+  },
   setMissionDetails(state, payload) {
     state.missionDetails = payload.content
   },

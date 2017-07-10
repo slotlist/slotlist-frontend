@@ -9,6 +9,7 @@ import MissionSlotlist from 'components/MissionSlotlist.vue'
 import utils from '../utils'
 
 export default {
+  props: ['slug'],
   components: {
     MissionSlotlist
   },

@@ -1,65 +1,39 @@
 <template>
   <div>
-    <p>
-      HEY! It is the mission list page! :D
-    </p>
-    <router-link to="/missions/13d0a164-10dc-4cce-b693-ee297d8264cf">Amazing mission #1</router-link>
-    <br>
-    <router-link to="/missions/253238f8-90f4-4d77-a2cc-69b556c8cd32">Amazing mission #2</router-link>
-    <br>
-    <router-link to="/missions/6dea3718-23c6-4f84-873e-35c046d1ddfc">Amazing mission #3</router-link>
-    <br>
-    <router-link to="/missions/fb86d972-043c-4355-8bcd-fc626db25baa">Operation Nightzone</router-link>
-    <br>
-    <router-link to="/missions/b06f4bb7-1ef3-4452-b1e1-b8c72ac2cf02">Beep Boop</router-link>
-
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Initiator</th>
+          <th>Description</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <missionlist-row v-for="mission in missionList" :info="mission" :key="mission.uid"></missionlist-row>
+      <tbody>
+      </tbody>
+    </table>
   </div>
 </template>
 
 <script>
+import MissionlistRow from 'components/MissionlistRow.vue'
 import utils from '../utils'
 
 export default {
+  components: {
+    MissionlistRow
+  },
+  computed: {
+    missionList() {
+      return this.$store.getters.missionList
+    }
+  },
   beforeCreate: function () {
     this.$store.dispatch("getMissions")
   },
   created: function () {
     utils.setTitle('Missions')
-    /*{
-    "uid": "13d0a164-10dc-4cce-b693-ee297d8264cf",
-    "title": "Amazing mission #1",
-    "slug": "amazing-mission-1",
-    "initiator": "MorpheusXAUT",
-    "description": "It'll be good"
-  },
-  {
-    "uid": "253238f8-90f4-4d77-a2cc-69b556c8cd32",
-    "title": "Amazing mission #2",
-    "slug": "amazing-mission-2",
-    "initiator": "MorpheusXAUT",
-    "description": "It'll still be good"
-  },
-  {
-    "uid": "6dea3718-23c6-4f84-873e-35c046d1ddfc",
-    "title": "Amazing mission #3",
-    "slug": "amazing-mission-3",
-    "initiator": "MorpheusXAUT",
-    "description": "It'll probably still be good"
-  },
-  {
-    "uid": "fb86d972-043c-4355-8bcd-fc626db25baa",
-    "title": "Operation Nightzone",
-    "slug": "operation-nightzone",
-    "initiator": "XAUTMorpheus",
-    "description": "It might not be good"
-  },
-  {
-    "uid": "b06f4bb7-1ef3-4452-b1e1-b8c72ac2cf02",
-    "title": "Beep Boop",
-    "slug": "beep-boop",
-    "initiator": "AUTXMorpheus",
-    "description": "It'll most definitely not be good"
-  }*/
   }
 }
 </script>
