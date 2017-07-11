@@ -40,11 +40,6 @@ const actions = {
           throw "Received empty response"
         }
 
-        if (!response.data.success) {
-          console.error(response)
-          throw "Retrieving login redirect URL was unsuccessful"
-        }
-
         if (!_.isString(response.data.url) || _.isEmpty(response.data.url)) {
           console.error(response)
           throw "Missing login redirect URL"
@@ -71,11 +66,6 @@ const actions = {
         if (_.isEmpty(response.data)) {
           console.error(response)
           throw "Received empty response"
-        }
-
-        if (!response.data.success) {
-          console.error(response)
-          throw "Performing login was unsuccessful"
         }
 
         if (!_.isString(response.data.token) || _.isEmpty(response.data.token)) {

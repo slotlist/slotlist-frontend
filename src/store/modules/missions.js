@@ -3,12 +3,24 @@ import * as _ from 'lodash'
 import MissionsApi from '../../api/missions'
 
 const state = {
-  missions: []
+  missions: [],
+  missionsLoaded: false,
+  missionDetails: {},
+  missionDetailsLoaded: false,
 }
 
 const getters = {
-  missionList() {
+  missions() {
     return state.missions
+  },
+  missionsLoaded() {
+    return state.missionsLoaded
+  },
+  missionDetails() {
+    return state.missionDetails
+  },
+  missionDetailsLoaded() {
+    return state.missionDetailsLoaded
   }
 }
 
@@ -24,6 +36,11 @@ const actions = {
         if (_.isEmpty(response.data)) {
           console.error(response)
           throw "Received empty response"
+        }
+
+        if (_.isNil(response.data.missions) || !_.isArray(response.data.missions)) {
+          console.error(response)
+          throw "Received invalid missions"
         }
 
         commit({
@@ -45,45 +62,35 @@ const actions = {
           throw "Received empty response"
         }
 
-        return response.data.mission
-      })
-
-    /*var mockData = {
-      id: 12345,
-      name: 'Mock Mission',
-      slots: [
-        {
-          id: 1,
-          name: 'FBI Special Agent Derp',
-          comment: 'FUCK YEA!'
-        },
-        {
-          id: 2,
-          name: 'FBI Survellance Pilot',
-          comment: ''
+        if (_.isNil(response.data.mission) || !_.isObject(response.data.mission)) {
+          console.error(response)
+          throw "Received invalid mission"
         }
-      ]
-    }
 
-    commit({
-      type: 'setMissionDetails',
-      content: mockData
-    })*/
+        commit({
+          type: 'setMissionDetails',
+          mission: response.data.mission
+        })
+      })
   }
 }
 
 const mutations = {
   setMissions(state, payload) {
     state.missions = payload.missions
+    state.missionsLoaded = true
   },
   clearMissions(state, payload) {
     state.missions = []
+    state.missionsLoaded = false
   },
   setMissionDetails(state, payload) {
-    state.missionDetails = payload.content
+    state.missionDetails = payload.mission
+    state.missionDetailsLoaded = true
   },
   clearMissionDetails(state, payload) {
     state.missionDetails = {}
+    state.missionDetailsLoaded = false
   }
 }
 
