@@ -4,39 +4,39 @@
     "title": "Amazing mission #1",
     "slug": "amazing-mission-1",
     "initiator": "MorpheusXAUT",
-    "description": "It'll be good",
-    "shortDescription": "Hello"
+    "description": "<h1>Hintergrund</h1><p><br></p><p>Wir sind toll, die anderen nicht.</p><p><br></p><h1>Feindlage</h1><p><br></p><p>Viel, aber schnell weg.</p><p><br></p><h1>Sonstige Hinweise</h1><p><br></p><h2>Medic-System</h2><p><br></p><p>Ist an.</p>",
+    "shortDescription": "It'll be good"
   },
   {
     "uid": "253238f8-90f4-4d77-a2cc-69b556c8cd32",
     "title": "Amazing mission #2",
     "slug": "amazing-mission-2",
     "initiator": "MorpheusXAUT",
-    "description": "It'll still be good",
-    "shortDescription": "Hello 2"
+    "description": "<h1>Hintergrund</h1><p><br></p><p>Wir sind toll, die anderen nicht.</p><p><br></p><h1>Feindlage</h1><p><br></p><p>Viel, aber schnell weg.</p><p><br></p><h1>Sonstige Hinweise</h1><p><br></p><h2>Medic-System</h2><p><br></p><p>Ist an.</p>",
+    "shortDescription": "It'll still be good"
   },
   {
     "uid": "6dea3718-23c6-4f84-873e-35c046d1ddfc",
     "title": "Amazing mission #3",
     "slug": "amazing-mission-3",
     "initiator": "MorpheusXAUT",
-    "description": "It'll probably still be good",
-    "shortDescription": "Hello 3"
+    "description": "<h1>Hintergrund</h1><p><br></p><p>Wir sind toll, die anderen nicht.</p><p><br></p><h1>Feindlage</h1><p><br></p><p>Viel, aber schnell weg.</p><p><br></p><h1>Sonstige Hinweise</h1><p><br></p><h2>Medic-System</h2><p><br></p><p>Ist an.</p>",
+    "shortDescription": "It'll probably still be good"
   },
   {
     "uid": "fb86d972-043c-4355-8bcd-fc626db25baa",
     "title": "Operation Nightzone",
     "slug": "operation-nightzone",
     "initiator": "XAUTMorpheus",
-    "description": "It might not be good",
-    "shortDescription": "Hello 4"
+    "description": "<h1>Hintergrund</h1><p><br></p><p>Wir sind toll, die anderen nicht.</p><p><br></p><h1>Feindlage</h1><p><br></p><p>Viel, aber schnell weg.</p><p><br></p><h1>Sonstige Hinweise</h1><p><br></p><h2>Medic-System</h2><p><br></p><p>Ist an.</p>",
+    "shortDescription": "It might not be good"
   },
   {
     "uid": "b06f4bb7-1ef3-4452-b1e1-b8c72ac2cf02",
     "title": "Beep Boop",
     "slug": "beep-boop",
     "initiator": "AUTXMorpheus",
-    "description": "It'll most definitely not be good",
-    "shortDescription": "Hello 5"
+    "description": "<h1>Hintergrund</h1><p><br></p><p>Wir sind toll, die anderen nicht.</p><p><br></p><h1>Feindlage</h1><p><br></p><p>Viel, aber schnell weg.</p><p><br></p><h1>Sonstige Hinweise</h1><p><br></p><h2>Medic-System</h2><p><br></p><p>Ist an.</p>",
+    "shortDescription": "It'll most definitely not be good"
   }
 ]

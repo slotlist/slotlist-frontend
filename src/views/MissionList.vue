@@ -1,32 +1,28 @@
 <template>
   <div>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Initiator</th>
-          <th>Description</th>
-          <th>Details</th>
-        </tr>
-      </thead>
-      <missionlist-row v-for="mission in missionList" :info="mission" :key="mission.uid"></missionlist-row>
-      <tbody>
-      </tbody>
-    </table>
+    <div v-show="loaded">
+      <missionlist-table></missionlist-table>
+      <div class="text-center">
+        <button type="button" class="btn btn-success">Create mission</button>
+      </div>
+    </div>
+    <div v-show="!loaded">
+      <loading-overlay message="Loading Missions..."></loading-overlay>
+    </div>
   </div>
 </template>
 
 <script>
-import MissionlistRow from 'components/MissionlistRow.vue'
+import MissionlistTable from '../components/MissionlistTable.vue'
 import utils from '../utils'
 
 export default {
   components: {
-    MissionlistRow
+    MissionlistTable
   },
   computed: {
-    missionList() {
-      return this.$store.getters.missionList
+    loaded() {
+      return this.$store.getters.missionsLoaded
     }
   },
   beforeCreate: function () {

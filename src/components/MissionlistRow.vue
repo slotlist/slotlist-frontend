@@ -1,10 +1,10 @@
 <template>
   <tr>
-    <td>{{ info.title }}</td>
-    <td>{{ info.initiator }}</td>
-    <td>{{ info.shortDescription }}</td>
-    <td>
-      <router-link :to="{name: 'missionDetails', params: {slug: info.slug}}">Mission Details</router-link>
+    <td>{{ mission.title }}</td>
+    <td>{{ mission.shortDescription }}</td>
+    <td>{{ mission.initiator }}</td>
+    <td class="text-center">
+      <router-link :to="{name: 'missionDetails', params: {slug: mission.slug}}">Details</router-link>
     </td>
   </tr>
 </template>
@@ -12,7 +12,7 @@
 <script>
 export default {
   props: [
-    'info'
+    'mission'
   ]
 }
 </script>
