@@ -4,7 +4,7 @@
     <td>{{ info.initiator }}</td>
     <td>{{ info.shortDescription }}</td>
     <td>
-      <router-link :to="{name: 'missionList', params: {slug: 'asd'}}">Mission Details</router-link>
+      <router-link :to="{name: 'missionDetails', params: {slug: info.slug}}">Mission Details</router-link>
     </td>
   </tr>
 </template>
