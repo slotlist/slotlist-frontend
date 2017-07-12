@@ -21,6 +21,13 @@ const getters = {
   },
   missionDetailsLoaded() {
     return state.missionDetailsLoaded
+  },
+  missionSlotlist() {
+    if (!_.isArray(state.missionDetails.slots)) {
+      return []
+    }
+
+    return state.missionDetails.slots
   }
 }
 

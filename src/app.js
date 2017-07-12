@@ -7,6 +7,7 @@ import store from './store'
 import VueLocalStorage from 'vue-ls'
 import VueQuillEditor from 'vue-quill-editor'
 import VueSimpleSpinner from 'vue-simple-spinner'
+import VueDatePicker from 'vuejs-datepicker'
 import LoadingOverlay from './components/LoadingOverlay.vue'
 
 // Blank-require mock adapter so it gets loaded in dev environment
@@ -23,6 +24,7 @@ Vue.use(VueLocalStorage, {
 Vue.use(VueQuillEditor)
 
 Vue.component('spinner', VueSimpleSpinner)
+Vue.component('datepicker', VueDatePicker)
 Vue.component('loading-overlay', LoadingOverlay)
 
 const app = new Vue({

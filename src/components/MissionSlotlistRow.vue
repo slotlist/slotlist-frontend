@@ -1,8 +1,8 @@
 <template>
   <tr>
-    <td>{{ info.id }}</td>
-    <td>{{ info.name }}</td>
-    <td></td>
+    <td>{{ info.number }}</td>
+    <td>{{ info.role }}</td>
+    <td>{{ info.player }}</td>
     <td>{{ info.comment }}</td>
   </tr>
 </template>

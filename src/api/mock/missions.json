@@ -5,7 +5,23 @@
     "slug": "amazing-mission-1",
     "initiator": "MorpheusXAUT",
     "description": "<h1>Hintergrund</h1><p><br></p><p>Wir sind toll, die anderen nicht.</p><p><br></p><h1>Feindlage</h1><p><br></p><p>Viel, aber schnell weg.</p><p><br></p><h1>Sonstige Hinweise</h1><p><br></p><h2>Medic-System</h2><p><br></p><p>Ist an.</p>",
-    "shortDescription": "It'll be good"
+    "shortDescription": "It'll be good",
+    "missionDate": "2017-07-12",
+    "slottingTime": "19:30",
+    "startTime": "20:00",
+    "endTime": "23:00",
+    "briefingTime": "19:00",
+    "repositoryURL": "<a href=\"http://localhost:1234\">ArmA3Sync",
+    "techSupport": "Yes",
+    "rules": "Don't be a douchebag!",
+    "slots": [
+      {
+        "number": 1,
+        "role": "Best guy ever",
+        "player": "MorpheusXAUT",
+        "comment": "Amazing."
+      }
+    ]
   },
   {
     "uid": "253238f8-90f4-4d77-a2cc-69b556c8cd32",
@@ -13,7 +29,15 @@
     "slug": "amazing-mission-2",
     "initiator": "MorpheusXAUT",
     "description": "<h1>Hintergrund</h1><p><br></p><p>Wir sind toll, die anderen nicht.</p><p><br></p><h1>Feindlage</h1><p><br></p><p>Viel, aber schnell weg.</p><p><br></p><h1>Sonstige Hinweise</h1><p><br></p><h2>Medic-System</h2><p><br></p><p>Ist an.</p>",
-    "shortDescription": "It'll still be good"
+    "shortDescription": "It'll still be good",
+    "missionDate": "2017-07-12",
+    "slottingTime": "19:30",
+    "startTime": "20:00",
+    "endTime": "23:00",
+    "briefingTime": "19:00",
+    "repositoryURL": "<a href=\"http://localhost:1234\">ArmA3Sync",
+    "techSupport": "Yes",
+    "rules": "Don't be a douchebag!"
   },
   {
     "uid": "6dea3718-23c6-4f84-873e-35c046d1ddfc",
@@ -21,7 +45,15 @@
     "slug": "amazing-mission-3",
     "initiator": "MorpheusXAUT",
     "description": "<h1>Hintergrund</h1><p><br></p><p>Wir sind toll, die anderen nicht.</p><p><br></p><h1>Feindlage</h1><p><br></p><p>Viel, aber schnell weg.</p><p><br></p><h1>Sonstige Hinweise</h1><p><br></p><h2>Medic-System</h2><p><br></p><p>Ist an.</p>",
-    "shortDescription": "It'll probably still be good"
+    "shortDescription": "It'll probably still be good",
+    "missionDate": "2017-07-12",
+    "slottingTime": "19:30",
+    "startTime": "20:00",
+    "endTime": "23:00",
+    "briefingTime": "19:00",
+    "repositoryURL": "<a href=\"http://localhost:1234\">ArmA3Sync",
+    "techSupport": "Yes",
+    "rules": "Don't be a douchebag!"
   },
   {
     "uid": "fb86d972-043c-4355-8bcd-fc626db25baa",
@@ -29,7 +61,15 @@
     "slug": "operation-nightzone",
     "initiator": "XAUTMorpheus",
     "description": "<h1>Hintergrund</h1><p><br></p><p>Wir sind toll, die anderen nicht.</p><p><br></p><h1>Feindlage</h1><p><br></p><p>Viel, aber schnell weg.</p><p><br></p><h1>Sonstige Hinweise</h1><p><br></p><h2>Medic-System</h2><p><br></p><p>Ist an.</p>",
-    "shortDescription": "It might not be good"
+    "shortDescription": "It might not be good",
+    "missionDate": "2017-07-12",
+    "slottingTime": "19:30",
+    "startTime": "20:00",
+    "endTime": "23:00",
+    "briefingTime": "19:00",
+    "repositoryURL": "n/a",
+    "techSupport": "Yes",
+    "rules": "Don't be a douchebag!"
   },
   {
     "uid": "b06f4bb7-1ef3-4452-b1e1-b8c72ac2cf02",
@@ -37,6 +77,14 @@
     "slug": "beep-boop",
     "initiator": "AUTXMorpheus",
     "description": "<h1>Hintergrund</h1><p><br></p><p>Wir sind toll, die anderen nicht.</p><p><br></p><h1>Feindlage</h1><p><br></p><p>Viel, aber schnell weg.</p><p><br></p><h1>Sonstige Hinweise</h1><p><br></p><h2>Medic-System</h2><p><br></p><p>Ist an.</p>",
-    "shortDescription": "It'll most definitely not be good"
+    "shortDescription": "It'll most definitely not be good",
+    "missionDate": "2017-07-12",
+    "slottingTime": "19:30",
+    "startTime": "20:00",
+    "endTime": "23:00",
+    "briefingTime": "19:00",
+    "repositoryURL": "<a href=\"http://localhost:1234\">ArmA3Sync",
+    "techSupport": "Yes",
+    "rules": "Don't be a douchebag!"
   }
 ]

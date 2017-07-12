@@ -21,7 +21,7 @@ if (process.env.NODE_ENV === 'development') {
 
   mock.onGet(/\/v1\/missions\/([\w-]+)/).reply((config) => {
     const missionSlug = /\/v1\/missions\/([\w-]+)/.exec(config.url)[1]
-    const mission = _.find(mockMissions, 'slug', missionSlug)
+    const mission = _.find(mockMissions, ['slug', missionSlug])
     if (_.isNil(mission)) {
       return [404, {}]
     }
