@@ -43,8 +43,15 @@
         <div class="row">
           <div class="col">
             <span class="text-muted small float-left">
-              <router-link to="/">slotlist.info</router-link> &copy; 2017
-              <a href="https://github.com/MorpheusXAUT">MorpheusXAUT</a>.
+              Copyright &copy; {{ year }}
+              <router-link to="/">slotlist.info</router-link>. All rights reserved.
+            </span>
+          </div>
+          <div class="col text-center">
+            <span class="text-muted small">
+              Made with
+              <i class="fa fa-heart" aria-hidden="true"></i> by
+              <a href="https://github.com/MorpheusXAUT">MorpheusXAUT</a>
             </span>
           </div>
           <div class="col">
@@ -71,6 +78,9 @@ export default {
   computed: {
     loggedIn() {
       return this.$store.getters.loggedIn
+    },
+    year() {
+      return new Date().getFullYear()
     }
   },
   methods: {
