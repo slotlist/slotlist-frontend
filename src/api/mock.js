@@ -4,7 +4,7 @@ import * as _ from 'lodash'
 
 const mockMissions = require('./mock/missions')
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.MOCK_AXIOS_RESPONSES) {
   const mock = new MockAdapter(axios, { delayResponse: 500 })
 
   mock.onGet('/v1/auth/steam').reply(200, {

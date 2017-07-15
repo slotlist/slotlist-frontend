@@ -3,7 +3,8 @@
   "main": "src/index.js",
   "scripts": {
     "build": "webpack --config build/webpack.prod.js",
-    "dev": "node build/server.js",
+    "dev": "cross-env MOCK_AXIOS_RESPONSES=false node build/server.js",
+    "dev:mock": "cross-env MOCK_AXIOS_RESPONSES=true node build/server.js",
     "lint": "xo **/src/**/*.{vue,js} !node_modules/**"
   },
   "license": "MIT",

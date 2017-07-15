@@ -12,7 +12,8 @@ base.plugins.push(
     'process.env': {
       NODE_ENV: JSON.stringify('development'),
       BASE_URL: JSON.stringify('http://localhost:4000'),
-      BASE_API_URL: JSON.stringify('http://localhost:3000')
+      BASE_API_URL: JSON.stringify('http://localhost:3000'),
+      MOCK_AXIOS_RESPONSES: JSON.stringify(process.env.MOCK_AXIOS_RESPONSES === 'true')
     }
   }),
   new webpack.HotModuleReplacementPlugin(),
