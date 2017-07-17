@@ -114,7 +114,7 @@ const mutations = {
     Vue.ls.set('auth-token', payload.token)
     Vue.ls.set('auth-decodedToken', payload.decodedToken)
 
-    Vue.acl.permissions = payload.decodedToken.permissions
+    Vue.acl.parsePermissions(payload.decodedToken.permissions)
 
     state.token = payload.token
     state.decodedToken = payload.decodedToken
@@ -124,7 +124,7 @@ const mutations = {
   logout(state) {
     Vue.ls.clear()
 
-    Vue.acl.permissions = []
+    Vue.acl.clearPermissions()
 
     state.token = null
     state.decodedToken = null
