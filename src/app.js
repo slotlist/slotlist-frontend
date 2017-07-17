@@ -4,6 +4,7 @@ import { sync } from 'vuex-router-sync'
 import App from './components/App'
 import router from './router'
 import store from './store'
+import VueACL from './plugins/acl'
 import VueLocalStorage from 'vue-ls'
 import VueQuillEditor from 'vue-quill-editor'
 import VueSimpleSpinner from 'vue-simple-spinner'
@@ -16,6 +17,10 @@ require('./api/mock')
 axios.defaults.baseURL = process.env.BASE_API_URL
 
 sync(store, router)
+
+Vue.use(VueACL, {
+  router
+})
 
 Vue.use(VueLocalStorage, {
   namespace: 'sl__'

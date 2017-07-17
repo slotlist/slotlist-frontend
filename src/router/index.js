@@ -24,7 +24,7 @@ export default new Router({
     { path: '/communities/:communityId', name: 'communityDetails', component: CommunityDetails },
     { path: '/account', name: 'account', component: Account },
     { path: '/login', name: 'login', component: Login },
-    { path: '/admin', name: 'name', component: AdminPanel },
+    { path: '/admin', name: 'admin', component: AdminPanel, meta: { permissions: 'admin.panel' } },
     { path: '/about', name: 'about', component: About },
     { path: '/privacy', name: 'privacy', component: Privacy },
     { path: '/api', name: 'api', component: Api },

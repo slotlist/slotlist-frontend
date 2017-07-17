@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import * as _ from 'lodash'
+import jwtDecode from 'jwt-decode'
 
 import AuthApi from '../../api/auth'
 
@@ -7,7 +8,8 @@ const state = {
   loggedIn: false,
   loginRedirectUrl: null,
   performingLogin: false,
-  token: null
+  token: null,
+  decodedToken: null
 }
 
 const getters = {
@@ -73,9 +75,12 @@ const actions = {
           throw "Missing JWT"
         }
 
+        const decodedToken = jwtDecode(response.data.token)
+
         commit({
           type: "setToken",
-          token: response.data.token
+          token: response.data.token,
+          decodedToken: decodedToken
         })
       })
   },
@@ -85,9 +90,15 @@ const actions = {
     })
   },
   setTokenFromLocalStorage({ commit }, payload) {
+    let decodedToken = Vue.ls.get('auth-decodedToken')
+    if (_.isNil(decodedToken)) {
+      decodedToken = jwtDecode(payload.token)
+    }
+
     commit({
       type: "setToken",
-      token: payload.token
+      token: payload.token,
+      decodedToken: decodedToken
     })
   }
 }
@@ -100,16 +111,23 @@ const mutations = {
     state.performingLogin = true
   },
   setToken(state, payload) {
-    Vue.ls.set("token", payload.token)
+    Vue.ls.set('auth-token', payload.token)
+    Vue.ls.set('auth-decodedToken', payload.decodedToken)
+
+    Vue.acl.permissions = payload.decodedToken.permissions
 
     state.token = payload.token
+    state.decodedToken = payload.decodedToken
     state.loggedIn = true
     state.performingLogin = false
   },
   logout(state) {
     Vue.ls.clear()
 
+    Vue.acl.permissions = []
+
     state.token = null
+    state.decodedToken = null
     state.loggedIn = false
     state.performingLogin = false
   }

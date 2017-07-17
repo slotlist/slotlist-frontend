@@ -27,7 +27,7 @@
           <li class="nav-item" v-if="loggedIn">
             <router-link class="nav-link text-danger" to="/" @click.native="logout">Logout</router-link>
           </li>
-          <li class="nav-item" v-if="hasPermission('admin.panel')">
+          <li class="nav-item" v-if="$acl.can('admin.panel')">
             <router-link class="nav-link text-warning" to="/admin">Admin Panel</router-link>
           </li>
         </ul>
@@ -81,13 +81,9 @@ export default {
     },
     year() {
       return new Date().getFullYear()
-    }
+    },
   },
   methods: {
-    hasPermission(permission) {
-      console.log(`hasPermission check for ${permission}`)
-      return true
-    },
     logout() {
       this.$store.dispatch('performLogout')
         .then(() => {
@@ -96,7 +92,7 @@ export default {
     }
   },
   beforeCreate: function () {
-    const token = this.$ls.get('token')
+    const token = this.$ls.get('auth-token')
     if (!_.isNil(token)) {
       this.$store.dispatch("setTokenFromLocalStorage", token)
     }
@@ -114,7 +110,7 @@ html {
 }
 
 body {
-  /* Margin bottom by footer height */
+  /* Margin bottom by footer height plus extra spacing */
   margin-bottom: 75px;
 }
 
@@ -122,10 +118,9 @@ body {
   position: absolute;
   bottom: 0;
   width: 100%;
-  /* Set the fixed height of the footer here */
+  /* Set fixed height of footer */
   height: 60px;
   line-height: 60px;
-  /* Vertically center the text there */
   background-color: #f5f5f5;
 }
 
