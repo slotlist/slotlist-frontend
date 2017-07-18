@@ -12,7 +12,7 @@ if (process.env.MOCK_AXIOS_RESPONSES) {
   })
 
   mock.onPost('/v1/auth/steam').reply(200, {
-    token: 'TOTALLYLEGITJWT'
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZTY5ODg0Ny1kZDFjLTRkYjUtOGE5Mi1lZWFhZDc0OGI3YTYiLCJ1c2VyIjp7InVpZCI6IjVlNjk4ODQ3LWRkMWMtNGRiNS04YTkyLWVlYWFkNzQ4YjdhNiIsIm5pY2tuYW1lIjoiVGVzdHVzZXIifSwicGVybWlzc2lvbnMiOlsiYWRtaW4uKiIsIm1pc3Npb24uKiIsImNvbW11bml0eS4qIl19.WGTcsUh0jPFGHELbKNZ54Kotd3Vb6fMlCBSwz7J3dqQ'
   })
 
   mock.onGet('/v1/missions').reply(200, {

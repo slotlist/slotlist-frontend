@@ -3,10 +3,8 @@ import * as _ from 'lodash'
 class ACL {
   can(permission, strict) {
     if (_.keys(this.permissions).length <= 0) {
-      console.log("empty")
       return false
     } else if (_.has(this.permissions, '*')) {
-      console.log("wildcard")
       return true
     }
 
@@ -15,64 +13,11 @@ class ACL {
       perms = [permission]
     }
 
-    console.log("perms", perms)
-
-    let foundPermissions =
-      _.each(perms, (perm) => {
-        if (this.hasPermission(this.permissions, perm)) {
-          foundPermissions.push(perm)
-        }
-      })
-
-    console.log("foundPermissions", foundPermissions)
+    const foundPermissions = _.filter(perms, (perm) => {
+      return this._hasPermission(this.permissions, perm)
+    })
 
     return strict ? foundPermissions.length === perms.length : foundPermissions.length > 0
-  }
-
-  hasPermission(perms, perm) {
-    console.log("checking against", perms, perm)
-    if (_.has(perms, perm)) {
-      console.log("found", perm)
-      return true
-    } else {
-      console.log("not found", perm)
-      let permParts = perm
-      if (_.isString(perm)) {
-        permParts = perm.toLowerCase().split('.')
-      }
-
-      let previous = perms
-      let part = permParts.shift()
-      while (!_.isNil(part)) {
-        console.log("checking direct", part, previous[part])
-        let next = _.get(previous, part)
-        if (_.isNil(next)) {
-          console.log("checking wildcard", '*', previous['*'])
-          next = _.get(previous, '*')
-        }
-        if (_.isNil(next)) {
-          console.log("not found at all", part, previous)
-        } else {
-          console.log("found sth", part, next, permParts.length)
-          if (permParts.length <= 0) {
-            console.log("reached end", next, part)
-            if (next === true) {
-              console.log("found at end")
-              return true
-            }
-
-            return false
-          }
-
-          return this.hasPermission(next, permParts)
-        }
-
-        previous = next
-        part = permParts.shift()
-      }
-    }
-
-    return false
   }
 
   get permissions() {
@@ -93,7 +38,7 @@ class ACL {
       let part = permissionParts.shift()
       while (!_.isNil(part)) {
         if (_.isNil(previous[part])) {
-          previous[part] = permissionParts.length <= 0 ? true : {}
+          previous[part] = {}
         }
 
         previous = previous[part]
@@ -122,6 +67,33 @@ class ACL {
 
       return next()
     })
+  }
+
+  _hasPermission(perms, perm) {
+    if (_.isNil(perms) || !_.isObject(perms) || _.keys(perms).length <= 0) {
+      return false
+    }
+
+    if (_.has(perms, perm)) {
+      return true
+    }
+
+    const found = _.some(perms, (next, current) => {
+      const permParts = _.isString(perm) ? perm.toLowerCase().split('.') : perm
+
+      const permPart = permParts.shift()
+      if (current === '*' || current === permPart) {
+        if (permParts.length <= 0) {
+          return true
+        }
+
+        return this._hasPermission(next, _.clone(permParts))
+      }
+
+      return false
+    })
+
+    return found
   }
 }
 

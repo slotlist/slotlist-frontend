@@ -27,7 +27,7 @@
           <li class="nav-item" v-if="loggedIn">
             <router-link class="nav-link text-danger" to="/" @click.native="logout">Logout</router-link>
           </li>
-          <li class="nav-item" v-if="$acl.can('admin.panel.read')">
+          <li class="nav-item" v-if="$acl.can(['admin.panel'], true)">
             <router-link class="nav-link text-warning" to="/admin">Admin Panel</router-link>
           </li>
         </ul>
