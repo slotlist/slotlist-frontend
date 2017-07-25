@@ -4,6 +4,8 @@ import { sync } from 'vuex-router-sync'
 import App from './components/App'
 import router from './router'
 import store from './store'
+import Raven from 'raven-js'
+import RavenVue from 'raven-js/plugins/vue'
 import VueACL from './plugins/acl'
 import VueLocalStorage from 'vue-ls'
 import VueQuillEditor from 'vue-quill-editor'
@@ -15,6 +17,11 @@ import LoadingOverlay from './components/LoadingOverlay.vue'
 require('./api/mock')
 
 axios.defaults.baseURL = process.env.BASE_API_URL
+
+Raven
+  .config('https://bbf174ada43747c2aeda284b815ab2a2@sentry.io/195334')
+  .addPlugin(RavenVue, Vue)
+  .install()
 
 sync(store, router)
 
