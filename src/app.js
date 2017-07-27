@@ -13,15 +13,18 @@ import VueSimpleSpinner from 'vue-simple-spinner'
 import VueDatePicker from 'vuejs-datepicker'
 import LoadingOverlay from './components/LoadingOverlay.vue'
 
+// Black-require API/axios utils
+require('./api/util')
+
 // Blank-require mock adapter so it gets loaded in dev environment
 require('./api/mock')
 
-axios.defaults.baseURL = process.env.BASE_API_URL
-
-Raven
-  .config('https://bbf174ada43747c2aeda284b815ab2a2@sentry.io/195334')
-  .addPlugin(RavenVue, Vue)
-  .install()
+if (process.env.SENTRY_DSN) {
+  Raven
+    .config(process.env.SENTRY_DSN)
+    .addPlugin(RavenVue, Vue)
+    .install()
+}
 
 sync(store, router)
 

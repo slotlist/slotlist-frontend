@@ -6,6 +6,9 @@ export const v1 = {
   },
   performLogin(url) {
     return axios.post('/v1/auth/steam', { url })
+  },
+  refreshToken() {
+    return axios.post('/v1/auth/refresh')
   }
 }
 

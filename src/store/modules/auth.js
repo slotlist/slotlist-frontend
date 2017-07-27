@@ -1,15 +1,19 @@
 import Vue from 'vue'
 import * as _ from 'lodash'
 import jwtDecode from 'jwt-decode'
+import axios from 'axios'
+import router from '../../router'
 
 import AuthApi from '../../api/auth'
 
 const state = {
   loggedIn: false,
   loginRedirectUrl: null,
+  redirect: null,
   performingLogin: false,
   token: null,
-  decodedToken: null
+  decodedToken: null,
+  refreshingToken: false
 }
 
 const getters = {
@@ -21,6 +25,12 @@ const getters = {
   },
   performingLogin() {
     return state.performingLogin
+  },
+  decodedToken() {
+    return state.decodedToken
+  },
+  refreshingToken() {
+    return state.refreshingToken
   }
 }
 
@@ -53,7 +63,7 @@ const actions = {
         })
       })
   },
-  performLogin({ state, commit }, payload) {
+  performLogin({ commit }, payload) {
     commit({
       type: "startPerformingLogin"
     })
@@ -62,7 +72,7 @@ const actions = {
       .then(function (response) {
         if (response.status !== 200) {
           console.error(response)
-          throw "Performing failed"
+          throw "Performing login failed"
         }
 
         if (_.isEmpty(response.data)) {
@@ -100,6 +110,43 @@ const actions = {
       token: payload.token,
       decodedToken: decodedToken
     })
+  },
+  refreshToken({ commit }) {
+    commit({
+      type: "startRefreshingToken"
+    })
+
+    return AuthApi.refreshToken()
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Refreshing token failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (!_.isString(response.data.token) || _.isEmpty(response.data.token)) {
+          console.error(response)
+          throw "Missing JWT"
+        }
+
+        const decodedToken = jwtDecode(response.data.token)
+
+        commit({
+          type: "setToken",
+          token: response.data.token,
+          decodedToken: decodedToken
+        })
+      })
+  },
+  setRedirect({ commit }, payload) {
+    commit({
+      type: "setRedirect",
+      redirect: payload
+    })
   }
 }
 
@@ -110,16 +157,28 @@ const mutations = {
   startPerformingLogin(state) {
     state.performingLogin = true
   },
+  startRefreshingToken(state) {
+    state.refreshingToken = true
+  },
   setToken(state, payload) {
     Vue.ls.set('auth-token', payload.token)
     Vue.ls.set('auth-decodedToken', payload.decodedToken)
 
     Vue.acl.parsePermissions(payload.decodedToken.permissions)
 
+    axios.defaults.headers.common['Authorization'] = `JWT ${payload.token}`
+
     state.token = payload.token
     state.decodedToken = payload.decodedToken
     state.loggedIn = true
     state.performingLogin = false
+    state.refreshingToken = false
+
+    if (!_.isNil(state.redirect)) {
+      const redirect = state.redirect
+      state.redirect = null
+      router.push(redirect)
+    }
   },
   logout(state) {
     Vue.ls.clear()
@@ -130,6 +189,10 @@ const mutations = {
     state.decodedToken = null
     state.loggedIn = false
     state.performingLogin = false
+    state.refreshingToken = false
+  },
+  setRedirect(state, payload) {
+    state.redirect = payload.redirect
   }
 }
 

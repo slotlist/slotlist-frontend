@@ -48,9 +48,6 @@ export default {
     if (_.has(this.$route.query, 'openid.claimed_id')) {
       const url = process.env.BASE_URL + this.$route.fullPath
       this.$store.dispatch('performLogin', url)
-        .then(() => {
-          this.$router.push({ path: '/' })
-        })
     }
   },
   created: function () {
