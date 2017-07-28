@@ -5,6 +5,8 @@ import MissionsApi from '../../api/missions'
 const state = {
   missions: [],
   missionsLoaded: false,
+  missionsLimit: 25,
+  missionsOffset: 0,
   missionDetails: {},
   missionDetailsLoaded: false,
 }
@@ -32,8 +34,8 @@ const getters = {
 }
 
 const actions = {
-  getMissions({ commit, state }, payload) {
-    return MissionsApi.getMissions()
+  getMissions({ commit, state }) {
+    return MissionsApi.getMissions(state.missionsLimit, state.missionsOffset)
       .then(function (response) {
         if (response.status !== 200) {
           console.error(response)
@@ -52,11 +54,12 @@ const actions = {
 
         commit({
           type: 'setMissions',
-          missions: response.data.missions
+          missions: response.data.missions,
+          offset: response.data.moreAvailable === true ? (response.data.offset + response.data.count) : 0
         })
       })
   },
-  getMissionDetails({ commit, state }, payload) {
+  getMissionDetails({ commit }, payload) {
     return MissionsApi.getMissionDetails(payload)
       .then(function (response) {
         if (response.status !== 200) {
@@ -86,8 +89,9 @@ const mutations = {
   setMissions(state, payload) {
     state.missions = payload.missions
     state.missionsLoaded = true
+    state.missionsOffset = payload.offset
   },
-  clearMissions(state, payload) {
+  clearMissions(state) {
     state.missions = []
     state.missionsLoaded = false
   },
@@ -95,7 +99,7 @@ const mutations = {
     state.missionDetails = payload.mission
     state.missionDetailsLoaded = true
   },
-  clearMissionDetails(state, payload) {
+  clearMissionDetails(state) {
     state.missionDetails = {}
     state.missionDetailsLoaded = false
   }

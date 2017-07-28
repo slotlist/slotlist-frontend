@@ -1,4 +1,5 @@
 import axios from 'axios'
+import moment from 'moment'
 import Vue from 'vue'
 import { sync } from 'vuex-router-sync'
 import App from './components/App'
@@ -41,6 +42,12 @@ Vue.use(VueQuillEditor)
 Vue.component('spinner', VueSimpleSpinner)
 Vue.component('datepicker', VueDatePicker)
 Vue.component('loading-overlay', LoadingOverlay)
+
+Vue.mixin({
+  methods: {
+    formatDateTime: dateTime => moment(dateTime).format('Y-MM-DD HH:mm')
+  }
+})
 
 const app = new Vue({
   router,

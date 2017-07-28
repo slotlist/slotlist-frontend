@@ -3,9 +3,10 @@
     <table class="table table-striped">
       <thead>
         <tr>
+          <th class="w-5">Start time</th>
           <th class="w-25">Title</th>
-          <th class="w-50">Description</th>
-          <th class="w-15">Initiator</th>
+          <th class="w-45">Description</th>
+          <th class="w-10">Creator</th>
           <th class="w-10 text-center">Actions</th>
         </tr>
       </thead>

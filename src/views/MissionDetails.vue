@@ -1,10 +1,12 @@
 <template>
   <div>
-    <div v-show="loaded">
+    <div v-if="loaded">
       <div class="jumbotron">
         <h1 class="display-4 text-center">{{ missionDetails.title }}</h1>
         <h5 class="text-center">
-          <span class="text-muted">by</span> {{ missionDetails.initiator }}</h5>
+          <span class="text-muted">by</span>
+          <router-link :to="{name: 'userDetails', params: {userUid: missionDetails.creator.uid}}">{{ missionDetails.creator.nickname }}</router-link>
+        </h5>
         <br>
         <p class="lead text-justify">{{ missionDetails.shortDescription }}</p>
         <hr class="my-4">
@@ -15,17 +17,17 @@
           </div>
           <div class="col">
             <h5>Slotting time</h5>
-            <p class="font-weight-bold text-success">{{ missionDetails.slottingTime }}</p>
+            <p class="font-weight-bold text-success">{{ formatDateTime(missionDetails.slottingTime) }}</p>
           </div>
           <div class="col">
             <h5>Start time</h5>
-            <p class="font-weight-bold text-danger">{{ missionDetails.startTime }}</p>
+            <p class="font-weight-bold text-danger">{{ formatDateTime(missionDetails.startTime) }}</p>
           </div>
           <div class="col">
             <h5>End time
               <span class="text-muted">(est.)</span>
             </h5>
-            <p>{{ missionDetails.endTime }}</p>
+            <p>{{ formatDateTime(missionDetails.endTime) }}</p>
           </div>
         </div>
         <div class="row text-center">
@@ -33,7 +35,7 @@
             <h5>Briefing
               <span class="text-muted">(ldrsp.)</span>
             </h5>
-            <p>{{ missionDetails.briefingTime }}</p>
+            <p>{{ formatDateTime(missionDetails.briefingTime) }}</p>
           </div>
           <div class="col">
             <h5>Repository URL</h5>
@@ -62,7 +64,7 @@
         </div>
       </div>
     </div>
-    <div v-show="!loaded">
+    <div v-if="!loaded">
       <loading-overlay message="Loading Mission details..."></loading-overlay>
     </div>
   </div>
@@ -70,6 +72,7 @@
 
 <script>
 import MissionSlotlist from 'components/MissionSlotlist.vue'
+import moment from 'moment'
 import utils from '../utils'
 
 export default {
@@ -82,7 +85,7 @@ export default {
     },
     missionDetails() {
       return this.$store.getters.missionDetails
-    }
+    },
   },
   /*data() {
     return {
@@ -107,10 +110,10 @@ export default {
     }
   },*/
   beforeCreate: function () {
-    this.$store.dispatch('getMissionDetails', this.$route.params.slug)
+    this.$store.dispatch('getMissionDetails', this.$route.params.missionSlug)
   },
   created: function () {
-    utils.setTitle('Testmission')
+    utils.setTitle(this.missionDetails.title)
   },
   beforeDestroy: function () {
     this.$store.commit('clearMissionDetails')

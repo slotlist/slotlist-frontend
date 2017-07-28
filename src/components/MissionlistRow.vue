@@ -1,10 +1,13 @@
 <template>
   <tr>
+    <td>{{ formatDateTime(mission.startTime) }}</td>
     <td>{{ mission.title }}</td>
     <td>{{ mission.shortDescription }}</td>
-    <td>{{ mission.initiator }}</td>
+    <td>
+      <router-link :to="{name: 'userDetails', params: {userUid: mission.creator.uid}}">{{ mission.creator.nickname }}</router-link>
+    </td>
     <td class="text-center">
-      <router-link :to="{name: 'missionDetails', params: {slug: mission.slug}}">Details</router-link>
+      <router-link :to="{name: 'missionDetails', params: {missionSlug: mission.slug}}">Details</router-link>
     </td>
   </tr>
 </template>
