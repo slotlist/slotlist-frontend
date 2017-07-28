@@ -12,8 +12,11 @@
         <hr class="my-4">
         <div class="row text-center">
           <div class="col">
-            <h5>Mission date</h5>
-            <p>{{ missionDetails.missionDate }}</p>
+            <h5>Community</h5>
+            <p>
+              <router-link v-if="missionDetails.community" :to="{name: 'communityDetails', params: {communitySlug: missionDetails.community.slug}}">{{ missionDetails.community.name }}</router-link>
+              <span v-if="!missionDetails.community" class="text-muted font-italic">not associated</span>
+            </p>
           </div>
           <div class="col">
             <h5>Slotting time</h5>
@@ -39,15 +42,15 @@
           </div>
           <div class="col">
             <h5>Repository URL</h5>
-            <p v-html="missionDetails.repositoryURL"></p>
+            <p v-html="optionalRepositoryURL"></p>
           </div>
           <div class="col">
             <h5>Techsupport</h5>
-            <p>{{ missionDetails.techSupport }}</p>
+            <p v-html="optionalTechSupport"></p>
           </div>
           <div class="col">
             <h5>Rules</h5>
-            <p v-html="missionDetails.rules"></p>
+            <p v-html="optionalRules"></p>
           </div>
         </div>
       </div>
@@ -57,14 +60,14 @@
         </div>
       </div>
       <br>
-      <div class="card">
+      <div class="card" v-if="slotlistLoaded">
         <div class="card-block text-nowrap">
           <h1>Slotlist</h1>
           <mission-slotlist></mission-slotlist>
         </div>
       </div>
     </div>
-    <div v-if="!loaded">
+    <div v-if="!loaded || !slotlistLoaded">
       <loading-overlay message="Loading Mission details..."></loading-overlay>
     </div>
   </div>
@@ -72,7 +75,6 @@
 
 <script>
 import MissionSlotlist from 'components/MissionSlotlist.vue'
-import moment from 'moment'
 import utils from '../utils'
 
 export default {
@@ -83,9 +85,21 @@ export default {
     loaded() {
       return this.$store.getters.missionDetailsLoaded
     },
+    slotlistLoaded() {
+      return this.$store.getters.missionSlotlistLoaded
+    },
     missionDetails() {
       return this.$store.getters.missionDetails
     },
+    optionalRepositoryURL() {
+      return this.missionDetails.repositoryURL || "<span class='text-muted font-italic'>not required</span>"
+    },
+    optionalTechSupport() {
+      return this.missionDetails.techSupport || "<span class='text-muted font-italic'>not provided</span>"
+    },
+    optionalRules() {
+      return this.missionDetails.rules || "<span class='text-muted font-italic'>not specified</span>"
+    }
   },
   /*data() {
     return {
@@ -111,9 +125,10 @@ export default {
   },*/
   beforeCreate: function () {
     this.$store.dispatch('getMissionDetails', this.$route.params.missionSlug)
+    this.$store.dispatch('getMissionSlotlist', this.$route.params.missionSlug)
   },
   created: function () {
-    utils.setTitle(this.missionDetails.title)
+    utils.setTitle('Mission')
   },
   beforeDestroy: function () {
     this.$store.commit('clearMissionDetails')

@@ -1,4 +1,5 @@
 import * as _ from 'lodash'
+import utils from '../../utils'
 
 import MissionsApi from '../../api/missions'
 
@@ -9,6 +10,8 @@ const state = {
   missionsOffset: 0,
   missionDetails: {},
   missionDetailsLoaded: false,
+  missionSlotlist: [],
+  missionSlotlistLoaded: false
 }
 
 const getters = {
@@ -23,6 +26,9 @@ const getters = {
   },
   missionDetailsLoaded() {
     return state.missionDetailsLoaded
+  },
+  missionSlotlistLoaded() {
+    return state.missionSlotlistLoaded
   },
   missionSlotlist() {
     if (!_.isArray(state.missionDetails.slots)) {
@@ -64,7 +70,7 @@ const actions = {
       .then(function (response) {
         if (response.status !== 200) {
           console.error(response)
-          throw "Retrieving missions failed"
+          throw "Retrieving mission details failed"
         }
 
         if (_.isEmpty(response.data)) {
@@ -80,6 +86,30 @@ const actions = {
         commit({
           type: 'setMissionDetails',
           mission: response.data.mission
+        })
+      })
+  },
+  getMissionSlotlist({ commit }, payload) {
+    return MissionsApi.getMissionSlotlist(payload)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Retrieving mission slotlist failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (_.isNil(response.data.slots) || !_.isObject(response.data.slots)) {
+          console.error(response)
+          throw "Received invalid mission slotlist"
+        }
+
+        commit({
+          type: 'setMissionSlotlist',
+          slots: response.data.slots
         })
       })
   }
@@ -98,6 +128,11 @@ const mutations = {
   setMissionDetails(state, payload) {
     state.missionDetails = payload.mission
     state.missionDetailsLoaded = true
+    utils.setTitle(`Mission ${state.missionDetails.title}`)
+  },
+  setMissionSlotlist(state, payload) {
+    state.missionSlotlist = payload.slots
+    state.missionSlotlistLoaded = true
   },
   clearMissionDetails(state) {
     state.missionDetails = {}

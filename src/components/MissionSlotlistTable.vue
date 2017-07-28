@@ -9,7 +9,7 @@
           <th>Comment</th>
         </tr>
       </thead>
-        <mission-slotlist-row v-for="slot in slotlist" :info="slot" :key="slot.id"></mission-slotlist-row>
+        <mission-slotlist-row v-for="slot in slotlist" :slot="slot" :key="slot.id"></mission-slotlist-row>
       <tbody>
       </tbody>
     </table>
