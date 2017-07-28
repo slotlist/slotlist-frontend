@@ -102,12 +102,12 @@ const actions = {
   setTokenFromLocalStorage({ commit }, payload) {
     let decodedToken = Vue.ls.get('auth-decodedToken')
     if (_.isNil(decodedToken)) {
-      decodedToken = jwtDecode(payload.token)
+      decodedToken = jwtDecode(payload)
     }
 
     commit({
       type: "setToken",
-      token: payload.token,
+      token: payload,
       decodedToken: decodedToken
     })
   },
@@ -174,9 +174,10 @@ const mutations = {
     state.performingLogin = false
     state.refreshingToken = false
 
-    if (!_.isNil(state.redirect)) {
-      const redirect = state.redirect
-      state.redirect = null
+    const redirect = Vue.ls.get('auth-redirect')
+    if (!_.isNil(redirect)) {
+      console.log(redirect)
+      Vue.ls.remove('auth-redirect')
       router.push(redirect)
     }
   },
@@ -192,7 +193,9 @@ const mutations = {
     state.refreshingToken = false
   },
   setRedirect(state, payload) {
-    state.redirect = payload.redirect
+    if (_.isNil(Vue.ls.get('auth-redirect'))) {
+      Vue.ls.set('auth-redirect', payload.redirect)
+    }
   }
 }
 
