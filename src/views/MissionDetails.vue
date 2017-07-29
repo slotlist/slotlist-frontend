@@ -53,6 +53,13 @@
             <p v-html="optionalRules"></p>
           </div>
         </div>
+        <hr class="my-4" v-if="isMissionEditor">
+        <div class="row justify-content-center" v-if="isMissionEditor">
+          <div class="btn-group" role="group" aria-label="Mission actions">
+            <button type="button" class="btn btn-primary" @click="editMission">Edit</button>
+            <button type="button" class="btn btn-danger" v-if="isMissionCreator" @click="deleteMission">Delete</button>
+          </div>
+        </div>
       </div>
       <div class="card">
         <div class="card-block text-nowrap">
@@ -62,7 +69,9 @@
       <br>
       <div class="card" v-if="slotlistLoaded">
         <div class="card-block text-nowrap">
-          <h1>Slotlist</h1>
+          <h1> Slotlist
+            <i class="fa fa-refresh fa-fw small" aria-hidden="true"></i>
+          </h1>
           <mission-slotlist></mission-slotlist>
         </div>
       </div>
@@ -88,6 +97,12 @@ export default {
     slotlistLoaded() {
       return this.$store.getters.missionSlotlistLoaded
     },
+    isMissionEditor() {
+      return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`, `mission.${this.$route.params.missionSlug}.editor`])
+    },
+    isMissionCreator() {
+      return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`])
+    },
     missionDetails() {
       return this.$store.getters.missionDetails
     },
@@ -99,6 +114,14 @@ export default {
     },
     optionalRules() {
       return this.missionDetails.rules || "<span class='text-muted font-italic'>not specified</span>"
+    }
+  },
+  methods: {
+    editMission() {
+      console.log('editMission', this.missionDetails)
+    },
+    deleteMission() {
+      console.log('deleteMission', this.missionDetails)
     }
   },
   /*data() {

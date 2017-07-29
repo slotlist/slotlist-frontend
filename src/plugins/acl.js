@@ -1,7 +1,7 @@
 import * as _ from 'lodash'
 
 class ACL {
-  can(permission, strict) {
+  can(permission, strict = false) {
     if (_.keys(this.permissions).length <= 0) {
       return false
     } else if (_.has(this.permissions, '*')) {

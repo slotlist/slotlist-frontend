@@ -3,11 +3,11 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th class="w-5">Start time</th>
-          <th class="w-25">Title</th>
-          <th class="w-45">Description</th>
-          <th class="w-10">Creator</th>
-          <th class="w-10 text-center">Actions</th>
+          <th style="width: 15%">Start time</th>
+          <th style="width: 25%">Title</th>
+          <th style="width: 35%">Description</th>
+          <th style="width: 10%">Creator</th>
+          <th style="width: 10%" class="text-center">Actions</th>
         </tr>
       </thead>
       <tbody>

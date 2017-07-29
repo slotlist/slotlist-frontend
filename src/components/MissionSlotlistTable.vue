@@ -3,11 +3,11 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>#</th>
-          <th>Role</th>
-          <th>Player</th>
-          <th>Comment</th>
-          <th class="text-center">Actions</th>
+          <th style="width: 1%">#</th>
+          <th style="width: 25%">Role</th>
+          <th style="width: 34%">Player</th>
+          <th style="width: 30%">Comment</th>
+          <th style="width: 10%" class="text-center">Actions</th>
         </tr>
       </thead>
       <tbody>

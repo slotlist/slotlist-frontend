@@ -2,8 +2,8 @@
   <div>
     <div v-show="loaded">
       <missionlist-table></missionlist-table>
-      <div class="text-center">
-        <button type="button" class="btn btn-success">Create mission</button>
+      <div class="text-center" v-show="loggedIn">
+        <button type="button" class="btn btn-success" @click="createMission">Create mission</button>
       </div>
     </div>
     <div v-show="!loaded">
@@ -23,6 +23,14 @@ export default {
   computed: {
     loaded() {
       return this.$store.getters.missionsLoaded
+    },
+    loggedIn() {
+      return this.$store.getters.loggedIn
+    }
+  },
+  methods: {
+    createMission() {
+      console.log('createMission')
     }
   },
   beforeCreate: function () {
