@@ -1,16 +1,17 @@
 <<template>
   <div>
-    <table class="table">
+    <table class="table table-striped">
       <thead>
         <tr>
           <th>#</th>
           <th>Role</th>
           <th>Player</th>
           <th>Comment</th>
+          <th class="text-center">Actions</th>
         </tr>
       </thead>
-        <mission-slotlist-row v-for="slot in slotlist" :slot="slot" :key="slot.id"></mission-slotlist-row>
       <tbody>
+        <mission-slotlist-row v-for="slot in slotlist" :missionSlot="slot" :key="slot.id"></mission-slotlist-row>
       </tbody>
     </table>
   </div>

@@ -1,4 +1,4 @@
-import axios from 'axios'
+import * as _ from 'lodash'
 import moment from 'moment'
 import Vue from 'vue'
 import { sync } from 'vuex-router-sync'
@@ -45,7 +45,8 @@ Vue.component('loading-overlay', LoadingOverlay)
 
 Vue.mixin({
   methods: {
-    formatDateTime: dateTime => moment(dateTime).format('Y-MM-DD HH:mm')
+    formatDateTime: dateTime => moment(dateTime).format('Y-MM-DD HH:mm'),
+    formatUserWithTag: user => _.isNil(user.community) ? user.nickname : `[${user.community.tag}] ${user.nickname}`
   }
 })
 
