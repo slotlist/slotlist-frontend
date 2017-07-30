@@ -107,6 +107,9 @@
           <div class="col col-5" v-html="slotStatus"></div>
         </div>
         <hr class="my-4" v-show="slotDetails.description">
+        <div class="row font-weight-bold" v-show="slotDetails.description">
+          <div class="col col-12">Detailed description</div>
+        </div>
         <div class="row" v-show="slotDetails.description">
           <div class="col col-12" v-html="slotDetails.description"></div>
         </div>
@@ -118,8 +121,36 @@
         </div>
       </div>
     </b-modal>
+    <b-modal ref="slotRegisterModal" id="slotRegisterModal" @ok="submitSlotRegistration" @shown="clearSlotRegistrationComment" @hide="slotRegisterModalClosed" ok-title="Confirm" close-title="Cancel">
+      <div slot="modal-title">
+        <h5>Register for slot #{{ slotDetails.orderNumber + 1 }} {{ slotDetails.title }}</h5>
+      </div>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">Confirm registration as
+            <span class="font-weight-bold">{{ slotDetails.title }}</span>?</div>
+        </div>
+        <hr class="my-4">
+        <div class="row">
+          <div class="col col-12">
+            <form @submit.stop.prevent="submitSlotRegistration">
+              <b-form-input type="text" placeholder="Optional comment to the mission creator" v-model="slotRegistrationComment"></b-form-input>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div slot="modal-footer">
+        <div class="btn-group" role="group" aria-label="Mission slot register actions">
+          <button type="button" class="btn btn-success" @click="submitSlotRegistration" :disabled="slotDetails.assignee">Confirm</button>
+          <button type="button" class="btn btn-secondary" @click="hideSlotRegisterModal">Cancel</button>
+        </div>
+      </div>
+    </b-modal>
     <div v-if="!loaded || !slotlistLoaded">
       <loading-overlay message="Loading Mission details..."></loading-overlay>
+    </div>
+    <div v-if="registeringForSlot">
+      <loading-overlay message="Registering for Mission slot..."></loading-overlay>
     </div>
   </div>
 </template>
@@ -133,12 +164,20 @@ export default {
   components: {
     MissionSlotlist
   },
+  data() {
+    return {
+      slotRegistrationComment: null
+    }
+  },
   computed: {
     loaded() {
       return this.$store.getters.missionDetailsLoaded
     },
     slotlistLoaded() {
       return this.$store.getters.missionSlotlistLoaded
+    },
+    registeringForSlot() {
+      return this.$store.getters.registeringForMissionSlot
     },
     isMissionEditor() {
       return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`, `mission.${this.$route.params.missionSlug}.editor`])
@@ -163,6 +202,9 @@ export default {
     },
     showSlotDetails() {
       return this.$store.getters.showMissionSlotDetails
+    },
+    showSlotRegister() {
+      return this.$store.getters.showMissionSlotRegister
     },
     optionalAssignee() {
       return _.isNil(this.slotDetails.assignee) ? '<span class="text-muted font-italic">not assigned</span>' : this.formatUserWithTag(this.slotDetails.assignee)
@@ -218,11 +260,25 @@ export default {
     slotDetailsModalClosed() {
       this.$store.dispatch('clearMissionSlotDetails')
     },
+    slotRegisterModalClosed() {
+      this.$store.dispatch('clearMissionSlotRegister')
+    },
     slotDetailsRegister() {
-      console.log('slotDetailsRegister')
+      this.$refs.slotDetailsModal.hide()
+      this.$store.dispatch('showMissionSlotRegister', this.slotDetails)
     },
     hideSlotDetailsModal() {
       this.$refs.slotDetailsModal.hide()
+    },
+    hideSlotRegisterModal() {
+      this.$refs.slotRegisterModal.hide()
+    },
+    submitSlotRegistration() {
+      this.$refs.slotRegisterModal.hide()
+      this.$store.dispatch('registerForMissionSlot', { missionSlug: this.$route.params.missionSlug, slotUid: this.slotDetails.uid, comment: this.slotRegistrationComment })
+    },
+    clearSlotRegistrationComment() {
+      this.slotRegistrationComment = null
     }
   },
   watch: {
@@ -230,12 +286,18 @@ export default {
       if (val) {
         this.$refs.slotDetailsModal.show()
       }
+    },
+    showSlotRegister(val) {
+      if (val) {
+        this.$refs.slotRegisterModal.show()
+      }
     }
   },
   beforeCreate: function () {
     this.$store.dispatch('getMissionDetails', this.$route.params.missionSlug)
     this.$store.dispatch('getMissionSlotlist', this.$route.params.missionSlug)
     this.$store.dispatch('clearMissionSlotDetails')
+    this.$store.dispatch('clearMissionSlotRegister')
   },
   created: function () {
     utils.setTitle('Mission')
@@ -243,6 +305,7 @@ export default {
   beforeDestroy: function () {
     this.$store.dispatch('clearMissionDetails')
     this.$store.dispatch('clearMissionSlotDetails')
+    this.$store.dispatch('clearMissionSlotRegister')
   }
 }
 </script>

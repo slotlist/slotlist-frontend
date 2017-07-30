@@ -4,11 +4,16 @@ export const v1 = {
   getMissions(limit = 25, offset = 0) {
     return axios.get(`/v1/missions?limit=${limit}&offset=${offset}`)
   },
-  getMissionDetails(slug) {
-    return axios.get(`/v1/missions/${slug}`)
+  getMissionDetails(missionSlug) {
+    return axios.get(`/v1/missions/${missionSlug}`)
   },
-  getMissionSlotlist(slug, limit = 25, offset = 0) {
-    return axios.get(`/v1/missions/${slug}/slots?limit=${limit}&offset=${offset}`)
+  getMissionSlotlist(missionSlug, limit = 25, offset = 0) {
+    return axios.get(`/v1/missions/${missionSlug}/slots?limit=${limit}&offset=${offset}`)
+  },
+  registerMissionSlot(missionSlug, slotUid, comment) {
+    console.log(missionSlug, slotUid, comment)
+    return axios.post(`/v1/missions/${missionSlug}/slots/${slotUid}/registrations`, { comment })
+
   }
 }
 

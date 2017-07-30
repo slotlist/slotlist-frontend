@@ -66,7 +66,7 @@ export default {
   },
   methods: {
     registerForSlot() {
-      console.log('registerForSlot', this.missionSlot)
+      this.$store.dispatch('showMissionSlotRegister', this.missionSlot)
     },
     slotDetails() {
       this.$store.dispatch('setMissionSlotDetails', this.missionSlot)

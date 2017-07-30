@@ -13,7 +13,9 @@ const state = {
   missionSlotlist: [],
   missionSlotlistLoaded: false,
   missionSlotDetails: {},
-  showMissionSlotDetails: false
+  showMissionSlotDetails: false,
+  showMissionSlotRegister: false,
+  registeringForMissionSlot: false
 }
 
 const getters = {
@@ -40,6 +42,12 @@ const getters = {
   },
   showMissionSlotDetails() {
     return state.showMissionSlotDetails
+  },
+  showMissionSlotRegister() {
+    return state.showMissionSlotRegister
+  },
+  registeringForMissionSlot() {
+    return state.registeringForMissionSlot
   }
 }
 
@@ -132,6 +140,48 @@ const actions = {
     commit({
       type: 'clearMissionSlotDetails'
     })
+  },
+  showMissionSlotRegister({ commit }, payload) {
+    commit({
+      type: 'showMissionSlotRegister',
+      slotDetails: payload
+    })
+  },
+  clearMissionSlotRegister({ commit }) {
+    commit({
+      type: 'clearMissionSlotRegister'
+    })
+  },
+  registerForMissionSlot({ commit }, payload) {
+    commit({
+      type: "startRegisteringForMissionSlot"
+    })
+
+    const comment = _.isNil(payload.comment) || _.isEmpty(payload.comment) ? null : payload.comment
+
+    return MissionsApi.registerMissionSlot(payload.missionSlug, payload.slotUid, comment)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Registering for mission slot failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        console.log(response.data)
+
+        if (_.isNil(response.data.registration) || !_.isObject(response.data.registration)) {
+          console.error(response)
+          throw "Received invalid mission slot registration"
+        }
+
+        commit({
+          type: 'finishRegisteringForMissionSlot'
+        })
+      })
   }
 }
 
@@ -163,8 +213,20 @@ const mutations = {
     state.showMissionSlotDetails = true
   },
   clearMissionSlotDetails(state) {
-    // state.missionSlotDetails = {}
     state.showMissionSlotDetails = false
+  },
+  showMissionSlotRegister(state, payload) {
+    state.missionSlotDetails = payload.slotDetails
+    state.showMissionSlotRegister = true
+  },
+  clearMissionSlotRegister(state) {
+    state.showMissionSlotRegister = false
+  },
+  startRegisteringForMissionSlot(state) {
+    state.registeringForMissionSlot = true
+  },
+  finishRegisteringForMissionSlot(state) {
+    state.registeringForMissionSlot = false
   }
 }
 
