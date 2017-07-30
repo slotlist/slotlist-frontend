@@ -1,6 +1,9 @@
 import * as _ from 'lodash'
 import moment from 'moment'
 import Vue from 'vue'
+import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+import 'bootstrap/dist/css/bootstrap.css'
 import { sync } from 'vuex-router-sync'
 import App from './components/App'
 import router from './router'
@@ -28,6 +31,8 @@ if (process.env.SENTRY_DSN) {
 }
 
 sync(store, router)
+
+Vue.use(BootstrapVue)
 
 Vue.use(VueACL, {
   router

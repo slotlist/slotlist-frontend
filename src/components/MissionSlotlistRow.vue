@@ -2,7 +2,11 @@
   <tr>
     <td>{{ missionSlot.orderNumber + 1 }}</td>
     <td>
-      <i :class="difficultyIcon" aria-hidden="true"></i> {{ missionSlot.title }}
+      <i :class="difficultyIcon" aria-hidden="true"></i>
+      <b-tooltip v-if="missionSlot.restricted || missionSlot.reserve" :content="titleTooltip">
+        <span :class="titleColor">{{ missionSlot.title }}</span>
+      </b-tooltip>
+      <span v-if="!missionSlot.restricted && !missionSlot.reserve" :class="titleColor">{{ missionSlot.title }}</span>
     </td>
     <td v-html="optionalAssignee"></td>
     <td>{{ missionSlot.shortDescription }}</td>
@@ -28,7 +32,9 @@ export default {
       return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`, `mission.${this.$route.params.missionSlug}.editor`])
     },
     optionalAssignee() {
-      return _.isNil(this.missionSlot.assignee) ? '<span class="text-muted font-italic">not assigned</span>' : this.formatUserWithTag(this.missionSlot.assignee)
+      return _.isNil(this.missionSlot.assignee) ?
+        '<span class="text-muted font-italic">not assigned</span>' :
+        `<span class="text-success font-weight-bold">${this.formatUserWithTag(this.missionSlot.assignee)}</span>`
     },
     difficultyColor() {
       switch (this.missionSlot.difficulty) {
@@ -42,6 +48,20 @@ export default {
     },
     difficultyIcon() {
       return `${this.difficultyColor} fa fa-thermometer-${this.missionSlot.difficulty} fa-lg`
+    },
+    titleColor() {
+      if (this.missionSlot.restricted) {
+        return 'text-primary font-italic'
+      } else if (this.missionSlot.reserve) {
+        return 'text-muted font-italic'
+      }
+    },
+    titleTooltip() {
+      if (this.missionSlot.restricted) {
+        return 'Restricted - not available for everyone'
+      } else if (this.missionSlot.reserve) {
+        return 'Reserve - only filled after other slots are taken'
+      }
     }
   },
   methods: {
@@ -49,7 +69,7 @@ export default {
       console.log('registerForSlot', this.missionSlot)
     },
     slotDetails() {
-      console.log('details', this.missionSlot)
+      this.$store.dispatch('setMissionSlotDetails', this.missionSlot)
     },
     deleteSlot() {
       console.log('deleteSlot', this.missionSlot)

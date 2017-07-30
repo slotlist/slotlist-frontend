@@ -11,7 +11,9 @@ const state = {
   missionDetails: {},
   missionDetailsLoaded: false,
   missionSlotlist: [],
-  missionSlotlistLoaded: false
+  missionSlotlistLoaded: false,
+  missionSlotDetails: {},
+  showMissionSlotDetails: false
 }
 
 const getters = {
@@ -32,6 +34,12 @@ const getters = {
   },
   missionSlotlist() {
     return state.missionSlotlist
+  },
+  missionSlotDetails() {
+    return state.missionSlotDetails
+  },
+  showMissionSlotDetails() {
+    return state.showMissionSlotDetails
   }
 }
 
@@ -108,6 +116,22 @@ const actions = {
           slots: response.data.slots
         })
       })
+  },
+  setMissionSlotDetails({ commit }, payload) {
+    commit({
+      type: 'setMissionSlotDetails',
+      slotDetails: payload
+    })
+  },
+  clearMissionDetails({ commit }) {
+    commit({
+      type: 'clearMissionDetails'
+    })
+  },
+  clearMissionSlotDetails({ commit }) {
+    commit({
+      type: 'clearMissionSlotDetails'
+    })
   }
 }
 
@@ -133,6 +157,14 @@ const mutations = {
   clearMissionDetails(state) {
     state.missionDetails = {}
     state.missionDetailsLoaded = false
+  },
+  setMissionSlotDetails(state, payload) {
+    state.missionSlotDetails = payload.slotDetails
+    state.showMissionSlotDetails = true
+  },
+  clearMissionSlotDetails(state) {
+    // state.missionSlotDetails = {}
+    state.showMissionSlotDetails = false
   }
 }
 

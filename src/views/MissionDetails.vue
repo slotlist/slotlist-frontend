@@ -76,6 +76,48 @@
         </div>
       </div>
     </div>
+    <b-modal ref="slotDetailsModal" id="slotDetailsModal" @hide="slotDetailsModalClosed">
+      <div slot="modal-title">
+        <h5>Slot details - #{{ slotDetails.orderNumber + 1 }} {{ slotDetails.title }}</h5>
+      </div>
+      <div class="container-fluid">
+        <div class="row font-weight-bold">
+          <div class="col col-1">#</div>
+          <div class="col col-3">Role</div>
+          <div class="col col-5">Player</div>
+          <div class="col col-3">Difficulty</div>
+        </div>
+        <div class="row">
+          <div class="col col-1">{{ slotDetails.orderNumber + 1 }}</div>
+          <div class="col col-3">{{ slotDetails.title }} </div>
+          <div class="col col-5" v-html="optionalAssignee"></div>
+          <div class="col col-3">
+            <i :class="difficultyIcon" aria-hidden="true"></i>
+            <span :class="difficultyColor">{{ difficultyText }}</span>
+          </div>
+        </div>
+        <div class="row font-weight-bold">
+          <div class="col col-1"></div>
+          <div class="col col-6">Description</div>
+          <div class="col col-5">Status</div>
+        </div>
+        <div class="row">
+          <div class="col col-1"></div>
+          <div class="col col-6">{{ slotDetails.shortDescription}}</div>
+          <div class="col col-5" v-html="slotStatus"></div>
+        </div>
+        <hr class="my-4" v-show="slotDetails.description">
+        <div class="row" v-show="slotDetails.description">
+          <div class="col col-12" v-html="slotDetails.description"></div>
+        </div>
+      </div>
+      <div slot="modal-footer">
+        <div class="btn-group" role="group" aria-label="Mission slot detail actions">
+          <button type="button" class="btn btn-success" @click="slotDetailsRegister" :disabled="slotDetails.assignee">Register</button>
+          <button type="button" class="btn btn-secondary" @click="hideSlotDetailsModal">Close</button>
+        </div>
+      </div>
+    </b-modal>
     <div v-if="!loaded || !slotlistLoaded">
       <loading-overlay message="Loading Mission details..."></loading-overlay>
     </div>
@@ -83,6 +125,7 @@
 </template>
 
 <script>
+import * as _ from 'lodash'
 import MissionSlotlist from 'components/MissionSlotlist.vue'
 import utils from '../utils'
 
@@ -114,6 +157,55 @@ export default {
     },
     optionalRules() {
       return this.missionDetails.rules || "<span class='text-muted font-italic'>not specified</span>"
+    },
+    slotDetails() {
+      return this.$store.getters.missionSlotDetails
+    },
+    showSlotDetails() {
+      return this.$store.getters.showMissionSlotDetails
+    },
+    optionalAssignee() {
+      return _.isNil(this.slotDetails.assignee) ? '<span class="text-muted font-italic">not assigned</span>' : this.formatUserWithTag(this.slotDetails.assignee)
+    },
+    difficultyColor() {
+      switch (this.slotDetails.difficulty) {
+        case 0: return 'text-muted'
+        case 1: return 'text-info'
+        case 2: return 'text-primary'
+        case 3: return 'text-warning'
+        case 4: return 'text-danger'
+        default: return ''
+      }
+    },
+    difficultyIcon() {
+      return `${this.difficultyColor} fa fa-thermometer-${this.slotDetails.difficulty} fa-lg`
+    },
+    difficultyText() {
+      switch (this.slotDetails.difficulty) {
+        case 0: return 'Beginner'
+        case 1: return 'Easy'
+        case 2: return 'Medium'
+        case 3: return 'Advanced'
+        case 4: return 'Expert'
+        default: return ''
+      }
+    },
+    slotStatus() {
+      return `${this.slotRestricted} - ${this.slotReserve}`
+    },
+    slotRestricted() {
+      if (this.slotDetails.restricted) {
+        return '<span class="text-primary font-italic">restricted</span>'
+      }
+
+      return '<span>unrestricted</span>'
+    },
+    slotReserve() {
+      if (this.slotDetails.reserve) {
+        return '<span class="text-muted font-italic">reserve</span>'
+      }
+
+      return '<span>regular</span>'
     }
   },
   methods: {
@@ -122,39 +214,35 @@ export default {
     },
     deleteMission() {
       console.log('deleteMission', this.missionDetails)
+    },
+    slotDetailsModalClosed() {
+      this.$store.dispatch('clearMissionSlotDetails')
+    },
+    slotDetailsRegister() {
+      console.log('slotDetailsRegister')
+    },
+    hideSlotDetailsModal() {
+      this.$refs.slotDetailsModal.hide()
     }
   },
-  /*data() {
-    return {
-      editorOptions: {
-        modules: {
-          toolbar: [
-            [{ 'size': ['small', false, 'large', 'huge'] }, { 'header': 1 }, { 'header': 2 }, { 'color': [] }],
-            ['bold', 'italic'],
-            [{ 'indent': '-1' }, { 'indent': '+1' }],
-            [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'align': [] }],
-            ['link', 'image'],
-            ['clean']
-          ],
-          history: {
-            delay: 1000,
-            maxStack: 50,
-            userOnly: false
-          },
-        },
-        theme: 'snow'
+  watch: {
+    showSlotDetails(val) {
+      if (val) {
+        this.$refs.slotDetailsModal.show()
       }
     }
-  },*/
+  },
   beforeCreate: function () {
     this.$store.dispatch('getMissionDetails', this.$route.params.missionSlug)
     this.$store.dispatch('getMissionSlotlist', this.$route.params.missionSlug)
+    this.$store.dispatch('clearMissionSlotDetails')
   },
   created: function () {
     utils.setTitle('Mission')
   },
   beforeDestroy: function () {
-    this.$store.commit('clearMissionDetails')
+    this.$store.dispatch('clearMissionDetails')
+    this.$store.dispatch('clearMissionSlotDetails')
   }
 }
 </script>
