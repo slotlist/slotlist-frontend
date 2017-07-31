@@ -3,7 +3,9 @@
     <div v-show="loaded">
       <missionlist-table></missionlist-table>
       <div class="text-center" v-show="loggedIn">
-        <button type="button" class="btn btn-success" @click="createMission">Create mission</button>
+        <button type="button" class="btn btn-success" @click="createMission">
+          <i class="fa fa-plus" aria-label="true"></i> Create mission
+        </button>
       </div>
     </div>
     <div v-show="!loaded">

@@ -35,6 +35,9 @@
     </nav>
     <template>
       <div class="container">
+        <b-alert :variant="alertVariant" :dismissible="alertDismissible" :show="showAlert" @dismissed="alertDismissed" @dismiss-count-down="alertDismissCountDown">
+          <div v-html="alertMessage"></div>
+        </b-alert>
         <router-view></router-view>
       </div>
     </template>
@@ -82,6 +85,18 @@ export default {
     year() {
       return new Date().getFullYear()
     },
+    showAlert() {
+      return this.$store.getters.showAlert
+    },
+    alertVariant() {
+      return this.$store.getters.alertVariant
+    },
+    alertDismissible() {
+      return this.$store.getters.alertDismissible
+    },
+    alertMessage() {
+      return this.$store.getters.alertMessage
+    }
   },
   methods: {
     logout() {
@@ -89,6 +104,15 @@ export default {
         .then(() => {
           this.$router.push({ path: '/', query: { logout: true } })
         })
+    },
+    alertDismissed() {
+      this.$store.dispatch('clearAlert')
+    },
+    alertDismissCountDown(val) {
+      if (val === 1) {
+        console.log('This is gonna look ugly...')
+        this.$store.dispatch('clearAlert')
+      }
     }
   },
   beforeCreate: function () {

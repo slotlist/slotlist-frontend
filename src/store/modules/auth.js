@@ -35,7 +35,7 @@ const getters = {
 }
 
 const actions = {
-  getLoginRedirectUrl({ commit, state }) {
+  getLoginRedirectUrl({ commit, state, dispatch }) {
     if (_.isString(state.loginRedirectUrl) && !_.isEmpty(state.loginRedirectUrl)) {
       return
     }
@@ -61,9 +61,32 @@ const actions = {
           type: 'setLoginRedirectUrl',
           url: response.data.url
         })
+      }).catch((error) => {
+        if (error.response) {
+          console.error('getLoginRedirectUrl', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to get Steam SSO URL - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('getLoginRedirectUrl', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to get Steam SSO URL - Request failed`
+          })
+        } else {
+          console.error('getLoginRedirectUrl', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to get Steam SSO URL - Something failed...`
+          })
+        }
       })
   },
-  performLogin({ commit }, payload) {
+  performLogin({ commit, dispatch }, payload) {
     commit({
       type: "startPerformingLogin"
     })
@@ -92,6 +115,33 @@ const actions = {
           token: response.data.token,
           decodedToken: decodedToken
         })
+      }).catch((error) => {
+        commit({
+          type: "finishPerformingLogin"
+        })
+
+        if (error.response) {
+          console.error('performLogin', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to perform login - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('performLogin', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to perform login - Request failed`
+          })
+        } else {
+          console.error('performLogin', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to perform login - Something failed...`
+          })
+        }
       })
   },
   performLogout({ commit }) {
@@ -111,7 +161,7 @@ const actions = {
       decodedToken: decodedToken
     })
   },
-  refreshToken({ commit }) {
+  refreshToken({ commit, dispatch }) {
     commit({
       type: "startRefreshingToken"
     })
@@ -140,6 +190,35 @@ const actions = {
           token: response.data.token,
           decodedToken: decodedToken
         })
+      }).catch((error) => {
+        commit({
+          type: "finishRefreshingToken"
+        })
+
+        dispatch('performLogout')
+
+        if (error.response) {
+          console.error('refreshToken', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to perform login - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('refreshToken', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to perform login - Request failed`
+          })
+        } else {
+          console.error('refreshToken', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to perform login - Something failed...`
+          })
+        }
       })
   },
   setRedirect({ commit }, payload) {
@@ -157,8 +236,14 @@ const mutations = {
   startPerformingLogin(state) {
     state.performingLogin = true
   },
+  finishPerformingLogin(state) {
+    state.performingLogin = false
+  },
   startRefreshingToken(state) {
     state.refreshingToken = true
+  },
+  finishRefreshingToken(state) {
+    state.refreshingToken = false
   },
   setToken(state, payload) {
     Vue.ls.set('auth-token', payload.token)
@@ -176,7 +261,6 @@ const mutations = {
 
     const redirect = Vue.ls.get('auth-redirect')
     if (!_.isNil(redirect)) {
-      console.log(redirect)
       Vue.ls.remove('auth-redirect')
       router.push(redirect)
     }

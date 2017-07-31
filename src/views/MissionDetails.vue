@@ -56,8 +56,12 @@
         <hr class="my-4" v-if="isMissionEditor">
         <div class="row justify-content-center" v-if="isMissionEditor">
           <div class="btn-group" role="group" aria-label="Mission actions">
-            <button type="button" class="btn btn-primary" @click="editMission">Edit</button>
-            <button type="button" class="btn btn-danger" v-if="isMissionCreator" @click="deleteMission">Delete</button>
+            <button type="button" class="btn btn-primary" @click="editMission">
+              <i class="fa fa-edit" aria-label="true"></i> Edit
+            </button>
+            <button type="button" class="btn btn-danger" v-if="isMissionCreator" @click="deleteMission">
+              <i class="fa fa-trash" aria-label="true"></i> Delete
+            </button>
           </div>
         </div>
       </div>
@@ -69,9 +73,7 @@
       <br>
       <div class="card" v-if="slotlistLoaded">
         <div class="card-block text-nowrap">
-          <h1> Slotlist
-            <i class="fa fa-refresh fa-fw small" aria-hidden="true"></i>
-          </h1>
+          <h1>Slotlist</h1>
           <mission-slotlist></mission-slotlist>
         </div>
       </div>
@@ -275,7 +277,13 @@ export default {
     },
     submitSlotRegistration() {
       this.$refs.slotRegisterModal.hide()
-      this.$store.dispatch('registerForMissionSlot', { missionSlug: this.$route.params.missionSlug, slotUid: this.slotDetails.uid, comment: this.slotRegistrationComment })
+      this.$store.dispatch('registerForMissionSlot', {
+        missionSlug: this.$route.params.missionSlug,
+        slotUid: this.slotDetails.uid,
+        slotOrderNumber: this.slotDetails.orderNumber,
+        slotTitle: this.slotDetails.title,
+        comment: this.slotRegistrationComment
+      })
     },
     clearSlotRegistrationComment() {
       this.slotRegistrationComment = null
@@ -304,6 +312,7 @@ export default {
   },
   beforeDestroy: function () {
     this.$store.dispatch('clearMissionDetails')
+    this.$store.dispatch('clearMissionSlotlist')
     this.$store.dispatch('clearMissionSlotDetails')
     this.$store.dispatch('clearMissionSlotRegister')
   }

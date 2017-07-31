@@ -52,7 +52,11 @@ const getters = {
 }
 
 const actions = {
-  getMissions({ commit, state }) {
+  getMissions({ commit, state, dispatch }) {
+    commit({
+      type: 'startLoadingMissions'
+    })
+
     return MissionsApi.getMissions(state.missionsLimit, state.missionsOffset)
       .then(function (response) {
         if (response.status !== 200) {
@@ -75,9 +79,40 @@ const actions = {
           missions: response.data.missions,
           offset: response.data.moreAvailable === true ? (response.data.offset + response.data.count) : 0
         })
+      }).catch((error) => {
+        commit({
+          type: 'finishLoadingMissions'
+        })
+
+        if (error.response) {
+          console.error('getMissions', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load missions - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('getMissions', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load missions - Request failed`
+          })
+        } else {
+          console.error('getMissions', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load missions - Something failed...`
+          })
+        }
       })
   },
-  getMissionDetails({ commit }, payload) {
+  getMissionDetails({ commit, dispatch }, payload) {
+    commit({
+      type: 'startLoadingMissionDetails'
+    })
+
     return MissionsApi.getMissionDetails(payload)
       .then(function (response) {
         if (response.status !== 200) {
@@ -99,9 +134,40 @@ const actions = {
           type: 'setMissionDetails',
           mission: response.data.mission
         })
+      }).catch((error) => {
+        commit({
+          type: 'finishLoadingMissionDetails'
+        })
+
+        if (error.response) {
+          console.error('getMissionDetails', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load mission details - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('getMissionDetails', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load mission details - Request failed`
+          })
+        } else {
+          console.error('getMissionDetails', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load mission details - Something failed...`
+          })
+        }
       })
   },
-  getMissionSlotlist({ commit }, payload) {
+  getMissionSlotlist({ commit, dispatch }, payload) {
+    commit({
+      type: 'startLoadingMissionSlotlist'
+    })
+
     return MissionsApi.getMissionSlotlist(payload)
       .then(function (response) {
         if (response.status !== 200) {
@@ -123,6 +189,33 @@ const actions = {
           type: 'setMissionSlotlist',
           slots: response.data.slots
         })
+      }).catch((error) => {
+        commit({
+          type: 'finishLoadingMissionSlotlist'
+        })
+
+        if (error.response) {
+          console.error('getMissionSlotlist', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load mission slotlist - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('getMissionSlotlist', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load mission slotlist - Request failed`
+          })
+        } else {
+          console.error('getMissionSlotlist', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load mission slotlist - Something failed...`
+          })
+        }
       })
   },
   setMissionSlotDetails({ commit }, payload) {
@@ -134,6 +227,11 @@ const actions = {
   clearMissionDetails({ commit }) {
     commit({
       type: 'clearMissionDetails'
+    })
+  },
+  clearMissionSlotlist({ commit }) {
+    commit({
+      type: 'clearMissionSlotlist'
     })
   },
   clearMissionSlotDetails({ commit }) {
@@ -152,7 +250,7 @@ const actions = {
       type: 'clearMissionSlotRegister'
     })
   },
-  registerForMissionSlot({ commit }, payload) {
+  registerForMissionSlot({ commit, dispatch }, payload) {
     commit({
       type: "startRegisteringForMissionSlot"
     })
@@ -160,7 +258,7 @@ const actions = {
     const comment = _.isNil(payload.comment) || _.isEmpty(payload.comment) ? null : payload.comment
 
     return MissionsApi.registerMissionSlot(payload.missionSlug, payload.slotUid, comment)
-      .then(function (response) {
+      .then((response) => {
         if (response.status !== 200) {
           console.error(response)
           throw "Registering for mission slot failed"
@@ -171,8 +269,6 @@ const actions = {
           throw "Received empty response"
         }
 
-        console.log(response.data)
-
         if (_.isNil(response.data.registration) || !_.isObject(response.data.registration)) {
           console.error(response)
           throw "Received invalid mission slot registration"
@@ -181,11 +277,49 @@ const actions = {
         commit({
           type: 'finishRegisteringForMissionSlot'
         })
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully registered for slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong>`
+        })
+      }).catch((error) => {
+        commit({
+          type: 'finishRegisteringForMissionSlot'
+        })
+
+        if (error.response) {
+          console.error('registerForMissionSlot', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('registerForMissionSlot', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Request failed`
+          })
+        } else {
+          console.error('registerForMissionSlot', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Something failed...`
+          })
+        }
       })
   }
 }
 
 const mutations = {
+  startLoadingMissions(state) {
+    state.missionsLoaded = false
+  },
+  finishLoadingMissions(state) {
+    state.missionsLoaded = true
+  },
   setMissions(state, payload) {
     state.missions = payload.missions
     state.missionsLoaded = true
@@ -195,10 +329,22 @@ const mutations = {
     state.missions = []
     state.missionsLoaded = false
   },
+  startLoadingMissionDetails(state) {
+    state.missionDetailsLoaded = false
+  },
+  finishLoadingMissionDetails(state) {
+    state.missionDetailsLoaded = true
+  },
   setMissionDetails(state, payload) {
     state.missionDetails = payload.mission
     state.missionDetailsLoaded = true
     utils.setTitle(`Mission ${state.missionDetails.title}`)
+  },
+  startLoadingMissionSlotlist(state) {
+    state.missionSlotlistLoaded = false
+  },
+  finishLoadingMissionSlotlist(state) {
+    state.missionSlotlistLoaded = true
   },
   setMissionSlotlist(state, payload) {
     state.missionSlotlist = payload.slots
@@ -207,6 +353,10 @@ const mutations = {
   clearMissionDetails(state) {
     state.missionDetails = {}
     state.missionDetailsLoaded = false
+  },
+  clearMissionSlotlist(state) {
+    state.missionSlotlist = []
+    state.missionSlotlistLoaded = false
   },
   setMissionSlotDetails(state, payload) {
     state.missionSlotDetails = payload.slotDetails

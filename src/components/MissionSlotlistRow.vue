@@ -12,9 +12,15 @@
     <td>{{ missionSlot.shortDescription }}</td>
     <td class="text-center">
       <div class="btn-group btn-group-sm" role="group" aria-label="Mission slot actions">
-        <button type="button" class="btn btn-primary" @click="slotDetails">Details</button>
-        <button type="button" class="btn btn-success" v-show="loggedIn" :disabled="missionSlot.assignee" @click="registerForSlot">Register</button>
-        <button type="button" class="btn btn-danger" v-if="canEditSlotlist" @click="deleteSlot">Delete</button>
+        <button type="button" class="btn btn-primary" @click="slotDetails">
+          <i class="fa fa-info" aria-label="true"></i> Details
+        </button>
+        <button type="button" class="btn btn-success" v-show="loggedIn" :disabled="missionSlot.assignee" @click="registerForSlot">
+          <i class="fa fa-check-square-o" aria-label="true"></i> Register
+        </button>
+        <button type="button" class="btn btn-danger" v-if="canEditSlotlist" @click="deleteSlot">
+          <i class="fa fa-trash" aria-label="true"></i> Delete
+        </button>
       </div>
     </td>
   </tr>

@@ -2,7 +2,14 @@
   <div>
     <mission-slotlist-table></mission-slotlist-table>
     <div class="text-center">
-      <button type="button" class="btn btn-primary" v-if="isMissionEditor" @click="createSlot">Create Slot</button>
+      <div class="btn-group" role="group" aria-label="Mission slotlist actions">
+        <button type="button" class="btn btn-secondary" @click="refreshSlotlist">
+          <i class="fa fa-refresh" aria-hidden="true"></i> Refresh
+        </button>
+        <button type="button" class="btn btn-primary" v-if="isMissionEditor" @click="createSlot">
+          <i class="fa fa-plus" aria-hidden="true"></i> Create Slot
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -22,6 +29,10 @@ export default {
   methods: {
     createSlot() {
       console.log('createSlot')
+    },
+    refreshSlotlist() {
+      this.$store.dispatch('clearMissionSlotlist')
+      this.$store.dispatch('getMissionSlotlist', this.$route.params.missionSlug)
     }
   }
 }
