@@ -447,6 +447,59 @@ const actions = {
           })
         }
       })
+  },
+  editMission({ commit, dispatch }, payload) {
+    return MissionsApi.editMission(payload.missionSlug, payload.updatedMissionDetails)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Editing mission failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (_.isNil(response.data.mission) || !_.isObject(response.data.mission)) {
+          console.error(response)
+          throw "Received invalid mission"
+        }
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully edited mission <strong>${payload.missionTitle}</strong>`
+        })
+
+        commit({
+          type: 'setMissionDetails',
+          mission: response.data.mission
+        })
+      }).catch((error) => {
+        if (error.response) {
+          console.error('editMission', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to edit mission <strong>${payload.missionTitle}</strong> - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('editMission', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to edit mission <strong>${payload.missionTitle}</strong> - Request failed`
+          })
+        } else {
+          console.error('editMission', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to edit mission <strong>${payload.missionTitle}</strong> - Something failed...`
+          })
+        }
+      })
   }
 }
 

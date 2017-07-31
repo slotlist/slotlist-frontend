@@ -14,7 +14,6 @@ import VueACL from './plugins/acl'
 import VueLocalStorage from 'vue-ls'
 import VueQuillEditor from 'vue-quill-editor'
 import VueSimpleSpinner from 'vue-simple-spinner'
-import VueDatePicker from 'vuejs-datepicker'
 import LoadingOverlay from './components/LoadingOverlay.vue'
 
 // Black-require API/axios utils
@@ -45,7 +44,6 @@ Vue.use(VueLocalStorage, {
 Vue.use(VueQuillEditor)
 
 Vue.component('spinner', VueSimpleSpinner)
-Vue.component('datepicker', VueDatePicker)
 Vue.component('loading-overlay', LoadingOverlay)
 
 Vue.mixin({

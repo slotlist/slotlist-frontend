@@ -56,7 +56,7 @@
         <hr class="my-4" v-if="isMissionEditor">
         <div class="row justify-content-center" v-if="isMissionEditor">
           <div class="btn-group" role="group" aria-label="Mission actions">
-            <button type="button" class="btn btn-primary" @click="editMission">
+            <button type="button" class="btn btn-primary" @click="showMissionEditModal">
               <i class="fa fa-edit" aria-hidden="true"></i> Edit
             </button>
             <button type="button" class="btn btn-danger" v-if="isMissionCreator" @click="showMissionDeletionModal">
@@ -186,7 +186,8 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">Confirm deletion of
-            <span class="font-weight-bold">{{ missionDetails.title }}</span> mission?</div>
+            <span class="font-weight-bold">{{ missionDetails.title }}</span> mission?
+          </div>
         </div>
       </div>
       <div slot="modal-footer">
@@ -195,6 +196,89 @@
             <i class="fa fa-trash" aria-hidden="true"></i> Delete mission
           </button>
           <button type="button" class="btn btn-secondary" @click="hideMissionDeletionModal">
+            <i class="fa fa-times" aria-hidden="true"></i> Cancel
+          </button>
+        </div>
+      </div>
+    </b-modal>
+    <b-modal ref="missionEditModal" id="missionEditModal" size="lg" @show="populateMissionEditModal">
+      <div slot="modal-title">
+        <h5>Edit mission</h5>
+      </div>
+      <div class="container-fluid">
+        <b-form @submit.stop.prevent="submitMissionEdit">
+          <div class="row">
+            <div class="col">
+              <b-form-fieldset label="Title" :state="missionEditTitleState" :feedback="missionEditTitleFeedback">
+                <b-form-input v-model="missionEditTitle" type="text" required></b-form-input>
+              </b-form-fieldset>
+            </div>
+            <div class="col">
+              <b-form-fieldset label="Short description" :state="missionEditShortDescriptionState" :feedback="missionEditShortDescriptionFeedback">
+                <b-form-input v-model="missionEditShortDescription" textarea required></b-form-input>
+              </b-form-fieldset>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <b-form-fieldset label="Description" :state="missionEditDescriptionState" :feedback="missionEditDescriptionFeedback">
+                <quill-editor class="ql-editor-large" v-model="missionEditDescription" ref="missionEditDescriptionEditor" :options="editorOptions" required></quill-editor>
+              </b-form-fieldset>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <b-form-fieldset label="Slotting time" :state="missionEditSlottingTimeState" :feedback="missionEditSlottingTimeFeedback">
+                <b-form-input v-model="missionEditSlottingTime" type="text" required></b-form-input>
+              </b-form-fieldset>
+            </div>
+            <div class="col">
+              <b-form-fieldset label="Start time" :state="missionEditStartTimeState" :feedback="missionEditStartTimeFeedback">
+                <b-form-input v-model="missionEditStartTime" type="text" required></b-form-input>
+              </b-form-fieldset>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <b-form-fieldset label="End time" :state="missionEditEndTimeState" :feedback="missionEditEndTimeFeedback">
+                <b-form-input v-model="missionEditEndTime" type="text" required></b-form-input>
+              </b-form-fieldset>
+            </div>
+            <div class="col">
+              <b-form-fieldset label="Briefing time" :state="missionEditBriefingTimeState" :feedback="missionEditBriefingTimeFeedback">
+                <b-form-input v-model="missionEditBriefingTime" type="text" required></b-form-input>
+              </b-form-fieldset>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <b-form-fieldset label="Repository URL <em>(optional)</em>" :state="missionEditRepositoryUrlState" :feedback="missionEditRepositoryUrlFeedback">
+                <b-form-input v-model="missionEditRepositoryUrl" type="text"></b-form-input>
+              </b-form-fieldset>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <b-form-fieldset label="Tech support <em>(optional)</em>" :state="missionEditTechSupportState" :feedback="missionEditTechSupportFeedback">
+                <quill-editor v-model="missionEditTechSupport" ref="missionEditTechSupportEditor" :options="editorOptions"></quill-editor>
+              </b-form-fieldset>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <b-form-fieldset label="Rules <em>(optional)</em>" :state="missionEditRulesState" :feedback="missionEditRulesFeedback">
+                <quill-editor v-model="missionEditRules" ref="missionEditRulesEditor" :options="editorOptions"></quill-editor>
+              </b-form-fieldset>
+            </div>
+          </div>
+        </b-form>
+      </div>
+      <div slot="modal-footer">
+        <div class="btn-group" role="group" aria-label="Mission edit actions">
+          <button type="button" class="btn btn-success" @click="submitMissionEdit">
+            <i class="fa fa-edit" aria-hidden="true"></i> Submit changes
+          </button>
+          <button type="button" class="btn btn-secondary" @click="hideMissionEditModal">
             <i class="fa fa-times" aria-hidden="true"></i> Cancel
           </button>
         </div>
@@ -223,7 +307,35 @@ export default {
   },
   data() {
     return {
-      slotRegistrationComment: null
+      editorOptions: {
+        modules: {
+          toolbar: [
+            [{ 'size': ['small', false, 'large', 'huge'] }, { 'header': 1 }, { 'header': 2 }, { 'color': [] }],
+            ['bold', 'italic'],
+            [{ 'indent': '-1' }, { 'indent': '+1' }],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'align': [] }],
+            ['link', 'image'],
+            ['clean']
+          ],
+          history: {
+            delay: 1000,
+            maxStack: 50,
+            userOnly: false
+          },
+        },
+        theme: 'snow'
+      },
+      slotRegistrationComment: null,
+      missionEditTitle: null,
+      missionEditShortDescription: null,
+      missionEditDescription: null,
+      missionEditSlottingTime: null,
+      missionEditStartTime: null,
+      missionEditEndTime: null,
+      missionEditBriefingTime: null,
+      missionEditRepositoryUrl: null,
+      missionEditTechSupport: null,
+      missionEditRules: null
     }
   },
   computed: {
@@ -311,12 +423,69 @@ export default {
       }
 
       return '<span>regular</span>'
+    },
+    missionEditTitleState() {
+      return _.isNil(this.missionEditTitle) || _.isEmpty(this.missionEditTitle) ? 'warning' : 'success'
+    },
+    missionEditTitleFeedback() {
+      return _.isNil(this.missionEditTitle) || _.isEmpty(this.missionEditTitle) ? 'Please enter a title' : ''
+    },
+    missionEditShortDescriptionState() {
+      return _.isNil(this.missionEditShortDescription) || _.isEmpty(this.missionEditShortDescription) ? 'warning' : 'success'
+    },
+    missionEditShortDescriptionFeedback() {
+      return _.isNil(this.missionEditShortDescription) || _.isEmpty(this.missionEditShortDescription) ? 'Please enter a short (plain text) description' : ''
+    },
+    missionEditDescriptionState() {
+      return _.isNil(this.missionEditDescription) || _.isEmpty(this.missionEditDescription) ? 'warning' : 'success'
+    },
+    missionEditDescriptionFeedback() {
+      return _.isNil(this.missionEditDescription) || _.isEmpty(this.missionEditDescription) ? 'Please enter a description' : ''
+    },
+    missionEditSlottingTimeState() {
+      return _.isNil(this.missionEditSlottingTime) || _.isEmpty(this.missionEditSlottingTime) ? 'warning' : 'success'
+    },
+    missionEditSlottingTimeFeedback() {
+      return _.isNil(this.missionEditSlottingTime) || _.isEmpty(this.missionEditSlottingTime) ? 'Please enter a slotting date & time' : ''
+    },
+    missionEditStartTimeState() {
+      return _.isNil(this.missionEditStartTime) || _.isEmpty(this.missionEditStartTime) ? 'warning' : 'success'
+    },
+    missionEditStartTimeFeedback() {
+      return _.isNil(this.missionEditStartTime) || _.isEmpty(this.missionEditStartTime) ? 'Please enter a start date & time' : ''
+    },
+    missionEditEndTimeState() {
+      return _.isNil(this.missionEditEndTime) || _.isEmpty(this.missionEditEndTime) ? 'warning' : 'success'
+    },
+    missionEditEndTimeFeedback() {
+      return _.isNil(this.missionEditEndTime) || _.isEmpty(this.missionEditEndTime) ? 'Please enter an (est.) end date & time' : ''
+    },
+    missionEditBriefingTimeState() {
+      return _.isNil(this.missionEditBriefingTime) || _.isEmpty(this.missionEditBriefingTime) ? 'warning' : 'success'
+    },
+    missionEditBriefingTimeFeedback() {
+      return _.isNil(this.missionEditBriefingTime) || _.isEmpty(this.missionEditBriefingTime) ? 'Please enter a (ldrsp.) briefing date & time' : ''
+    },
+    missionEditRepositoryUrlState() {
+      return 'success'
+    },
+    missionEditRepositoryUrlFeedback() {
+      return ''
+    },
+    missionEditTechSupportState() {
+      return 'success'
+    },
+    missionEditTechSupportFeedback() {
+      return ''
+    },
+    missionEditRulesState() {
+      return 'success'
+    },
+    missionEditRulesFeedback() {
+      return ''
     }
   },
   methods: {
-    editMission() {
-      console.log('editMission', this.missionDetails)
-    },
     slotDetailsModalClosed() {
       this.$store.dispatch('clearMissionSlotDetails')
     },
@@ -377,6 +546,58 @@ export default {
         missionSlug: this.$route.params.missionSlug,
         missionTitle: this.missionDetails.title
       })
+    },
+    populateMissionEditModal() {
+      console.log(this.missionDetails)
+      this.missionEditTitle = this.missionDetails.title
+      this.missionEditShortDescription = this.missionDetails.shortDescription
+      this.missionEditDescription = this.missionDetails.description
+      this.missionEditSlottingTime = this.missionDetails.slottingTime
+      this.missionEditStartTime = this.missionDetails.startTime
+      this.missionEditEndTime = this.missionDetails.endTime
+      this.missionEditBriefingTime = this.missionDetails.briefingTime
+      this.missionEditRepositoryUrl = this.missionDetails.repositoryUrl
+      this.missionEditTechSupport = this.missionDetails.techSupport
+      this.missionEditRules = this.missionDetails.rules
+    },
+    showMissionEditModal() {
+      this.$refs.missionEditModal.show()
+    },
+    hideMissionEditModal() {
+      this.$refs.missionEditModal.hide()
+    },
+    submitMissionEdit() {
+      this.$refs.missionEditModal.hide()
+
+      const localMissionDetails = {
+        title: this.missionEditTitle,
+        shortDescription: this.missionEditShortDescription,
+        description: this.missionEditDescription,
+        slottingTime: this.missionEditSlottingTime,
+        startTime: this.missionEditStartTime,
+        endTime: this.missionEditEndTime,
+        briefingTime: this.missionEditBriefingTime,
+        repositoryUrl: this.missionEditRepositoryUrl,
+        techSupport: this.missionEditTechSupport,
+        rules: this.missionEditRules
+      }
+
+      const updatedMissionDetails = {}
+      _.each(localMissionDetails, (value, key) => {
+        if (!_.isEqual(value, this.missionDetails[key])) {
+          updatedMissionDetails[key] = value
+        }
+      })
+
+      console.log(localMissionDetails)
+      console.log(this.missionDetails)
+      console.log(updatedMissionDetails)
+
+      this.$store.dispatch('editMission', {
+        missionSlug: this.$route.params.missionSlug,
+        missionTitle: this.missionDetails.title,
+        updatedMissionDetails
+      })
     }
   },
   watch: {
@@ -414,9 +635,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .ql-container .ql-editor {
-  min-height: 20em;
+  min-height: 25em;
   padding-bottom: 1em;
   max-height: 25em;
 }

@@ -18,6 +18,9 @@ export const v1 = {
   },
   deleteMission(missionSlug) {
     return axios.delete(`/v1/missions/${missionSlug}`)
+  },
+  editMission(missionSlug, payload) {
+    return axios.patch(`/v1/missions/${missionSlug}`, payload)
   }
 }
 
