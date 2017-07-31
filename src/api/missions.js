@@ -10,10 +10,11 @@ export const v1 = {
   getMissionSlotlist(missionSlug, limit = 25, offset = 0) {
     return axios.get(`/v1/missions/${missionSlug}/slots?limit=${limit}&offset=${offset}`)
   },
-  registerMissionSlot(missionSlug, slotUid, comment) {
-    console.log(missionSlug, slotUid, comment)
+  registerForMissionSlot(missionSlug, slotUid, comment) {
     return axios.post(`/v1/missions/${missionSlug}/slots/${slotUid}/registrations`, { comment })
-
+  },
+  deleteMissionSlot(missionSlug, slotUid) {
+    return axios.delete(`/v1/missions/${missionSlug}/slots/${slotUid}`)
   }
 }
 

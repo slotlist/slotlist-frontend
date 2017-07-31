@@ -4,7 +4,7 @@
       <missionlist-table></missionlist-table>
       <div class="text-center" v-show="loggedIn">
         <button type="button" class="btn btn-success" @click="createMission">
-          <i class="fa fa-plus" aria-label="true"></i> Create mission
+          <i class="fa fa-plus" aria-hidden="true"></i> Create mission
         </button>
       </div>
     </div>

@@ -15,7 +15,9 @@ const state = {
   missionSlotDetails: {},
   showMissionSlotDetails: false,
   showMissionSlotRegister: false,
-  registeringForMissionSlot: false
+  registeringForMissionSlot: false,
+  showMissionSlotDeletion: false,
+  deletingMissionSlot: false
 }
 
 const getters = {
@@ -46,8 +48,14 @@ const getters = {
   showMissionSlotRegister() {
     return state.showMissionSlotRegister
   },
+  showMissionSlotDeletion() {
+    return state.showMissionSlotDeletion
+  },
   registeringForMissionSlot() {
     return state.registeringForMissionSlot
+  },
+  deletingMissionSlot() {
+    return state.deletingMissionSlot
   }
 }
 
@@ -250,6 +258,17 @@ const actions = {
       type: 'clearMissionSlotRegister'
     })
   },
+  showMissionSlotDeletion({ commit }, payload) {
+    commit({
+      type: 'showMissionSlotDeletion',
+      slotDetails: payload
+    })
+  },
+  clearMissionSlotDeletion({ commit }) {
+    commit({
+      type: 'clearMissionSlotDeletion'
+    })
+  },
   registerForMissionSlot({ commit, dispatch }, payload) {
     commit({
       type: "startRegisteringForMissionSlot"
@@ -257,7 +276,7 @@ const actions = {
 
     const comment = _.isNil(payload.comment) || _.isEmpty(payload.comment) ? null : payload.comment
 
-    return MissionsApi.registerMissionSlot(payload.missionSlug, payload.slotUid, comment)
+    return MissionsApi.registerForMissionSlot(payload.missionSlug, payload.slotUid, comment)
       .then((response) => {
         if (response.status !== 200) {
           console.error(response)
@@ -307,6 +326,68 @@ const actions = {
             showAlert: true,
             alertVariant: 'danger',
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Something failed...`
+          })
+        }
+      })
+  },
+  deleteMissionSlot({ commit, dispatch }, payload) {
+    commit({
+      type: "startDeletingMissionSlot"
+    })
+
+    return MissionsApi.deleteMissionSlot(payload.missionSlug, payload.slotUid)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Deleting mission slot failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (response.data.success !== true) {
+          console.error(response)
+          throw "Received invalid mission slot deletion"
+        }
+
+        commit({
+          type: 'finishDeletingMissionSlot'
+        })
+
+        dispatch('getMissionSlotlist', payload.missionSlug)
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully deleted slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong>`
+        })
+      }).catch((error) => {
+        commit({
+          type: 'finishDeletingMissionSlot'
+        })
+
+        if (error.response) {
+          console.error('deleteMissionSlot', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('deleteMissionSlot', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Request failed`
+          })
+        } else {
+          console.error('deleteMissionSlot', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Something failed...`
           })
         }
       })
@@ -377,6 +458,19 @@ const mutations = {
   },
   finishRegisteringForMissionSlot(state) {
     state.registeringForMissionSlot = false
+  },
+  showMissionSlotDeletion(state, payload) {
+    state.missionSlotDetails = payload.slotDetails
+    state.showMissionSlotDeletion = true
+  },
+  clearMissionSlotDeletion(state) {
+    state.showMissionSlotDeletion = false
+  },
+  startDeletingMissionSlot(state) {
+    state.deletingMissionSlot = true
+  },
+  finishDeletingMissionSlot(state) {
+    state.deletingMissionSlot = false
   }
 }
 

@@ -57,10 +57,10 @@
         <div class="row justify-content-center" v-if="isMissionEditor">
           <div class="btn-group" role="group" aria-label="Mission actions">
             <button type="button" class="btn btn-primary" @click="editMission">
-              <i class="fa fa-edit" aria-label="true"></i> Edit
+              <i class="fa fa-edit" aria-hidden="true"></i> Edit
             </button>
             <button type="button" class="btn btn-danger" v-if="isMissionCreator" @click="deleteMission">
-              <i class="fa fa-trash" aria-label="true"></i> Delete
+              <i class="fa fa-trash" aria-hidden="true"></i> Delete
             </button>
           </div>
         </div>
@@ -118,12 +118,18 @@
       </div>
       <div slot="modal-footer">
         <div class="btn-group" role="group" aria-label="Mission slot detail actions">
-          <button type="button" class="btn btn-success" @click="slotDetailsRegister" :disabled="slotDetails.assignee">Register</button>
-          <button type="button" class="btn btn-secondary" @click="hideSlotDetailsModal">Close</button>
+          <button type="button" class="btn btn-success" @click="slotDetailsRegister" :disabled="slotDetails.assignee">
+            <i class="fa fa-check-square-o" aria-hidden="true"></i> Register
+          </button>
+          <button type="button" class="btn btn-danger" v-if="isMissionEditor" @click="slotDetailsDelete">
+            <i class="fa fa-trash" aria-hidden="true"></i> Delete
+          </button>
+          <button type="button" class="btn btn-secondary" @click="hideSlotDetailsModal">
+            <i class="fa fa-times" aria-hidden="true"></i> Close</button>
         </div>
       </div>
     </b-modal>
-    <b-modal ref="slotRegisterModal" id="slotRegisterModal" @ok="submitSlotRegistration" @shown="clearSlotRegistrationComment" @hide="slotRegisterModalClosed" ok-title="Confirm" close-title="Cancel">
+    <b-modal ref="slotRegisterModal" id="slotRegisterModal" @shown="clearSlotRegistrationComment" @hide="slotRegisterModalClosed">
       <div slot="modal-title">
         <h5>Register for slot #{{ slotDetails.orderNumber + 1 }} {{ slotDetails.title }}</h5>
       </div>
@@ -143,16 +149,44 @@
       </div>
       <div slot="modal-footer">
         <div class="btn-group" role="group" aria-label="Mission slot register actions">
-          <button type="button" class="btn btn-success" @click="submitSlotRegistration" :disabled="slotDetails.assignee">Confirm</button>
-          <button type="button" class="btn btn-secondary" @click="hideSlotRegisterModal">Cancel</button>
+          <button type="button" class="btn btn-success" @click="submitSlotRegistration" :disabled="slotDetails.assignee">
+            <i class="fa fa-check" aria-hidden="true"></i> Confirm
+          </button>
+          <button type="button" class="btn btn-secondary" @click="hideSlotRegisterModal">
+            <i class="fa fa-times" aria-hidden="true"></i> Cancel
+          </button>
+        </div>
+      </div>
+    </b-modal>
+    <b-modal ref="slotDeletionModal" id="slotDeletionModal" @hide="slotDeletionModalClosed">
+      <div slot="modal-title">
+        <h5>Deletion of slot #{{ slotDetails.orderNumber + 1 }} {{ slotDetails.title }}</h5>
+      </div>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">Confirm deletion of slot
+            <span class="font-weight-bold">#{{ slotDetails.orderNumber + 1}} {{ slotDetails.title }}</span>?</div>
+        </div>
+      </div>
+      <div slot="modal-footer">
+        <div class="btn-group" role="group" aria-label="Mission slot deletion actions">
+          <button type="button" class="btn btn-danger" @click="submitSlotDeletion">
+            <i class="fa fa-trash" aria-hidden="true"></i> Delete slot
+          </button>
+          <button type="button" class="btn btn-secondary" @click="hideSlotDeletionModal">
+            <i class="fa fa-times" aria-hidden="true"></i> Cancel
+          </button>
         </div>
       </div>
     </b-modal>
     <div v-if="!loaded || !slotlistLoaded">
-      <loading-overlay message="Loading Mission details..."></loading-overlay>
+      <loading-overlay message="Loading Mission details and slotlist..."></loading-overlay>
     </div>
     <div v-if="registeringForSlot">
       <loading-overlay message="Registering for Mission slot..."></loading-overlay>
+    </div>
+    <div v-if="deletingSlot">
+      <loading-overlay message="Deleting Mission slot..."></loading-overlay>
     </div>
   </div>
 </template>
@@ -181,6 +215,9 @@ export default {
     registeringForSlot() {
       return this.$store.getters.registeringForMissionSlot
     },
+    deletingSlot() {
+      return this.$store.getters.deletingMissionSlot
+    },
     isMissionEditor() {
       return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`, `mission.${this.$route.params.missionSlug}.editor`])
     },
@@ -207,6 +244,9 @@ export default {
     },
     showSlotRegister() {
       return this.$store.getters.showMissionSlotRegister
+    },
+    showSlotDeletion() {
+      return this.$store.getters.showMissionSlotDeletion
     },
     optionalAssignee() {
       return _.isNil(this.slotDetails.assignee) ? '<span class="text-muted font-italic">not assigned</span>' : this.formatUserWithTag(this.slotDetails.assignee)
@@ -269,6 +309,10 @@ export default {
       this.$refs.slotDetailsModal.hide()
       this.$store.dispatch('showMissionSlotRegister', this.slotDetails)
     },
+    slotDetailsDelete() {
+      this.$refs.slotDetailsModal.hide()
+      this.$store.dispatch('showMissionSlotDeletion', this.slotDetails)
+    },
     hideSlotDetailsModal() {
       this.$refs.slotDetailsModal.hide()
     },
@@ -287,6 +331,21 @@ export default {
     },
     clearSlotRegistrationComment() {
       this.slotRegistrationComment = null
+    },
+    hideSlotDeletionModal() {
+      this.$refs.slotDeletionModal.hide()
+    },
+    slotDeletionModalClosed() {
+      this.$store.dispatch('clearMissionSlotDeletion')
+    },
+    submitSlotDeletion() {
+      this.$refs.slotDeletionModal.hide()
+      this.$store.dispatch('deleteMissionSlot', {
+        missionSlug: this.$route.params.missionSlug,
+        slotUid: this.slotDetails.uid,
+        slotOrderNumber: this.slotDetails.orderNumber,
+        slotTitle: this.slotDetails.title
+      })
     }
   },
   watch: {
@@ -298,6 +357,11 @@ export default {
     showSlotRegister(val) {
       if (val) {
         this.$refs.slotRegisterModal.show()
+      }
+    },
+    showSlotDeletion(val) {
+      if (val) {
+        this.$refs.slotDeletionModal.show()
       }
     }
   },
