@@ -1,5 +1,6 @@
 import * as _ from 'lodash'
 import utils from '../../utils'
+import router from '../../router'
 
 import MissionsApi from '../../api/missions'
 
@@ -388,6 +389,61 @@ const actions = {
             showAlert: true,
             alertVariant: 'danger',
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Something failed...`
+          })
+        }
+      })
+  },
+  deleteMission({ commit, dispatch }, payload) {
+    return MissionsApi.deleteMission(payload.missionSlug)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Deleting mission failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (response.data.success !== true) {
+          console.error(response)
+          throw "Received invalid mission deletion"
+        }
+
+        router.push({ name: 'missionList' })
+        dispatch('getMissions')
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully deleted mission <strong>${payload.missionTitle}</strong>`
+        })
+
+        commit({
+          type: 'clearMissionDetails'
+        })
+      }).catch((error) => {
+        if (error.response) {
+          console.error('deleteMission', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete mission <strong>${payload.missionTitle}</strong> - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('deleteMission', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete mission <strong>${payload.missionTitle}</strong> - Request failed`
+          })
+        } else {
+          console.error('deleteMission', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete mission <strong>${payload.missionTitle}</strong> - Something failed...`
           })
         }
       })

@@ -59,7 +59,7 @@
             <button type="button" class="btn btn-primary" @click="editMission">
               <i class="fa fa-edit" aria-hidden="true"></i> Edit
             </button>
-            <button type="button" class="btn btn-danger" v-if="isMissionCreator" @click="deleteMission">
+            <button type="button" class="btn btn-danger" v-if="isMissionCreator" @click="showMissionDeletionModal">
               <i class="fa fa-trash" aria-hidden="true"></i> Delete
             </button>
           </div>
@@ -174,6 +174,27 @@
             <i class="fa fa-trash" aria-hidden="true"></i> Delete slot
           </button>
           <button type="button" class="btn btn-secondary" @click="hideSlotDeletionModal">
+            <i class="fa fa-times" aria-hidden="true"></i> Cancel
+          </button>
+        </div>
+      </div>
+    </b-modal>
+    <b-modal ref="missionDeletionModal" id="missionDeletionModal">
+      <div slot="modal-title">
+        <h5>Deletion of mission</h5>
+      </div>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">Confirm deletion of
+            <span class="font-weight-bold">{{ missionDetails.title }}</span> mission?</div>
+        </div>
+      </div>
+      <div slot="modal-footer">
+        <div class="btn-group" role="group" aria-label="Mission deletion actions">
+          <button type="button" class="btn btn-danger" @click="submitMissionDeletion">
+            <i class="fa fa-trash" aria-hidden="true"></i> Delete mission
+          </button>
+          <button type="button" class="btn btn-secondary" @click="hideMissionDeletionModal">
             <i class="fa fa-times" aria-hidden="true"></i> Cancel
           </button>
         </div>
@@ -296,9 +317,6 @@ export default {
     editMission() {
       console.log('editMission', this.missionDetails)
     },
-    deleteMission() {
-      console.log('deleteMission', this.missionDetails)
-    },
     slotDetailsModalClosed() {
       this.$store.dispatch('clearMissionSlotDetails')
     },
@@ -345,6 +363,19 @@ export default {
         slotUid: this.slotDetails.uid,
         slotOrderNumber: this.slotDetails.orderNumber,
         slotTitle: this.slotDetails.title
+      })
+    },
+    showMissionDeletionModal() {
+      this.$refs.missionDeletionModal.show()
+    },
+    hideMissionDeletionModal() {
+      this.$refs.missionDeletionModal.hide()
+    },
+    submitMissionDeletion() {
+      this.$refs.missionDeletionModal.hide()
+      this.$store.dispatch('deleteMission', {
+        missionSlug: this.$route.params.missionSlug,
+        missionTitle: this.missionDetails.title
       })
     }
   },
