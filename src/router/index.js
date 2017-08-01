@@ -6,6 +6,7 @@ import CommunityList from '../views/CommunityList'
 import CommunityDetails from '../views/CommunityDetails'
 import MissionList from '../views/MissionList'
 import MissionDetails from '../views/MissionDetails'
+import MissionCreator from '../views/MissionCreator'
 import UserDetails from '../views/UserDetails'
 import Account from '../views/Account'
 import Login from '../views/Login'
@@ -45,6 +46,14 @@ export default new Router({
       component: MissionDetails
     },
     {
+      path: '/missioncreator',
+      name: 'missionCreator',
+      component: MissionCreator,
+      meta: {
+        authenticated: true
+      }
+    },
+    {
       path: '/users/:userUid',
       name: 'userDetails',
       component: UserDetails
@@ -52,7 +61,10 @@ export default new Router({
     {
       path: '/account',
       name: 'account',
-      component: Account
+      component: Account,
+      meta: {
+        authenticated: true // only logged in users can access this page
+      }
     },
     {
       path: '/login',
@@ -69,7 +81,8 @@ export default new Router({
       name: 'admin',
       component: AdminPanel,
       meta: {
-        permissions: 'admin.panel'
+        authenticated: true, // only logged in users can access this page
+        permissions: 'admin.panel' // only users with the `admin.panel` permission can access this page
       }
     },
     {

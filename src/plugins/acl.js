@@ -23,9 +23,13 @@ class ACL {
   get permissions() {
     return this._permissions || {}
   }
+  get authenticated() {
+    return this._authenticated || false
+  }
 
   parsePermissions(permissions) {
     this._permissions = {}
+    this._authenticated = true
 
     if (!_.isArray(permissions) || _.isEmpty(permissions)) {
       return
@@ -49,6 +53,7 @@ class ACL {
 
   clearPermissions() {
     this._permissions = {}
+    this._authenticated = false
   }
 
   set router(router) {
@@ -57,11 +62,17 @@ class ACL {
     }
 
     router.beforeEach((to, from, next) => {
-      if (_.isObject(to.meta) && !_.isNil(to.meta.permissions)) {
-        const strict = _.isBoolean(to.meta.strictPermissions) ? to.meta.strictPermissions : false
-
-        if (!this.can(to.meta.permissions, strict)) {
+      if (_.isObject(to.meta)) {
+        if (to.meta.authenticated === true && !this.authenticated) {
           return next(false)
+        }
+
+        if (!_.isNil(to.meta.permissions)) {
+          const strict = _.isBoolean(to.meta.strictPermissions) ? to.meta.strictPermissions : false
+
+          if (!this.can(to.meta.permissions, strict)) {
+            return next(false)
+          }
         }
       }
 

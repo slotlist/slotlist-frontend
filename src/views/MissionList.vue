@@ -1,15 +1,22 @@
 <template>
   <div>
+    <!-- Begin of content -->
     <div v-show="loaded">
       <missionlist-table></missionlist-table>
       <div class="text-center" v-show="loggedIn">
-        <button type="button" class="btn btn-success" @click="createMission">
+        <button type="button" class="btn btn-success" @click="redirectToMissionCreate">
           <i class="fa fa-plus" aria-hidden="true"></i> Create mission
         </button>
       </div>
     </div>
-    <div v-show="!loaded">
-      <loading-overlay message="Loading Missions..."></loading-overlay>
+    <!-- End of content -->
+    <!-- Begin of modals -->
+    <!-- End of modals -->
+    <!-- Begin of overlays -->
+    <div>
+      <div v-show="!loaded">
+        <loading-overlay message="Loading Missions..."></loading-overlay>
+      </div>
     </div>
   </div>
 </template>
@@ -31,8 +38,8 @@ export default {
     }
   },
   methods: {
-    createMission() {
-      console.log('createMission')
+    redirectToMissionCreate() {
+      this.$router.push({ name: 'missionCreator' })
     }
   },
   beforeCreate: function () {

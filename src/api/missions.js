@@ -1,4 +1,5 @@
 import axios from 'axios'
+import * as _ from 'lodash'
 
 export const v1 = {
   getMissions(limit = 25, offset = 0) {
@@ -30,6 +31,12 @@ export const v1 = {
   },
   unregisterFromMissionSlot(missionSlug, slotUid, registrationUid) {
     return axios.delete(`/v1/missions/${missionSlug}/slots/${slotUid}/registrations/${registrationUid}`)
+  },
+  checkMissionSlugAvailability(missionSlug) {
+    return axios.get(`/v1/missions/slugAvailable?slug=${missionSlug}`)
+  },
+  createMission(payload) {
+    return axios.post('/v1/missions', payload)
   }
 }
 

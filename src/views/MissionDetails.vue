@@ -159,8 +159,8 @@
             </div>
             <div class="row">
               <div class="col">
-                <b-form-fieldset label="Order number" description="Starts at 0 (e.g. orderNumber 0 displayed as slot #1)" :state="slotCreateOrderNumberState" :feedback="slotCreateOrderNumberFeedback" :formatter="slotCreateOrderNumberFormatter">
-                  <b-form-input v-model="slotCreateOrderNumber" type="number" required></b-form-input>
+                <b-form-fieldset label="Order number" description="Starts at 0 (e.g. orderNumber 0 displayed as slot #1)" :state="slotCreateOrderNumberState" :feedback="slotCreateOrderNumberFeedback">
+                  <b-form-input v-model="slotCreateOrderNumber" type="number" required :formatter="slotCreateOrderNumberFormatter"></b-form-input>
                 </b-form-fieldset>
               </div>
               <div class="col">
@@ -184,7 +184,7 @@
             <div class="row">
               <div class="col">
                 <b-form-fieldset label="Description <em>(optional)</em>" :state="slotCreateDescriptionState" :feedback="slotCreateDescriptionFeedback">
-                  <quill-editor v-model="slotCreateDescription" ref="slotCreateDescriptionCreateor" :options="editorOptions"></quill-editor>
+                  <quill-editor v-model="slotCreateDescription" ref="slotCreateDescriptionEditor" :options="editorOptions"></quill-editor>
                 </b-form-fieldset>
               </div>
             </div>
@@ -193,7 +193,7 @@
         <div slot="modal-footer">
           <div class="btn-group" role="group" aria-label="Mission slot create actions">
             <button type="button" class="btn btn-success" @click="submitSlotCreate">
-              <i class="fa fa-edit" aria-hidden="true"></i> Submit changes
+              <i class="fa fa-plus" aria-hidden="true"></i> Submit
             </button>
             <button type="button" class="btn btn-secondary" @click="hideSlotCreateModal">
               <i class="fa fa-times" aria-hidden="true"></i> Cancel
@@ -221,8 +221,8 @@
             </div>
             <div class="row">
               <div class="col">
-                <b-form-fieldset label="Order number" description="Starts at 0 (e.g. orderNumber 0 displayed as slot #1)" :state="slotEditOrderNumberState" :feedback="slotEditOrderNumberFeedback" :formatter="slotEditOrderNumberFormatter">
-                  <b-form-input v-model="slotEditOrderNumber" type="number" required></b-form-input>
+                <b-form-fieldset label="Order number" description="Starts at 0 (e.g. orderNumber 0 displayed as slot #1)" :state="slotEditOrderNumberState" :feedback="slotEditOrderNumberFeedback">
+                  <b-form-input v-model="slotEditOrderNumber" type="number" required :formatter="slotEditOrderNumberFormatter"></b-form-input>
                 </b-form-fieldset>
               </div>
               <div class="col">
@@ -721,9 +721,6 @@ export default {
     slotCreateOrderNumberFeedback() {
       return _.isNil(this.slotCreateOrderNumber) && !_.isNumber(this.slotCreateOrderNumber) ? 'Please enter an order number' : ''
     },
-    slotCreateOrderNumberFormatter(val) {
-      return parseInt(val, 10)
-    },
     slotCreateTitleState() {
       return _.isNil(this.slotCreateTitle) || _.isEmpty(this.slotCreateTitle) ? 'danger' : 'success'
     },
@@ -766,9 +763,6 @@ export default {
     slotEditOrderNumberFeedback() {
       return _.isNil(this.slotEditOrderNumber) && !_.isNumber(this.slotEditOrderNumber) ? 'Please enter an order number' : ''
     },
-    slotEditOrderNumberFormatter(val) {
-      return parseInt(val, 10)
-    },
     slotEditTitleState() {
       return _.isNil(this.slotEditTitle) || _.isEmpty(this.slotEditTitle) ? 'danger' : 'success'
     },
@@ -807,6 +801,20 @@ export default {
     },
   },
   methods: {
+    slotCreateOrderNumberFormatter(val) {
+      if (_.isNumber(val)) {
+        return val
+      }
+
+      return parseInt(val, 10)
+    },
+    slotEditOrderNumberFormatter(val) {
+      if (_.isNumber(val)) {
+        return val
+      }
+
+      return parseInt(val, 10)
+    },
     slotDetailsModalClosed() {
       this.$store.dispatch('clearMissionSlotDetails')
     },

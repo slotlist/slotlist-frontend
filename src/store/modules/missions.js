@@ -23,7 +23,10 @@ const state = {
   showMissionSlotUnregister: false,
   unregisteringFromMissionSlot: false,
   showMissionSlotCreate: false,
-  creatingMissionSlot: false
+  creatingMissionSlot: false,
+  checkingMissionSlugAvailability: false,
+  missionSlugAvailable: false,
+  creatingMission: false
 }
 
 const getters = {
@@ -74,6 +77,15 @@ const getters = {
   },
   showMissionSlotCreate() {
     return state.showMissionSlotCreate
+  },
+  checkingMissionSlugAvailability() {
+    return state.checkingMissionSlugAvailability
+  },
+  missionSlugAvailable() {
+    return state.missionSlugAvailable
+  },
+  creatingMission() {
+    return state.creatingMission
   }
 }
 
@@ -493,8 +505,9 @@ const actions = {
           throw "Received invalid mission deletion"
         }
 
-        router.push({ name: 'missionList' })
-        dispatch('getMissions')
+        commit({
+          type: 'clearMissionDetails'
+        })
 
         dispatch('showAlert', {
           showAlert: true,
@@ -502,9 +515,7 @@ const actions = {
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully deleted mission <strong>${payload.missionTitle}</strong>`
         })
 
-        commit({
-          type: 'clearMissionDetails'
-        })
+        router.push({ name: 'missionList' })
       }).catch((error) => {
         if (error.response) {
           console.error('deleteMission', error.response)
@@ -729,6 +740,127 @@ const actions = {
         }
       })
   },
+  checkMissionSlugAvailability({ commit, dispatch }, payload) {
+    commit({
+      type: 'startCheckingMissionSlugAvailability'
+    })
+
+    return MissionsApi.checkMissionSlugAvailability(payload)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Checking mission slug availability failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (_.isNil(response.data.available)) {
+          console.error(response)
+          throw "Received invalid mission slot availability status"
+        }
+
+        commit({
+          type: 'setMissionSlugAvailability',
+          available: response.data.available
+        })
+      }).catch((error) => {
+        commit({
+          type: 'setMissionSlugAvailability',
+          available: false
+        })
+
+        if (error.response) {
+          console.error('checkMissionSlugAvailability', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to check availability of mission slug <strong>${payload}</strong> - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('checkMissionSlugAvailability', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to check availability of mission slug <strong>${payload}</strong> - Request failed`
+          })
+        } else {
+          console.error('checkMissionSlugAvailability', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to check availability of mission slug <strong>${payload}</strong> - Something failed...`
+          })
+        }
+      })
+  },
+  createMission({ commit, dispatch }, payload) {
+    commit({
+      type: 'startCreatingMission'
+    })
+
+    return MissionsApi.createMission(payload)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Creating mission failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (_.isNil(response.data.mission) || !_.isObject(response.data.mission)) {
+          console.error(response)
+          throw "Received invalid mission"
+        }
+
+        commit({
+          type: 'finishCreatingMission'
+        })
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully created mission <strong>${payload.title}</strong>`
+        })
+
+        router.push({
+          name: 'missionDetails',
+          params: { missionSlug: response.data.mission.slug }
+        })
+      }).catch((error) => {
+        commit({
+          type: 'finishCreatingMission'
+        })
+
+        if (error.response) {
+          console.error('createMission', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create mission <strong>${payload.title}</strong> - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('createMission', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create mission <strong>${payload.title}</strong> - Request failed`
+          })
+        } else {
+          console.error('createMission', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create mission <strong>${payload.title}</strong> - Something failed...`
+          })
+        }
+      })
+  }
 }
 
 const mutations = {
@@ -839,7 +971,20 @@ const mutations = {
   },
   finishCreatingMissionSlot(state) {
     state.creatingMissionSlot = false
-  }
+  },
+  startCheckingMissionSlugAvailability(state) {
+    state.checkingMissionSlugAvailability = true
+  },
+  setMissionSlugAvailability(state, payload) {
+    state.checkingMissionSlugAvailability = false
+    state.missionSlugAvailable = payload.available
+  },
+  startCreatingMission(state) {
+    state.creatingMission = true
+  },
+  finishCreatingMission(state) {
+    state.creatingMission = false
+  },
 }
 
 export default {
