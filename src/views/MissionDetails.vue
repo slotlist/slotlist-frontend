@@ -118,8 +118,11 @@
       </div>
       <div slot="modal-footer">
         <div class="btn-group" role="group" aria-label="Mission slot detail actions">
-          <button type="button" class="btn btn-success" @click="slotDetailsRegister" :disabled="slotDetails.assignee">
+          <button type="button" class="btn btn-success" v-show="loggedIn && !slotDetails.registrationUid" :disabled="slotDetails.assignee" @click="slotDetailsRegister">
             <i class="fa fa-check-square-o" aria-hidden="true"></i> Register
+          </button>
+          <button type="button" class="btn btn-warning" v-show="loggedIn && slotDetails.registrationUid" @click="slotDetailsUnregister">
+            <i class="fa fa-eraser" aria-hidden="true"></i> Unregister
           </button>
           <button type="button" class="btn btn-danger" v-if="isMissionEditor" @click="slotDetailsDelete">
             <i class="fa fa-trash" aria-hidden="true"></i> Delete
@@ -284,11 +287,39 @@
         </div>
       </div>
     </b-modal>
+    <b-modal ref="missionSlotUnregisterModal" id="missionSlotUnregisterModal" @hide="slotUnregisterModalClosed">
+      <div slot="modal-title">
+        <h5>Unregister from slot #{{ slotDetails.orderNumber + 1 }} {{ slotDetails.title }}</h5>
+      </div>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">Confirm removal of registration for slot
+            <span class="font-weight-bold">{{ slotDetails.title }}</span>?
+          </div>
+        </div>
+        <div class="row" v-show="slotDetails.assignee && slotDetails.assignee.uid === user.uid">
+          <div class="col-12">This will also remove you as the assignee of the slot.</div>
+        </div>
+      </div>
+      <div slot="modal-footer">
+        <div class="btn-group" role="group" aria-label="Mission slot unregister actions">
+          <button type="button" class="btn btn-warning" @click="submitMissionSlotUnregister">
+            <i class="fa fa-eraser" aria-hidden="true"></i> Delete registration
+          </button>
+          <button type="button" class="btn btn-secondary" @click="hideMissionSlotUnregisterModal">
+            <i class="fa fa-times" aria-hidden="true"></i> Cancel
+          </button>
+        </div>
+      </div>
+    </b-modal>
     <div v-if="!loaded || !slotlistLoaded">
       <loading-overlay message="Loading Mission details and slotlist..."></loading-overlay>
     </div>
     <div v-if="registeringForSlot">
       <loading-overlay message="Registering for Mission slot..."></loading-overlay>
+    </div>
+    <div v-if="unregisteringFromSlot">
+      <loading-overlay message="Unregistering from Mission slot..."></loading-overlay>
     </div>
     <div v-if="deletingSlot">
       <loading-overlay message="Deleting Mission slot..."></loading-overlay>
@@ -342,11 +373,20 @@ export default {
     loaded() {
       return this.$store.getters.missionDetailsLoaded
     },
+    loggedIn() {
+      return this.$store.getters.loggedIn
+    },
+    user() {
+      return this.$store.getters.user
+    },
     slotlistLoaded() {
       return this.$store.getters.missionSlotlistLoaded
     },
     registeringForSlot() {
       return this.$store.getters.registeringForMissionSlot
+    },
+    unregisteringFromSlot() {
+      return this.$store.getters.unregisteringFromMissionSlot
     },
     deletingSlot() {
       return this.$store.getters.deletingMissionSlot
@@ -380,6 +420,9 @@ export default {
     },
     showSlotDeletion() {
       return this.$store.getters.showMissionSlotDeletion
+    },
+    showSlotUnregister() {
+      return this.$store.getters.showMissionSlotUnregister
     },
     optionalAssignee() {
       return _.isNil(this.slotDetails.assignee) ? '<span class="text-muted font-italic">not assigned</span>' : this.formatUserWithTag(this.slotDetails.assignee)
@@ -492,9 +535,16 @@ export default {
     slotRegisterModalClosed() {
       this.$store.dispatch('clearMissionSlotRegister')
     },
+    slotUnregisterModalClosed() {
+      this.$store.dispatch('clearMissionSlotUnregister')
+    },
     slotDetailsRegister() {
       this.$refs.slotDetailsModal.hide()
       this.$store.dispatch('showMissionSlotRegister', this.slotDetails)
+    },
+    slotDetailsUnregister() {
+      this.$refs.slotDetailsModal.hide()
+      this.$store.dispatch('showMissionSlotUnregister', this.slotDetails)
     },
     slotDetailsDelete() {
       this.$refs.slotDetailsModal.hide()
@@ -548,7 +598,6 @@ export default {
       })
     },
     populateMissionEditModal() {
-      console.log(this.missionDetails)
       this.missionEditTitle = this.missionDetails.title
       this.missionEditShortDescription = this.missionDetails.shortDescription
       this.missionEditDescription = this.missionDetails.description
@@ -589,16 +638,28 @@ export default {
         }
       })
 
-      console.log(localMissionDetails)
-      console.log(this.missionDetails)
-      console.log(updatedMissionDetails)
-
       this.$store.dispatch('editMission', {
         missionSlug: this.$route.params.missionSlug,
         missionTitle: this.missionDetails.title,
         updatedMissionDetails
       })
-    }
+    },
+    showMissionSlotUnregisterModal() {
+      this.$refs.missionSlotUnregisterModal.show()
+    },
+    hideMissionSlotUnregisterModal() {
+      this.$refs.missionSlotUnregisterModal.hide()
+    },
+    submitMissionSlotUnregister() {
+      this.$refs.missionSlotUnregisterModal.hide()
+      this.$store.dispatch('unregisterFromMissionSlot', {
+        missionSlug: this.$route.params.missionSlug,
+        slotUid: this.slotDetails.uid,
+        slotOrderNumber: this.slotDetails.orderNumber,
+        slotTitle: this.slotDetails.title,
+        registrationUid: this.slotDetails.registrationUid
+      })
+    },
   },
   watch: {
     showSlotDetails(val) {
@@ -615,13 +676,19 @@ export default {
       if (val) {
         this.$refs.slotDeletionModal.show()
       }
-    }
+    },
+    showSlotUnregister(val) {
+      if (val) {
+        this.$refs.missionSlotUnregisterModal.show()
+      }
+    },
   },
   beforeCreate: function () {
     this.$store.dispatch('getMissionDetails', this.$route.params.missionSlug)
     this.$store.dispatch('getMissionSlotlist', this.$route.params.missionSlug)
     this.$store.dispatch('clearMissionSlotDetails')
     this.$store.dispatch('clearMissionSlotRegister')
+    this.$store.dispatch('clearMissionSlotUnregister')
   },
   created: function () {
     utils.setTitle('Mission')
@@ -631,6 +698,7 @@ export default {
     this.$store.dispatch('clearMissionSlotlist')
     this.$store.dispatch('clearMissionSlotDetails')
     this.$store.dispatch('clearMissionSlotRegister')
+    this.$store.dispatch('clearMissionSlotUnregister')
   }
 }
 </script>

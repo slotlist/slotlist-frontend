@@ -31,6 +31,9 @@ const getters = {
   },
   refreshingToken() {
     return state.refreshingToken
+  },
+  user() {
+    return _.isNil(state.decodedToken) ? {} : state.decodedToken.user
   }
 }
 

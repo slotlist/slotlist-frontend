@@ -15,8 +15,11 @@
         <button type="button" class="btn btn-primary" @click="slotDetails">
           <i class="fa fa-info" aria-hidden="true"></i> Details
         </button>
-        <button type="button" class="btn btn-success" v-show="loggedIn" :disabled="missionSlot.assignee" @click="registerForSlot">
+        <button type="button" class="btn btn-success" v-show="loggedIn && !missionSlot.registrationUid" :disabled="missionSlot.assignee" @click="registerForSlot">
           <i class="fa fa-check-square-o" aria-hidden="true"></i> Register
+        </button>
+        <button type="button" class="btn btn-warning" v-show="loggedIn && missionSlot.registrationUid" @click="deleteSlotRegistration">
+          <i class="fa fa-eraser" aria-hidden="true"></i> Unregister
         </button>
         <button type="button" class="btn btn-danger" v-if="canEditSlotlist" @click="deleteSlot">
           <i class="fa fa-trash" aria-hidden="true"></i> Delete
@@ -79,6 +82,9 @@ export default {
     },
     deleteSlot() {
       this.$store.dispatch('showMissionSlotDeletion', this.missionSlot)
+    },
+    deleteSlotRegistration() {
+      this.$store.dispatch('showMissionSlotUnregister', this.missionSlot)
     }
   },
   props: [

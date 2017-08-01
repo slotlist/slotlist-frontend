@@ -21,6 +21,9 @@ export const v1 = {
   },
   editMission(missionSlug, payload) {
     return axios.patch(`/v1/missions/${missionSlug}`, payload)
+  },
+  unregisterFromMissionSlot(missionSlug, slotUid, registrationUid) {
+    return axios.delete(`/v1/missions/${missionSlug}/slots/${slotUid}/registrations/${registrationUid}`)
   }
 }
 

@@ -18,7 +18,9 @@ const state = {
   showMissionSlotRegister: false,
   registeringForMissionSlot: false,
   showMissionSlotDeletion: false,
-  deletingMissionSlot: false
+  deletingMissionSlot: false,
+  showMissionSlotUnregister: false,
+  unregisteringFromMissionSlot: false
 }
 
 const getters = {
@@ -57,7 +59,13 @@ const getters = {
   },
   deletingMissionSlot() {
     return state.deletingMissionSlot
-  }
+  },
+  showMissionSlotUnregister() {
+    return state.showMissionSlotUnregister
+  },
+  unregisteringFromMissionSlot() {
+    return state.unregisteringFromMissionSlot
+  },
 }
 
 const actions = {
@@ -297,6 +305,9 @@ const actions = {
         commit({
           type: 'finishRegisteringForMissionSlot'
         })
+
+        dispatch('getMissionSlotlist', payload.missionSlug)
+
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
@@ -500,6 +511,79 @@ const actions = {
           })
         }
       })
+  },
+  showMissionSlotUnregister({ commit }, payload) {
+    commit({
+      type: 'showMissionSlotUnregister',
+      slotDetails: payload
+    })
+  },
+  clearMissionSlotUnregister({ commit }) {
+    commit({
+      type: 'clearMissionSlotUnregister'
+    })
+  },
+  unregisterFromMissionSlot({ commit, dispatch }, payload) {
+    commit({
+      type: "startUnregisteringFromMissionSlot"
+    })
+
+    return MissionsApi.unregisterFromMissionSlot(payload.missionSlug, payload.slotUid, payload.registrationUid)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Unregistering from mission slot failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (response.data.success !== true) {
+          console.error(response)
+          throw "Received invalid mission slot registration deletion"
+        }
+
+        commit({
+          type: 'finishUnregisteringFromMissionSlot'
+        })
+
+        dispatch('getMissionSlotlist', payload.missionSlug)
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully unregistered from slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong>`
+        })
+      }).catch((error) => {
+        commit({
+          type: 'finishUnregisteringFromMissionSlot'
+        })
+
+        if (error.response) {
+          console.error('unregisterFromMissionSlot', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to unregister from slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('unregisterFromMissionSlot', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to unregister from slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Request failed`
+          })
+        } else {
+          console.error('unregisterFromMissionSlot', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to unregister from slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Something failed...`
+          })
+        }
+      })
   }
 }
 
@@ -580,6 +664,19 @@ const mutations = {
   },
   finishDeletingMissionSlot(state) {
     state.deletingMissionSlot = false
+  },
+  showMissionSlotUnregister(state, payload) {
+    state.missionSlotDetails = payload.slotDetails
+    state.showMissionSlotUnregister = true
+  },
+  clearMissionSlotUnregister(state) {
+    state.showMissionSlotUnregister = false
+  },
+  startUnregisteringFromMissionSlot(state) {
+    state.unregisteringFromMissionSlot = true
+  },
+  finishUnregisteringFromMissionSlot(state) {
+    state.unregisteringFromMissionSlot = false
   }
 }
 
