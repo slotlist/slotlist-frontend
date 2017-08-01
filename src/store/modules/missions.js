@@ -21,7 +21,9 @@ const state = {
   editingMissionSlot: false,
   deletingMissionSlot: false,
   showMissionSlotUnregister: false,
-  unregisteringFromMissionSlot: false
+  unregisteringFromMissionSlot: false,
+  showMissionSlotCreate: false,
+  creatingMissionSlot: false
 }
 
 const getters = {
@@ -70,6 +72,9 @@ const getters = {
   unregisteringFromMissionSlot() {
     return state.unregisteringFromMissionSlot
   },
+  showMissionSlotCreate() {
+    return state.showMissionSlotCreate
+  }
 }
 
 const actions = {
@@ -651,6 +656,79 @@ const actions = {
         }
       })
   },
+  showMissionSlotCreate({ commit }, payload) {
+    commit({
+      type: 'showMissionSlotCreate',
+      slotDetails: payload
+    })
+  },
+  clearMissionSlotCreate({ commit }) {
+    commit({
+      type: 'clearMissionSlotCreate'
+    })
+  },
+  createMissionSlot({ commit, dispatch }, payload) {
+    commit({
+      type: 'startCreatingMissionSlot'
+    })
+
+    return MissionsApi.createMissionSlot(payload.missionSlug, payload.slotDetails)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Creating mission slot failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (_.isNil(response.data.slots) || !_.isArray(response.data.slots) || _.isEmpty(response.data.slots)) {
+          console.error(response)
+          throw "Received invalid mission slot"
+        }
+
+        commit({
+          type: 'finishCreatingMissionSlot'
+        })
+
+        dispatch('getMissionSlotlist', payload.missionSlug)
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully created slot <strong>#${payload.slotDetails.orderNumber + 1} ${payload.slotDetails.title}</strong>`
+        })
+      }).catch((error) => {
+        commit({
+          type: 'finishCreatingMissionSlot'
+        })
+
+        if (error.response) {
+          console.error('createMissionSlot', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create slot <strong>#${payload.slotDetails.orderNumber + 1} ${payload.slotDetails.title}</strong> - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('createMissionSlot', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create slot <strong>#${payload.slotDetails.orderNumber + 1} ${payload.slotDetails.title}</strong> - Request failed`
+          })
+        } else {
+          console.error('createMissionSlot', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create slot <strong>#${payload.slotDetails.orderNumber + 1} ${payload.slotDetails.title}</strong> - Something failed...`
+          })
+        }
+      })
+  },
 }
 
 const mutations = {
@@ -749,6 +827,18 @@ const mutations = {
   },
   finishUnregisteringFromMissionSlot(state) {
     state.unregisteringFromMissionSlot = false
+  },
+  showMissionSlotCreate(state) {
+    state.showMissionSlotCreate = true
+  },
+  clearMissionSlotCreate(state) {
+    state.showMissionSlotCreate = false
+  },
+  startCreatingMissionSlot(state) {
+    state.creatingMissionSlot = true
+  },
+  finishCreatingMissionSlot(state) {
+    state.creatingMissionSlot = false
   }
 }
 

@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     createSlot() {
-      console.log('createSlot')
+      this.$store.dispatch('showMissionSlotCreate')
     },
     refreshSlotlist() {
       this.$store.dispatch('clearMissionSlotlist')
