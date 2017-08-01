@@ -13,6 +13,9 @@ export const v1 = {
   registerForMissionSlot(missionSlug, slotUid, comment) {
     return axios.post(`/v1/missions/${missionSlug}/slots/${slotUid}/registrations`, { comment })
   },
+  editMissionSlot(missionSlug, slotUid, payload) {
+    return axios.patch(`/v1/missions/${missionSlug}/slots/${slotUid}`, payload)
+  },
   deleteMissionSlot(missionSlug, slotUid) {
     return axios.delete(`/v1/missions/${missionSlug}/slots/${slotUid}`)
   },

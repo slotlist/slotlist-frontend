@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- Begin of content -->
     <div v-if="loaded">
       <div class="jumbotron">
         <h1 class="display-4 text-center">{{ missionDetails.title }}</h1>
@@ -78,252 +79,317 @@
         </div>
       </div>
     </div>
-    <b-modal ref="slotDetailsModal" id="slotDetailsModal" @hide="slotDetailsModalClosed">
-      <div slot="modal-title">
-        <h5>Slot details - #{{ slotDetails.orderNumber + 1 }} {{ slotDetails.title }}</h5>
-      </div>
-      <div class="container-fluid">
-        <div class="row font-weight-bold">
-          <div class="col col-1">#</div>
-          <div class="col col-3">Role</div>
-          <div class="col col-5">Player</div>
-          <div class="col col-3">Difficulty</div>
+    <!-- End of content -->
+    <!-- Begin of modals -->
+    <div>
+      <b-modal ref="slotDetailsModal" id="slotDetailsModal" @hide="slotDetailsModalClosed">
+        <div slot="modal-title">
+          <h5>Slot details - #{{ slotDetails.orderNumber + 1 }} {{ slotDetails.title }}</h5>
         </div>
-        <div class="row">
-          <div class="col col-1">{{ slotDetails.orderNumber + 1 }}</div>
-          <div class="col col-3">{{ slotDetails.title }} </div>
-          <div class="col col-5" v-html="optionalAssignee"></div>
-          <div class="col col-3">
-            <i :class="difficultyIcon" aria-hidden="true"></i>
-            <span :class="difficultyColor">{{ difficultyText }}</span>
-          </div>
-        </div>
-        <div class="row font-weight-bold">
-          <div class="col col-1"></div>
-          <div class="col col-6">Description</div>
-          <div class="col col-5">Status</div>
-        </div>
-        <div class="row">
-          <div class="col col-1"></div>
-          <div class="col col-6">{{ slotDetails.shortDescription}}</div>
-          <div class="col col-5" v-html="slotStatus"></div>
-        </div>
-        <hr class="my-4" v-show="slotDetails.description">
-        <div class="row font-weight-bold" v-show="slotDetails.description">
-          <div class="col col-12">Detailed description</div>
-        </div>
-        <div class="row" v-show="slotDetails.description">
-          <div class="col col-12" v-html="slotDetails.description"></div>
-        </div>
-      </div>
-      <div slot="modal-footer">
-        <div class="btn-group" role="group" aria-label="Mission slot detail actions">
-          <button type="button" class="btn btn-success" v-show="loggedIn && !slotDetails.registrationUid" :disabled="slotDetails.assignee" @click="slotDetailsRegister">
-            <i class="fa fa-check-square-o" aria-hidden="true"></i> Register
-          </button>
-          <button type="button" class="btn btn-warning" v-show="loggedIn && slotDetails.registrationUid" @click="slotDetailsUnregister">
-            <i class="fa fa-eraser" aria-hidden="true"></i> Unregister
-          </button>
-          <button type="button" class="btn btn-danger" v-if="isMissionEditor" @click="slotDetailsDelete">
-            <i class="fa fa-trash" aria-hidden="true"></i> Delete
-          </button>
-          <button type="button" class="btn btn-secondary" @click="hideSlotDetailsModal">
-            <i class="fa fa-times" aria-hidden="true"></i> Close</button>
-        </div>
-      </div>
-    </b-modal>
-    <b-modal ref="slotRegisterModal" id="slotRegisterModal" @shown="clearSlotRegistrationComment" @hide="slotRegisterModalClosed">
-      <div slot="modal-title">
-        <h5>Register for slot #{{ slotDetails.orderNumber + 1 }} {{ slotDetails.title }}</h5>
-      </div>
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-12">Confirm registration as
-            <span class="font-weight-bold">{{ slotDetails.title }}</span>?</div>
-        </div>
-        <hr class="my-4">
-        <div class="row">
-          <div class="col col-12">
-            <form @submit.stop.prevent="submitSlotRegistration">
-              <b-form-input type="text" placeholder="Optional comment to the mission creator" v-model="slotRegistrationComment"></b-form-input>
-            </form>
-          </div>
-        </div>
-      </div>
-      <div slot="modal-footer">
-        <div class="btn-group" role="group" aria-label="Mission slot register actions">
-          <button type="button" class="btn btn-success" @click="submitSlotRegistration" :disabled="slotDetails.assignee">
-            <i class="fa fa-check" aria-hidden="true"></i> Confirm
-          </button>
-          <button type="button" class="btn btn-secondary" @click="hideSlotRegisterModal">
-            <i class="fa fa-times" aria-hidden="true"></i> Cancel
-          </button>
-        </div>
-      </div>
-    </b-modal>
-    <b-modal ref="slotDeletionModal" id="slotDeletionModal" @hide="slotDeletionModalClosed">
-      <div slot="modal-title">
-        <h5>Deletion of slot #{{ slotDetails.orderNumber + 1 }} {{ slotDetails.title }}</h5>
-      </div>
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-12">Confirm deletion of slot
-            <span class="font-weight-bold">#{{ slotDetails.orderNumber + 1}} {{ slotDetails.title }}</span>?</div>
-        </div>
-      </div>
-      <div slot="modal-footer">
-        <div class="btn-group" role="group" aria-label="Mission slot deletion actions">
-          <button type="button" class="btn btn-danger" @click="submitSlotDeletion">
-            <i class="fa fa-trash" aria-hidden="true"></i> Delete slot
-          </button>
-          <button type="button" class="btn btn-secondary" @click="hideSlotDeletionModal">
-            <i class="fa fa-times" aria-hidden="true"></i> Cancel
-          </button>
-        </div>
-      </div>
-    </b-modal>
-    <b-modal ref="missionDeletionModal" id="missionDeletionModal">
-      <div slot="modal-title">
-        <h5>Deletion of mission</h5>
-      </div>
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-12">Confirm deletion of
-            <span class="font-weight-bold">{{ missionDetails.title }}</span> mission?
-          </div>
-        </div>
-      </div>
-      <div slot="modal-footer">
-        <div class="btn-group" role="group" aria-label="Mission deletion actions">
-          <button type="button" class="btn btn-danger" @click="submitMissionDeletion">
-            <i class="fa fa-trash" aria-hidden="true"></i> Delete mission
-          </button>
-          <button type="button" class="btn btn-secondary" @click="hideMissionDeletionModal">
-            <i class="fa fa-times" aria-hidden="true"></i> Cancel
-          </button>
-        </div>
-      </div>
-    </b-modal>
-    <b-modal ref="missionEditModal" id="missionEditModal" size="lg" @show="populateMissionEditModal">
-      <div slot="modal-title">
-        <h5>Edit mission</h5>
-      </div>
-      <div class="container-fluid">
-        <b-form @submit.stop.prevent="submitMissionEdit">
-          <div class="row">
-            <div class="col">
-              <b-form-fieldset label="Title" :state="missionEditTitleState" :feedback="missionEditTitleFeedback">
-                <b-form-input v-model="missionEditTitle" type="text" required></b-form-input>
-              </b-form-fieldset>
-            </div>
-            <div class="col">
-              <b-form-fieldset label="Short description" :state="missionEditShortDescriptionState" :feedback="missionEditShortDescriptionFeedback">
-                <b-form-input v-model="missionEditShortDescription" textarea required></b-form-input>
-              </b-form-fieldset>
-            </div>
+        <div class="container-fluid">
+          <div class="row font-weight-bold">
+            <div class="col col-1">#</div>
+            <div class="col col-3">Role</div>
+            <div class="col col-5">Player</div>
+            <div class="col col-3">Difficulty</div>
           </div>
           <div class="row">
-            <div class="col">
-              <b-form-fieldset label="Description" :state="missionEditDescriptionState" :feedback="missionEditDescriptionFeedback">
-                <quill-editor class="ql-editor-large" v-model="missionEditDescription" ref="missionEditDescriptionEditor" :options="editorOptions" required></quill-editor>
-              </b-form-fieldset>
+            <div class="col col-1">{{ slotDetails.orderNumber + 1 }}</div>
+            <div class="col col-3">{{ slotDetails.title }} </div>
+            <div class="col col-5" v-html="optionalAssignee"></div>
+            <div class="col col-3">
+              <i :class="difficultyIcon" aria-hidden="true"></i>
+              <span :class="difficultyColor">{{ difficultyText }}</span>
             </div>
+          </div>
+          <div class="row font-weight-bold">
+            <div class="col col-1"></div>
+            <div class="col col-6">Description</div>
+            <div class="col col-5">Status</div>
           </div>
           <div class="row">
-            <div class="col">
-              <b-form-fieldset label="Slotting time" :state="missionEditSlottingTimeState" :feedback="missionEditSlottingTimeFeedback">
-                <b-form-input v-model="missionEditSlottingTime" type="text" required></b-form-input>
-              </b-form-fieldset>
-            </div>
-            <div class="col">
-              <b-form-fieldset label="Start time" :state="missionEditStartTimeState" :feedback="missionEditStartTimeFeedback">
-                <b-form-input v-model="missionEditStartTime" type="text" required></b-form-input>
-              </b-form-fieldset>
-            </div>
+            <div class="col col-1"></div>
+            <div class="col col-6">{{ slotDetails.shortDescription}}</div>
+            <div class="col col-5" v-html="slotStatus"></div>
           </div>
-          <div class="row">
-            <div class="col">
-              <b-form-fieldset label="End time" :state="missionEditEndTimeState" :feedback="missionEditEndTimeFeedback">
-                <b-form-input v-model="missionEditEndTime" type="text" required></b-form-input>
-              </b-form-fieldset>
-            </div>
-            <div class="col">
-              <b-form-fieldset label="Briefing time" :state="missionEditBriefingTimeState" :feedback="missionEditBriefingTimeFeedback">
-                <b-form-input v-model="missionEditBriefingTime" type="text" required></b-form-input>
-              </b-form-fieldset>
-            </div>
+          <hr class="my-4" v-show="slotDetails.description">
+          <div class="row font-weight-bold" v-show="slotDetails.description">
+            <div class="col col-12">Detailed description</div>
           </div>
-          <div class="row">
-            <div class="col">
-              <b-form-fieldset label="Repository URL <em>(optional)</em>" :state="missionEditRepositoryUrlState" :feedback="missionEditRepositoryUrlFeedback">
-                <b-form-input v-model="missionEditRepositoryUrl" type="text"></b-form-input>
-              </b-form-fieldset>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <b-form-fieldset label="Tech support <em>(optional)</em>" :state="missionEditTechSupportState" :feedback="missionEditTechSupportFeedback">
-                <quill-editor v-model="missionEditTechSupport" ref="missionEditTechSupportEditor" :options="editorOptions"></quill-editor>
-              </b-form-fieldset>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <b-form-fieldset label="Rules <em>(optional)</em>" :state="missionEditRulesState" :feedback="missionEditRulesFeedback">
-                <quill-editor v-model="missionEditRules" ref="missionEditRulesEditor" :options="editorOptions"></quill-editor>
-              </b-form-fieldset>
-            </div>
-          </div>
-        </b-form>
-      </div>
-      <div slot="modal-footer">
-        <div class="btn-group" role="group" aria-label="Mission edit actions">
-          <button type="button" class="btn btn-success" @click="submitMissionEdit">
-            <i class="fa fa-edit" aria-hidden="true"></i> Submit changes
-          </button>
-          <button type="button" class="btn btn-secondary" @click="hideMissionEditModal">
-            <i class="fa fa-times" aria-hidden="true"></i> Cancel
-          </button>
-        </div>
-      </div>
-    </b-modal>
-    <b-modal ref="missionSlotUnregisterModal" id="missionSlotUnregisterModal" @hide="slotUnregisterModalClosed">
-      <div slot="modal-title">
-        <h5>Unregister from slot #{{ slotDetails.orderNumber + 1 }} {{ slotDetails.title }}</h5>
-      </div>
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-12">Confirm removal of registration for slot
-            <span class="font-weight-bold">{{ slotDetails.title }}</span>?
+          <div class="row" v-show="slotDetails.description">
+            <div class="col col-12" v-html="slotDetails.description"></div>
           </div>
         </div>
-        <div class="row" v-show="slotDetails.assignee && slotDetails.assignee.uid === user.uid">
-          <div class="col-12">This will also remove you as the assignee of the slot.</div>
+        <div slot="modal-footer">
+          <div class="btn-group" role="group" aria-label="Mission slot detail actions">
+            <button type="button" class="btn btn-success" v-show="loggedIn && !slotDetails.registrationUid" :disabled="slotDetails.assignee" @click="slotDetailsRegister">
+              <i class="fa fa-check-square-o" aria-hidden="true"></i> Register
+            </button>
+            <button type="button" class="btn btn-warning" v-show="loggedIn && slotDetails.registrationUid" @click="slotDetailsUnregister">
+              <i class="fa fa-eraser" aria-hidden="true"></i> Unregister
+            </button>
+            <button type="button" class="btn btn-primary" v-if="isMissionEditor" @click="slotDetailsEdit">
+              <i class="fa fa-edit" aria-hidden="true"></i> Edit
+            </button>
+            <button type="button" class="btn btn-danger" v-if="isMissionEditor" @click="slotDetailsDelete">
+              <i class="fa fa-trash" aria-hidden="true"></i> Delete
+            </button>
+            <button type="button" class="btn btn-secondary" @click="hideSlotDetailsModal">
+              <i class="fa fa-times" aria-hidden="true"></i> Close</button>
+          </div>
         </div>
-      </div>
-      <div slot="modal-footer">
-        <div class="btn-group" role="group" aria-label="Mission slot unregister actions">
-          <button type="button" class="btn btn-warning" @click="submitMissionSlotUnregister">
-            <i class="fa fa-eraser" aria-hidden="true"></i> Delete registration
-          </button>
-          <button type="button" class="btn btn-secondary" @click="hideMissionSlotUnregisterModal">
-            <i class="fa fa-times" aria-hidden="true"></i> Cancel
-          </button>
+      </b-modal>
+      <b-modal ref="slotEditModal" id="slotEditModal" size="lg" @show="populateSlotEditModal">
+        <div slot="modal-title">
+          <h5>Edit slot #{{ slotDetails.orderNumber }} {{ slotDetails.title }}</h5>
         </div>
-      </div>
-    </b-modal>
-    <div v-if="!loaded || !slotlistLoaded">
-      <loading-overlay message="Loading Mission details and slotlist..."></loading-overlay>
+        <div class="container-fluid">
+          <b-form @submit.stop.prevent="submitMissionEdit">
+            <div class="row">
+              <div class="col">
+                <b-form-fieldset label="Title" :state="slotEditTitleState" :feedback="slotEditTitleFeedback">
+                  <b-form-input v-model="slotEditTitle" type="text" required></b-form-input>
+                </b-form-fieldset>
+              </div>
+              <div class="col">
+                <b-form-fieldset label="Short description <em>(optional)</em>" :state="slotEditShortDescriptionState" :feedback="slotEditShortDescriptionFeedback">
+                  <b-form-input v-model="slotEditShortDescription" textarea></b-form-input>
+                </b-form-fieldset>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <b-form-fieldset label="Order number" description="Starts at 0 (e.g. orderNumber 0 displayed as slot #1)" :state="slotEditOrderNumberState" :feedback="slotEditOrderNumberFeedback" :formatter="slotEditOrderNumberFormatter">
+                  <b-form-input v-model="slotEditOrderNumber" type="number" required></b-form-input>
+                </b-form-fieldset>
+              </div>
+              <div class="col">
+                <b-form-fieldset label="Difficulty" :state="slotEditDifficultyState" :feedback="slotEditDifficultyFeedback">
+                  <b-form-select v-model="slotEditDifficulty" :options="slotEditDifficultyOptions" class="mb-3" required></b-form-select>
+                </b-form-fieldset>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <b-form-fieldset label="Description <em>(optional)</em>" :state="slotEditDescriptionState" :feedback="slotEditDescriptionFeedback">
+                  <quill-editor v-model="slotEditDescription" ref="slotEditDescriptionEditor" :options="editorOptions"></quill-editor>
+                </b-form-fieldset>
+              </div>
+            </div>
+          </b-form>
+        </div>
+        <div slot="modal-footer">
+          <div class="btn-group" role="group" aria-label="Mission slot edit actions">
+            <button type="button" class="btn btn-success" @click="submitSlotEdit">
+              <i class="fa fa-edit" aria-hidden="true"></i> Submit changes
+            </button>
+            <button type="button" class="btn btn-secondary" @click="hideSlotEditModal">
+              <i class="fa fa-times" aria-hidden="true"></i> Cancel
+            </button>
+          </div>
+        </div>
+      </b-modal>
+      <b-modal ref="slotRegisterModal" id="slotRegisterModal" @shown="clearSlotRegistrationComment" @hide="slotRegisterModalClosed">
+        <div slot="modal-title">
+          <h5>Register for slot #{{ slotDetails.orderNumber + 1 }} {{ slotDetails.title }}</h5>
+        </div>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">Confirm registration as
+              <span class="font-weight-bold">{{ slotDetails.title }}</span>?</div>
+          </div>
+          <hr class="my-4">
+          <div class="row">
+            <div class="col col-12">
+              <form @submit.stop.prevent="submitSlotRegistration">
+                <b-form-input type="text" placeholder="Optional comment to the mission creator" v-model="slotRegistrationComment"></b-form-input>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div slot="modal-footer">
+          <div class="btn-group" role="group" aria-label="Mission slot register actions">
+            <button type="button" class="btn btn-success" @click="submitSlotRegistration" :disabled="slotDetails.assignee">
+              <i class="fa fa-check" aria-hidden="true"></i> Confirm
+            </button>
+            <button type="button" class="btn btn-secondary" @click="hideSlotRegisterModal">
+              <i class="fa fa-times" aria-hidden="true"></i> Cancel
+            </button>
+          </div>
+        </div>
+      </b-modal>
+      <b-modal ref="slotDeletionModal" id="slotDeletionModal" @hide="slotDeletionModalClosed">
+        <div slot="modal-title">
+          <h5>Deletion of slot #{{ slotDetails.orderNumber + 1 }} {{ slotDetails.title }}</h5>
+        </div>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">Confirm deletion of slot
+              <span class="font-weight-bold">#{{ slotDetails.orderNumber + 1}} {{ slotDetails.title }}</span>?</div>
+          </div>
+        </div>
+        <div slot="modal-footer">
+          <div class="btn-group" role="group" aria-label="Mission slot deletion actions">
+            <button type="button" class="btn btn-danger" @click="submitSlotDeletion">
+              <i class="fa fa-trash" aria-hidden="true"></i> Delete slot
+            </button>
+            <button type="button" class="btn btn-secondary" @click="hideSlotDeletionModal">
+              <i class="fa fa-times" aria-hidden="true"></i> Cancel
+            </button>
+          </div>
+        </div>
+      </b-modal>
+      <b-modal ref="missionDeletionModal" id="missionDeletionModal">
+        <div slot="modal-title">
+          <h5>Deletion of mission</h5>
+        </div>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">Confirm deletion of
+              <span class="font-weight-bold">{{ missionDetails.title }}</span> mission?
+            </div>
+          </div>
+        </div>
+        <div slot="modal-footer">
+          <div class="btn-group" role="group" aria-label="Mission deletion actions">
+            <button type="button" class="btn btn-danger" @click="submitMissionDeletion">
+              <i class="fa fa-trash" aria-hidden="true"></i> Delete mission
+            </button>
+            <button type="button" class="btn btn-secondary" @click="hideMissionDeletionModal">
+              <i class="fa fa-times" aria-hidden="true"></i> Cancel
+            </button>
+          </div>
+        </div>
+      </b-modal>
+      <b-modal ref="missionEditModal" id="missionEditModal" size="lg" @show="populateMissionEditModal">
+        <div slot="modal-title">
+          <h5>Edit mission</h5>
+        </div>
+        <div class="container-fluid">
+          <b-form @submit.stop.prevent="submitMissionEdit">
+            <div class="row">
+              <div class="col">
+                <b-form-fieldset label="Title" :state="missionEditTitleState" :feedback="missionEditTitleFeedback">
+                  <b-form-input v-model="missionEditTitle" type="text" required></b-form-input>
+                </b-form-fieldset>
+              </div>
+              <div class="col">
+                <b-form-fieldset label="Short description" :state="missionEditShortDescriptionState" :feedback="missionEditShortDescriptionFeedback">
+                  <b-form-input v-model="missionEditShortDescription" textarea required></b-form-input>
+                </b-form-fieldset>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <b-form-fieldset label="Description" :state="missionEditDescriptionState" :feedback="missionEditDescriptionFeedback">
+                  <quill-editor v-model="missionEditDescription" ref="missionEditDescriptionEditor" :options="editorOptions" required></quill-editor>
+                </b-form-fieldset>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <b-form-fieldset label="Slotting time" :state="missionEditSlottingTimeState" :feedback="missionEditSlottingTimeFeedback">
+                  <b-form-input v-model="missionEditSlottingTime" type="text" required></b-form-input>
+                </b-form-fieldset>
+              </div>
+              <div class="col">
+                <b-form-fieldset label="Start time" :state="missionEditStartTimeState" :feedback="missionEditStartTimeFeedback">
+                  <b-form-input v-model="missionEditStartTime" type="text" required></b-form-input>
+                </b-form-fieldset>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <b-form-fieldset label="End time" :state="missionEditEndTimeState" :feedback="missionEditEndTimeFeedback">
+                  <b-form-input v-model="missionEditEndTime" type="text" required></b-form-input>
+                </b-form-fieldset>
+              </div>
+              <div class="col">
+                <b-form-fieldset label="Briefing time" :state="missionEditBriefingTimeState" :feedback="missionEditBriefingTimeFeedback">
+                  <b-form-input v-model="missionEditBriefingTime" type="text" required></b-form-input>
+                </b-form-fieldset>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <b-form-fieldset label="Repository URL <em>(optional)</em>" :state="missionEditRepositoryUrlState" :feedback="missionEditRepositoryUrlFeedback">
+                  <b-form-input v-model="missionEditRepositoryUrl" type="text"></b-form-input>
+                </b-form-fieldset>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <b-form-fieldset label="Tech support <em>(optional)</em>" :state="missionEditTechSupportState" :feedback="missionEditTechSupportFeedback">
+                  <quill-editor v-model="missionEditTechSupport" ref="missionEditTechSupportEditor" :options="editorOptions"></quill-editor>
+                </b-form-fieldset>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <b-form-fieldset label="Rules <em>(optional)</em>" :state="missionEditRulesState" :feedback="missionEditRulesFeedback">
+                  <quill-editor v-model="missionEditRules" ref="missionEditRulesEditor" :options="editorOptions"></quill-editor>
+                </b-form-fieldset>
+              </div>
+            </div>
+          </b-form>
+        </div>
+        <div slot="modal-footer">
+          <div class="btn-group" role="group" aria-label="Mission edit actions">
+            <button type="button" class="btn btn-success" @click="submitMissionEdit">
+              <i class="fa fa-edit" aria-hidden="true"></i> Submit changes
+            </button>
+            <button type="button" class="btn btn-secondary" @click="hideMissionEditModal">
+              <i class="fa fa-times" aria-hidden="true"></i> Cancel
+            </button>
+          </div>
+        </div>
+      </b-modal>
+      <b-modal ref="missionSlotUnregisterModal" id="missionSlotUnregisterModal" @hide="slotUnregisterModalClosed">
+        <div slot="modal-title">
+          <h5>Unregister from slot #{{ slotDetails.orderNumber + 1 }} {{ slotDetails.title }}</h5>
+        </div>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">Confirm removal of registration for slot
+              <span class="font-weight-bold">{{ slotDetails.title }}</span>?
+            </div>
+          </div>
+          <div class="row" v-show="slotDetails.assignee && slotDetails.assignee.uid === user.uid">
+            <div class="col-12">This will also remove you as the assignee of the slot.</div>
+          </div>
+        </div>
+        <div slot="modal-footer">
+          <div class="btn-group" role="group" aria-label="Mission slot unregister actions">
+            <button type="button" class="btn btn-warning" @click="submitMissionSlotUnregister">
+              <i class="fa fa-eraser" aria-hidden="true"></i> Delete registration
+            </button>
+            <button type="button" class="btn btn-secondary" @click="hideMissionSlotUnregisterModal">
+              <i class="fa fa-times" aria-hidden="true"></i> Cancel
+            </button>
+          </div>
+        </div>
+      </b-modal>
     </div>
-    <div v-if="registeringForSlot">
-      <loading-overlay message="Registering for Mission slot..."></loading-overlay>
+    <!-- End of modals -->
+    <!-- Begin of overlays -->
+    <div>
+      <div v-if="!loaded || !slotlistLoaded">
+        <loading-overlay message="Loading Mission details and slotlist..."></loading-overlay>
+      </div>
+      <div v-if="registeringForSlot">
+        <loading-overlay message="Registering for Mission slot..."></loading-overlay>
+      </div>
+      <div v-if="unregisteringFromSlot">
+        <loading-overlay message="Unregistering from Mission slot..."></loading-overlay>
+      </div>
+      <div v-if="editingSlot">
+        <loading-overlay message="Editing Mission slot..."></loading-overlay>
+      </div>
+      <div v-if="deletingSlot">
+        <loading-overlay message="Deleting Mission slot..."></loading-overlay>
+      </div>
     </div>
-    <div v-if="unregisteringFromSlot">
-      <loading-overlay message="Unregistering from Mission slot..."></loading-overlay>
-    </div>
-    <div v-if="deletingSlot">
-      <loading-overlay message="Deleting Mission slot..."></loading-overlay>
-    </div>
+    <!-- End of overlays -->
   </div>
 </template>
 
@@ -356,6 +422,28 @@ export default {
         },
         theme: 'snow'
       },
+      slotEditDifficultyOptions: [
+        {
+          text: 'Beginner',
+          value: 0
+        },
+        {
+          text: 'Easy',
+          value: 1
+        },
+        {
+          text: 'Medium',
+          value: 2
+        },
+        {
+          text: 'Advanced',
+          value: 3
+        },
+        {
+          text: 'Expert',
+          value: 4
+        }
+      ],
       slotRegistrationComment: null,
       missionEditTitle: null,
       missionEditShortDescription: null,
@@ -366,7 +454,12 @@ export default {
       missionEditBriefingTime: null,
       missionEditRepositoryUrl: null,
       missionEditTechSupport: null,
-      missionEditRules: null
+      missionEditRules: null,
+      slotEditOrderNumber: null,
+      slotEditTitle: null,
+      slotEditDifficulty: null,
+      slotEditShortDescription: null,
+      slotEditDescription: null
     }
   },
   computed: {
@@ -387,6 +480,9 @@ export default {
     },
     unregisteringFromSlot() {
       return this.$store.getters.unregisteringFromMissionSlot
+    },
+    editingSlot() {
+      return this.$store.getters.editingMissionSlot
     },
     deletingSlot() {
       return this.$store.getters.deletingMissionSlot
@@ -468,43 +564,43 @@ export default {
       return '<span>regular</span>'
     },
     missionEditTitleState() {
-      return _.isNil(this.missionEditTitle) || _.isEmpty(this.missionEditTitle) ? 'warning' : 'success'
+      return _.isNil(this.missionEditTitle) || _.isEmpty(this.missionEditTitle) ? 'danger' : 'success'
     },
     missionEditTitleFeedback() {
       return _.isNil(this.missionEditTitle) || _.isEmpty(this.missionEditTitle) ? 'Please enter a title' : ''
     },
     missionEditShortDescriptionState() {
-      return _.isNil(this.missionEditShortDescription) || _.isEmpty(this.missionEditShortDescription) ? 'warning' : 'success'
+      return _.isNil(this.missionEditShortDescription) || _.isEmpty(this.missionEditShortDescription) ? 'danger' : 'success'
     },
     missionEditShortDescriptionFeedback() {
       return _.isNil(this.missionEditShortDescription) || _.isEmpty(this.missionEditShortDescription) ? 'Please enter a short (plain text) description' : ''
     },
     missionEditDescriptionState() {
-      return _.isNil(this.missionEditDescription) || _.isEmpty(this.missionEditDescription) ? 'warning' : 'success'
+      return _.isNil(this.missionEditDescription) || _.isEmpty(this.missionEditDescription) ? 'danger' : 'success'
     },
     missionEditDescriptionFeedback() {
       return _.isNil(this.missionEditDescription) || _.isEmpty(this.missionEditDescription) ? 'Please enter a description' : ''
     },
     missionEditSlottingTimeState() {
-      return _.isNil(this.missionEditSlottingTime) || _.isEmpty(this.missionEditSlottingTime) ? 'warning' : 'success'
+      return _.isNil(this.missionEditSlottingTime) || _.isEmpty(this.missionEditSlottingTime) ? 'danger' : 'success'
     },
     missionEditSlottingTimeFeedback() {
       return _.isNil(this.missionEditSlottingTime) || _.isEmpty(this.missionEditSlottingTime) ? 'Please enter a slotting date & time' : ''
     },
     missionEditStartTimeState() {
-      return _.isNil(this.missionEditStartTime) || _.isEmpty(this.missionEditStartTime) ? 'warning' : 'success'
+      return _.isNil(this.missionEditStartTime) || _.isEmpty(this.missionEditStartTime) ? 'danger' : 'success'
     },
     missionEditStartTimeFeedback() {
       return _.isNil(this.missionEditStartTime) || _.isEmpty(this.missionEditStartTime) ? 'Please enter a start date & time' : ''
     },
     missionEditEndTimeState() {
-      return _.isNil(this.missionEditEndTime) || _.isEmpty(this.missionEditEndTime) ? 'warning' : 'success'
+      return _.isNil(this.missionEditEndTime) || _.isEmpty(this.missionEditEndTime) ? 'danger' : 'success'
     },
     missionEditEndTimeFeedback() {
       return _.isNil(this.missionEditEndTime) || _.isEmpty(this.missionEditEndTime) ? 'Please enter an (est.) end date & time' : ''
     },
     missionEditBriefingTimeState() {
-      return _.isNil(this.missionEditBriefingTime) || _.isEmpty(this.missionEditBriefingTime) ? 'warning' : 'success'
+      return _.isNil(this.missionEditBriefingTime) || _.isEmpty(this.missionEditBriefingTime) ? 'danger' : 'success'
     },
     missionEditBriefingTimeFeedback() {
       return _.isNil(this.missionEditBriefingTime) || _.isEmpty(this.missionEditBriefingTime) ? 'Please enter a (ldrsp.) briefing date & time' : ''
@@ -526,7 +622,40 @@ export default {
     },
     missionEditRulesFeedback() {
       return ''
-    }
+    },
+    slotEditOrderNumberState() {
+      return _.isNil(this.slotEditOrderNumber) && !_.isNumber(this.slotEditOrderNumber) ? 'danger' : 'success'
+    },
+    slotEditOrderNumberFeedback() {
+      return _.isNil(this.slotEditOrderNumber) && !_.isNumber(this.slotEditOrderNumber) ? 'Please enter an order number' : ''
+    },
+    slotEditOrderNumberFormatter(val) {
+      return parseInt(val, 10)
+    },
+    slotEditTitleState() {
+      return _.isNil(this.slotEditTitle) || _.isEmpty(this.slotEditTitle) ? 'danger' : 'success'
+    },
+    slotEditTitleFeedback() {
+      return _.isNil(this.slotEditTitle) || _.isEmpty(this.slotEditTitle) ? 'Please enter a title' : ''
+    },
+    slotEditDifficultyState() {
+      return _.isNil(this.slotEditDifficulty) || !_.isNumber(this.slotEditDifficulty) ? 'danger' : 'success'
+    },
+    slotEditDifficultyFeedback() {
+      return _.isNil(this.slotEditDifficulty) || !_.isNumber(this.slotEditDifficulty) ? 'Please select a difficulty' : ''
+    },
+    slotEditShortDescriptionState() {
+      return 'success'
+    },
+    slotEditShortDescriptionFeedback() {
+      return ''
+    },
+    slotEditDescriptionState() {
+      return 'success'
+    },
+    slotEditDescriptionFeedback() {
+      return ''
+    },
   },
   methods: {
     slotDetailsModalClosed() {
@@ -549,6 +678,10 @@ export default {
     slotDetailsDelete() {
       this.$refs.slotDetailsModal.hide()
       this.$store.dispatch('showMissionSlotDeletion', this.slotDetails)
+    },
+    slotDetailsEdit() {
+      this.$refs.slotDetailsModal.hide()
+      this.$refs.slotEditModal.show()
     },
     hideSlotDetailsModal() {
       this.$refs.slotDetailsModal.hide()
@@ -670,6 +803,55 @@ export default {
         registrationUid: this.slotDetails.registrationUid
       })
     },
+    populateSlotEditModal() {
+      this.slotEditOrderNumber = this.slotDetails.orderNumber
+      this.slotEditTitle = this.slotDetails.title
+      this.slotEditDifficulty = this.slotDetails.difficulty
+      this.slotEditShortDescription = this.slotDetails.shortDescription
+      this.slotEditDescription = this.slotDetails.description
+    },
+    hideSlotEditModal() {
+      this.$refs.slotEditModal.hide()
+    },
+    submitSlotEdit() {
+      this.$refs.slotEditModal.hide()
+
+      const localSlotDetails = {
+        orderNumber: this.slotEditOrderNumber,
+        title: this.slotEditTitle,
+        difficulty: this.slotEditDifficulty,
+        shortDescription: this.slotEditShortDescription,
+        description: this.slotEditDescription
+      }
+
+      if (_.isEmpty(localSlotDetails.shortDescription)) {
+        localSlotDetails.shortDescription = null
+      }
+      if (_.isEmpty(localSlotDetails.description)) {
+        localSlotDetails.description = null
+      }
+      if (_.isString(localSlotDetails.orderNumber)) {
+        localSlotDetails.orderNumber = parseInt(localSlotDetails.orderNumber, 10)
+      }
+      if (_.isString(localSlotDetails.difficulty)) {
+        localSlotDetails.difficulty = parseInt(localSlotDetails.difficulty, 10)
+      }
+
+      const updatedSlotDetails = {}
+      _.each(localSlotDetails, (value, key) => {
+        if (!_.isEqual(value, this.slotDetails[key])) {
+          updatedSlotDetails[key] = value
+        }
+      })
+
+      this.$store.dispatch('editMissionSlot', {
+        missionSlug: this.$route.params.missionSlug,
+        slotUid: this.slotDetails.uid,
+        slotOrderNumber: this.slotDetails.orderNumber,
+        slotTitle: this.slotDetails.title,
+        updatedSlotDetails
+      })
+    }
   },
   watch: {
     showSlotDetails(val) {

@@ -18,6 +18,7 @@ const state = {
   showMissionSlotRegister: false,
   registeringForMissionSlot: false,
   showMissionSlotDeletion: false,
+  editingMissionSlot: false,
   deletingMissionSlot: false,
   showMissionSlotUnregister: false,
   unregisteringFromMissionSlot: false
@@ -59,6 +60,9 @@ const getters = {
   },
   deletingMissionSlot() {
     return state.deletingMissionSlot
+  },
+  editingMissionSlot() {
+    return state.editingMissionSlot
   },
   showMissionSlotUnregister() {
     return state.showMissionSlotUnregister
@@ -342,6 +346,68 @@ const actions = {
         }
       })
   },
+  editMissionSlot({ commit, dispatch }, payload) {
+    commit({
+      type: 'startEditingMissionSlot'
+    })
+
+    return MissionsApi.editMissionSlot(payload.missionSlug, payload.slotUid, payload.updatedSlotDetails)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Editing mission slot failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (_.isNil(response.data.slot) || !_.isObject(response.data.slot)) {
+          console.error(response)
+          throw "Received invalid mission slot"
+        }
+
+        commit({
+          type: 'finishEditingMissionSlot'
+        })
+
+        dispatch('getMissionSlotlist', payload.missionSlug)
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully edited slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong>`
+        })
+      }).catch((error) => {
+        commit({
+          type: 'finishEditingMissionSlot'
+        })
+
+        if (error.response) {
+          console.error('editMissionSlot', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to edit slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('editMissionSlot', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to edit slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - Request failed`
+          })
+        } else {
+          console.error('editMissionSlot', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to edit slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - Something failed...`
+          })
+        }
+      })
+  },
   deleteMissionSlot({ commit, dispatch }, payload) {
     commit({
       type: "startDeletingMissionSlot"
@@ -584,7 +650,7 @@ const actions = {
           })
         }
       })
-  }
+  },
 }
 
 const mutations = {
@@ -658,6 +724,12 @@ const mutations = {
   },
   clearMissionSlotDeletion(state) {
     state.showMissionSlotDeletion = false
+  },
+  startEditingMissionSlot(state) {
+    state.editingMissionSlot = true
+  },
+  finishEditingMissionSlot(state) {
+    state.editingMissionSlot = false
   },
   startDeletingMissionSlot(state) {
     state.deletingMissionSlot = true

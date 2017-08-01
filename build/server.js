@@ -19,7 +19,7 @@ let compiler
 try {
   compiler = webpack(webpackConfig)
 } catch (err) {
-  console.log(err.message)
+  console.error(err.message)
   process.exit(1)
 }
 

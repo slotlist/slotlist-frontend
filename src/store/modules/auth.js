@@ -152,6 +152,15 @@ const actions = {
       type: "logout"
     })
   },
+  setToken({ commit }, payload) {
+    const decodedToken = jwtDecode(payload)
+
+    commit({
+      type: "setToken",
+      token: payload,
+      decodedToken: decodedToken
+    })
+  },
   setTokenFromLocalStorage({ commit }, payload) {
     let decodedToken = Vue.ls.get('auth-decodedToken')
     if (_.isNil(decodedToken)) {

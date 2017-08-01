@@ -25,11 +25,11 @@ const getters = {
 const actions = {
   showAlert({ commit }, payload) {
     if (_.isNil(payload.showAlert)) {
-      console.log('Showing alert without showAlert doesn\'t make much sense...')
+      console.error('Showing alert without showAlert doesn\'t make much sense...')
       return
     }
     if (_.isNil(payload.alertMessage)) {
-      console.log('Showing alert without alertMessage doesn\'t make much sense...')
+      console.error('Showing alert without alertMessage doesn\'t make much sense...')
       return
     }
 

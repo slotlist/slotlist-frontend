@@ -110,7 +110,7 @@ export default {
     },
     alertDismissCountDown(val) {
       if (val === 1) {
-        console.log('This is gonna look ugly...')
+        console.info('This is gonna look ugly...')
         this.$store.dispatch('clearAlert')
       }
     }

@@ -10,24 +10,30 @@ axios.defaults.headers.patch['Content-Type'] = 'application/json'
 
 axios.interceptors.request.use((config) => {
   if (!store.getters.refreshingToken && shouldRefreshToken()) {
-    console.log('Refreshing JWT before performing request')
+    console.info('Refreshing JWT before performing request')
     return store.dispatch('refreshToken')
       .then(() => {
-        console.log('Done refreshing JWT, performing actual request')
+        console.info('Done refreshing JWT, performing actual request')
         return config
       }).catch((error) => {
         return Promise.reject(error)
       })
   }
-  console.log('request', config)
+  console.debug('request', config)
   return config
 }, (error) => {
-  console.log('request', error)
+  console.debug('request error', error)
   return Promise.reject(error)
 })
 
 axios.interceptors.response.use((response) => {
-  console.log('response', response)
+  console.debug('response', response)
+
+  if (!_.isNil(response.data.token)) {
+    console.info('Received new JWT during request, updating local token')
+    store.dispatch('setToken', response.data.token)
+  }
+
   return response
 }, (error) => {
   if (error.response && error.response.status === 401) {
@@ -39,7 +45,7 @@ axios.interceptors.response.use((response) => {
     return
   }
 
-  console.log('response', error)
+  console.debug('response error', error)
   return Promise.reject(error)
 })
 
