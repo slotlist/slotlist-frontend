@@ -42,7 +42,7 @@
           </div>
           <div class="col">
             <h5>Repository URL</h5>
-            <p v-html="optionalRepositoryURL"></p>
+            <p v-html="optionalRepositoryUrl"></p>
           </div>
           <div class="col">
             <h5>Techsupport</h5>
@@ -400,8 +400,8 @@ export default {
     missionDetails() {
       return this.$store.getters.missionDetails
     },
-    optionalRepositoryURL() {
-      return this.missionDetails.repositoryURL || "<span class='text-muted font-italic'>not required</span>"
+    optionalRepositoryUrl() {
+      return this.missionDetails.repositoryUrl || "<span class='text-muted font-italic'>not required</span>"
     },
     optionalTechSupport() {
       return this.missionDetails.techSupport || "<span class='text-muted font-italic'>not provided</span>"
@@ -629,6 +629,16 @@ export default {
         repositoryUrl: this.missionEditRepositoryUrl,
         techSupport: this.missionEditTechSupport,
         rules: this.missionEditRules
+      }
+
+      if (_.isEmpty(localMissionDetails.repositoryUrl)) {
+        localMissionDetails.repositoryUrl = null
+      }
+      if (_.isEmpty(localMissionDetails.techSupport)) {
+        localMissionDetails.techSupport = null
+      }
+      if (_.isEmpty(localMissionDetails.rules)) {
+        localMissionDetails.rules = null
       }
 
       const updatedMissionDetails = {}
