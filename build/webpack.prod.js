@@ -24,7 +24,7 @@ base.plugins.push(
   new webpack.DefinePlugin({
     'process.env': {
       NODE_ENV: JSON.stringify('production'),
-      BASE_URL: JSON.stringify('http://slotlist.info'),
+      BASE_URL: JSON.stringify('https://slotlist.info'),
       BASE_API_URL: JSON.stringify('https://api.slotlist.info')
     }
   }),

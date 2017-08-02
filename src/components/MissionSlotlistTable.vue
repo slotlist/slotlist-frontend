@@ -11,7 +11,7 @@
         </tr>
       </thead>
       <tbody>
-        <mission-slotlist-row v-for="slot in slotlist" :missionSlot="slot" :key="slot.id"></mission-slotlist-row>
+        <mission-slotlist-row v-for="slot in slotlist" :missionSlot="slot" :key="slot.uid"></mission-slotlist-row>
       </tbody>
       <tfoot v-show="slotlist.length >= 10">
         <tr>

@@ -26,7 +26,12 @@ const state = {
   creatingMissionSlot: false,
   checkingMissionSlugAvailability: false,
   missionSlugAvailable: false,
-  creatingMission: false
+  creatingMission: false,
+  missionSlotRegistrations: [],
+  missionSlotRegistration: {},
+  showMissionSlotRegistrationConfirmation: false,
+  showMissionSlotRegistrationConfirmationAssign: false,
+  modifyingMissionSlotRegistration: false
 }
 
 const getters = {
@@ -86,6 +91,21 @@ const getters = {
   },
   creatingMission() {
     return state.creatingMission
+  },
+  missionSlotRegistrations() {
+    return state.missionSlotRegistrations
+  },
+  missionSlotRegistration() {
+    return state.missionSlotRegistration
+  },
+  showMissionSlotRegistrationConfirmation() {
+    return state.showMissionSlotRegistrationConfirmation
+  },
+  showMissionSlotRegistrationConfirmationAssign() {
+    return state.showMissionSlotRegistrationConfirmationAssign
+  },
+  modifyingMissionSlotRegistration() {
+    return state.modifyingMissionSlotRegistration
   }
 }
 
@@ -332,7 +352,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully registered for slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong>`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully registered for slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong>`
         })
       }).catch((error) => {
         commit({
@@ -344,21 +364,21 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('registerForMissionSlot', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - Request failed`
           })
         } else {
           console.error('registerForMissionSlot', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - Something failed...`
           })
         }
       })
@@ -456,7 +476,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully deleted slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong>`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully deleted slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong>`
         })
       }).catch((error) => {
         commit({
@@ -468,21 +488,21 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('deleteMissionSlot', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - Request failed`
           })
         } else {
           console.error('deleteMissionSlot', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - Something failed...`
           })
         }
       })
@@ -636,7 +656,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully unregistered from slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong>`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully unregistered from slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong>`
         })
       }).catch((error) => {
         commit({
@@ -648,21 +668,21 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to unregister from slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to unregister from slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('unregisterFromMissionSlot', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to unregister from slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to unregister from slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - Request failed`
           })
         } else {
           console.error('unregisterFromMissionSlot', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to unregister from slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to unregister from slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - Something failed...`
           })
         }
       })
@@ -860,6 +880,134 @@ const actions = {
           })
         }
       })
+  },
+  getMissionSlotRegistrations({ commit, dispatch }, payload) {
+    return MissionsApi.getMissionSlotRegistrations(payload.missionSlug, payload.slotUid)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Retrieving mission slot registrations failed"
+        }
+
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (_.isNil(response.data.registrations) || !_.isArray(response.data.registrations)) {
+          console.error(response)
+          throw "Received invalid mission slot registrations"
+        }
+
+        commit({
+          type: 'setMissionSlotRegistrations',
+          registrations: response.data.registrations
+        })
+      }).catch((error) => {
+        if (error.response) {
+          console.error('registerForMissionSlot', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to retrieve registrations for slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('registerForMissionSlot', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - Request failed`
+          })
+        } else {
+          console.error('registerForMissionSlot', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - Something failed...`
+          })
+        }
+      })
+  },
+  clearMissionSlotRegistrations({ commit }) {
+    commit({
+      type: 'clearMissionSlotRegistrations'
+    })
+  },
+  showMissionSlotRegistrationConfirmation({ commit }, payload) {
+    commit({
+      type: 'showMissionSlotRegistrationConfirmation',
+      registration: payload.registration,
+      assign: payload.assign
+    })
+  },
+  clearMissionSlotRegistrationConfirmation({ commit }) {
+    commit({
+      type: 'clearMissionSlotRegistrationConfirmation'
+    })
+  },
+  modifyMissionSlotRegistration({ commit, dispatch }, payload) {
+    commit({
+      type: "startModifyingMissionSlotRegistration"
+    })
+
+    return MissionsApi.modifyMissionSlotRegistration(payload.missionSlug, payload.slotUid, payload.registrationUid, payload.confirm)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Modifying mission slot registration failed"
+        }
+
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (_.isNil(response.data.registration) || !_.isObject(response.data.registration)) {
+          console.error(response)
+          throw "Received invalid mission slot registration"
+        }
+
+        commit({
+          type: "finishModifyingMissionSlotRegistration"
+        })
+
+        dispatch('getMissionSlotlist', payload.missionSlug)
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully modified slot registration`
+        })
+      }).catch((error) => {
+        commit({
+          type: 'finishModifyingMissionSlotRegistration'
+        })
+
+        if (error.response) {
+          console.error('modifyMissionSlotRegistration', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to modify slot registration - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('modifyMissionSlotRegistration', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to modify slot registration - Request failed`
+          })
+        } else {
+          console.error('modifyMissionSlotRegistration', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to modify slot registration - Something failed...`
+          })
+        }
+      })
   }
 }
 
@@ -985,6 +1133,28 @@ const mutations = {
   finishCreatingMission(state) {
     state.creatingMission = false
   },
+  setMissionSlotRegistrations(state, payload) {
+    state.missionSlotRegistrations = payload.registrations
+  },
+  clearMissionSlotRegistrations(state) {
+    state.missionSlotRegistrations = []
+  },
+  showMissionSlotRegistrationConfirmation(state, payload) {
+    state.missionSlotRegistration = payload.registration
+    state.showMissionSlotRegistrationConfirmation = true
+    state.showMissionSlotRegistrationConfirmationAssign = payload.assign
+  },
+  clearMissionSlotRegistrationConfirmation(state) {
+    state.missionSlotRegistration = {}
+    state.showMissionSlotRegistrationConfirmation = false
+    state.showMissionSlotRegistrationConfirmationAssign = false
+  },
+  startModifyingMissionSlotRegistration(state) {
+    state.modifyingMissionSlotRegistration = true
+  },
+  finishModifyingMissionSlotRegistration(state) {
+    state.modifyingMissionSlotRegistration = false
+  }
 }
 
 export default {

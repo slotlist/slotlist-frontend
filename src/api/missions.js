@@ -37,6 +37,12 @@ export const v1 = {
   },
   createMission(payload) {
     return axios.post('/v1/missions', payload)
+  },
+  getMissionSlotRegistrations(missionSlug, slotUid) {
+    return axios.get(`/v1/missions/${missionSlug}/slots/${slotUid}/registrations`)
+  },
+  modifyMissionSlotRegistration(missionSlug, slotUid, registrationUid, confirm) {
+    return axios.patch(`/v1/missions/${missionSlug}/slots/${slotUid}/registrations/${registrationUid}`, { confirmed: confirm })
   }
 }
 
