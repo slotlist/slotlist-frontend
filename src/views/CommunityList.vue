@@ -11,12 +11,11 @@
     </div>
     <!-- End of content -->
     <!-- Begin of modals -->
+    <div>
+    </div>
     <!-- End of modals -->
     <!-- Begin of overlays -->
     <div>
-      <div v-show="working">
-        <loading-overlay :message="working"></loading-overlay>
-      </div>
     </div>
   </div>
 </template>

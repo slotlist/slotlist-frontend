@@ -26,7 +26,7 @@ export default {
         this.registration.comment
     },
     registrationConfirmed() {
-      return this.registration.confirmed ? '<i class="fa fa-check fa-lg text-success" aria-hidden="true"></i>' : '<i class="fa fa-times fa-lg text-danger" aria-hidden="true"></i>'
+      return this.registration.confirmed ? '<i class="fa fa-check fa-lg text-success" aria-hidden="true"></i>' : '<i class="fa fa-close fa-lg text-danger" aria-hidden="true"></i>'
     }
   },
   methods: {

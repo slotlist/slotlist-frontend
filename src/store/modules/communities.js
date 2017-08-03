@@ -1,16 +1,22 @@
 import * as _ from 'lodash'
+import utils from '../../utils'
 
 import CommunitiesApi from '../../api/communities'
 
 const state = {
   communities: null,
+  communityApplications: null,
   communityDetails: null,
-  communityMembers: null
+  communityMembers: null,
+  communityMissions: null
 }
 
 const getters = {
   communities() {
     return state.communities
+  },
+  communityApplications() {
+    return state.communityApplications
   },
   communityDetails() {
     return state.communityDetails
@@ -38,10 +44,79 @@ const getters = {
     state.communityMembers = _.sortBy(members, [(m) => m.nickname.toUpperCase()])
 
     return state.communityMembers
+  },
+  communityMissions() {
+    return state.communityMissions
   }
 }
 
 const actions = {
+  applyToCommunity({ commit, dispatch }, payload) {
+    commit({
+      type: 'startWorking',
+      message: 'Applying to community...'
+    })
+
+    return CommunitiesApi.applyToCommunity(payload)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Processing community application failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (response.data.status !== "submitted") {
+          console.error(response)
+          throw "Received invalid community application status"
+        }
+
+        commit({
+          type: 'stopWorking'
+        })
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully applied to community`
+        })
+      }).catch((error) => {
+        commit({
+          type: 'stopWorking'
+        })
+
+        if (error.response) {
+          console.error('applyToCommunity', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to apply to community - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('applyToCommunity', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to apply to community - Request failed`
+          })
+        } else {
+          console.error('applyToCommunity', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to apply to community - Something failed...`
+          })
+        }
+      })
+  },
+  clearCommunityDetails({ commit }) {
+    commit({
+      type: 'clearCommunityDetails'
+    })
+  },
   getCommunities({ commit, dispatch, state }) {
     commit({
       type: 'startWorking',
@@ -99,6 +174,66 @@ const actions = {
             showAlert: true,
             alertVariant: 'danger',
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load communities - Something failed...`
+          })
+        }
+      })
+  },
+  getCommunityApplications({ commit, dispatch }, payload) {
+    commit({
+      type: 'startWorking',
+      message: 'Loading community applications...'
+    })
+
+    return CommunitiesApi.getCommunityApplications(payload)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Retrieving community applications failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (_.isNil(response.data.applications) || !_.isArray(response.data.applications)) {
+          console.error(response)
+          throw "Received invalid community applications"
+        }
+
+        commit({
+          type: 'setCommunityApplications',
+          communityApplications: response.data.applications
+        })
+
+        commit({
+          type: 'stopWorking'
+        })
+      }).catch((error) => {
+        commit({
+          type: 'stopWorking'
+        })
+
+        if (error.response) {
+          console.error('getCommunityApplications', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load community applications - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('getCommunityApplications', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load community applications - Request failed`
+          })
+        } else {
+          console.error('getCommunityApplications', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load community applications - Something failed...`
           })
         }
       })
@@ -163,10 +298,130 @@ const actions = {
         }
       })
   },
+  getCommunityMissions({ commit, dispatch }, payload) {
+    commit({
+      type: 'startWorking',
+      message: 'Loading community missions...'
+    })
+
+    return CommunitiesApi.getCommunityMissions(payload)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Retrieving community missions failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (_.isNil(response.data.missions) || !_.isArray(response.data.missions)) {
+          console.error(response)
+          throw "Received invalid community missions"
+        }
+
+        commit({
+          type: 'setCommunityMissions',
+          communityMissions: response.data.missions
+        })
+
+        commit({
+          type: 'stopWorking'
+        })
+      }).catch((error) => {
+        commit({
+          type: 'stopWorking'
+        })
+
+        if (error.response) {
+          console.error('getCommunityMissions', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load community missions - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('getCommunityMissions', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load community missions - Request failed`
+          })
+        } else {
+          console.error('getCommunityMissions', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load community missions - Something failed...`
+          })
+        }
+      })
+  },
+  processCommunityApplication({ commit, dispatch }, payload) {
+    commit({
+      type: 'startWorking',
+      message: 'Processing community application...'
+    })
+
+    return CommunitiesApi.processCommunityApplication(payload.communitySlug, payload.applicationUid, payload.accepted)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Processing community application failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (_.isNil(response.data.application) || !_.isObject(response.data.application)) {
+          console.error(response)
+          throw "Received invalid community application"
+        }
+
+        dispatch('getCommunityDetails', payload.communitySlug)
+        dispatch('getCommunityApplications', payload.communitySlug)
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully ${payload.accepted ? 'accepted' : 'denied'} community application for user <strong>${payload.applicationUserNickname}</strong>`
+        })
+      }).catch((error) => {
+        commit({
+          type: 'stopWorking'
+        })
+
+        if (error.response) {
+          console.error('processCommunityApplication', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to ${payload.accepted ? 'accept' : 'deny'} community application for user <strong>${payload.applicationUserNickname}</strong> - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('processCommunityApplication', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to ${payload.accepted ? 'accept' : 'deny'} community application for user <strong>${payload.applicationUserNickname}</strong> - Request failed`
+          })
+        } else {
+          console.error('processCommunityApplication', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to ${payload.accepted ? 'accept' : 'deny'} community application for user <strong>${payload.applicationUserNickname}</strong> - Something failed...`
+          })
+        }
+      })
+  },
   removeCommunityMember({ commit, dispatch }, payload) {
     commit({
       type: 'startWorking',
-      message: `Removing community member...`
+      message: 'Removing community member...'
     })
 
     return CommunitiesApi.removeCommunityMember(payload.communitySlug, payload.memberUid)
@@ -191,7 +446,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Successfully removed community member <strong>${payload.memberNickname}</strong>`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully removed community member <strong>${payload.memberNickname}</strong>`
         })
       }).catch((error) => {
         commit({
@@ -225,21 +480,31 @@ const actions = {
 }
 
 const mutations = {
-  setCommunities(state, payload) {
-    state.communities = payload.communities
-    state.communityOffset = payload.offset
-  },
   clearCommunities(state) {
     state.communities = null
     state.communityOffset = 0
   },
+  clearCommunityDetails(state) {
+    state.communityApplications = null
+    state.communityDetails = null
+    state.communityMembers = null
+    state.communityMissions = null
+  },
+  setCommunities(state, payload) {
+    state.communities = payload.communities
+    state.communityOffset = payload.offset
+  },
+  setCommunityApplications(state, payload) {
+    state.communityApplications = payload.communityApplications
+  },
   setCommunityDetails(state, payload) {
     state.communityDetails = payload.communityDetails
     state.communityMembers = null // force community member refresh
+
+    utils.setTitle(`Community ${state.communityDetails.name}`)
   },
-  clearCommunityDetails(state) {
-    state.communityDetails = null
-    state.communityMembers = null
+  setCommunityMissions(state, payload) {
+    state.communityMissions = payload.communityMissions
   }
 }
 

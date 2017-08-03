@@ -191,7 +191,7 @@ export default {
         return '<i class="fa fa-check" aria-hidden="true"></i>'
       }
 
-      return '<i class="fa fa-times" aria-hidden="true"></i>'
+      return '<i class="fa fa-close" aria-hidden="true"></i>'
     },
     checkingMissionSlugAvailability() {
       return this.$store.getters.checkingMissionSlugAvailability

@@ -16,7 +16,7 @@
           <i class="fa fa-info" aria-hidden="true"></i> Details
         </button>
         <button type="button" class="btn btn-success" v-show="loggedIn && !missionSlot.registrationUid" :disabled="missionSlot.assignee" @click="registerForSlot">
-          <i class="fa fa-check-square-o" aria-hidden="true"></i> Register
+          <i class="fa fa-ticket" aria-hidden="true"></i> Register
         </button>
         <button type="button" class="btn btn-warning" v-show="loggedIn && missionSlot.registrationUid" @click="deleteSlotRegistration">
           <i class="fa fa-eraser" aria-hidden="true"></i> Unregister

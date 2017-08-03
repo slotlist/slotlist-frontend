@@ -6,7 +6,7 @@
         <h1 class="display-4 text-center">{{ missionDetails.title }}</h1>
         <h5 class="text-center">
           <span class="text-muted">by</span>
-          <router-link :to="{name: 'userDetails', params: {userUid: missionDetails.creator.uid}}">{{ missionDetails.creator.nickname }}</router-link>
+          <router-link :to="{name: 'userDetails', params: {userUid: missionDetails.creator.uid}}">{{ formatUserWithTag(missionDetails.creator) }}</router-link>
         </h5>
         <br>
         <p class="lead text-justify">{{ missionDetails.shortDescription }}</p>
@@ -123,13 +123,13 @@
         <div slot="modal-footer">
           <div class="btn-group" role="group" aria-label="Mission slot detail actions">
             <button type="button" class="btn btn-success" v-show="loggedIn && !slotDetails.registrationUid" :disabled="slotDetails.assignee" @click="slotDetailsRegister">
-              <i class="fa fa-check-square-o" aria-hidden="true"></i> Register
+              <i class="fa fa-ticket" aria-hidden="true"></i> Register
             </button>
             <button type="button" class="btn btn-warning" v-show="loggedIn && slotDetails.registrationUid" @click="slotDetailsUnregister">
               <i class="fa fa-eraser" aria-hidden="true"></i> Unregister
             </button>
             <button type="button" class="btn btn-secondary" @click="hideSlotDetailsModal">
-              <i class="fa fa-times" aria-hidden="true"></i> Close</button>
+              <i class="fa fa-close" aria-hidden="true"></i> Close</button>
           </div>
         </div>
       </b-modal>
@@ -178,7 +178,7 @@
         <div slot="modal-footer">
           <div class="btn-group" role="group" aria-label="Mission slot detail editor actions">
             <button type="button" class="btn btn-success" v-show="loggedIn && !slotDetails.registrationUid" :disabled="slotDetails.assignee" @click="slotDetailsRegister">
-              <i class="fa fa-check-square-o" aria-hidden="true"></i> Register
+              <i class="fa fa-ticket" aria-hidden="true"></i> Register
             </button>
             <button type="button" class="btn btn-warning" v-show="loggedIn && slotDetails.registrationUid" @click="slotDetailsUnregister">
               <i class="fa fa-eraser" aria-hidden="true"></i> Unregister
@@ -190,7 +190,7 @@
               <i class="fa fa-trash" aria-hidden="true"></i> Delete
             </button>
             <button type="button" class="btn btn-secondary" @click="hideSlotDetailsModal">
-              <i class="fa fa-times" aria-hidden="true"></i> Close</button>
+              <i class="fa fa-close" aria-hidden="true"></i> Close</button>
           </div>
         </div>
       </b-modal>
@@ -251,7 +251,7 @@
               <i class="fa fa-plus" aria-hidden="true"></i> Submit
             </button>
             <button type="button" class="btn btn-secondary" @click="hideSlotCreateModal">
-              <i class="fa fa-times" aria-hidden="true"></i> Cancel
+              <i class="fa fa-close" aria-hidden="true"></i> Cancel
             </button>
           </div>
         </div>
@@ -313,7 +313,7 @@
               <i class="fa fa-edit" aria-hidden="true"></i> Submit changes
             </button>
             <button type="button" class="btn btn-secondary" @click="hideSlotEditModal">
-              <i class="fa fa-times" aria-hidden="true"></i> Cancel
+              <i class="fa fa-close" aria-hidden="true"></i> Cancel
             </button>
           </div>
         </div>
@@ -342,7 +342,7 @@
               <i class="fa fa-check" aria-hidden="true"></i> Confirm
             </button>
             <button type="button" class="btn btn-secondary" @click="hideSlotRegisterModal">
-              <i class="fa fa-times" aria-hidden="true"></i> Cancel
+              <i class="fa fa-close" aria-hidden="true"></i> Cancel
             </button>
           </div>
         </div>
@@ -363,7 +363,7 @@
               <i class="fa fa-trash" aria-hidden="true"></i> Delete slot
             </button>
             <button type="button" class="btn btn-secondary" @click="hideSlotDeletionModal">
-              <i class="fa fa-times" aria-hidden="true"></i> Cancel
+              <i class="fa fa-close" aria-hidden="true"></i> Cancel
             </button>
           </div>
         </div>
@@ -385,7 +385,7 @@
               <i class="fa fa-trash" aria-hidden="true"></i> Delete mission
             </button>
             <button type="button" class="btn btn-secondary" @click="hideMissionDeletionModal">
-              <i class="fa fa-times" aria-hidden="true"></i> Cancel
+              <i class="fa fa-close" aria-hidden="true"></i> Cancel
             </button>
           </div>
         </div>
@@ -468,7 +468,7 @@
               <i class="fa fa-edit" aria-hidden="true"></i> Submit changes
             </button>
             <button type="button" class="btn btn-secondary" @click="hideMissionEditModal">
-              <i class="fa fa-times" aria-hidden="true"></i> Cancel
+              <i class="fa fa-close" aria-hidden="true"></i> Cancel
             </button>
           </div>
         </div>
@@ -493,7 +493,7 @@
               <i class="fa fa-eraser" aria-hidden="true"></i> Delete registration
             </button>
             <button type="button" class="btn btn-secondary" @click="hideMissionSlotUnregisterModal">
-              <i class="fa fa-times" aria-hidden="true"></i> Cancel
+              <i class="fa fa-close" aria-hidden="true"></i> Cancel
             </button>
           </div>
         </div>
@@ -513,7 +513,7 @@
               <i :class="registrationIcon" aria-hidden="true"></i> {{ registrationAssign ? 'Assign' : 'Unassign' }}
             </button>
             <button type="button" class="btn btn-secondary" @click="hideSlotRegistrationConfirmationModal">
-              <i class="fa fa-times" aria-hidden="true"></i> Cancel
+              <i class="fa fa-close" aria-hidden="true"></i> Cancel
             </button>
           </div>
         </div>
@@ -715,7 +715,7 @@ export default {
       return this.registrationAssign ? 'btn btn-success' : 'btn btn-danger'
     },
     registrationIcon() {
-      return this.registrationAssign ? 'fa fa-check' : 'fa fa-times'
+      return this.registrationAssign ? 'fa fa-check' : 'fa fa-close'
     },
     optionalAssignee() {
       return _.isNil(this.slotDetails.assignee) ? '<span class="text-muted font-italic">not assigned</span>' : this.formatUserWithTag(this.slotDetails.assignee)

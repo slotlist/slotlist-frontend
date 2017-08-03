@@ -4,7 +4,7 @@
       <thead>
         <tr>
           <th style="width: 70%">Nickname</th>
-          <th style="width: 10%">Leader</th>
+          <th class="text-center" style="width: 10%">Leader</th>
           <th style="width: 20%" class="text-center">Actions</th>
         </tr>
       </thead>
@@ -14,7 +14,7 @@
       <tfoot v-show="communityMembers.length >= 10">
         <tr>
           <th style="width: 70%">Nickname</th>
-          <th style="width: 10%">Leader</th>
+          <th class="text-center" style="width: 10%">Leader</th>
           <th style="width: 20%" class="text-center">Actions</th>
         </tr>
       </tfoot>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <table class="table table-striped">
+    <table class="table table-striped" v-if="communityMissions">
       <thead>
         <tr>
           <th style="width: 15%">Start time</th>
@@ -11,9 +11,9 @@
         </tr>
       </thead>
       <tbody>
-        <mission-list-row v-for="mission in missions" :mission="mission" :key="mission.uid"></mission-list-row>
+        <community-missions-row v-for="communityMission in communityMissions" :communityMission="communityMission" :key="communityMission.uid"></community-missions-row>
       </tbody>
-      <tfoot v-show="missions.length >= 10">
+      <tfoot v-show="communityMissions.length >= 10">
         <tr>
           <th style="width: 15%">Start time</th>
           <th style="width: 25%">Title</th>
@@ -27,16 +27,19 @@
 </template>
 
 <script>
-import MissionListRow from './MissionListRow.vue'
+import CommunityMissionsRow from './CommunityMissionsRow.vue'
 
 export default {
   components: {
-    MissionListRow
+    CommunityMissionsRow
   },
   computed: {
-    missions() {
-      return this.$store.getters.missions
+    communityMissions() {
+      return this.$store.getters.communityMissions
     }
+  },
+  beforeCreate: function () {
+    this.$store.dispatch('getCommunityMissions', this.$route.params.communitySlug)
   }
 }
 </script>

@@ -4,7 +4,7 @@
     <td>{{ mission.title }}</td>
     <td>{{ mission.shortDescription }}</td>
     <td>
-      <router-link :to="{name: 'userDetails', params: {userUid: mission.creator.uid}}">{{ mission.creator.nickname }}</router-link>
+      <router-link :to="{name: 'userDetails', params: {userUid: mission.creator.uid}}">{{ formatUserWithTag(mission.creator) }}</router-link>
     </td>
     <td class="text-center">
       <router-link tag="button" class="btn btn-primary btn-sm" :to="{name: 'missionDetails', params: {missionSlug: mission.slug}}">
