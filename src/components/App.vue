@@ -8,27 +8,41 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <router-link class="nav-link" to="/">Home</router-link>
+            <router-link class="nav-link" to="/">
+              <i class="fa fa-home" aria-hidden="true"></i> Home
+            </router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/missions">Missions</router-link>
+            <router-link class="nav-link" to="/missions">
+              <i class="fa fa-tasks" aria-hidden="true"></i> Missions
+            </router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/communities">Communities</router-link>
+            <router-link class="nav-link" to="/communities">
+              <i class="fa fa-users" aria-hidden="true"></i> Communities
+            </router-link>
           </li>
         </ul>
         <ul class="navbar-nav">
-          <li class="nav-item" v-if="!loggedIn">
-            <router-link class="nav-link text-primary" to="/login">Login</router-link>
+          <li class="nav-item" v-show="loggedIn">
+            <router-link class="nav-link" to="/account">
+              <i class="fa fa-user" aria-hidden="true"></i> Account
+            </router-link>
           </li>
-          <li class="nav-item" v-if="loggedIn">
-            <router-link class="nav-link" to="/account">Account</router-link>
+          <li class="nav-item" v-show="!loggedIn">
+            <router-link class="nav-link text-primary" to="/login">
+              <i class="fa fa-sign-in" aria-hidden="true"></i> Login
+            </router-link>
           </li>
-          <li class="nav-item" v-if="loggedIn">
-            <router-link class="nav-link text-danger" to="/" @click.native="logout">Logout</router-link>
+          <li class="nav-item" v-show="loggedIn">
+            <router-link class="nav-link text-danger" to="/" @click.native="logout">
+              <i class="fa fa-sign-out" aria-hidden="true"></i> Logout
+            </router-link>
           </li>
           <li class="nav-item" v-if="$acl.can(['admin.panel'], true)">
-            <router-link class="nav-link text-warning" to="/admin">Admin Panel</router-link>
+            <router-link class="nav-link text-warning" to="/admin">
+              <i class="fa fa-server" aria-hidden="true"></i> Admin Panel
+            </router-link>
           </li>
         </ul>
       </div>
@@ -39,6 +53,9 @@
           <div v-html="alertMessage"></div>
         </b-alert>
         <router-view></router-view>
+        <div v-show="working">
+          <loading-overlay :message="working"></loading-overlay>
+        </div>
       </div>
     </template>
     <footer class="footer">
@@ -96,6 +113,9 @@ export default {
     },
     alertMessage() {
       return this.$store.getters.alertMessage
+    },
+    working() {
+      return this.$store.getters.working
     }
   },
   methods: {
