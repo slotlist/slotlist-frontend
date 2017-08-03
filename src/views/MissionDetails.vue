@@ -1240,9 +1240,6 @@ export default {
     this.$store.dispatch('clearMissionSlotRegistrations')
     this.$store.dispatch('clearMissionSlotRegistrationConfirmation')
   },
-  created: function () {
-    utils.setTitle('Mission')
-  },
   beforeDestroy: function () {
     this.$store.dispatch('clearMissionDetails')
     this.$store.dispatch('clearMissionSlotlist')

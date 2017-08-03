@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import CommunityListTable from '../components/CommunityListTable.vue'
+import CommunityListTable from '../components/communities/CommunityListTable.vue'
 import utils from '../utils'
 
 export default {
@@ -38,7 +38,7 @@ export default {
     }
   },
   beforeCreate: function () {
-    this.$store.dispatch("getCommunities")
+    this.$store.dispatch('getCommunities')
   },
   created: function () {
     utils.setTitle('Communities')
