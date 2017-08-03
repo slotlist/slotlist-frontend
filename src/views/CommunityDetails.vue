@@ -2,7 +2,20 @@
   <div>
     <!-- Begin of content -->
     <div v-if="communityDetails">
-      <h1 class="display-4  text-center">{{ communityDetails.name }}</h1>
+      <div class="jumbotron">
+        <h1 class="display-4  text-center">{{ communityDetails.name }}</h1>
+        <br>
+        <div class="row text-center">
+          <div class="col">
+            <h5>Tag</h5>
+            <p>{{ communityDetails.tag}}</p>
+          </div>
+          <div class="col">
+            <h5>Website</h5>
+            <p v-html="optionalCommunityWebsite"></p>
+          </div>
+        </div>
+      </div>
       <div class="card">
         <div class="card-block text-nowrap">
           <h4 class="card-title">Members</h4>
@@ -57,6 +70,11 @@ export default {
     },
     communityDetails() {
       return this.$store.getters.communityDetails
+    },
+    optionalCommunityWebsite() {
+      return _.isString(this.communityDetails.website) && !_.isEmpty(this.communityDetails.website) ?
+        `<a href="${this.communityDetails.website}">${this.communityDetails.website}</a>` :
+        `<span class="text-muted font-italic">not provided</span>`
     },
     canEditCommunity() {
       return this.$acl.can([`community.${this.$route.params.communitySlug}.founder`, `community.${this.$route.params.communitySlug}.leader`])
