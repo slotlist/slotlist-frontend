@@ -11,7 +11,7 @@
         </tr>
       </thead>
       <tbody>
-        <missionlist-row v-for="mission in missions" :mission="mission" :key="mission.uid"></missionlist-row>
+        <mission-list-row v-for="mission in missions" :mission="mission" :key="mission.uid"></mission-list-row>
       </tbody>
       <tfoot v-show="missions.length >= 10">
         <tr>
@@ -27,11 +27,11 @@
 </template>
 
 <script>
-import MissionlistRow from './MissionlistRow.vue'
+import MissionListRow from './MissionListRow.vue'
 
 export default {
   components: {
-    MissionlistRow
+    MissionListRow
   },
   computed: {
     missions() {

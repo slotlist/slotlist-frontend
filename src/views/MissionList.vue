@@ -2,11 +2,11 @@
   <div>
     <!-- Begin of content -->
     <div v-show="loaded">
-      <missionlist-table></missionlist-table>
+      <mission-list-table></mission-list-table>
       <div class="text-center" v-show="loggedIn">
-        <button type="button" class="btn btn-success" @click="redirectToMissionCreate">
+        <router-link tag="button" type="button" class="btn btn-success" :to="{name: 'missionCreator'}">
           <i class="fa fa-plus" aria-hidden="true"></i> Create mission
-        </button>
+        </router-link>
       </div>
     </div>
     <!-- End of content -->
@@ -22,12 +22,12 @@
 </template>
 
 <script>
-import MissionlistTable from '../components/MissionlistTable.vue'
+import MissionListTable from '../components/MissionListTable.vue'
 import utils from '../utils'
 
 export default {
   components: {
-    MissionlistTable
+    MissionListTable
   },
   computed: {
     loaded() {
@@ -35,11 +35,6 @@ export default {
     },
     loggedIn() {
       return this.$store.getters.loggedIn
-    }
-  },
-  methods: {
-    redirectToMissionCreate() {
-      this.$router.push({ name: 'missionCreator' })
     }
   },
   beforeCreate: function () {
