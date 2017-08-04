@@ -181,9 +181,6 @@ export default {
       return _.isString(this.communityDetails.website) && !_.isEmpty(this.communityDetails.website) ?
         `<a href="${this.communityDetails.website}">${this.communityDetails.website}</a>` :
         `<span class="text-muted font-italic">not provided</span>`
-    },
-    working() {
-      return this.$store.getters.working
     }
   },
   methods: {

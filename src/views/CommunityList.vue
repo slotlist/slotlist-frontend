@@ -38,9 +38,6 @@ export default {
     this.$store.dispatch('clearCommunities')
   },
   computed: {
-    working() {
-      return this.$store.getters.working
-    },
     loggedIn() {
       return this.$store.getters.loggedIn
     }
