@@ -17,7 +17,7 @@
         </div>
         <hr class="my-4" v-show="canEditCommunity">
         <div class="row justify-content-center" v-show="canEditCommunity">
-          <div class="btn-group btn-group-sm" role="group" aria-label="Community actions">
+          <div class="btn-group" role="group" aria-label="Community actions">
             <button type="button" class="btn btn-primary" @click="showCommunityEditModal">
               <i class="fa fa-edit" aria-hidden="true"></i> Edit
             </button>

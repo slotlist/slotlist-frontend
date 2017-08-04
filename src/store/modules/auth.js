@@ -13,7 +13,10 @@ const state = {
   performingLogin: false,
   token: null,
   decodedToken: null,
-  refreshingToken: false
+  refreshingToken: false,
+  accountDetails: null,
+  accountMissions: null,
+  accountPermissions: null
 }
 
 const getters = {
@@ -34,6 +37,15 @@ const getters = {
   },
   user() {
     return _.isNil(state.decodedToken) ? {} : state.decodedToken.user
+  },
+  accountDetails() {
+    return state.accountDetails
+  },
+  accountMissions() {
+    return state.accountMissions
+  },
+  accountPermissions() {
+    return state.accountPermissions
   }
 }
 
@@ -238,6 +250,137 @@ const actions = {
       type: "setRedirect",
       redirect: payload
     })
+  },
+  getAccountDetails({commit, dispatch}) {
+    commit({
+      type: 'startWorking',
+      message: 'Loading account details...'
+    })
+
+    return AuthApi.getAccountDetails()
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Retrieving account details failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (_.isNil(response.data.user) || !_.isObject(response.data.user)) {
+          console.error(response)
+          throw "Received invalid user"
+        }
+
+        commit({
+          type: 'setAccountDetails',
+          accountDetails: response.data.user
+        })
+
+        commit({
+          type: 'stopWorking'
+        })
+      }).catch((error) => {
+        commit({
+          type: 'stopWorking'
+        })
+
+        if (error.response) {
+          console.error('getAccountDetails', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load account details - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('getAccountDetails', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load account details - Request failed`
+          })
+        } else {
+          console.error('getAccountDetails', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load account details - Something failed...`
+          })
+        }
+      })
+  },
+  clearAccountDetails({commit}) {
+    commit({
+      type: 'clearAccountDetails'
+    })
+  },
+  editAccount({commit, dispatch}, payload) {
+    commit({
+      type: 'startWorking',
+      message: 'Updating account details...'
+    })
+
+    return AuthApi.editAccount(payload.updatedAccountDetails)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Updating account details failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (_.isNil(response.data.user) || !_.isObject(response.data.user)) {
+          console.error(response)
+          throw "Received invalid user"
+        }
+
+        commit({
+          type: 'setAccountDetails',
+          accountDetails: response.data.user
+        })
+
+        commit({
+          type: 'stopWorking',
+        })
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully updated account details`
+        })
+      }).catch((error) => {
+        commit({
+          type: 'stopWorking'
+        })
+
+        if (error.response) {
+          console.error('editAccount', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to update account details - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('editAccount', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to update account details - Request failed`
+          })
+        } else {
+          console.error('editAccount', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to update account details - Something failed...`
+          })
+        }
+      })
   }
 }
 
@@ -292,6 +435,16 @@ const mutations = {
     if (_.isNil(Vue.ls.get('auth-redirect'))) {
       Vue.ls.set('auth-redirect', payload.redirect)
     }
+  },
+  setAccountDetails(state, payload) {
+    state.accountDetails = payload.accountDetails
+    state.accountMissions = payload.accountDetails.missions
+    state.accountPermissions = payload.accountDetails.permissions
+  },
+  clearAccountDetails(state) {
+    state.accountDetails = null
+    state.accountMIssions = null
+    state.accountPermissions = null
   }
 }
 

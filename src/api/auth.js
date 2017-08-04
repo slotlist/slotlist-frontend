@@ -9,6 +9,12 @@ export const v1 = {
   },
   refreshToken() {
     return axios.post('/v1/auth/refresh')
+  },
+  getAccountDetails(){
+    return axios.get('/v1/auth/account')
+  },
+  editAccount(payload){
+    return axios.patch('/v1/auth/account', payload)
   }
 }
 

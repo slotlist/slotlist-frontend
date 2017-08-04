@@ -41,7 +41,7 @@ export default new Router({
       name: 'communityCreator',
       component: CommunityCreator,
       meta: {
-        authenticated: true
+        authenticated: true // only logged in users can access this page
       }
     },
     {
@@ -59,7 +59,7 @@ export default new Router({
       name: 'missionCreator',
       component: MissionCreator,
       meta: {
-        authenticated: true
+        authenticated: true // only logged in users can access this page
       }
     },
     {

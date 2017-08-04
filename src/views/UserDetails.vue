@@ -35,8 +35,6 @@
 </template>
 
 <script>
-import * as _ from 'lodash'
-
 import UserMissions from '../components/users/UserMissions.vue'
 
 import utils from '../utils'
