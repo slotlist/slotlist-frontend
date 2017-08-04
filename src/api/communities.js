@@ -4,6 +4,9 @@ export const v1 = {
   applyToCommunity(communitySlug) {
     return axios.post(`/v1/communities/${communitySlug}/applications`)
   },
+  editCommunity(communitySlug, payload) {
+    return axios.patch(`/v1/communities/${communitySlug}`, payload)
+  },
   getCommunities(limit = 25, offset = 0) {
     return axios.get(`/v1/communities?limit=${limit}&offset=${offset}`)
   },

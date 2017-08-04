@@ -117,6 +117,72 @@ const actions = {
       type: 'clearCommunityDetails'
     })
   },
+  editCommunity({ commit, dispatch }, payload) {
+    commit({
+      type: 'startWorking',
+      message: 'Updating community details...'
+    })
+
+    return CommunitiesApi.editCommunity(payload.communitySlug, payload.updatedCommunityDetails)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Updating community details failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (_.isNil(response.data.community) || !_.isObject(response.data.community)) {
+          console.error(response)
+          throw "Received invalid community"
+        }
+
+        commit({
+          type: 'setCommunityDetails',
+          communityDetails: response.data.community
+        })
+
+        commit({
+          type: 'stopWorking',
+        })
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully updated community details`
+        })
+      }).catch((error) => {
+        commit({
+          type: 'stopWorking'
+        })
+
+        if (error.response) {
+          console.error('editCommunity', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to update community details - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('editCommunity', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to update community details - Request failed`
+          })
+        } else {
+          console.error('editCommunity', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to update community details - Something failed...`
+          })
+        }
+      })
+  },
   getCommunities({ commit, dispatch, state }) {
     commit({
       type: 'startWorking',

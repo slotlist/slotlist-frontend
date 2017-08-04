@@ -14,6 +14,7 @@ import VueACL from './plugins/acl'
 import VueLocalStorage from 'vue-ls'
 import VueQuillEditor from 'vue-quill-editor'
 import VueSimpleSpinner from 'vue-simple-spinner'
+import VueClickConfirm from 'click-confirm'
 import LoadingOverlay from './components/LoadingOverlay.vue'
 
 // Black-require API/axios utils
@@ -43,6 +44,7 @@ Vue.use(VueLocalStorage, {
 
 Vue.use(VueQuillEditor)
 
+Vue.component('click-confirm', VueClickConfirm)
 Vue.component('spinner', VueSimpleSpinner)
 Vue.component('loading-overlay', LoadingOverlay)
 

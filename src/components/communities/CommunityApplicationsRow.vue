@@ -7,12 +7,16 @@
         <router-link tag="button" class="btn btn-primary" :to="{name: 'userDetails', params: {userUid: communityApplication.user.uid}}">
           <i class="fa fa-info" aria-hidden="true"></i> Details
         </router-link>
-        <button type="button" class="btn btn-success" :disabled="isCommunityApplicationProcessed" @click="processCommunityApplication(true)">
-          <i class="fa fa-check" aria-hidden="true"></i> Accept
-        </button>
-        <button type="button" class="btn btn-danger" :disabled="isCommunityApplicationProcessed" @click="processCommunityApplication(false)">
-          <i class="fa fa-ban" aria-hidden="true"></i> Deny
-        </button>
+        <click-confirm button-yes-icon="fa fa-user-plus" button-yes-class="btn btn-success" button-size="sm" :messages="{title: 'Accept application?', yes: 'Confirm', no: 'Cancel'}">
+          <button type="button" class="btn btn-success btn-sm" :disabled="isCommunityApplicationProcessed" @click="processCommunityApplication(true)">
+            <i class="fa fa-user-plus" aria-hidden="true"></i> Accept
+          </button>
+        </click-confirm>
+        <click-confirm button-yes-icon="fa fa-user-times" button-yes-class="btn btn-danger" button-size="sm" :messages="{title: 'Deny application?', yes: 'Confirm', no: 'Cancel'}">
+          <button type="button" class="btn btn-danger btn-sm" :disabled="isCommunityApplicationProcessed" @click="processCommunityApplication(false)">
+            <i class="fa fa-user-times" aria-hidden="true"></i> Deny
+          </button>
+        </click-confirm>
       </div>
     </td>
   </tr>
@@ -31,7 +35,7 @@ export default {
         case 'denied':
           return '<i class="fa fa-close fa-lg text-danger" aria-hidden="true"></i>'
         default:
-          return ''
+          return '<i class="fa fa-question-circle fa-lg text-muted" aria-hidden="true"></i>'
       }
     },
     isCommunityApplicationProcessed() {
