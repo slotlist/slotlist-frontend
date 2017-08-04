@@ -443,7 +443,7 @@ const mutations = {
   },
   clearAccountDetails(state) {
     state.accountDetails = null
-    state.accountMIssions = null
+    state.accountMissions = null
     state.accountPermissions = null
   }
 }
