@@ -4,6 +4,12 @@ export const v1 = {
   applyToCommunity(communitySlug) {
     return axios.post(`/v1/communities/${communitySlug}/applications`)
   },
+  checkCommunitySlugAvailability(missionSlug) {
+    return axios.get(`/v1/communities/slugAvailable?slug=${missionSlug}`)
+  },
+  createCommunity(payload) {
+    return axios.post('/v1/communities', payload)
+  },
   deleteCommunity(communitySlug) {
     return axios.delete(`/v1/communities/${communitySlug}`)
   },

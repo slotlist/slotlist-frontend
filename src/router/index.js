@@ -4,6 +4,7 @@ import store from '../store'
 import Home from '../views/Home'
 import CommunityList from '../views/CommunityList'
 import CommunityDetails from '../views/CommunityDetails'
+import CommunityCreator from '../views/CommunityCreator'
 import MissionList from '../views/MissionList'
 import MissionDetails from '../views/MissionDetails'
 import MissionCreator from '../views/MissionCreator'
@@ -34,6 +35,14 @@ export default new Router({
       path: '/communities/:communitySlug',
       name: 'communityDetails',
       component: CommunityDetails
+    },
+    {
+      path: '/communitycreator',
+      name: 'communityCreator',
+      component: CommunityCreator,
+      meta: {
+        authenticated: true
+      }
     },
     {
       path: '/missions',

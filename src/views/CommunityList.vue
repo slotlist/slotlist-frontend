@@ -28,6 +28,15 @@ export default {
   components: {
     CommunityListTable
   },
+  beforeCreate: function () {
+    this.$store.dispatch('getCommunities')
+  },
+  created: function () {
+    utils.setTitle('Communities')
+  },
+  beforeDestroy: function () {
+    this.$store.dispatch('clearCommunities')
+  },
   computed: {
     working() {
       return this.$store.getters.working
@@ -35,12 +44,6 @@ export default {
     loggedIn() {
       return this.$store.getters.loggedIn
     }
-  },
-  beforeCreate: function () {
-    this.$store.dispatch('getCommunities')
-  },
-  created: function () {
-    utils.setTitle('Communities')
   }
 }
 </script>

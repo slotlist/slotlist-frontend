@@ -5,14 +5,19 @@ import router from '../../router'
 import CommunitiesApi from '../../api/communities'
 
 const state = {
+  checkingCommunitySlugAvalability: false,
   communities: null,
   communityApplications: null,
   communityDetails: null,
   communityMembers: null,
-  communityMissions: null
+  communityMissions: null,
+  communitySlugAvailable: false
 }
 
 const getters = {
+  checkingCommunitySlugAvalability() {
+    return state.checkingCommunitySlugAvalability
+  },
   communities() {
     return state.communities
   },
@@ -48,6 +53,9 @@ const getters = {
   },
   communityMissions() {
     return state.communityMissions
+  },
+  communitySlugAvailable() {
+    return state.communitySlugAvailable
   }
 }
 
@@ -113,10 +121,142 @@ const actions = {
         }
       })
   },
+  checkCommunitySlugAvailability({ commit, dispatch }, payload) {
+    commit({
+      type: 'startCheckingCommunitySlugAvailability'
+    })
+
+    return CommunitiesApi.checkCommunitySlugAvailability(payload)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Checking community slug availability failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (_.isNil(response.data.available)) {
+          console.error(response)
+          throw "Received invalid community slug availability status"
+        }
+
+        commit({
+          type: 'setCommunitySlugAvailability',
+          available: response.data.available
+        })
+      }).catch((error) => {
+        commit({
+          type: 'setCommunitySlugAvailability',
+          available: false
+        })
+
+        if (error.response) {
+          console.error('checkingCommunitySlugAvalability', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to check availability of community slug <strong>${payload}</strong> - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('checkingCommunitySlugAvalability', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to check availability of community slug <strong>${payload}</strong> - Request failed`
+          })
+        } else {
+          console.error('checkingCommunitySlugAvalability', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to check availability of community slug <strong>${payload}</strong> - Something failed...`
+          })
+        }
+      })
+  },
+  clearCommunities({ commit }) {
+    commit({
+      type: 'clearCommunities'
+    })
+  },
   clearCommunityDetails({ commit }) {
     commit({
       type: 'clearCommunityDetails'
     })
+  },
+  clearCommunitySlugAvailability({ commit }) {
+    commit({
+      type: 'clearCommunitySlugAvailability'
+    })
+  },
+  createCommunity({ commit, dispatch }, payload) {
+    commit({
+      type: 'startWorking',
+      message: 'Creating community...'
+    })
+
+    return CommunitiesApi.createCommunity(payload)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Creatomg community failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (_.isNil(response.data.community) || !_.isObject(response.data.community)) {
+          console.error(response)
+          throw "Received invalid community"
+        }
+
+        commit({
+          type: 'stopWorking',
+        })
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully created community`
+        })
+
+        router.push({
+          name: 'communityDetails',
+          params: { communitySlug: response.data.community.slug }
+        })
+      }).catch((error) => {
+        commit({
+          type: 'stopWorking'
+        })
+
+        if (error.response) {
+          console.error('createCommunity', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create community - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('createCommunity', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create community - Request failed`
+          })
+        } else {
+          console.error('createCommunity', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create community - Something failed...`
+          })
+        }
+      })
   },
   deleteCommunity({ commit, dispatch }, payload) {
     commit({
@@ -620,6 +760,10 @@ const mutations = {
     state.communityMembers = null
     state.communityMissions = null
   },
+  clearCommunitySlugAvailability(state) {
+    state.checkingCommunitySlugAvalability = false
+    state.communitySlug = false
+  },
   setCommunities(state, payload) {
     state.communities = payload.communities
     state.communityOffset = payload.offset
@@ -635,6 +779,13 @@ const mutations = {
   },
   setCommunityMissions(state, payload) {
     state.communityMissions = payload.communityMissions
+  },
+  setCommunitySlugAvailability(state, payload) {
+    state.checkCommunitySlugAvailability = false
+    state.communitySlugAvailable = payload.available
+  },
+  startCheckingCommunitySlugAvailability(state) {
+    state.checkingCommunitySlugAvalability = true
   }
 }
 

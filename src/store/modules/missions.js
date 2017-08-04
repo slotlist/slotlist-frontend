@@ -779,7 +779,7 @@ const actions = {
 
         if (_.isNil(response.data.available)) {
           console.error(response)
-          throw "Received invalid mission slot availability status"
+          throw "Received invalid mission slug availability status"
         }
 
         commit({
