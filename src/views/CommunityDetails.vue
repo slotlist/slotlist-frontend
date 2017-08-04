@@ -188,7 +188,7 @@ export default {
   },
   methods: {
     deleteCommunity() {
-      this.$store.dispatch('deleteCommunity', this.$route.params.communitySlug)
+      this.$store.dispatch('deleteCommunity', { communitySlug: this.$route.params.communitySlug, communityName: this.communityDetails.name })
     },
     editCommunity() {
       this.hideCommunityEditModal()

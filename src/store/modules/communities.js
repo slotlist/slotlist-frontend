@@ -1,5 +1,6 @@
 import * as _ from 'lodash'
 import utils from '../../utils'
+import router from '../../router'
 
 import CommunitiesApi from '../../api/communities'
 
@@ -116,6 +117,69 @@ const actions = {
     commit({
       type: 'clearCommunityDetails'
     })
+  },
+  deleteCommunity({ commit, dispatch }, payload) {
+    commit({
+      type: 'startWorking',
+      message: 'Deleting community...'
+    })
+
+    return CommunitiesApi.deleteCommunity(payload.communitySlug)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Deleting community failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (response.data.success !== true) {
+          console.error(response)
+          throw "Received invalid community deletion"
+        }
+
+        commit({
+          type: 'stopWorking',
+        })
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully deleted community <strong>${payload.communityName}</strong>`
+        })
+
+        router.push({ name: 'communityList' })
+      }).catch((error) => {
+        commit({
+          type: 'stopWorking'
+        })
+
+        if (error.response) {
+          console.error('deleteCommunity', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete community <strong>${payload.communityName}</strong> - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('deleteCommunity', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete community <strong>${payload.communityName}</strong> - Request failed`
+          })
+        } else {
+          console.error('deleteCommunity', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete community <strong>${payload.communityName}</strong> - Something failed...`
+          })
+        }
+      })
   },
   editCommunity({ commit, dispatch }, payload) {
     commit({

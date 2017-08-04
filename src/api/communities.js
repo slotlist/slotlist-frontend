@@ -4,6 +4,9 @@ export const v1 = {
   applyToCommunity(communitySlug) {
     return axios.post(`/v1/communities/${communitySlug}/applications`)
   },
+  deleteCommunity(communitySlug) {
+    return axios.delete(`/v1/communities/${communitySlug}`)
+  },
   editCommunity(communitySlug, payload) {
     return axios.patch(`/v1/communities/${communitySlug}`, payload)
   },
