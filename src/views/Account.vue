@@ -20,6 +20,9 @@
             <button type="button" class="btn btn-primary" @click="showAccountEditModal">
               <i class="fa fa-edit" aria-hidden="true"></i> Edit
             </button>
+            <button type="button" class="btn btn-secondary" @click="refreshAuthentication">
+              <i class="fa fa-key" aria-hidden="true"></i> Refresh Authentication
+            </button>
           </div>
         </div>
       </div>
@@ -140,6 +143,11 @@ export default {
     },
     populateAccountEditModal() {
       this.accountEdit.nickname = this.accountDetails.nickname
+    },
+    refreshAuthentication() {
+      this.$store.dispatch("refreshToken").then(() => {
+        this.$store.dispatch("getAccountDetails")
+      })
     },
     showAccountEditModal() {
       this.$refs.accountEditModal.show()
