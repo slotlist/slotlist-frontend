@@ -14,11 +14,11 @@
         <router-link :to="{name: 'home'}">slotlist.info</router-link> is currently solely developed by
         <a href="https://github.com/MorpheusXAUT">MorpheusXAUT</a>. The website's frontend and backend source code can be found on GitHub:
         <dl class="row">
-          <dt class="col-sm-3">Frontend repository</dt>
+          <dt class="col-sm-3">frontend repository</dt>
           <dd class="col-sm-9">
             <a href="https://github.com/MorpheusXAUT/slotlist-frontend">slotlist-frontend</a>
           </dd>
-          <dt class="col-sm-3">Backend repository</dt>
+          <dt class="col-sm-3">backend repository</dt>
           <dd class="col-sm-9">
             <a href="https://github.com/MorpheusXAUT/slotlist-backend">slotlist-backend</a>
           </dd>
