@@ -79,8 +79,10 @@
               <router-link to="/about">About</router-link> |
               <router-link to="/privacy">Privacy</router-link> |
               <router-link to="/api">API</router-link> |
-              <a href="https://github.com/MorpheusXAUT/slotlist-frontend">Frontend</a> |
-              <a href="https://github.com/MorpheusXAUT/slotlist-backend">Backend</a>
+              <a href="https://github.com/MorpheusXAUT/slotlist-frontend">
+                <i class="fa fa-github"></i> Frontend</a> |
+              <a href="https://github.com/MorpheusXAUT/slotlist-backend">
+                <i class="fa fa-github"></i> Backend</a>
             </span>
           </div>
         </div>
