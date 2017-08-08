@@ -25,7 +25,8 @@ base.plugins.push(
     'process.env': {
       NODE_ENV: JSON.stringify('production'),
       BASE_URL: JSON.stringify('https://slotlist.info'),
-      BASE_API_URL: JSON.stringify('https://api.slotlist.info')
+      BASE_API_URL: JSON.stringify('https://api.slotlist.info'),
+      SENTRY_DSN: JSON.stringify(process.env.SENTRY_DSN)
     }
   }),
   new webpack.optimize.UglifyJsPlugin({
