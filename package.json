@@ -52,6 +52,7 @@
     "vue-quill-editor": "^2.2.6",
     "vue-router": "^2.0.0",
     "vue-simple-spinner": "^1.2.1",
+    "vuejs-paginate": "^1.2.0",
     "vuex": "^2.0.0",
     "vuex-router-sync": "^4.0.0"
   },

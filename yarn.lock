@@ -1123,13 +1123,6 @@ cli-width@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/cli-width/-/cli-width-2.1.0.tgz#b234ca209b29ef66fc518d9b98d5847b00edf00a"
 
-click-confirm@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/click-confirm/-/click-confirm-1.0.4.tgz#105126c8dfc132e7b65f140bbc81a510691caaa0"
-  dependencies:
-    bootstrap-vue "^0.15.0"
-    vue "^2.2.0"
-
 "click-confirm@https://github.com/MorpheusXAUT/click-confirm.git#8d7d322e46dc430300a939a90efb0f972b7bb08d":
   version "1.0.4"
   resolved "https://github.com/MorpheusXAUT/click-confirm.git#8d7d322e46dc430300a939a90efb0f972b7bb08d"
@@ -5584,6 +5577,10 @@ vue@^2.2.0:
 vue@^2.2.6, vue@^2.3.3:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.4.2.tgz#a9855261f191c978cc0dc1150531b8d08149b58c"
+
+vuejs-paginate@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/vuejs-paginate/-/vuejs-paginate-1.2.0.tgz#4d6b6fc5a02a611fa357a2fd2f055ed670c82a66"
 
 vuex-router-sync@^4.0.0:
   version "4.2.0"

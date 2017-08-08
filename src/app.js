@@ -15,6 +15,7 @@ import VueLocalStorage from 'vue-ls'
 import VueQuillEditor from 'vue-quill-editor'
 import VueSimpleSpinner from 'vue-simple-spinner'
 import VueClickConfirm from 'click-confirm'
+import VuePaginate from 'vuejs-paginate'
 import LoadingOverlay from './components/LoadingOverlay.vue'
 
 // Black-require API/axios utils
@@ -48,6 +49,7 @@ Vue.use(VueQuillEditor)
 Vue.component('click-confirm', VueClickConfirm)
 Vue.component('spinner', VueSimpleSpinner)
 Vue.component('loading-overlay', LoadingOverlay)
+Vue.component('paginate', VuePaginate)
 
 Vue.mixin({
   methods: {

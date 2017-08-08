@@ -4,6 +4,8 @@ import router from '../../router'
 
 import CommunitiesApi from '../../api/communities'
 
+const communityListLimit = 10
+
 const state = {
   checkingCommunitySlugAvalability: false,
   communities: null,
@@ -11,7 +13,8 @@ const state = {
   communityDetails: null,
   communityMembers: null,
   communityMissions: null,
-  communitySlugAvailable: false
+  communitySlugAvailable: false,
+  totalCommunities: 0
 }
 
 const getters = {
@@ -26,6 +29,9 @@ const getters = {
   },
   communityDetails() {
     return state.communityDetails
+  },
+  communityListPageCount() {
+    return Math.ceil(state.totalCommunities / communityListLimit)
   },
   communityMembers() {
     if (!_.isNil(state.communityMembers)) {
@@ -387,13 +393,19 @@ const actions = {
         }
       })
   },
-  getCommunities({ commit, dispatch, state }) {
+  getCommunities({ commit, dispatch }, payload) {
     commit({
       type: 'startWorking',
       message: 'Loading communities...'
     })
 
-    return CommunitiesApi.getCommunities(state.communityLimit, state.communityOffset)
+    if (_.isNil(payload)) {
+      payload = { page: 1 }
+    } else if (_.isNil(payload.page)) {
+      payload.page = 1
+    }
+
+    return CommunitiesApi.getCommunities(communityListLimit, (payload.page - 1) * communityListLimit)
       .then(function (response) {
         if (response.status !== 200) {
           console.error(response)
@@ -413,7 +425,7 @@ const actions = {
         commit({
           type: 'setCommunities',
           communities: response.data.communities,
-          offset: response.data.moreAvailable === true ? (response.data.offset + response.data.count) : 0
+          total: response.data.total
         })
 
         commit({
@@ -766,7 +778,7 @@ const mutations = {
   },
   setCommunities(state, payload) {
     state.communities = payload.communities
-    state.communityOffset = payload.offset
+    state.totalCommunities = payload.total
   },
   setCommunityApplications(state, payload) {
     state.communityApplications = payload.communityApplications
