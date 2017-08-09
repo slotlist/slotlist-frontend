@@ -42,6 +42,8 @@
             <a href="https://discord.gg/QZ5HpwT">Discord</a>
           </dd>
         </dl>
+        Contact details for legal inquiries can be found on the
+        <router-link :to="{name: 'imprint'}">imprint</router-link>.
       </p>
     </b-jumbotron>
   </div>

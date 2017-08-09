@@ -13,6 +13,7 @@ import Account from '../views/Account'
 import Login from '../views/Login'
 import AdminPanel from '../views/AdminPanel'
 import About from '../views/About'
+import Imprint from '../views/Imprint'
 import Privacy from '../views/Privacy'
 import Api from '../views/Api'
 
@@ -98,6 +99,11 @@ export default new Router({
       path: '/about',
       name: 'about',
       component: About
+    },
+    {
+      path: '/imprint',
+      name: 'imprint',
+      component: Imprint
     },
     {
       path: '/privacy',

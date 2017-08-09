@@ -30,7 +30,7 @@
         Cookies are files with small amount of data, stored by your browser on your computer's hard drive. Cookies may contain an anonymous unique identifier and are sent to your browser from our Service or a third party used to provide our Service.
         <br>We (or our Service Providers) may use Cookies to collect information about your website usage. You can instruct your browser to reject all Cookies, however some parts of our Service might not work to their fullest extend when doing so.
         <br>Our Service currently does not use any additional tracking or storage Cookies, however our Service Provider
-        <a href="https://cloudflare.com">Cloudflare</a> may add a cookie to better serve your requests.
+        <a href="https://cloudflare.com">Cloudflare</a> may add a cookie to better serve your requests. Furthermore, the cookie consent popup displayed to you upon visiting our Service also stores a cookie indicating your approval.
         <br>
         <br>
         <h4>Service Providers</h4>
@@ -38,20 +38,25 @@
         <br>These third parties only have access to your personal information as required to perform their designated task and are obligated not to disclose or use it for any other purposes.
         <br>As of now, our Service uses
         <a href="https://cloudflare.com">Cloudflare</a> as a DNS-, CDN- and DDoS protection service as well as
-        <a href="https://cloud.google.com">Google Cloud Platform</a> as a hosting provider. The respective privacy policies can be found on the companies' websites.
+        <a href="https://cloud.google.com">Google Cloud Platform</a> as a hosting provider (with servers currently located in the
+        <code>eu-west1</code> zone in Belgium). Furthermore, we employ services of
+        <a href="https://sentry.io">sentry.io</a> for error reporting and crash monitoring.
+        <br>The respective privacy policies can be found on the companies' websites.
         <br>
         <br>
         <h4>Links to other sites</h4>
         Our Service may contain links to other sites that are not operated by us. If you click on a third-party link, you will be redirected to that respective third-party site. We do not have any control over, and assume no responsibility for the content, privacy policies and practices of any third-party sites or services and strongly advise you to review the privacy policy of any third-party site you visit.
         <br>Should you notice any illegal or otherwise offensive material on any third-party sites linked to by our Service, please contact us via any way mentioned at our
-        <router-link :to="{name: 'about'}">About</router-link> page and inform us about the link.
+        <router-link :to="{name: 'about'}">About</router-link> or
+        <router-link :to="{name: 'imprint'}">Imprint</router-link> pages and inform us about the link.
         <br>
         <br>
         <h4>Children's privacy</h4>
         Our Service does not adress anyone under the age of 13 ("Child", Children").
         <br>We do not knowingly collect personally identifiable information from Children under 13. If you are a parent or guardian and you are aware that your Child has provided us with personal information, please contact us via any way mentioned at our
-        <router-link :to="{name: 'about'}">About</router-link> page.
-        <br>Should we discover any personal information provided by Children under the age of 13 years, we will delete such information from our servies immediately.
+        <router-link :to="{name: 'about'}">About</router-link> or
+        <router-link :to="{name: 'imprint'}">Imprint</router-link> pages.
+        <br>Should we discover any personal information provided by Children under the age of 13 years, we will delete such information from our Service immediately.
         <br>
         <br>
         <h4>Changes to this privacy policy</h4>
@@ -63,7 +68,8 @@
         <br>
         <h4>Contact us</h4>
         If you have any questions regarding this privacy policy, please contact us via any way mentioned on our
-        <router-link :to="{name: 'about'}">About</router-link> page.
+        <router-link :to="{name: 'about'}">About</router-link> or
+        <router-link :to="{name: 'imprint'}">Imprint</router-link> pages.
       </p>
     </b-jumbotron>
   </div>

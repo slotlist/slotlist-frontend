@@ -77,6 +77,7 @@
           <div class="col">
             <span class="text-muted small float-right">
               <router-link to="/about">About</router-link> |
+              <router-link to="/imprint">Imprint</router-link> |
               <router-link to="/privacy">Privacy</router-link> |
               <router-link to="/api">API</router-link> |
               <a href="https://github.com/MorpheusXAUT/slotlist-frontend">
