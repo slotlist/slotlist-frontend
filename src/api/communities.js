@@ -16,17 +16,17 @@ export const v1 = {
   editCommunity(communitySlug, payload) {
     return axios.patch(`/v1/communities/${communitySlug}`, payload)
   },
-  getCommunities(limit = 25, offset = 0) {
+  getCommunities(limit = 10, offset = 0) {
     return axios.get(`/v1/communities?limit=${limit}&offset=${offset}`)
+  },
+  getCommunityApplications(communitySlug, limit = 10, offset = 0) {
+    return axios.get(`/v1/communities/${communitySlug}/applications?limit=${limit}&offset=${offset}`)
   },
   getCommunityDetails(communitySlug) {
     return axios.get(`/v1/communities/${communitySlug}`)
   },
-  getCommunityMissions(communitySlug) {
-    return axios.get(`/v1/communities/${communitySlug}/missions`)
-  },
-  getCommunityApplications(communitySlug) {
-    return axios.get(`/v1/communities/${communitySlug}/applications`)
+  getCommunityMissions(communitySlug, limit = 10, offset = 0) {
+    return axios.get(`/v1/communities/${communitySlug}/missions?limit=${limit}&offset=${offset}`)
   },
   processCommunityApplication(communitySlug, applicationUid, accepted) {
     return axios.patch(`/v1/communities/${communitySlug}/applications/${applicationUid}`, { status: accepted ? 'accepted' : 'denied' })

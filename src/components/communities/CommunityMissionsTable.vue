@@ -37,9 +37,6 @@ export default {
     communityMissions() {
       return this.$store.getters.communityMissions
     }
-  },
-  beforeCreate: function () {
-    this.$store.dispatch('getCommunityMissions', this.$route.params.communitySlug)
   }
 }
 </script>

@@ -22,9 +22,6 @@ export default {
     CommunityMembersTable
   },
   computed: {
-    loggedIn() {
-      return this.$store.getters.loggedIn
-    },
     isCommunityMember() {
       const user = this.$store.getters.user
 
@@ -36,13 +33,16 @@ export default {
 
       return user.community.slug === this.$router.params.communitySlug
     },
+    loggedIn() {
+      return this.$store.getters.loggedIn
+    }
   },
   methods: {
-    refreshCommunityMembers() {
-      this.$store.dispatch('getCommunityDetails', this.$route.params.communitySlug)
-    },
     applyToCommunity() {
       this.$store.dispatch('applyToCommunity', this.$route.params.communitySlug)
+    },
+    refreshCommunityMembers() {
+      this.$store.dispatch('getCommunityDetails', this.$route.params.communitySlug)
     }
   }
 }

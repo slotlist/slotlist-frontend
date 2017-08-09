@@ -4,7 +4,9 @@ import router from '../../router'
 
 import CommunitiesApi from '../../api/communities'
 
-const communityListLimit = 10
+const communitiesLimit = 10
+const communityApplicationsLimit = 10
+const communityMissionsLimit = 10
 
 const state = {
   checkingCommunitySlugAvalability: false,
@@ -14,7 +16,9 @@ const state = {
   communityMembers: null,
   communityMissions: null,
   communitySlugAvailable: false,
-  totalCommunities: 0
+  totalCommunities: 0,
+  totalCommunityApplications: 0,
+  totalCommunityMissions: 0
 }
 
 const getters = {
@@ -27,11 +31,14 @@ const getters = {
   communityApplications() {
     return state.communityApplications
   },
+  communityApplicationsPageCount() {
+    return Math.ceil(state.totalCommunityApplications / communityApplicationsLimit)
+  },
   communityDetails() {
     return state.communityDetails
   },
   communityListPageCount() {
-    return Math.ceil(state.totalCommunities / communityListLimit)
+    return Math.ceil(state.totalCommunities / communitiesLimit)
   },
   communityMembers() {
     if (!_.isNil(state.communityMembers)) {
@@ -59,6 +66,9 @@ const getters = {
   },
   communityMissions() {
     return state.communityMissions
+  },
+  communityMissionsPageCount() {
+    return Math.ceil(state.totalCommunityMissions / communityMissionsLimit)
   },
   communitySlugAvailable() {
     return state.communitySlugAvailable
@@ -405,7 +415,7 @@ const actions = {
       payload.page = 1
     }
 
-    return CommunitiesApi.getCommunities(communityListLimit, (payload.page - 1) * communityListLimit)
+    return CommunitiesApi.getCommunities(communitiesLimit, (payload.page - 1) * communitiesLimit)
       .then(function (response) {
         if (response.status !== 200) {
           console.error(response)
@@ -466,7 +476,11 @@ const actions = {
       message: 'Loading community applications...'
     })
 
-    return CommunitiesApi.getCommunityApplications(payload)
+    if (_.isNil(payload.page)) {
+      payload.page = 1
+    }
+
+    return CommunitiesApi.getCommunityApplications(payload.communitySlug, communityApplicationsLimit, (payload.page - 1) * communityApplicationsLimit)
       .then(function (response) {
         if (response.status !== 200) {
           console.error(response)
@@ -485,7 +499,8 @@ const actions = {
 
         commit({
           type: 'setCommunityApplications',
-          communityApplications: response.data.applications
+          communityApplications: response.data.applications,
+          total: response.data.total
         })
 
         commit({
@@ -586,7 +601,11 @@ const actions = {
       message: 'Loading community missions...'
     })
 
-    return CommunitiesApi.getCommunityMissions(payload)
+    if (_.isNil(payload.page)) {
+      payload.page = 1
+    }
+
+    return CommunitiesApi.getCommunityMissions(payload.communitySlug, communityMissionsLimit, (payload.page - 1) * communityMissionsLimit)
       .then(function (response) {
         if (response.status !== 200) {
           console.error(response)
@@ -605,7 +624,8 @@ const actions = {
 
         commit({
           type: 'setCommunityMissions',
-          communityMissions: response.data.missions
+          communityMissions: response.data.missions,
+          total: response.data.total
         })
 
         commit({
@@ -782,6 +802,7 @@ const mutations = {
   },
   setCommunityApplications(state, payload) {
     state.communityApplications = payload.communityApplications
+    state.totalCommunityApplications = payload.total
   },
   setCommunityDetails(state, payload) {
     state.communityDetails = payload.communityDetails
@@ -791,6 +812,7 @@ const mutations = {
   },
   setCommunityMissions(state, payload) {
     state.communityMissions = payload.communityMissions
+    state.totalCommunityMissions = payload.total
   },
   setCommunitySlugAvailability(state, payload) {
     state.checkCommunitySlugAvailability = false

@@ -33,9 +33,6 @@ export default {
     communityApplications() {
       return this.$store.getters.communityApplications
     }
-  },
-  beforeCreate: function () {
-    this.$store.dispatch('getCommunityApplications', this.$route.params.communitySlug)
   }
 }
 </script>
