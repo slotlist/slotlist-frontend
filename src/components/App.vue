@@ -138,13 +138,13 @@ export default {
       }
     }
   },
-  beforeCreate: function () {
+  beforeCreate: function() {
     const token = this.$ls.get('auth-token')
     if (!_.isNil(token)) {
       this.$store.dispatch("setTokenFromLocalStorage", token)
     }
   },
-  created: function () {
+  created: function() {
     utils.clearTitle()
   },
 }

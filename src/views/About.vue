@@ -12,15 +12,23 @@
       <h4>Development</h4>
       <p class="text-justify">
         <router-link :to="{name: 'home'}">slotlist.info</router-link> is currently solely developed by
-        <a href="https://github.com/MorpheusXAUT">MorpheusXAUT</a>. The website's frontend and backend source code can be found on GitHub:
+        <a href="https://github.com/MorpheusXAUT">MorpheusXAUT</a>. The website's frontend and backend source code repositories as well as the current versions deployed can be found below. Please include this information is bug reports as it helps with narrowing down issues.
         <dl class="row">
-          <dt class="col-sm-3">frontend repository</dt>
-          <dd class="col-sm-9">
-            <a href="https://github.com/MorpheusXAUT/slotlist-frontend">slotlist-frontend</a>
+          <dt class="col-1">frontend</dt>
+          <dd class="col-2">
+            <a href="https://github.com/MorpheusXAUT/slotlist-frontend">
+              <i class="fa fa-github" aria-hidden="true"></i> slotlist-frontend</a>
           </dd>
-          <dt class="col-sm-3">backend repository</dt>
-          <dd class="col-sm-9">
-            <a href="https://github.com/MorpheusXAUT/slotlist-backend">slotlist-backend</a>
+          <dd class="col-9">
+            <span v-show="frontendVersion">{{ frontendVersion }}</span>
+          </dd>
+          <dt class="col-1">backend</dt>
+          <dd class="col-2">
+            <a href="https://github.com/MorpheusXAUT/slotlist-backend">
+              <i class="fa fa-github" aria-hidden="true"></i> slotlist-backend</a>
+          </dd>
+          <dd class="col-9">
+            <span v-show="backendVersion">{{ backendVersion }}</span>
           </dd>
         </dl>
         You can also use these repositories and their respective issue trackers to report any bugs you encounter - or use one of the contact methods available, as mentioned below.
@@ -50,11 +58,23 @@
 </template>
 
 <script>
+import * as _ from 'lodash'
 import utils from '../utils'
 
 export default {
-  created: function () {
+  beforeCreate: function() {
+    this.$store.dispatch('getBackendVersion')
+  },
+  created: function() {
     utils.setTitle('About')
+  },
+  computed: {
+    backendVersion() {
+      return _.startsWith(this.$store.getters.backendVersion, 'v') ? this.$store.getters.backendVersion : `v${this.$store.getters.backendVersion}`
+    },
+    frontendVersion() {
+      return _.startsWith(process.env.FRONTEND_VERSION, 'v') ? process.env.FRONTEND_VERSION : `v${process.env.FRONTEND_VERSION}`
+    }
   }
 }
 </script>
