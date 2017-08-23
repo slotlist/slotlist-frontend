@@ -614,25 +614,6 @@ export default {
           value: 4
         }
       ],
-      missionEditVisibilityOptions: [
-        {
-          text: 'community members',
-          value: 'community'
-        },
-        {
-          text: 'mission creator & editors only',
-          value: 'hidden'
-        },
-        // Disabled for now since the backend doesn't fully support this setting yet
-        /* {
-          text: 'selected users',
-          value: 'private'
-        }, */
-        {
-          text: 'everyone',
-          value: 'public'
-        }
-      ],
       slotRegistrationComment: null,
       missionEditTitle: null,
       missionEditShortDescription: null,
@@ -872,6 +853,35 @@ export default {
     },
     missionEditVisibilityFeedback() {
       return _.isNil(this.missionEditVisibility) || _.isEmpty(this.missionEditVisibility) ? 'Please select a visibility setting' : ''
+    },
+    missionEditVisibilityOptions() {
+      let options = [
+        {
+          text: 'mission creator & editors only',
+          value: 'hidden'
+        },
+        // Disabled for now since the backend doesn't fully support this setting yet
+        /* {
+          text: 'selected users',
+          value: 'private'
+        }, */
+        {
+          text: 'everyone',
+          value: 'public'
+        }
+      ]
+
+      if (!_.isNil(this.user.community)) {
+        options = [
+          {
+            text: 'community members',
+            value: 'community'
+          },
+          ...options
+        ]
+      }
+
+      return options
     },
     slotCreateOrderNumberState() {
       return _.isNil(this.slotCreateOrderNumber) && !_.isNumber(this.slotCreateOrderNumber) ? 'danger' : 'success'

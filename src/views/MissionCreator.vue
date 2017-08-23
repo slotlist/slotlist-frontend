@@ -80,10 +80,15 @@
               </b-form-fieldset>
             </div>
           </div>
-          <div class="row" v-show="user.community">
-            <div class="col text-center">
+          <div class="row">
+            <div class="col text-center" v-show="user.community">
               <b-form-fieldset label="Add mission to community?" :state="missionCreateAddToCommunityState" :feedback="missionCreateAddToCommunityFeedback" description="Adding a mission to your community makes it visible in the community's mission list">
                 <b-form-checkbox v-model="missionCreateAddToCommunity"></b-form-checkbox>
+              </b-form-fieldset>
+            </div>
+            <div class="col">
+              <b-form-fieldset label="Visibility" :state="missionCreateVisibilityState" :feedback="missionCreateVisibilityFeedback">
+                <b-form-select v-model="missionCreateVisibility" :options="missionCreateVisibilityOptions" class="mb-3" required></b-form-select>
               </b-form-fieldset>
             </div>
           </div>
@@ -146,7 +151,8 @@ export default {
       missionCreateRepositoryUrl: null,
       missionCreateTechSupport: null,
       missionCreateRules: null,
-      missionCreateAddToCommunity: true
+      missionCreateAddToCommunity: true,
+      missionCreateVisibility: 'hidden'
     }
   },
   computed: {
@@ -258,6 +264,41 @@ export default {
     },
     missionCreateAddToCommunityFeedback() {
       return ''
+    },
+    missionCreateVisibilityState() {
+      return _.isNil(this.missionCreateVisibility) || _.isEmpty(this.missionCreateVisibility) ? 'danger' : 'success'
+    },
+    missionCreateVisibilityFeedback() {
+      return _.isNil(this.missionCreateVisibility) || _.isEmpty(this.missionCreateVisibility) ? 'Please select a visibility setting' : ''
+    },
+    missionCreateVisibilityOptions() {
+      let options = [
+        {
+          text: 'mission creator & editors only',
+          value: 'hidden'
+        },
+        // Disabled for now since the backend doesn't fully support this setting yet
+        /* {
+          text: 'selected users',
+          value: 'private'
+        }, */
+        {
+          text: 'everyone',
+          value: 'public'
+        }
+      ]
+
+      if (!_.isNil(this.user.community)) {
+        options = [
+          {
+            text: 'community members',
+            value: 'community'
+          },
+          ...options
+        ]
+      }
+
+      return options
     }
   },
   methods: {
@@ -291,7 +332,8 @@ export default {
         repositoryUrl: this.missionCreateRepositoryUrl,
         techSupport: this.missionCreateTechSupport,
         rules: this.missionCreateRules,
-        addToCommunity: this.missionCreateAddToCommunity
+        addToCommunity: this.missionCreateAddToCommunity,
+        visibility: this.missionCreateVisibility
       }
 
       if (_.isEmpty(missionDetails.repositoryUrl)) {
@@ -307,7 +349,7 @@ export default {
       this.$store.dispatch('createMission', missionDetails)
     }
   },
-  created: function () {
+  created: function() {
     utils.setTitle('Mission Creator')
   }
 }
