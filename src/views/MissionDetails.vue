@@ -466,6 +466,13 @@
                 </b-form-fieldset>
               </div>
             </div>
+            <div class="row">
+              <div class="col">
+                <b-form-fieldset label="Visibility" :state="missionEditVisibilityState" :feedback="missionEditVisibilityFeedback">
+                  <b-form-select v-model="missionEditVisibility" :options="missionEditVisibilityOptions" class="mb-3" required></b-form-select>
+                </b-form-fieldset>
+              </div>
+            </div>
           </b-form>
         </div>
         <div slot="modal-footer">
@@ -607,6 +614,25 @@ export default {
           value: 4
         }
       ],
+      missionEditVisibilityOptions: [
+        {
+          text: 'community members',
+          value: 'community'
+        },
+        {
+          text: 'mission creator & editors only',
+          value: 'hidden'
+        },
+        // Disabled for now since the backend doesn't fully support this setting yet
+        /* {
+          text: 'selected users',
+          value: 'private'
+        }, */
+        {
+          text: 'everyone',
+          value: 'public'
+        }
+      ],
       slotRegistrationComment: null,
       missionEditTitle: null,
       missionEditShortDescription: null,
@@ -618,6 +644,7 @@ export default {
       missionEditRepositoryUrl: null,
       missionEditTechSupport: null,
       missionEditRules: null,
+      missionEditVisibility: null,
       slotCreateOrderNumber: null,
       slotCreateTitle: null,
       slotCreateDifficulty: null,
@@ -840,6 +867,12 @@ export default {
     missionEditRulesFeedback() {
       return ''
     },
+    missionEditVisibilityState() {
+      return _.isNil(this.missionEditVisibility) || _.isEmpty(this.missionEditVisibility) ? 'danger' : 'success'
+    },
+    missionEditVisibilityFeedback() {
+      return _.isNil(this.missionEditVisibility) || _.isEmpty(this.missionEditVisibility) ? 'Please select a visibility setting' : ''
+    },
     slotCreateOrderNumberState() {
       return _.isNil(this.slotCreateOrderNumber) && !_.isNumber(this.slotCreateOrderNumber) ? 'danger' : 'success'
     },
@@ -1032,6 +1065,7 @@ export default {
       this.missionEditRepositoryUrl = this.missionDetails.repositoryUrl
       this.missionEditTechSupport = this.missionDetails.techSupport
       this.missionEditRules = this.missionDetails.rules
+      this.missionEditVisibility = this.missionDetails.visibility
     },
     showMissionEditModal() {
       this.$refs.missionEditModal.show()
@@ -1052,7 +1086,8 @@ export default {
         briefingTime: this.missionEditBriefingTime,
         repositoryUrl: this.missionEditRepositoryUrl,
         techSupport: this.missionEditTechSupport,
-        rules: this.missionEditRules
+        rules: this.missionEditRules,
+        visibility: this.missionEditVisibility
       }
 
       if (_.isEmpty(localMissionDetails.repositoryUrl)) {
