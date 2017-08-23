@@ -20,6 +20,16 @@
             </p>
           </div>
           <div class="col">
+            <h5>Repository URL</h5>
+            <p v-html="optionalRepositoryUrl"></p>
+          </div>
+          <div class="col">
+            <h5>Visibility</h5>
+            <p v-html="formattedMissionVisibility"></p>
+          </div>
+        </div>
+        <div class="row text-center">
+          <div class="col">
             <h5>Slotting time</h5>
             <p class="font-weight-bold text-success">{{ formatDateTime(missionDetails.slottingTime) }}</p>
           </div>
@@ -33,18 +43,14 @@
             </h5>
             <p>{{ formatDateTime(missionDetails.endTime) }}</p>
           </div>
-        </div>
-        <div class="row text-center">
           <div class="col">
             <h5>Briefing
               <span class="text-muted">(ldrsp.)</span>
             </h5>
             <p>{{ formatDateTime(missionDetails.briefingTime) }}</p>
           </div>
-          <div class="col">
-            <h5>Repository URL</h5>
-            <p v-html="optionalRepositoryUrl"></p>
-          </div>
+        </div>
+        <div class="row text-center">
           <div class="col">
             <h5>Techsupport</h5>
             <p v-html="optionalTechSupport"></p>
@@ -717,6 +723,20 @@ export default {
     registrationIcon() {
       return this.registrationAssign ? 'fa fa-check' : 'fa fa-close'
     },
+    formattedMissionVisibility() {
+      switch (this.missionDetails.visibility) {
+        case 'community':
+          return `<span class="text-primary"><i class="fa fa-users" aria-hidden="true"></i> community members</span>`
+        case 'hidden':
+          return `<span class="text-danger"><i class="fa fa-edit" aria-hidden="true"></i> mission creator & editors only</span>`
+        case 'private':
+          return `<span class="text-warning"><i class="fa fa-user-secret" aria-hidden="true"></i> selected users</span>`
+        case 'public':
+          return `<span class="text-success"><i class="fa fa-globe" aria-hidden="true"></i> everyone</span>`
+        default:
+          return `<span class="text-muted font-italic"><i class="fa fa-question-circle" aria-hidden="true"></i> unknown</span>`
+      }
+    },
     optionalAssignee() {
       return _.isNil(this.slotDetails.assignee) ? '<span class="text-muted font-italic">not assigned</span>' : this.formatUserWithTag(this.slotDetails.assignee)
     },
@@ -1230,7 +1250,7 @@ export default {
       }
     }
   },
-  beforeCreate: function () {
+  beforeCreate: function() {
     this.$store.dispatch('getMissionDetails', this.$route.params.missionSlug)
     this.$store.dispatch('getMissionSlotlist', this.$route.params.missionSlug)
     this.$store.dispatch('clearMissionSlotDetails')
@@ -1240,7 +1260,7 @@ export default {
     this.$store.dispatch('clearMissionSlotRegistrations')
     this.$store.dispatch('clearMissionSlotRegistrationConfirmation')
   },
-  beforeDestroy: function () {
+  beforeDestroy: function() {
     this.$store.dispatch('clearMissionDetails')
     this.$store.dispatch('clearMissionSlotlist')
     this.$store.dispatch('clearMissionSlotDetails')
