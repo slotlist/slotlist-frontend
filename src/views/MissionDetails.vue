@@ -88,7 +88,7 @@
     <!-- End of content -->
     <!-- Begin of modals -->
     <div>
-      <b-modal ref="slotDetailsModal" id="slotDetailsModal" @hide="slotDetailsModalClosed">
+      <b-modal ref="slotDetailsModal" id="slotDetailsModal" size="lg" @hide="slotDetailsModalClosed">
         <div slot="modal-title">
           <h5>Slot details - #{{ slotDetails.orderNumber + 1 }} {{ slotDetails.title }}</h5>
         </div>
@@ -125,64 +125,19 @@
           <div class="row" v-show="slotDetails.description">
             <div class="col col-12" v-html="slotDetails.description"></div>
           </div>
+          <hr class="my-4">
+          <div class="row font-weight-bold">
+            <div class="col col-12">Registrations</div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col col-12">
+              <mission-slot-registrations :slotDetails="slotDetails"></mission-slot-registrations>
+            </div>
+          </div>
         </div>
         <div slot="modal-footer">
           <div class="btn-group" role="group" aria-label="Mission slot detail actions">
-            <button type="button" class="btn btn-success" v-show="loggedIn && !slotDetails.registrationUid" :disabled="slotDetails.assignee" @click="slotDetailsRegister">
-              <i class="fa fa-ticket" aria-hidden="true"></i> Register
-            </button>
-            <button type="button" class="btn btn-warning" v-show="loggedIn && slotDetails.registrationUid" @click="slotDetailsUnregister">
-              <i class="fa fa-eraser" aria-hidden="true"></i> Unregister
-            </button>
-            <button type="button" class="btn btn-secondary" @click="hideSlotDetailsModal">
-              <i class="fa fa-close" aria-hidden="true"></i> Close</button>
-          </div>
-        </div>
-      </b-modal>
-      <b-modal ref="slotDetailsEditorModal" id="slotDetailsEditorModal" size="lg" @hide="slotDetailsModalClosed">
-        <div slot="modal-title">
-          <h5>Slot details - #{{ slotDetails.orderNumber + 1 }} {{ slotDetails.title }}</h5>
-        </div>
-        <div class="container-fluid">
-          <div class="row font-weight-bold">
-            <div class="col col-1">#</div>
-            <div class="col col-3">Role</div>
-            <div class="col col-3">Player</div>
-            <div class="col col-2">Difficulty</div>
-            <div class="col col-3">Status</div>
-          </div>
-          <div class="row">
-            <div class="col col-1">{{ slotDetails.orderNumber + 1 }}</div>
-            <div class="col col-3">{{ slotDetails.title }} </div>
-            <div class="col col-3" v-html="optionalAssignee"></div>
-            <div class="col col-2">
-              <i :class="difficultyIcon" aria-hidden="true"></i>
-              <span :class="difficultyColor">{{ difficultyText }}</span>
-            </div>
-            <div class="col col-3" v-html="slotStatus"></div>
-          </div>
-          <div class="row font-weight-bold">
-            <div class="col col-1"></div>
-            <div class="col col-11">Description</div>
-          </div>
-          <div class="row">
-            <div class="col col-1"></div>
-            <div class="col col-11">{{ slotDetails.shortDescription}}</div>
-          </div>
-          <hr class="my-4" v-show="slotDetails.description">
-          <div class="row font-weight-bold" v-show="slotDetails.description">
-            <div class="col col-12">Detailed description</div>
-          </div>
-          <div class="row" v-show="slotDetails.description">
-            <div class="col col-12" v-html="slotDetails.description"></div>
-          </div>
-          <hr class="my-4">
-          <div class="row">
-            <mission-slot-registrations :slotDetails="slotDetails"></mission-slot-registrations>
-          </div>
-        </div>
-        <div slot="modal-footer">
-          <div class="btn-group" role="group" aria-label="Mission slot detail editor actions">
             <button type="button" class="btn btn-success" v-show="loggedIn && !slotDetails.registrationUid" :disabled="slotDetails.assignee" @click="slotDetailsRegister">
               <i class="fa fa-ticket" aria-hidden="true"></i> Register
             </button>
@@ -997,27 +952,22 @@ export default {
       this.$store.dispatch('clearMissionSlotUnregister')
     },
     slotDetailsRegister() {
-      this.$refs.slotDetailsEditorModal.hide()
       this.$refs.slotDetailsModal.hide()
       this.$store.dispatch('showMissionSlotRegister', this.slotDetails)
     },
     slotDetailsUnregister() {
-      this.$refs.slotDetailsEditorModal.hide()
       this.$refs.slotDetailsModal.hide()
       this.$store.dispatch('showMissionSlotUnregister', this.slotDetails)
     },
     slotDetailsDelete() {
-      this.$refs.slotDetailsEditorModal.hide()
       this.$refs.slotDetailsModal.hide()
       this.$store.dispatch('showMissionSlotDeletion', this.slotDetails)
     },
     slotDetailsEdit() {
-      this.$refs.slotDetailsEditorModal.hide()
       this.$refs.slotDetailsModal.hide()
       this.$refs.slotEditModal.show()
     },
     hideSlotDetailsModal() {
-      this.$refs.slotDetailsEditorModal.hide()
       this.$refs.slotDetailsModal.hide()
     },
     hideSlotRegisterModal() {
@@ -1255,17 +1205,14 @@ export default {
   watch: {
     showSlotDetails(val) {
       if (val) {
-        if (this.isMissionEditor) {
-          this.$store.dispatch('getMissionSlotRegistrations', {
-            missionSlug: this.$route.params.missionSlug,
-            slotUid: this.slotDetails.uid,
-            slotOrderNumber: this.slotDetails.orderNumber,
-            slotTitle: this.slotDetails.title
-          })
-          this.$refs.slotDetailsEditorModal.show()
-        } else {
-          this.$refs.slotDetailsModal.show()
-        }
+        this.$store.dispatch('getMissionSlotRegistrations', {
+          missionSlug: this.$route.params.missionSlug,
+          slotUid: this.slotDetails.uid,
+          slotOrderNumber: this.slotDetails.orderNumber,
+          slotTitle: this.slotDetails.title
+        })
+
+        this.$refs.slotDetailsModal.show()
       }
     },
     showSlotCreate(val) {
@@ -1290,7 +1237,6 @@ export default {
     },
     showSlotRegistrationConfirmation(val) {
       if (val) {
-        this.$refs.slotDetailsEditorModal.hide()
         this.$refs.slotRegistrationConfirmationModal.show()
       }
     }

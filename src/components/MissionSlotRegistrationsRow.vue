@@ -1,10 +1,10 @@
 <template>
   <tr>
     <td>{{ formatUserWithTag(registration.user) }}</td>
-    <td v-html="optionalComment"></td>
+    <td v-html="optionalComment" v-show="isMissionEditor"></td>
     <td>{{ formatDateTime(registration.createdAt) }}</td>
     <td class="text-center" v-html="registrationConfirmed"></td>
-    <td class="text-center">
+    <td class="text-center" v-show="isMissionEditor">
       <button type="button" class="btn btn-success btn-sm" v-show="!registration.confirmed" @click="registrationAssign">
         <i class="fa fa-check" aria-hidden="true"></i> Assign
       </button>
@@ -19,7 +19,13 @@
 import * as _ from 'lodash'
 
 export default {
+  props: [
+    'registration'
+  ],
   computed: {
+    isMissionEditor() {
+      return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`, `mission.${this.$route.params.missionSlug}.editor`])
+    },
     optionalComment() {
       return _.isNil(this.registration.comment) ?
         '<span class="text-muted font-italic">not provided</span>' :
@@ -36,9 +42,6 @@ export default {
     registrationUnassign() {
       this.$store.dispatch('showMissionSlotRegistrationConfirmation', { registration: this.registration, assign: false })
     }
-  },
-  props: [
-    'registration'
-  ]
+  }
 }
 </script>

@@ -15,6 +15,9 @@
 import MissionSlotRegistrationsTable from './MissionSlotRegistrationsTable.vue'
 
 export default {
+  props: [
+    'slotDetails'
+  ],
   components: {
     MissionSlotRegistrationsTable
   },
@@ -28,9 +31,6 @@ export default {
         slotTitle: this.slotDetails.title
       })
     }
-  },
-  props: [
-    'slotDetails'
-  ]
+  }
 }
 </script>

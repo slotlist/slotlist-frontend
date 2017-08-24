@@ -8,7 +8,7 @@
       </b-tooltip>
       <span v-if="!missionSlot.restricted && !missionSlot.reserve" :class="titleColor">{{ missionSlot.title }}</span>
     </td>
-    <td v-html="optionalAssignee"></td>
+    <td v-html="formattedAssignee"></td>
     <td>{{ missionSlot.shortDescription }}</td>
     <td class="text-center">
       <div class="btn-group btn-group-sm" role="group" aria-label="Mission slot actions">
@@ -40,10 +40,16 @@ export default {
     canEditSlotlist() {
       return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`, `mission.${this.$route.params.missionSlug}.editor`])
     },
-    optionalAssignee() {
-      return _.isNil(this.missionSlot.assignee) ?
-        '<span class="text-muted font-italic">not assigned</span>' :
-        `<span class="text-success font-weight-bold">${this.formatUserWithTag(this.missionSlot.assignee)}</span>`
+    formattedAssignee() {
+      if (!_.isNil(this.missionSlot.assignee)) {
+        return `<span class="text-success font-weight-bold">${this.formatUserWithTag(this.missionSlot.assignee)}</span>`
+      }
+
+      if (!_.isNumber(this.missionSlot.registrationCount) || this.missionSlot.registrationCount <= 0) {
+        return '<span class="text-muted font-italic">not assigned - no registrations</span>'
+      }
+
+      return `<span class="text-muted font-italic">not assigned - ${this.missionSlot.registrationCount} registration${this.missionSlot.registrationCount > 1 ? 's' : ''}</span>`
     },
     difficultyColor() {
       switch (this.missionSlot.difficulty) {
