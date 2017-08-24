@@ -31,7 +31,7 @@ export default {
         return false
       }
 
-      return user.community.slug === this.$router.params.communitySlug
+      return user.community.slug === this.$route.params.communitySlug
     },
     loggedIn() {
       return this.$store.getters.loggedIn
