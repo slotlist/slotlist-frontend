@@ -81,6 +81,21 @@
       <div class="card" v-if="slotlistLoaded">
         <div class="card-block text-nowrap">
           <h1>Slotlist</h1>
+          <div class="small">
+            <b-form-group label="Filter" label-for="missionSlotlistFilter">
+              <div role="group" id="missionSlotlistFilter">
+                <b-form-checkbox v-model="missionSlotlistFilter" name="assigned" value="assigned">
+                  assigned
+                </b-form-checkbox>
+                <b-form-checkbox v-model="missionSlotlistFilter" name="hasRegistrations" value="hasRegistrations">
+                  has registrations
+                </b-form-checkbox>
+                <b-form-checkbox v-model="missionSlotlistFilter" name="open" value="open">
+                  open
+                </b-form-checkbox>
+              </div>
+            </b-form-group>
+          </div>
           <mission-slotlist></mission-slotlist>
         </div>
       </div>
@@ -594,7 +609,8 @@ export default {
       slotEditShortDescription: null,
       slotEditDescription: null,
       slotEditRestricted: false,
-      slotEditReserve: false
+      slotEditReserve: false,
+      missionSlotlistFilter: []
     }
   },
   computed: {
@@ -1239,6 +1255,9 @@ export default {
       if (val) {
         this.$refs.slotRegistrationConfirmationModal.show()
       }
+    },
+    missionSlotlistFilter(val) {
+      this.$store.dispatch('filterMissionSlotlist', val)
     }
   },
   beforeCreate: function() {

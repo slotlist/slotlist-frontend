@@ -13,6 +13,7 @@ const state = {
   missionDetailsLoaded: false,
   missionSlotlist: [],
   missionSlotlistLoaded: false,
+  missionSlotlistFilter: {},
   missionSlotDetails: {},
   showMissionSlotDetails: false,
   showMissionSlotRegister: false,
@@ -52,6 +53,24 @@ const getters = {
   },
   missionSlotlist() {
     return state.missionSlotlist
+  },
+  filteredMissionSlotlist() {
+    if (_.isEmpty(_.keys(state.missionSlotlistFilter))) {
+      return state.missionSlotlist
+    }
+
+    const filteredSlotlist = []
+    _.each(state.missionSlotlist, (slot) => {
+      if (_.has(state.missionSlotlistFilter, 'assigned') && !_.isNil(slot.assignee)) {
+        filteredSlotlist.push(slot)
+      } else if (_.has(state.missionSlotlistFilter, 'hasRegistrations') && _.isNil(slot.assignee) && slot.registrationCount > 0) {
+        filteredSlotlist.push(slot)
+      } else if (_.has(state.missionSlotlistFilter, 'open') && _.isNil(slot.assignee) && slot.registrationCount <= 0) {
+        filteredSlotlist.push(slot)
+      }
+    })
+
+    return filteredSlotlist
   },
   missionSlotDetails() {
     return state.missionSlotDetails
@@ -1008,6 +1027,12 @@ const actions = {
           })
         }
       })
+  },
+  filterMissionSlotlist({ commit }, payload) {
+    commit({
+      type: 'setMissionSlotlistFilter',
+      missionSlotlistFilter: payload
+    })
   }
 }
 
@@ -1154,6 +1179,14 @@ const mutations = {
   },
   finishModifyingMissionSlotRegistration(state) {
     state.modifyingMissionSlotRegistration = false
+  },
+  setMissionSlotlistFilter(state, payload) {
+    const filter = {};
+    _.each(payload.missionSlotlistFilter, (f) => {
+      filter[f] = true
+    });
+
+    state.missionSlotlistFilter = filter
   }
 }
 

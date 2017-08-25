@@ -35,7 +35,7 @@ export default {
   },
   computed: {
     slotlist() {
-      return this.$store.getters.missionSlotlist
+      return this.$store.getters.filteredMissionSlotlist
     }
   }
 }
