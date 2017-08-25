@@ -307,7 +307,7 @@
           <div class="row">
             <div class="col col-12">
               <form @submit.stop.prevent="submitSlotRegistration">
-                <b-form-input type="text" placeholder="Optional comment to the mission creator" v-model="slotRegistrationComment"></b-form-input>
+                <b-form-input type="text" maxlength="128" placeholder="Optional comment to the mission creator (max. 128 char)" v-model="slotRegistrationComment"></b-form-input>
               </form>
             </div>
           </div>
