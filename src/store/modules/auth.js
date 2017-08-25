@@ -2,6 +2,7 @@ import Vue from 'vue'
 import * as _ from 'lodash'
 import jwtDecode from 'jwt-decode'
 import axios from 'axios'
+import moment from 'moment'
 import router from '../../router'
 
 import AuthApi from '../../api/auth'
@@ -179,6 +180,16 @@ const actions = {
       decodedToken = jwtDecode(payload)
     }
 
+    const expiry = moment(decodedToken.exp * 1000)
+    const now = moment().utc()
+    if (expiry <= now) {
+      console.info('JWT from localStorage is expired, clearing stored data')
+
+      return commit({
+        type: 'logout'
+      })
+    }
+
     commit({
       type: "setToken",
       token: payload,
@@ -251,7 +262,7 @@ const actions = {
       redirect: payload
     })
   },
-  getAccountDetails({commit, dispatch}) {
+  getAccountDetails({ commit, dispatch }) {
     commit({
       type: 'startWorking',
       message: 'Loading account details...'
@@ -311,12 +322,12 @@ const actions = {
         }
       })
   },
-  clearAccountDetails({commit}) {
+  clearAccountDetails({ commit }) {
     commit({
       type: 'clearAccountDetails'
     })
   },
-  editAccount({commit, dispatch}, payload) {
+  editAccount({ commit, dispatch }, payload) {
     commit({
       type: 'startWorking',
       message: 'Updating account details...'
