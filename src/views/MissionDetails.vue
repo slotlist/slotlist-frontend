@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Begin of content -->
-    <div v-if="loaded">
+    <div v-if="missionDetails">
       <div class="jumbotron">
         <h1 class="display-4 text-center">{{ missionDetails.title }}</h1>
         <h5 class="text-center">
@@ -78,7 +78,7 @@
         </div>
       </div>
       <br>
-      <div class="card" v-if="slotlistLoaded">
+      <div class="card">
         <div class="card-block text-nowrap">
           <h1>Slotlist</h1>
           <div class="small">
@@ -103,7 +103,7 @@
     <!-- End of content -->
     <!-- Begin of modals -->
     <div>
-      <b-modal ref="slotDetailsModal" id="slotDetailsModal" size="lg" @hide="slotDetailsModalClosed">
+      <b-modal ref="slotDetailsModal" id="slotDetailsModal" v-if="slotDetails" size="lg" @hide="slotDetailsModalClosed">
         <div slot="modal-title">
           <h5>Slot details - #{{ slotDetails.orderNumber + 1 }} {{ slotDetails.title }}</h5>
         </div>
@@ -232,7 +232,7 @@
           </div>
         </div>
       </b-modal>
-      <b-modal ref="slotEditModal" id="slotEditModal" size="lg" @show="populateSlotEditModal">
+      <b-modal ref="slotEditModal" id="slotEditModal" v-if="slotDetails" size="lg" @show="populateSlotEditModal">
         <div slot="modal-title">
           <h5>Edit slot #{{ slotDetails.orderNumber }} {{ slotDetails.title }}</h5>
         </div>
@@ -294,7 +294,7 @@
           </div>
         </div>
       </b-modal>
-      <b-modal ref="slotRegisterModal" id="slotRegisterModal" @shown="clearSlotRegistrationComment" @hide="slotRegisterModalClosed">
+      <b-modal ref="slotRegisterModal" id="slotRegisterModal" v-if="slotDetails" @shown="clearSlotRegistrationComment" @hide="slotRegisterModalClosed">
         <div slot="modal-title">
           <h5>Register for slot #{{ slotDetails.orderNumber + 1 }} {{ slotDetails.title }}</h5>
         </div>
@@ -323,7 +323,7 @@
           </div>
         </div>
       </b-modal>
-      <b-modal ref="slotDeletionModal" id="slotDeletionModal" @hide="slotDeletionModalClosed">
+      <b-modal ref="slotDeletionModal" id="slotDeletionModal" @hide="slotDeletionModalClosed" v-if="slotDetails">
         <div slot="modal-title">
           <h5>Deletion of slot #{{ slotDetails.orderNumber + 1 }} {{ slotDetails.title }}</h5>
         </div>
@@ -344,7 +344,7 @@
           </div>
         </div>
       </b-modal>
-      <b-modal ref="missionDeletionModal" id="missionDeletionModal">
+      <b-modal ref="missionDeletionModal" id="missionDeletionModal" v-if="missionDetails">
         <div slot="modal-title">
           <h5>Deletion of mission</h5>
         </div>
@@ -456,7 +456,7 @@
           </div>
         </div>
       </b-modal>
-      <b-modal ref="missionSlotUnregisterModal" id="missionSlotUnregisterModal" @hide="slotUnregisterModalClosed">
+      <b-modal ref="missionSlotUnregisterModal" id="missionSlotUnregisterModal" v-if="slotDetails" @hide="slotUnregisterModalClosed">
         <div slot="modal-title">
           <h5>Unregister from slot #{{ slotDetails.orderNumber + 1 }} {{ slotDetails.title }}</h5>
         </div>
@@ -505,9 +505,6 @@
     <!-- End of modals -->
     <!-- Begin of overlays -->
     <div>
-      <div v-if="!loaded || !slotlistLoaded">
-        <loading-overlay message="Loading Mission details and slotlist..."></loading-overlay>
-      </div>
       <div v-if="registeringForSlot">
         <loading-overlay message="Registering for Mission slot..."></loading-overlay>
       </div>
@@ -533,7 +530,7 @@
 
 <script>
 import * as _ from 'lodash'
-import MissionSlotlist from 'components/MissionSlotlist.vue'
+import MissionSlotlist from 'components/missions/MissionSlotlist.vue'
 import MissionSlotRegistrations from 'components/MissionSlotRegistrations.vue'
 import utils from '../utils'
 

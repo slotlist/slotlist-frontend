@@ -9,12 +9,10 @@ const state = {
   missionsLoaded: false,
   missionsLimit: 25,
   missionsOffset: 0,
-  missionDetails: {},
-  missionDetailsLoaded: false,
-  missionSlotlist: [],
-  missionSlotlistLoaded: false,
+  missionDetails: null,
+  missionSlotGroups: null,
   missionSlotlistFilter: {},
-  missionSlotDetails: {},
+  missionSlotDetails: null,
   showMissionSlotDetails: false,
   showMissionSlotRegister: false,
   registeringForMissionSlot: false,
@@ -51,26 +49,33 @@ const getters = {
   missionSlotlistLoaded() {
     return state.missionSlotlistLoaded
   },
-  missionSlotlist() {
-    return state.missionSlotlist
+  missionSlotGroups() {
+    return state.missionSlotGroups
   },
-  filteredMissionSlotlist() {
+  filteredMissionSlotGroups() {
     if (_.isEmpty(_.keys(state.missionSlotlistFilter))) {
-      return state.missionSlotlist
+      return state.missionSlotGroups
     }
 
-    const filteredSlotlist = []
-    _.each(state.missionSlotlist, (slot) => {
-      if (_.has(state.missionSlotlistFilter, 'assigned') && !_.isNil(slot.assignee)) {
-        filteredSlotlist.push(slot)
-      } else if (_.has(state.missionSlotlistFilter, 'hasRegistrations') && _.isNil(slot.assignee) && slot.registrationCount > 0) {
-        filteredSlotlist.push(slot)
-      } else if (_.has(state.missionSlotlistFilter, 'open') && _.isNil(slot.assignee) && slot.registrationCount <= 0) {
-        filteredSlotlist.push(slot)
-      }
+    const filteredSlotGroups = []
+    _.each(state.missionSlotGroups, (slotGroup) => {
+      const filteredSlots = []
+      _.each(slotGroup.slots, (slot) => {
+        if (_.has(state.missionSlotlistFilter, 'assigned') && !_.isNil(slot.assignee)) {
+          filteredSlots.push(slot)
+        } else if (_.has(state.missionSlotlistFilter, 'hasRegistrations') && _.isNil(slot.assignee) && slot.registrationCount > 0) {
+          filteredSlots.push(slot)
+        } else if (_.has(state.missionSlotlistFilter, 'open') && _.isNil(slot.assignee) && slot.registrationCount <= 0) {
+          filteredSlots.push(slot)
+        }
+      })
+
+      filteredSlotGroups.push(_.defaults({
+        slots: filteredSlots
+      }, slotGroup))
     })
 
-    return filteredSlotlist
+    return filteredSlotGroups
   },
   missionSlotDetails() {
     return state.missionSlotDetails
@@ -187,7 +192,8 @@ const actions = {
   },
   getMissionDetails({ commit, dispatch }, payload) {
     commit({
-      type: 'startLoadingMissionDetails'
+      type: 'startWorking',
+      message: 'Loading mission details...'
     })
 
     return MissionsApi.getMissionDetails(payload)
@@ -211,9 +217,13 @@ const actions = {
           type: 'setMissionDetails',
           mission: response.data.mission
         })
+
+        commit({
+          type: 'stopWorking'
+        })
       }).catch((error) => {
         commit({
-          type: 'finishLoadingMissionDetails'
+          type: 'stopWorking'
         })
 
         if (error.response) {
@@ -242,7 +252,8 @@ const actions = {
   },
   getMissionSlotlist({ commit, dispatch }, payload) {
     commit({
-      type: 'startLoadingMissionSlotlist'
+      type: 'startWorking',
+      message: 'Loading mission slotlist...'
     })
 
     return MissionsApi.getMissionSlotlist(payload)
@@ -257,18 +268,22 @@ const actions = {
           throw "Received empty response"
         }
 
-        if (_.isNil(response.data.slots) || !_.isObject(response.data.slots)) {
+        if (_.isNil(response.data.slotGroups) || !_.isObject(response.data.slotGroups)) {
           console.error(response)
           throw "Received invalid mission slotlist"
         }
 
         commit({
           type: 'setMissionSlotlist',
-          slots: response.data.slots
+          slotGroups: response.data.slotGroups
+        })
+
+        commit({
+          type: 'stopWorking'
         })
       }).catch((error) => {
         commit({
-          type: 'finishLoadingMissionSlotlist'
+          type: 'stopWorking'
         })
 
         if (error.response) {
@@ -1052,34 +1067,18 @@ const mutations = {
     state.missions = []
     state.missionsLoaded = false
   },
-  startLoadingMissionDetails(state) {
-    state.missionDetailsLoaded = false
-  },
-  finishLoadingMissionDetails(state) {
-    state.missionDetailsLoaded = true
-  },
   setMissionDetails(state, payload) {
     state.missionDetails = payload.mission
-    state.missionDetailsLoaded = true
     utils.setTitle(`Mission ${state.missionDetails.title}`)
   },
-  startLoadingMissionSlotlist(state) {
-    state.missionSlotlistLoaded = false
-  },
-  finishLoadingMissionSlotlist(state) {
-    state.missionSlotlistLoaded = true
-  },
   setMissionSlotlist(state, payload) {
-    state.missionSlotlist = payload.slots
-    state.missionSlotlistLoaded = true
+    state.missionSlotGroups = payload.slotGroups
   },
   clearMissionDetails(state) {
     state.missionDetails = {}
-    state.missionDetailsLoaded = false
   },
   clearMissionSlotlist(state) {
     state.missionSlotlist = []
-    state.missionSlotlistLoaded = false
   },
   setMissionSlotDetails(state, payload) {
     state.missionSlotDetails = payload.slotDetails
@@ -1181,10 +1180,10 @@ const mutations = {
     state.modifyingMissionSlotRegistration = false
   },
   setMissionSlotlistFilter(state, payload) {
-    const filter = {};
+    const filter = {}
     _.each(payload.missionSlotlistFilter, (f) => {
       filter[f] = true
-    });
+    })
 
     state.missionSlotlistFilter = filter
   }
