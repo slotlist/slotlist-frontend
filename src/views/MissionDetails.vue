@@ -501,6 +501,7 @@
           </div>
         </div>
       </b-modal>
+      <mission-create-slot-group-modal></mission-create-slot-group-modal>
     </div>
     <!-- End of modals -->
     <!-- Begin of overlays -->
@@ -532,12 +533,14 @@
 import * as _ from 'lodash'
 import MissionSlotlist from 'components/missions/MissionSlotlist.vue'
 import MissionSlotRegistrations from 'components/MissionSlotRegistrations.vue'
+import MissionCreateSlotGroupModal from 'components/missions/modals/MissionCreateSlotGroupModal.vue'
 import utils from '../utils'
 
 export default {
   components: {
     MissionSlotlist,
-    MissionSlotRegistrations
+    MissionSlotRegistrations,
+    MissionCreateSlotGroupModal
   },
   data() {
     return {

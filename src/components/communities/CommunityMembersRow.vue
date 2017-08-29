@@ -10,7 +10,7 @@
         <router-link tag="button" class="btn btn-primary" :to="{name: 'userDetails', params: {userUid: communityMember.uid}}">
           <i class="fa fa-info" aria-hidden="true"></i> Details
         </router-link>
-        <click-confirm button-yes-icon="fa fa-ban" button-yes-class="btn btn-danger" button-size="sm" :messages="{title: 'Remove member?', yes: 'Confirm', no: 'Cancel'}">
+        <click-confirm yes-icon="fa fa-ban" yes-class="btn btn-danger" button-size="sm" :messages="{title: 'Remove member?', yes: 'Confirm', no: 'Cancel'}">
           <button type="button" class="btn btn-danger btn-sm" v-show="canEditCommunityMembers" @click="removeCommunityMember">
             <i class="fa fa-ban" aria-hidden="true"></i> Remove
           </button>

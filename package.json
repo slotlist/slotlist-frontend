@@ -41,7 +41,7 @@
     "babel-runtime": "^6.18.0",
     "bootstrap": "4.0.0-alpha.6",
     "bootstrap-vue": "^0.18.0",
-    "click-confirm": "https://github.com/MorpheusXAUT/click-confirm.git#8d7d322e46dc430300a939a90efb0f972b7bb08d",
+    "click-confirm": "^1.1.0",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",

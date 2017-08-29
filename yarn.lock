@@ -1123,9 +1123,9 @@ cli-width@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/cli-width/-/cli-width-2.1.0.tgz#b234ca209b29ef66fc518d9b98d5847b00edf00a"
 
-"click-confirm@https://github.com/MorpheusXAUT/click-confirm.git#8d7d322e46dc430300a939a90efb0f972b7bb08d":
-  version "1.0.4"
-  resolved "https://github.com/MorpheusXAUT/click-confirm.git#8d7d322e46dc430300a939a90efb0f972b7bb08d"
+click-confirm@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/click-confirm/-/click-confirm-1.1.0.tgz#aa3567c2bb344b7afaf40c0c85af2587cd7c0db3"
   dependencies:
     bootstrap-vue "^0.15.0"
     vue "^2.2.0"

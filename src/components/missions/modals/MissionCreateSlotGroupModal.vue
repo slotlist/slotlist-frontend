@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-modal id="createMissionSlotGroupModal" refs="createMissionSlotGroupModal" title="Create slot group" @shown="clearCreateMissionSlotGroupData">
+    <b-modal id="createMissionSlotGroupModal" ref="createMissionSlotGroupModal" title="Create slot group" @shown="clearCreateMissionSlotGroupData">
       <div class="container-fluid">
         <b-form @submit.stop.prevent="createMissionSlotGroup">
           <div class="row">
@@ -11,7 +11,9 @@
             </div>
             <div class="col">
               <b-form-fieldset label="Order number" description="Used for sorting slot groups in the mission slotlist" :state="createMissionSlotGroupOrderNumberState" :feedback="createMissionSlotGroupOrderNumberFeedback">
-                <b-form-input v-model="createMissionSlotGroupData.orderNumber" type="number" min="1" :formatter="createMissionSlotGroupOrderNumberFormatter" required></b-form-input>
+                <b-input-group left="#">
+                  <b-form-input v-model="createMissionSlotGroupData.orderNumber" type="number" min="1" :formatter="createMissionSlotGroupOrderNumberFormatter" required></b-form-input>
+                </b-input-group>
               </b-form-fieldset>
             </div>
           </div>
@@ -51,30 +53,9 @@ export default {
       }
     }
   },
-  methods: {
-    clearCreateMissionSlotGroupData() {
-      this.createMissionSlotGroupData = {
-        description: null,
-        orderNumber: 1,
-        title: ''
-      };
-    },
-    createMissionSlotGroup() {
-      if (_.isString(this.createMissionSlotGroupData.description) && _.isEmpty(this.createMissionSlotGroupData.description)) {
-        this.createMissionSlotGroupData.description = null
-      }
-
-      console.log("createMissionSlotGroup", this.createMissionSlotGroupData)
-    },
+  computed: {
     createMissionSlotGroupOrderNumberFeedback() {
       return this.createMissionSlotGroupData.orderNumber < 0 ? 'Please enter an order number' : ''
-    },
-    createMissionSlotGroupOrderNumberFormatter(val) {
-      if (_.isNumber(val)) {
-        return val
-      }
-
-      return parseInt(val, 10)
     },
     createMissionSlotGroupOrderNumberState() {
       return this.createMissionSlotGroupData.orderNumber < 0 ? 'danger' : 'success'
@@ -84,6 +65,38 @@ export default {
     },
     createMissionSlotGroupTitleState() {
       return _.isString(this.createMissionSlotGroupData.title) && !_.isEmpty(this.createMissionSlotGroupData.title) ? 'success' : 'danger'
+    }
+  },
+  methods: {
+    clearCreateMissionSlotGroupData() {
+      this.createMissionSlotGroupData = {
+        description: null,
+        orderNumber: 1,
+        title: ''
+      };
+    },
+    createMissionSlotGroup() {
+      if (_.isEmpty(this.createMissionSlotGroupData.title)) {
+        return
+      }
+
+      if (_.isString(this.createMissionSlotGroupData.description) && _.isEmpty(this.createMissionSlotGroupData.description)) {
+        this.createMissionSlotGroupData.description = null
+      }
+
+      this.hideCreateMissionSlotGroupModal();
+
+      console.log("createMissionSlotGroup", this.createMissionSlotGroupData)
+    },
+    createMissionSlotGroupOrderNumberFormatter(val) {
+      if (_.isNumber(val)) {
+        return val
+      }
+
+      return parseInt(val, 10)
+    },
+    hideCreateMissionSlotGroupModal() {
+      this.$refs.createMissionSlotGroupModal.hide();
     }
   }
 }

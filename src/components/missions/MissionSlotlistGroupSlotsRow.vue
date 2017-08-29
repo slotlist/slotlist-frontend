@@ -18,12 +18,12 @@
         <button type="button" class="btn btn-success" v-if="loggedIn && !missionSlot.registrationUid" :disabled="missionSlot.assignee" @click="showMissionSlotRegistration">
           <i class="fa fa-ticket" aria-hidden="true"></i> Register
         </button>
-        <click-confirm v-if="loggedIn && missionSlot.registrationUid" button-yes-icon="fa fa-eraser" button-yes-class="btn btn-warning" button-size="sm" :messages="{title: 'Unregister from slot?', yes: 'Confirm', no: 'Cancel'}">
+        <click-confirm v-if="loggedIn && missionSlot.registrationUid" yes-icon="fa fa-eraser" yes-class="btn btn-warning" button-size="sm" :messages="{title: 'Unregister from slot?', yes: 'Confirm', no: 'Cancel'}">
           <button type="button" class="btn btn-sm btn-warning" @click="deleteMissionSlotRegistration">
             <i class="fa fa-eraser" aria-hidden="true"></i> Unregister
           </button>
         </click-confirm>
-        <click-confirm v-if="isMissionEditor" button-yes-icon="fa fa-trash" button-yes-class="btn btn-danger" button-size="sm" :messages="{title: 'Delete slot?', yes: 'Confirm', no: 'Cancel'}">
+        <click-confirm v-if="isMissionEditor" yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: 'Delete slot?', yes: 'Confirm', no: 'Cancel'}">
           <button type="button" class="btn btn-sm btn-danger" @click="deleteMissionSlotRegistration">
             <i class="fa fa-trash" aria-hidden="true"></i> Delete
           </button>

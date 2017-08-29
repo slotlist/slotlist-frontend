@@ -21,7 +21,7 @@
             <button type="button" class="btn btn-primary" @click="showCommunityEditModal">
               <i class="fa fa-edit" aria-hidden="true"></i> Edit
             </button>
-            <click-confirm v-show="isCommunityFounder" button-yes-icon="fa fa-trash" button-yes-class="btn btn-danger" :messages="{title: 'Delete community?', yes: 'Confirm', no: 'Cancel'}">
+            <click-confirm v-show="isCommunityFounder" yes-icon="fa fa-trash" yes-class="btn btn-danger" :messages="{title: 'Delete community?', yes: 'Confirm', no: 'Cancel'}">
               <button type="button" class="btn btn-danger" v-show="isCommunityFounder" @click="deleteCommunity">
                 <i class="fa fa-trash" aria-hidden="true"></i> Delete
               </button>
@@ -112,13 +112,13 @@ export default {
     CommunityMembers,
     CommunityMissions
   },
-  beforeCreate: function () {
+  beforeCreate: function() {
     this.$store.dispatch('getCommunityDetails', this.$route.params.communitySlug)
   },
-  created: function () {
+  created: function() {
     utils.setTitle('Community')
   },
-  beforeDestroy: function () {
+  beforeDestroy: function() {
     this.$store.dispatch('clearCommunityDetails')
   },
   data() {

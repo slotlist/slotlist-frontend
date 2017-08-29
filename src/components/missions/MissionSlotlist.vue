@@ -5,14 +5,12 @@
     </div>
     <br>
     <div class="text-center">
-      <div class="btn-group" role="group" aria-label="Mission slotlist actions">
-        <button type="button" class="btn btn-success" v-if="isMissionEditor" @click="createMissionSlotGroup">
-          <i class="fa fa-plus" aria-hidden="true"></i> Create slot group
-        </button>
-        <button type="button" class="btn btn-secondary" @click="refreshMissionSlotlist">
-          <i class="fa fa-refresh" aria-hidden="true"></i> Refresh
-        </button>
-      </div>
+      <b-btn variant="success" v-if="isMissionEditor" v-b-modal.createMissionSlotGroupModal>
+        <i class="fa fa-plus" aria-hidden="true"></i> Create slot group
+      </b-btn>
+      <b-btn @click="refreshMissionSlotlist">
+        <i class="fa fa-refresh" aria-hidden="true"></i> Refresh
+      </b-btn>
     </div>
   </div>
 </template>
