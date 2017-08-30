@@ -1261,24 +1261,11 @@ export default {
     }
   },
   beforeCreate: function() {
-    this.$store.dispatch('getMissionDetails', this.$route.params.missionSlug)
-    this.$store.dispatch('getMissionSlotlist', this.$route.params.missionSlug)
-    this.$store.dispatch('clearMissionSlotDetails')
-    this.$store.dispatch('clearMissionSlotCreate')
-    this.$store.dispatch('clearMissionSlotRegister')
-    this.$store.dispatch('clearMissionSlotUnregister')
-    this.$store.dispatch('clearMissionSlotRegistrations')
-    this.$store.dispatch('clearMissionSlotRegistrationConfirmation')
+    this.$store.dispatch('getMissionDetails', { missionSlug: this.$route.params.missionSlug })
+    this.$store.dispatch('getMissionSlotlist', { missionSlug: this.$route.params.missionSlug })
   },
   beforeDestroy: function() {
     this.$store.dispatch('clearMissionDetails')
-    this.$store.dispatch('clearMissionSlotlist')
-    this.$store.dispatch('clearMissionSlotDetails')
-    this.$store.dispatch('clearMissionSlotCreate')
-    this.$store.dispatch('clearMissionSlotRegister')
-    this.$store.dispatch('clearMissionSlotUnregister')
-    this.$store.dispatch('clearMissionSlotRegistrations')
-    this.$store.dispatch('clearMissionSlotRegistrationConfirmation')
   }
 }
 </script>

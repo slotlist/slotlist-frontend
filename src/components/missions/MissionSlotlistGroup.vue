@@ -33,7 +33,11 @@ export default {
   },
   methods: {
     deleteMissionSlotGroup() {
-      this.$store.dispatch('deleteMissionSlotGroup', { missionSlug: this.$route.params.missionSlug, missionSlotGroupUid: this.missionSlotGroup.uid })
+      this.$store.dispatch('deleteMissionSlotGroup', {
+        missionSlug: this.$route.params.missionSlug,
+        slotGroupUid: this.missionSlotGroup.uid,
+        slotGroupTitle: this.missionSlotGroup.title
+      })
     }
   }
 }

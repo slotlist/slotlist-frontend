@@ -4,55 +4,38 @@ import router from '../../router'
 
 import MissionsApi from '../../api/missions'
 
+const limits = {
+  missions: 10,
+  missionSlotRegistrations: 10
+}
+
 const state = {
-  missions: [],
-  missionsLoaded: false,
-  missionsLimit: 25,
-  missionsOffset: 0,
+  checkingMissionSlugAvailability: false,
   missionDetails: null,
+  missions: null,
+  missionSlotDetails: null,
   missionSlotGroups: null,
   missionSlotlistFilter: {},
-  missionSlotDetails: null,
-  showMissionSlotDetails: false,
-  showMissionSlotRegister: false,
-  registeringForMissionSlot: false,
-  showMissionSlotDeletion: false,
-  editingMissionSlot: false,
-  deletingMissionSlot: false,
-  showMissionSlotUnregister: false,
-  unregisteringFromMissionSlot: false,
-  showMissionSlotCreate: false,
-  creatingMissionSlot: false,
-  checkingMissionSlugAvailability: false,
-  missionSlugAvailable: false,
-  creatingMission: false,
-  missionSlotRegistrations: [],
-  missionSlotRegistration: {},
-  showMissionSlotRegistrationConfirmation: false,
-  showMissionSlotRegistrationConfirmationAssign: false,
-  modifyingMissionSlotRegistration: false
+  missionSlotRegistrationDetails: null,
+  missionSlotRegistrations: null,
+  totalMissions: 0,
+  totalMissionSlotRegistrations: 0
 }
 
 const getters = {
-  missions() {
-    return state.missions
-  },
-  missionsLoaded() {
-    return state.missionsLoaded
+  checkingMissionSlugAvailability() {
+    return state.checkingMissionSlugAvailability
   },
   missionDetails() {
     return state.missionDetails
   },
-  missionDetailsLoaded() {
-    return state.missionDetailsLoaded
+  missions() {
+    return state.missions
   },
-  missionSlotlistLoaded() {
-    return state.missionSlotlistLoaded
+  missionSlotDetails() {
+    return state.missionSlotDetails
   },
   missionSlotGroups() {
-    return state.missionSlotGroups
-  },
-  filteredMissionSlotGroups() {
     if (_.isEmpty(_.keys(state.missionSlotlistFilter))) {
       return state.missionSlotGroups
     }
@@ -77,118 +60,531 @@ const getters = {
 
     return filteredSlotGroups
   },
-  missionSlotDetails() {
-    return state.missionSlotDetails
-  },
-  showMissionSlotDetails() {
-    return state.showMissionSlotDetails
-  },
-  showMissionSlotRegister() {
-    return state.showMissionSlotRegister
-  },
-  showMissionSlotDeletion() {
-    return state.showMissionSlotDeletion
-  },
-  registeringForMissionSlot() {
-    return state.registeringForMissionSlot
-  },
-  deletingMissionSlot() {
-    return state.deletingMissionSlot
-  },
-  editingMissionSlot() {
-    return state.editingMissionSlot
-  },
-  showMissionSlotUnregister() {
-    return state.showMissionSlotUnregister
-  },
-  unregisteringFromMissionSlot() {
-    return state.unregisteringFromMissionSlot
-  },
-  showMissionSlotCreate() {
-    return state.showMissionSlotCreate
-  },
-  checkingMissionSlugAvailability() {
-    return state.checkingMissionSlugAvailability
-  },
-  missionSlugAvailable() {
-    return state.missionSlugAvailable
-  },
-  creatingMission() {
-    return state.creatingMission
+  missionSlotRegistrationDetails() {
+    return state.missionSlotRegistrationDetails
   },
   missionSlotRegistrations() {
     return state.missionSlotRegistrations
   },
-  missionSlotRegistration() {
-    return state.missionSlotRegistration
+  missionSlotRegistrationsPageCount() {
+    return Math.ceil(state.totalMissionSlotRegistrations / limits.missionSlotRegistrations)
   },
-  showMissionSlotRegistrationConfirmation() {
-    return state.showMissionSlotRegistrationConfirmation
+  missionSlugAvailable() {
+    return state.missionSlugAvailable
   },
-  showMissionSlotRegistrationConfirmationAssign() {
-    return state.showMissionSlotRegistrationConfirmationAssign
-  },
-  modifyingMissionSlotRegistration() {
-    return state.modifyingMissionSlotRegistration
+  missionsPageCount() {
+    return Math.ceil(state.totalMissions / limits.missions)
   }
 }
 
 const actions = {
-  getMissions({ commit, state, dispatch }) {
+  checkMissionSlugAvailability({ commit, dispatch }, payload) {
     commit({
-      type: 'startLoadingMissions'
+      type: 'startCheckingMissionSlugAvailability'
     })
 
-    return MissionsApi.getMissions(state.missionsLimit, state.missionsOffset)
-      .then(function (response) {
+    return MissionsApi.checkMissionSlugAvailability(payload)
+      .then((response) => {
         if (response.status !== 200) {
           console.error(response)
-          throw "Retrieving missions failed"
+          throw 'Checking mission slug availability failed'
         }
 
         if (_.isEmpty(response.data)) {
           console.error(response)
-          throw "Received empty response"
+          throw 'Received empty response'
         }
 
-        if (_.isNil(response.data.missions) || !_.isArray(response.data.missions)) {
+        if (_.isNil(response.data.available)) {
           console.error(response)
-          throw "Received invalid missions"
+          throw 'Received invalid mission slug availability status'
         }
 
         commit({
-          type: 'setMissions',
-          missions: response.data.missions,
-          offset: response.data.moreAvailable === true ? (response.data.offset + response.data.count) : 0
+          type: 'setMissionSlugAvailability',
+          available: response.data.available
         })
       }).catch((error) => {
         commit({
-          type: 'finishLoadingMissions'
+          type: 'setMissionSlugAvailability',
+          available: false
         })
 
         if (error.response) {
-          console.error('getMissions', error.response)
+          console.error('checkMissionSlugAvailability', error.response)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load missions - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to check availability of mission slug <strong>${payload}</strong> - ${error.response.data.message}`
           })
         } else if (error.request) {
-          console.error('getMissions', error.request)
+          console.error('checkMissionSlugAvailability', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load missions - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to check availability of mission slug <strong>${payload}</strong> - Request failed`
           })
         } else {
-          console.error('getMissions', error.message)
+          console.error('checkMissionSlugAvailability', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load missions - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to check availability of mission slug <strong>${payload}</strong> - Something failed...`
           })
         }
       })
+  },
+  clearMissionDetails({ commit }) {
+    commit({
+      type: 'clearMissionDetails'
+    })
+  },
+  clearMissions({ commit }) {
+    commit({
+      type: 'clearMissions'
+    })
+  },
+  clearMissionSlotDetails({ commit }) {
+    commit({
+      type: 'clearMissionSlotDetails'
+    })
+  },
+  createMission({ commit, dispatch }, payload) {
+    commit({
+      type: 'startWorking',
+      message: 'Creating missions...'
+    })
+
+    return MissionsApi.createMission(payload)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Creating mission failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (_.isNil(response.data.mission) || !_.isObject(response.data.mission)) {
+          console.error(response)
+          throw 'Received invalid mission'
+        }
+
+        commit({
+          type: 'stopWorking'
+        })
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully created mission <strong>${payload.title}</strong>`
+        })
+
+        router.push({
+          name: 'missionDetails',
+          params: { missionSlug: response.data.mission.slug }
+        })
+      }).catch((error) => {
+        commit({
+          type: 'stopWorking'
+        })
+
+        if (error.response) {
+          console.error('createMission', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create mission <strong>${payload.title}</strong> - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('createMission', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create mission <strong>${payload.title}</strong> - Request failed`
+          })
+        } else {
+          console.error('createMission', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create mission <strong>${payload.title}</strong> - Something failed...`
+          })
+        }
+      })
+  },
+  createMissionSlot({ commit, dispatch }, payload) {
+    commit({
+      type: 'startWorking',
+      message: 'Creating slot...'
+    })
+
+    return MissionsApi.createMissionSlot(payload.missionSlug, payload.slotDetails)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Creating mission slot failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (_.isNil(response.data.slots) || !_.isArray(response.data.slots) || _.isEmpty(response.data.slots)) {
+          console.error(response)
+          throw 'Received invalid mission slot'
+        }
+
+        dispatch('getMissionSlotlist', payload.missionSlug)
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully created slot <strong>#${payload.slotDetails.orderNumber + 1} ${payload.slotDetails.title}</strong>`
+        })
+      }).catch((error) => {
+        commit({
+          type: 'stopWorking'
+        })
+
+        if (error.response) {
+          console.error('createMissionSlot', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create slot <strong>#${payload.slotDetails.orderNumber + 1} ${payload.slotDetails.title}</strong> - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('createMissionSlot', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create slot <strong>#${payload.slotDetails.orderNumber + 1} ${payload.slotDetails.title}</strong> - Request failed`
+          })
+        } else {
+          console.error('createMissionSlot', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create slot <strong>#${payload.slotDetails.orderNumber + 1} ${payload.slotDetails.title}</strong> - Something failed...`
+          })
+        }
+      })
+  },
+  deleteMission({ commit, dispatch }, payload) {
+    dispatch({
+      type: 'startWorking',
+      message: 'Deleting mission...'
+    })
+
+    return MissionsApi.deleteMission(payload.missionSlug)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Deleting mission failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (response.data.success !== true) {
+          console.error(response)
+          throw 'Received invalid mission deletion'
+        }
+
+        commit({
+          type: 'stopWorking'
+        })
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully deleted mission <strong>${payload.missionTitle}</strong>`
+        })
+
+        router.push({ name: 'missionList' })
+      }).catch((error) => {
+        commit({
+          type: 'stopWorking',
+        })
+
+        if (error.response) {
+          console.error('deleteMission', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete mission <strong>${payload.missionTitle}</strong> - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('deleteMission', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete mission <strong>${payload.missionTitle}</strong> - Request failed`
+          })
+        } else {
+          console.error('deleteMission', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete mission <strong>${payload.missionTitle}</strong> - Something failed...`
+          })
+        }
+      })
+  },
+  deleteMissionSlot({ commit, dispatch }, payload) {
+    commit({
+      type: 'startWorking',
+      message: 'Deleting slot...'
+    })
+
+    return MissionsApi.deleteMissionSlot(payload.missionSlug, payload.slotUid)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Deleting mission slot failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (response.data.success !== true) {
+          console.error(response)
+          throw 'Received invalid mission slot deletion'
+        }
+
+        dispatch('getMissionSlotlist', payload.missionSlug)
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully deleted slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong>`
+        })
+      }).catch((error) => {
+        commit({
+          type: 'stopWorking'
+        })
+
+        if (error.response) {
+          console.error('deleteMissionSlot', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('deleteMissionSlot', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Request failed`
+          })
+        } else {
+          console.error('deleteMissionSlot', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Something failed...`
+          })
+        }
+      })
+  },
+  deleteMissionSlotGroup({ commit, dispatch }, payload) {
+    commit({
+      type: 'startWorking',
+      message: 'Deleting slot group...'
+    })
+
+    return MissionsApi.deleteMissionSlotGroup(payload.missionSlug, payload.slotGroupUid)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Deleting mission slot group failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (response.data.success !== true) {
+          console.error(response)
+          throw 'Received invalid mission slot group deletion'
+        }
+
+        dispatch('getMissionSlotlist', payload.missionSlug)
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully deleted slot group <strong>${payload.slotGroupTitle}</strong>`
+        })
+      }).catch((error) => {
+        commit({
+          type: 'stopWorking'
+        })
+
+        if (error.response) {
+          console.error('deleteMissionSlotGroup', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete slot group <strong>${payload.slotGroupTitle}</strong> - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('deleteMissionSlotGroup', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete slot group <strong>${payload.slotGroupTitle}</strong> - Request failed`
+          })
+        } else {
+          console.error('deleteMissionSlotGroup', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete slot group <strong>${payload.slotGroupTitle}</strong> - Something failed...`
+          })
+        }
+      })
+  },
+  editMission({ commit, dispatch }, payload) {
+    dispatch({
+      type: 'startWorking',
+      message: 'Editing mission...'
+    })
+
+    return MissionsApi.editMission(payload.missionSlug, payload.updatedMissionDetails)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Editing mission failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (_.isNil(response.data.mission) || !_.isObject(response.data.mission)) {
+          console.error(response)
+          throw 'Received invalid mission'
+        }
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully edited mission <strong>${payload.missionTitle}</strong>`
+        })
+
+        commit({
+          type: 'stopWorking'
+        })
+
+        commit({
+          type: 'setMissionDetails',
+          mission: response.data.mission
+        })
+      }).catch((error) => {
+        commit({
+          type: 'stopWorking'
+        })
+
+        if (error.response) {
+          console.error('editMission', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to edit mission <strong>${payload.missionTitle}</strong> - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('editMission', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to edit mission <strong>${payload.missionTitle}</strong> - Request failed`
+          })
+        } else {
+          console.error('editMission', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to edit mission <strong>${payload.missionTitle}</strong> - Something failed...`
+          })
+        }
+      })
+  },
+  editMissionSlot({ commit, dispatch }, payload) {
+    commit({
+      type: 'startWorking',
+      message: 'Editing slot...'
+    })
+
+    return MissionsApi.editMissionSlot(payload.missionSlug, payload.slotUid, payload.updatedSlotDetails)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Editing mission slot failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (_.isNil(response.data.slot) || !_.isObject(response.data.slot)) {
+          console.error(response)
+          throw 'Received invalid mission slot'
+        }
+
+        dispatch('getMissionSlotlist', payload.missionSlug)
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully edited slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong>`
+        })
+      }).catch((error) => {
+        commit({
+          type: 'stopWorking'
+        })
+
+        if (error.response) {
+          console.error('editMissionSlot', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to edit slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('editMissionSlot', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to edit slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Request failed`
+          })
+        } else {
+          console.error('editMissionSlot', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to edit slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Something failed...`
+          })
+        }
+      })
+  },
+  filterMissionSlotlist({ commit }, payload) {
+    commit({
+      type: 'setMissionSlotlistFilter',
+      missionSlotlistFilter: payload
+    })
   },
   getMissionDetails({ commit, dispatch }, payload) {
     commit({
@@ -196,21 +592,21 @@ const actions = {
       message: 'Loading mission details...'
     })
 
-    return MissionsApi.getMissionDetails(payload)
+    return MissionsApi.getMissionDetails(payload.missionSlug)
       .then(function (response) {
         if (response.status !== 200) {
           console.error(response)
-          throw "Retrieving mission details failed"
+          throw 'Retrieving mission details failed'
         }
 
         if (_.isEmpty(response.data)) {
           console.error(response)
-          throw "Received empty response"
+          throw 'Received empty response'
         }
 
         if (_.isNil(response.data.mission) || !_.isObject(response.data.mission)) {
           console.error(response)
-          throw "Received invalid mission"
+          throw 'Received invalid mission'
         }
 
         commit({
@@ -250,27 +646,94 @@ const actions = {
         }
       })
   },
+  getMissions({ commit, dispatch }, payload) {
+    commit({
+      type: 'startWorking',
+      message: 'Loading missions...'
+    })
+
+    if (_.isNil(payload)) {
+      payload = { page: 1 }
+    } else if (_.isNil(payload.page)) {
+      payload.page = 1
+    }
+
+    return MissionsApi.getMissions(limits.missions, (payload.page - 1) * limits.missions)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Retrieving missions failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (_.isNil(response.data.missions) || !_.isArray(response.data.missions)) {
+          console.error(response)
+          throw 'Received invalid missions'
+        }
+
+        commit({
+          type: 'setMissions',
+          missions: response.data.missions,
+          total: response.data.total
+        })
+
+        commit({
+          type: 'stopWorking'
+        })
+      }).catch((error) => {
+        commit({
+          type: 'stopWorking'
+        })
+
+        if (error.response) {
+          console.error('getMissions', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load missions - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('getMissions', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load missions - Request failed`
+          })
+        } else {
+          console.error('getMissions', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load missions - Something failed...`
+          })
+        }
+      })
+  },
   getMissionSlotlist({ commit, dispatch }, payload) {
     commit({
       type: 'startWorking',
       message: 'Loading mission slotlist...'
     })
 
-    return MissionsApi.getMissionSlotlist(payload)
+    return MissionsApi.getMissionSlotlist(payload.missionSlug)
       .then(function (response) {
         if (response.status !== 200) {
           console.error(response)
-          throw "Retrieving mission slotlist failed"
+          throw 'Retrieving mission slotlist failed'
         }
 
         if (_.isEmpty(response.data)) {
           console.error(response)
-          throw "Received empty response"
+          throw 'Received empty response'
         }
 
         if (_.isNil(response.data.slotGroups) || !_.isObject(response.data.slotGroups)) {
           console.error(response)
-          throw "Received invalid mission slotlist"
+          throw 'Received invalid mission slotlist'
         }
 
         commit({
@@ -310,702 +773,94 @@ const actions = {
         }
       })
   },
-  setMissionSlotDetails({ commit }, payload) {
-    commit({
-      type: 'setMissionSlotDetails',
-      slotDetails: payload
-    })
-  },
-  clearMissionDetails({ commit }) {
-    commit({
-      type: 'clearMissionDetails'
-    })
-  },
-  clearMissionSlotlist({ commit }) {
-    commit({
-      type: 'clearMissionSlotlist'
-    })
-  },
-  clearMissionSlotDetails({ commit }) {
-    commit({
-      type: 'clearMissionSlotDetails'
-    })
-  },
-  showMissionSlotRegister({ commit }, payload) {
-    commit({
-      type: 'showMissionSlotRegister',
-      slotDetails: payload
-    })
-  },
-  clearMissionSlotRegister({ commit }) {
-    commit({
-      type: 'clearMissionSlotRegister'
-    })
-  },
-  showMissionSlotDeletion({ commit }, payload) {
-    commit({
-      type: 'showMissionSlotDeletion',
-      slotDetails: payload
-    })
-  },
-  clearMissionSlotDeletion({ commit }) {
-    commit({
-      type: 'clearMissionSlotDeletion'
-    })
-  },
-  registerForMissionSlot({ commit, dispatch }, payload) {
-    commit({
-      type: "startRegisteringForMissionSlot"
-    })
-
-    const comment = _.isNil(payload.comment) || _.isEmpty(payload.comment) ? null : payload.comment
-
-    return MissionsApi.registerForMissionSlot(payload.missionSlug, payload.slotUid, comment)
-      .then((response) => {
-        if (response.status !== 200) {
-          console.error(response)
-          throw "Registering for mission slot failed"
-        }
-
-        if (_.isEmpty(response.data)) {
-          console.error(response)
-          throw "Received empty response"
-        }
-
-        if (_.isNil(response.data.registration) || !_.isObject(response.data.registration)) {
-          console.error(response)
-          throw "Received invalid mission slot registration"
-        }
-
-        commit({
-          type: 'finishRegisteringForMissionSlot'
-        })
-
-        dispatch('getMissionSlotlist', payload.missionSlug)
-
-        dispatch('showAlert', {
-          showAlert: true,
-          alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully registered for slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong>`
-        })
-      }).catch((error) => {
-        commit({
-          type: 'finishRegisteringForMissionSlot'
-        })
-
-        if (error.response) {
-          console.error('registerForMissionSlot', error.response)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - ${error.response.data.message}`
-          })
-        } else if (error.request) {
-          console.error('registerForMissionSlot', error.request)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - Request failed`
-          })
-        } else {
-          console.error('registerForMissionSlot', error.message)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - Something failed...`
-          })
-        }
-      })
-  },
-  editMissionSlot({ commit, dispatch }, payload) {
-    commit({
-      type: 'startEditingMissionSlot'
-    })
-
-    return MissionsApi.editMissionSlot(payload.missionSlug, payload.slotUid, payload.updatedSlotDetails)
-      .then((response) => {
-        if (response.status !== 200) {
-          console.error(response)
-          throw "Editing mission slot failed"
-        }
-
-        if (_.isEmpty(response.data)) {
-          console.error(response)
-          throw "Received empty response"
-        }
-
-        if (_.isNil(response.data.slot) || !_.isObject(response.data.slot)) {
-          console.error(response)
-          throw "Received invalid mission slot"
-        }
-
-        commit({
-          type: 'finishEditingMissionSlot'
-        })
-
-        dispatch('getMissionSlotlist', payload.missionSlug)
-
-        dispatch('showAlert', {
-          showAlert: true,
-          alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully edited slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong>`
-        })
-      }).catch((error) => {
-        commit({
-          type: 'finishEditingMissionSlot'
-        })
-
-        if (error.response) {
-          console.error('editMissionSlot', error.response)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to edit slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - ${error.response.data.message}`
-          })
-        } else if (error.request) {
-          console.error('editMissionSlot', error.request)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to edit slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - Request failed`
-          })
-        } else {
-          console.error('editMissionSlot', error.message)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to edit slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - Something failed...`
-          })
-        }
-      })
-  },
-  deleteMissionSlot({ commit, dispatch }, payload) {
-    commit({
-      type: "startDeletingMissionSlot"
-    })
-
-    return MissionsApi.deleteMissionSlot(payload.missionSlug, payload.slotUid)
-      .then((response) => {
-        if (response.status !== 200) {
-          console.error(response)
-          throw "Deleting mission slot failed"
-        }
-
-        if (_.isEmpty(response.data)) {
-          console.error(response)
-          throw "Received empty response"
-        }
-
-        if (response.data.success !== true) {
-          console.error(response)
-          throw "Received invalid mission slot deletion"
-        }
-
-        commit({
-          type: 'finishDeletingMissionSlot'
-        })
-
-        dispatch('getMissionSlotlist', payload.missionSlug)
-
-        dispatch('showAlert', {
-          showAlert: true,
-          alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully deleted slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong>`
-        })
-      }).catch((error) => {
-        commit({
-          type: 'finishDeletingMissionSlot'
-        })
-
-        if (error.response) {
-          console.error('deleteMissionSlot', error.response)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - ${error.response.data.message}`
-          })
-        } else if (error.request) {
-          console.error('deleteMissionSlot', error.request)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - Request failed`
-          })
-        } else {
-          console.error('deleteMissionSlot', error.message)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - Something failed...`
-          })
-        }
-      })
-  },
-  deleteMission({ commit, dispatch }, payload) {
-    return MissionsApi.deleteMission(payload.missionSlug)
-      .then((response) => {
-        if (response.status !== 200) {
-          console.error(response)
-          throw "Deleting mission failed"
-        }
-
-        if (_.isEmpty(response.data)) {
-          console.error(response)
-          throw "Received empty response"
-        }
-
-        if (response.data.success !== true) {
-          console.error(response)
-          throw "Received invalid mission deletion"
-        }
-
-        commit({
-          type: 'clearMissionDetails'
-        })
-
-        dispatch('showAlert', {
-          showAlert: true,
-          alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully deleted mission <strong>${payload.missionTitle}</strong>`
-        })
-
-        router.push({ name: 'missionList' })
-      }).catch((error) => {
-        if (error.response) {
-          console.error('deleteMission', error.response)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete mission <strong>${payload.missionTitle}</strong> - ${error.response.data.message}`
-          })
-        } else if (error.request) {
-          console.error('deleteMission', error.request)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete mission <strong>${payload.missionTitle}</strong> - Request failed`
-          })
-        } else {
-          console.error('deleteMission', error.message)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete mission <strong>${payload.missionTitle}</strong> - Something failed...`
-          })
-        }
-      })
-  },
-  editMission({ commit, dispatch }, payload) {
-    return MissionsApi.editMission(payload.missionSlug, payload.updatedMissionDetails)
-      .then((response) => {
-        if (response.status !== 200) {
-          console.error(response)
-          throw "Editing mission failed"
-        }
-
-        if (_.isEmpty(response.data)) {
-          console.error(response)
-          throw "Received empty response"
-        }
-
-        if (_.isNil(response.data.mission) || !_.isObject(response.data.mission)) {
-          console.error(response)
-          throw "Received invalid mission"
-        }
-
-        dispatch('showAlert', {
-          showAlert: true,
-          alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully edited mission <strong>${payload.missionTitle}</strong>`
-        })
-
-        commit({
-          type: 'setMissionDetails',
-          mission: response.data.mission
-        })
-      }).catch((error) => {
-        if (error.response) {
-          console.error('editMission', error.response)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to edit mission <strong>${payload.missionTitle}</strong> - ${error.response.data.message}`
-          })
-        } else if (error.request) {
-          console.error('editMission', error.request)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to edit mission <strong>${payload.missionTitle}</strong> - Request failed`
-          })
-        } else {
-          console.error('editMission', error.message)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to edit mission <strong>${payload.missionTitle}</strong> - Something failed...`
-          })
-        }
-      })
-  },
-  showMissionSlotUnregister({ commit }, payload) {
-    commit({
-      type: 'showMissionSlotUnregister',
-      slotDetails: payload
-    })
-  },
-  clearMissionSlotUnregister({ commit }) {
-    commit({
-      type: 'clearMissionSlotUnregister'
-    })
-  },
-  unregisterFromMissionSlot({ commit, dispatch }, payload) {
-    commit({
-      type: "startUnregisteringFromMissionSlot"
-    })
-
-    return MissionsApi.unregisterFromMissionSlot(payload.missionSlug, payload.slotUid, payload.registrationUid)
-      .then((response) => {
-        if (response.status !== 200) {
-          console.error(response)
-          throw "Unregistering from mission slot failed"
-        }
-
-        if (_.isEmpty(response.data)) {
-          console.error(response)
-          throw "Received empty response"
-        }
-
-        if (response.data.success !== true) {
-          console.error(response)
-          throw "Received invalid mission slot registration deletion"
-        }
-
-        commit({
-          type: 'finishUnregisteringFromMissionSlot'
-        })
-
-        dispatch('getMissionSlotlist', payload.missionSlug)
-
-        dispatch('showAlert', {
-          showAlert: true,
-          alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully unregistered from slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong>`
-        })
-      }).catch((error) => {
-        commit({
-          type: 'finishUnregisteringFromMissionSlot'
-        })
-
-        if (error.response) {
-          console.error('unregisterFromMissionSlot', error.response)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to unregister from slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - ${error.response.data.message}`
-          })
-        } else if (error.request) {
-          console.error('unregisterFromMissionSlot', error.request)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to unregister from slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - Request failed`
-          })
-        } else {
-          console.error('unregisterFromMissionSlot', error.message)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to unregister from slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - Something failed...`
-          })
-        }
-      })
-  },
-  showMissionSlotCreate({ commit }, payload) {
-    commit({
-      type: 'showMissionSlotCreate',
-      slotDetails: payload
-    })
-  },
-  clearMissionSlotCreate({ commit }) {
-    commit({
-      type: 'clearMissionSlotCreate'
-    })
-  },
-  createMissionSlot({ commit, dispatch }, payload) {
-    commit({
-      type: 'startCreatingMissionSlot'
-    })
-
-    return MissionsApi.createMissionSlot(payload.missionSlug, payload.slotDetails)
-      .then((response) => {
-        if (response.status !== 200) {
-          console.error(response)
-          throw "Creating mission slot failed"
-        }
-
-        if (_.isEmpty(response.data)) {
-          console.error(response)
-          throw "Received empty response"
-        }
-
-        if (_.isNil(response.data.slots) || !_.isArray(response.data.slots) || _.isEmpty(response.data.slots)) {
-          console.error(response)
-          throw "Received invalid mission slot"
-        }
-
-        commit({
-          type: 'finishCreatingMissionSlot'
-        })
-
-        dispatch('getMissionSlotlist', payload.missionSlug)
-
-        dispatch('showAlert', {
-          showAlert: true,
-          alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully created slot <strong>#${payload.slotDetails.orderNumber + 1} ${payload.slotDetails.title}</strong>`
-        })
-      }).catch((error) => {
-        commit({
-          type: 'finishCreatingMissionSlot'
-        })
-
-        if (error.response) {
-          console.error('createMissionSlot', error.response)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create slot <strong>#${payload.slotDetails.orderNumber + 1} ${payload.slotDetails.title}</strong> - ${error.response.data.message}`
-          })
-        } else if (error.request) {
-          console.error('createMissionSlot', error.request)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create slot <strong>#${payload.slotDetails.orderNumber + 1} ${payload.slotDetails.title}</strong> - Request failed`
-          })
-        } else {
-          console.error('createMissionSlot', error.message)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create slot <strong>#${payload.slotDetails.orderNumber + 1} ${payload.slotDetails.title}</strong> - Something failed...`
-          })
-        }
-      })
-  },
-  checkMissionSlugAvailability({ commit, dispatch }, payload) {
-    commit({
-      type: 'startCheckingMissionSlugAvailability'
-    })
-
-    return MissionsApi.checkMissionSlugAvailability(payload)
-      .then((response) => {
-        if (response.status !== 200) {
-          console.error(response)
-          throw "Checking mission slug availability failed"
-        }
-
-        if (_.isEmpty(response.data)) {
-          console.error(response)
-          throw "Received empty response"
-        }
-
-        if (_.isNil(response.data.available)) {
-          console.error(response)
-          throw "Received invalid mission slug availability status"
-        }
-
-        commit({
-          type: 'setMissionSlugAvailability',
-          available: response.data.available
-        })
-      }).catch((error) => {
-        commit({
-          type: 'setMissionSlugAvailability',
-          available: false
-        })
-
-        if (error.response) {
-          console.error('checkMissionSlugAvailability', error.response)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to check availability of mission slug <strong>${payload}</strong> - ${error.response.data.message}`
-          })
-        } else if (error.request) {
-          console.error('checkMissionSlugAvailability', error.request)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to check availability of mission slug <strong>${payload}</strong> - Request failed`
-          })
-        } else {
-          console.error('checkMissionSlugAvailability', error.message)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to check availability of mission slug <strong>${payload}</strong> - Something failed...`
-          })
-        }
-      })
-  },
-  createMission({ commit, dispatch }, payload) {
-    commit({
-      type: 'startCreatingMission'
-    })
-
-    return MissionsApi.createMission(payload)
-      .then((response) => {
-        if (response.status !== 200) {
-          console.error(response)
-          throw "Creating mission failed"
-        }
-
-        if (_.isEmpty(response.data)) {
-          console.error(response)
-          throw "Received empty response"
-        }
-
-        if (_.isNil(response.data.mission) || !_.isObject(response.data.mission)) {
-          console.error(response)
-          throw "Received invalid mission"
-        }
-
-        commit({
-          type: 'finishCreatingMission'
-        })
-
-        dispatch('showAlert', {
-          showAlert: true,
-          alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully created mission <strong>${payload.title}</strong>`
-        })
-
-        router.push({
-          name: 'missionDetails',
-          params: { missionSlug: response.data.mission.slug }
-        })
-      }).catch((error) => {
-        commit({
-          type: 'finishCreatingMission'
-        })
-
-        if (error.response) {
-          console.error('createMission', error.response)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create mission <strong>${payload.title}</strong> - ${error.response.data.message}`
-          })
-        } else if (error.request) {
-          console.error('createMission', error.request)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create mission <strong>${payload.title}</strong> - Request failed`
-          })
-        } else {
-          console.error('createMission', error.message)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create mission <strong>${payload.title}</strong> - Something failed...`
-          })
-        }
-      })
-  },
   getMissionSlotRegistrations({ commit, dispatch }, payload) {
-    return MissionsApi.getMissionSlotRegistrations(payload.missionSlug, payload.slotUid)
+    dispatch({
+      type: 'startWorking',
+      message: 'Loading slot registrations...'
+    })
+
+    if (_.isNil(payload.page)) {
+      payload.page = 1
+    }
+
+    return MissionsApi.getMissionSlotRegistrations(payload.missionSlug, payload.slotUid, limits.missionSlotRegistrations, (payload.page - 1) * limits.missionSlotRegistrations)
       .then((response) => {
         if (response.status !== 200) {
           console.error(response)
-          throw "Retrieving mission slot registrations failed"
+          throw 'Retrieving mission slot registrations failed'
         }
-
 
         if (_.isEmpty(response.data)) {
           console.error(response)
-          throw "Received empty response"
+          throw 'Received empty response'
         }
 
         if (_.isNil(response.data.registrations) || !_.isArray(response.data.registrations)) {
           console.error(response)
-          throw "Received invalid mission slot registrations"
+          throw 'Received invalid mission slot registrations'
         }
 
         commit({
           type: 'setMissionSlotRegistrations',
-          registrations: response.data.registrations
+          registrations: response.data.registrations,
+          total: response.data.total
+        })
+
+        dispatch({
+          type: 'stopWorking'
         })
       }).catch((error) => {
+        dispatch({
+          type: 'stopWorking'
+        })
+
         if (error.response) {
-          console.error('registerForMissionSlot', error.response)
+          console.error('getMissionSlotRegistrations', error.response)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to retrieve registrations for slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to retrieve registrations for slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - ${error.response.data.message}`
           })
         } else if (error.request) {
-          console.error('registerForMissionSlot', error.request)
+          console.error('getMissionSlotRegistrations', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Request failed`
           })
         } else {
-          console.error('registerForMissionSlot', error.message)
+          console.error('getMissionSlotRegistrations', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber + 1} ${payload.slotTitle}</strong> - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Something failed...`
           })
         }
       })
   },
-  clearMissionSlotRegistrations({ commit }) {
-    commit({
-      type: 'clearMissionSlotRegistrations'
-    })
-  },
-  showMissionSlotRegistrationConfirmation({ commit }, payload) {
-    commit({
-      type: 'showMissionSlotRegistrationConfirmation',
-      registration: payload.registration,
-      assign: payload.assign
-    })
-  },
-  clearMissionSlotRegistrationConfirmation({ commit }) {
-    commit({
-      type: 'clearMissionSlotRegistrationConfirmation'
-    })
-  },
   modifyMissionSlotRegistration({ commit, dispatch }, payload) {
     commit({
-      type: "startModifyingMissionSlotRegistration"
+      type: 'startWorking',
+      message: 'Editing slot registration...'
     })
 
     return MissionsApi.modifyMissionSlotRegistration(payload.missionSlug, payload.slotUid, payload.registrationUid, payload.confirm)
       .then((response) => {
         if (response.status !== 200) {
           console.error(response)
-          throw "Modifying mission slot registration failed"
+          throw 'Modifying mission slot registration failed'
         }
 
 
         if (_.isEmpty(response.data)) {
           console.error(response)
-          throw "Received empty response"
+          throw 'Received empty response'
         }
 
         if (_.isNil(response.data.registration) || !_.isObject(response.data.registration)) {
           console.error(response)
-          throw "Received invalid mission slot registration"
+          throw 'Received invalid mission slot registration'
         }
-
-        commit({
-          type: "finishModifyingMissionSlotRegistration"
-        })
 
         dispatch('getMissionSlotlist', payload.missionSlug)
 
@@ -1016,7 +871,7 @@ const actions = {
         })
       }).catch((error) => {
         commit({
-          type: 'finishModifyingMissionSlotRegistration'
+          type: 'stopWorking'
         })
 
         if (error.response) {
@@ -1043,141 +898,164 @@ const actions = {
         }
       })
   },
-  filterMissionSlotlist({ commit }, payload) {
+  registerForMissionSlot({ commit, dispatch }, payload) {
     commit({
-      type: 'setMissionSlotlistFilter',
-      missionSlotlistFilter: payload
+      type: 'startWorking',
+      message: 'Registering for slot...'
     })
+
+    const comment = _.isNil(payload.comment) || _.isEmpty(payload.comment) ? null : payload.comment
+
+    return MissionsApi.registerForMissionSlot(payload.missionSlug, payload.slotUid, comment)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Registering for mission slot failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (_.isNil(response.data.registration) || !_.isObject(response.data.registration)) {
+          console.error(response)
+          throw 'Received invalid mission slot registration'
+        }
+
+        dispatch('getMissionSlotlist', payload.missionSlug)
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully registered for slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong>`
+        })
+      }).catch((error) => {
+        dispatch('stopWorking')
+
+        if (error.response) {
+          console.error('registerForMissionSlot', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('registerForMissionSlot', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Request failed`
+          })
+        } else {
+          console.error('registerForMissionSlot', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Something failed...`
+          })
+        }
+      })
+  },
+  setMissionSlotDetails({ commit }, payload) {
+    commit({
+      type: 'setMissionSlotDetails',
+      slotDetails: payload
+    })
+  },
+  unregisterFromMissionSlot({ commit, dispatch }, payload) {
+    commit({
+      type: 'startWorking',
+      message: 'Unregistering from slot...'
+    })
+
+    return MissionsApi.unregisterFromMissionSlot(payload.missionSlug, payload.slotUid, payload.registrationUid)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Unregistering from mission slot failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (response.data.success !== true) {
+          console.error(response)
+          throw 'Received invalid mission slot registration deletion'
+        }
+
+        dispatch('getMissionSlotlist', payload.missionSlug)
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully unregistered from slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong>`
+        })
+      }).catch((error) => {
+        commit({
+          type: 'stopWorking'
+        })
+
+        if (error.response) {
+          console.error('unregisterFromMissionSlot', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to unregister from slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('unregisterFromMissionSlot', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to unregister from slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Request failed`
+          })
+        } else {
+          console.error('unregisterFromMissionSlot', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to unregister from slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Something failed...`
+          })
+        }
+      })
   }
 }
 
 const mutations = {
-  startLoadingMissions(state) {
-    state.missionsLoaded = false
-  },
-  finishLoadingMissions(state) {
-    state.missionsLoaded = true
-  },
-  setMissions(state, payload) {
-    state.missions = payload.missions
-    state.missionsLoaded = true
-    state.missionsOffset = payload.offset
-  },
   clearMissions(state) {
-    state.missions = []
-    state.missionsLoaded = false
+    state.missions = null
+    state.totalMissions = 0
+  },
+  clearMissionDetails(state) {
+    state.missionDetails = null
+    state.missionSlotDetails = null
+    state.missionSlotGroups = null
+    state.missionSlotRegistrations = null
+    state.totalMissionSlotRegistrations = 0
+  },
+  clearMissionSlotDetails(state) {
+    state.missionSlotDetails = null
   },
   setMissionDetails(state, payload) {
     state.missionDetails = payload.mission
     utils.setTitle(`Mission ${state.missionDetails.title}`)
   },
-  setMissionSlotlist(state, payload) {
-    state.missionSlotGroups = payload.slotGroups
-  },
-  clearMissionDetails(state) {
-    state.missionDetails = {}
-  },
-  clearMissionSlotlist(state) {
-    state.missionSlotlist = []
-  },
-  setMissionSlotDetails(state, payload) {
-    state.missionSlotDetails = payload.slotDetails
-    state.showMissionSlotDetails = true
-  },
-  clearMissionSlotDetails(state) {
-    state.showMissionSlotDetails = false
-  },
-  showMissionSlotRegister(state, payload) {
-    state.missionSlotDetails = payload.slotDetails
-    state.showMissionSlotRegister = true
-  },
-  clearMissionSlotRegister(state) {
-    state.showMissionSlotRegister = false
-  },
-  startRegisteringForMissionSlot(state) {
-    state.registeringForMissionSlot = true
-  },
-  finishRegisteringForMissionSlot(state) {
-    state.registeringForMissionSlot = false
-  },
-  showMissionSlotDeletion(state, payload) {
-    state.missionSlotDetails = payload.slotDetails
-    state.showMissionSlotDeletion = true
-  },
-  clearMissionSlotDeletion(state) {
-    state.showMissionSlotDeletion = false
-  },
-  startEditingMissionSlot(state) {
-    state.editingMissionSlot = true
-  },
-  finishEditingMissionSlot(state) {
-    state.editingMissionSlot = false
-  },
-  startDeletingMissionSlot(state) {
-    state.deletingMissionSlot = true
-  },
-  finishDeletingMissionSlot(state) {
-    state.deletingMissionSlot = false
-  },
-  showMissionSlotUnregister(state, payload) {
-    state.missionSlotDetails = payload.slotDetails
-    state.showMissionSlotUnregister = true
-  },
-  clearMissionSlotUnregister(state) {
-    state.showMissionSlotUnregister = false
-  },
-  startUnregisteringFromMissionSlot(state) {
-    state.unregisteringFromMissionSlot = true
-  },
-  finishUnregisteringFromMissionSlot(state) {
-    state.unregisteringFromMissionSlot = false
-  },
-  showMissionSlotCreate(state) {
-    state.showMissionSlotCreate = true
-  },
-  clearMissionSlotCreate(state) {
-    state.showMissionSlotCreate = false
-  },
-  startCreatingMissionSlot(state) {
-    state.creatingMissionSlot = true
-  },
-  finishCreatingMissionSlot(state) {
-    state.creatingMissionSlot = false
-  },
-  startCheckingMissionSlugAvailability(state) {
-    state.checkingMissionSlugAvailability = true
+  setMissions(state, payload) {
+    state.missions = payload.missions
+    state.totalMissions = payload.total
   },
   setMissionSlugAvailability(state, payload) {
     state.checkingMissionSlugAvailability = false
     state.missionSlugAvailable = payload.available
   },
-  startCreatingMission(state) {
-    state.creatingMission = true
+  setMissionSlotDetails(state, payload) {
+    state.missionSlotDetails = payload.slotDetails
   },
-  finishCreatingMission(state) {
-    state.creatingMission = false
-  },
-  setMissionSlotRegistrations(state, payload) {
-    state.missionSlotRegistrations = payload.registrations
-  },
-  clearMissionSlotRegistrations(state) {
-    state.missionSlotRegistrations = []
-  },
-  showMissionSlotRegistrationConfirmation(state, payload) {
-    state.missionSlotRegistration = payload.registration
-    state.showMissionSlotRegistrationConfirmation = true
-    state.showMissionSlotRegistrationConfirmationAssign = payload.assign
-  },
-  clearMissionSlotRegistrationConfirmation(state) {
-    state.missionSlotRegistration = {}
-    state.showMissionSlotRegistrationConfirmation = false
-    state.showMissionSlotRegistrationConfirmationAssign = false
-  },
-  startModifyingMissionSlotRegistration(state) {
-    state.modifyingMissionSlotRegistration = true
-  },
-  finishModifyingMissionSlotRegistration(state) {
-    state.modifyingMissionSlotRegistration = false
+  setMissionSlotlist(state, payload) {
+    state.missionSlotGroups = payload.slotGroups
   },
   setMissionSlotlistFilter(state, payload) {
     const filter = {}
@@ -1186,6 +1064,13 @@ const mutations = {
     })
 
     state.missionSlotlistFilter = filter
+  },
+  setMissionSlotRegistrations(state, payload) {
+    state.missionSlotRegistrations = payload.registrations
+    state.totalMissionSlotRegistrations = payload.total
+  },
+  startCheckingMissionSlugAvailability(state) {
+    state.checkingMissionSlugAvailability = true
   }
 }
 

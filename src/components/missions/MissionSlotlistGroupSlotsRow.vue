@@ -3,10 +3,10 @@
     <td>{{ missionSlot.orderNumber }}</td>
     <td>
       <i :class="difficultyIcon" aria-hidden="true"></i>
-      <b-tooltip v-if="missionSlot.restricted || missionSlot.reserve" :content="titleTooltip">
+      <b-tooltip v-show="missionSlot.restricted || missionSlot.reserve" :content="titleTooltip">
         <span :class="titleColor">{{ missionSlot.title }}</span>
       </b-tooltip>
-      <span v-if="!missionSlot.restricted && !missionSlot.reserve" :class="titleColor">{{ missionSlot.title }}</span>
+      <span v-show="!missionSlot.restricted && !missionSlot.reserve" :class="titleColor">{{ missionSlot.title }}</span>
     </td>
     <td v-html="formattedAssignee"></td>
     <td>{{ missionSlot.shortDescription }}</td>
@@ -97,10 +97,21 @@ export default {
   },
   methods: {
     deleteMissionSlot() {
-      console.log(`deleteMissionSlot ${this.missionSlot.uid}`);
+      this.$store.dispatch('deleteMissionSlot', {
+        missionSlug: this.$route.params.missionSlug,
+        slotUid: this.missionSlot.uid,
+        slotOrderNumber: this.missionSlot.orderNumber,
+        slotTitle: this.missionSlot.title
+      });
     },
     deleteMissionSlotRegistration() {
-      console.log(`deleteMissionSlotRegistration ${this.missionSlot.uid} ${this.missionSlot.registrationUid}`);
+      this.$store.dispatch('unregisterFromMissionSlot', {
+        missionSlug: this.$route.params.missionSlug,
+        slotUid: this.missionSlot.uid,
+        registrationUid: this.missionSlot.registrationUid,
+        slotOrderNumber: this.missionSlot.orderNumber,
+        slotTitle: this.missionSlot.title
+      })
     },
     showMissionSlotDetails() {
       this.$store.dispatch('setMissionSlotDetails', this.missionSlot)

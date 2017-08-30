@@ -1,8 +1,6 @@
 <template>
   <div>
-    <div>
-      <mission-slotlist-group v-for="missionSlotGroup in missionSlotGroups" :missionSlotGroup="missionSlotGroup" :key="missionSlotGroup.uid"></mission-slotlist-group>
-    </div>
+    <mission-slotlist-group v-for="missionSlotGroup in missionSlotGroups" :missionSlotGroup="missionSlotGroup" :key="missionSlotGroup.uid"></mission-slotlist-group>
     <br>
     <div class="text-center">
       <b-btn variant="success" v-if="isMissionEditor" v-b-modal.createMissionSlotGroupModal>
@@ -30,12 +28,12 @@ export default {
       return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`, `mission.${this.$route.params.missionSlug}.editor`])
     },
     missionSlotGroups() {
-      return this.$store.getters.filteredMissionSlotGroups
+      return this.$store.getters.missionSlotGroups
     }
   },
   methods: {
     refreshMissionSlotlist() {
-      this.$store.dispatch('getMissionSlotlist', this.$route.params.missionSlug)
+      this.$store.dispatch('getMissionSlotlist', { missionSlug: this.$route.params.missionSlug })
     }
   }
 }
