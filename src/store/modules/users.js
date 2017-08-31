@@ -24,10 +24,7 @@ const actions = {
     })
   },
   getUserDetails({ commit, dispatch }, payload) {
-    commit({
-      type: 'startWorking',
-      message: 'Loading user details...'
-    })
+    dispatch('startWorking', 'Loading user details...')
 
     return UsersApi.getUserDetails(payload)
       .then(function (response) {
@@ -51,13 +48,9 @@ const actions = {
           userDetails: response.data.user
         })
 
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
       }).catch((error) => {
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('getUserDetails', error.response)
@@ -84,10 +77,7 @@ const actions = {
       })
   },
   getUserMissions({ commit, dispatch }, payload) {
-    commit({
-      type: 'startWorking',
-      message: 'Loading user missions...'
-    })
+    dispatch('startWorking', 'Loading user missions...')
 
     return UsersApi.getUserMissions(payload)
       .then(function (response) {
@@ -111,13 +101,9 @@ const actions = {
           userMissions: response.data.missions
         })
 
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
       }).catch((error) => {
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('getUserMissions', error.response)

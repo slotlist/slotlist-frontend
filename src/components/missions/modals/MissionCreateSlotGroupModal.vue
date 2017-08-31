@@ -28,12 +28,12 @@
       </div>
       <div slot="modal-footer">
         <div class="btn-group" role="group" aria-label="Mission slot group create actions">
-          <button type="button" class="btn btn-success" @click="createMissionSlotGroup">
+          <b-btn variant="success" @click="createMissionSlotGroup">
             <i class="fa fa-plus" aria-hidden="true"></i> Submit
-          </button>
-          <button type="button" class="btn btn-secondary" @click="hideCreateMissionSlotGroupModal">
+          </b-btn>
+          <b-btn @click="hideCreateMissionSlotGroupModal">
             <i class="fa fa-close" aria-hidden="true"></i> Cancel
-          </button>
+          </b-btn>
         </div>
       </div>
     </b-modal>

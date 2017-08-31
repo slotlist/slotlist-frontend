@@ -263,10 +263,7 @@ const actions = {
     })
   },
   getAccountDetails({ commit, dispatch }) {
-    commit({
-      type: 'startWorking',
-      message: 'Loading account details...'
-    })
+    dispatch('startWorking', 'Loading account details...')
 
     return AuthApi.getAccountDetails()
       .then(function (response) {
@@ -290,13 +287,9 @@ const actions = {
           accountDetails: response.data.user
         })
 
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
       }).catch((error) => {
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('getAccountDetails', error.response)
@@ -328,10 +321,7 @@ const actions = {
     })
   },
   editAccount({ commit, dispatch }, payload) {
-    commit({
-      type: 'startWorking',
-      message: 'Updating account details...'
-    })
+    dispatch('startWorking', 'Updating account details...')
 
     return AuthApi.editAccount(payload.updatedAccountDetails)
       .then(function (response) {
@@ -355,9 +345,7 @@ const actions = {
           accountDetails: response.data.user
         })
 
-        commit({
-          type: 'stopWorking',
-        })
+        dispatch('stopWorking')
 
         dispatch('showAlert', {
           showAlert: true,
@@ -365,9 +353,7 @@ const actions = {
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully updated account details`
         })
       }).catch((error) => {
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('editAccount', error.response)

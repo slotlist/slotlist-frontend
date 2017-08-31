@@ -78,11 +78,8 @@ const getters = {
 }
 
 const actions = {
-  applyToCommunity({ commit, dispatch }, payload) {
-    commit({
-      type: 'startWorking',
-      message: 'Applying to community...'
-    })
+  applyToCommunity({ dispatch }, payload) {
+    dispatch('startWorking', 'Applying to community...')
 
     return CommunitiesApi.applyToCommunity(payload)
       .then(function (response) {
@@ -101,9 +98,7 @@ const actions = {
           throw "Received invalid community application status"
         }
 
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         dispatch('showAlert', {
           showAlert: true,
@@ -111,9 +106,7 @@ const actions = {
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully applied to community`
         })
       }).catch((error) => {
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('applyToCommunity', error.response)
@@ -210,11 +203,8 @@ const actions = {
       type: 'clearCommunitySlugAvailability'
     })
   },
-  createCommunity({ commit, dispatch }, payload) {
-    commit({
-      type: 'startWorking',
-      message: 'Creating community...'
-    })
+  createCommunity({ dispatch }, payload) {
+    dispatch('startWorking', 'Creating community...')
 
     return CommunitiesApi.createCommunity(payload)
       .then(function (response) {
@@ -233,9 +223,7 @@ const actions = {
           throw "Received invalid community"
         }
 
-        commit({
-          type: 'stopWorking',
-        })
+        dispatch('stopWorking')
 
         dispatch('showAlert', {
           showAlert: true,
@@ -248,9 +236,7 @@ const actions = {
           params: { communitySlug: response.data.community.slug }
         })
       }).catch((error) => {
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('createCommunity', error.response)
@@ -276,11 +262,8 @@ const actions = {
         }
       })
   },
-  deleteCommunity({ commit, dispatch }, payload) {
-    commit({
-      type: 'startWorking',
-      message: 'Deleting community...'
-    })
+  deleteCommunity({ dispatch }, payload) {
+    dispatch('startWorking', 'Deleting community...')
 
     return CommunitiesApi.deleteCommunity(payload.communitySlug)
       .then(function (response) {
@@ -299,9 +282,7 @@ const actions = {
           throw "Received invalid community deletion"
         }
 
-        commit({
-          type: 'stopWorking',
-        })
+        dispatch('stopWorking')
 
         dispatch('showAlert', {
           showAlert: true,
@@ -311,9 +292,7 @@ const actions = {
 
         router.push({ name: 'communityList' })
       }).catch((error) => {
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('deleteCommunity', error.response)
@@ -340,10 +319,7 @@ const actions = {
       })
   },
   editCommunity({ commit, dispatch }, payload) {
-    commit({
-      type: 'startWorking',
-      message: 'Updating community details...'
-    })
+    dispatch('startWorking', 'Updating community details...')
 
     return CommunitiesApi.editCommunity(payload.communitySlug, payload.updatedCommunityDetails)
       .then(function (response) {
@@ -367,9 +343,7 @@ const actions = {
           communityDetails: response.data.community
         })
 
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         dispatch('showAlert', {
           showAlert: true,
@@ -377,9 +351,7 @@ const actions = {
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully updated community details`
         })
       }).catch((error) => {
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('editCommunity', error.response)
@@ -406,10 +378,7 @@ const actions = {
       })
   },
   getCommunities({ commit, dispatch }, payload) {
-    commit({
-      type: 'startWorking',
-      message: 'Loading communities...'
-    })
+    dispatch('startWorking', 'Loading communities...')
 
     if (_.isNil(payload)) {
       payload = { page: 1 }
@@ -440,13 +409,9 @@ const actions = {
           total: response.data.total
         })
 
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
       }).catch((error) => {
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('getCommunities', error.response)
@@ -473,10 +438,7 @@ const actions = {
       })
   },
   getCommunityApplications({ commit, dispatch }, payload) {
-    commit({
-      type: 'startWorking',
-      message: 'Loading community applications...'
-    })
+    dispatch('startWorking', 'Loading community applications...')
 
     if (_.isNil(payload.page)) {
       payload.page = 1
@@ -505,13 +467,9 @@ const actions = {
           total: response.data.total
         })
 
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
       }).catch((error) => {
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('getCommunityApplications', error.response)
@@ -538,10 +496,7 @@ const actions = {
       })
   },
   getCommunityDetails({ commit, dispatch }, payload) {
-    commit({
-      type: 'startWorking',
-      message: 'Loading community details...'
-    })
+    dispatch('startWorking', 'Loading community details...')
 
     return CommunitiesApi.getCommunityDetails(payload)
       .then(function (response) {
@@ -565,13 +520,9 @@ const actions = {
           communityDetails: response.data.community
         })
 
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
       }).catch((error) => {
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('getCommunityDetails', error.response)
@@ -598,10 +549,7 @@ const actions = {
       })
   },
   getCommunityMissions({ commit, dispatch }, payload) {
-    commit({
-      type: 'startWorking',
-      message: 'Loading community missions...'
-    })
+    dispatch('startWorking', 'Loading community missions...')
 
     if (_.isNil(payload.page)) {
       payload.page = 1
@@ -630,13 +578,9 @@ const actions = {
           total: response.data.total
         })
 
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
       }).catch((error) => {
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('getCommunityMissions', error.response)
@@ -662,11 +606,8 @@ const actions = {
         }
       })
   },
-  processCommunityApplication({ commit, dispatch }, payload) {
-    commit({
-      type: 'startWorking',
-      message: 'Processing community application...'
-    })
+  processCommunityApplication({ dispatch }, payload) {
+    dispatch('startWorking', 'Processing community application...')
 
     return CommunitiesApi.processCommunityApplication(payload.communitySlug, payload.applicationUid, payload.accepted)
       .then(function (response) {
@@ -694,9 +635,7 @@ const actions = {
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully ${payload.accepted ? 'accepted' : 'denied'} community application for user <strong>${payload.applicationUserNickname}</strong>`
         })
       }).catch((error) => {
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('processCommunityApplication', error.response)
@@ -722,11 +661,8 @@ const actions = {
         }
       })
   },
-  removeCommunityMember({ commit, dispatch }, payload) {
-    commit({
-      type: 'startWorking',
-      message: 'Removing community member...'
-    })
+  removeCommunityMember({ dispatch }, payload) {
+    dispatch('startWorking', 'Removing community member...')
 
     return CommunitiesApi.removeCommunityMember(payload.communitySlug, payload.memberUid)
       .then(function (response) {
@@ -753,9 +689,7 @@ const actions = {
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully removed community member <strong>${payload.memberNickname}</strong>`
         })
       }).catch((error) => {
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('removeCommunityMember', error.response)

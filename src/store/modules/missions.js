@@ -149,11 +149,8 @@ const actions = {
       type: 'clearMissionSlotDetails'
     })
   },
-  createMission({ commit, dispatch }, payload) {
-    commit({
-      type: 'startWorking',
-      message: 'Creating missions...'
-    })
+  createMission({ dispatch }, payload) {
+    dispatch('startWorking', 'Creating missions...')
 
     return MissionsApi.createMission(payload)
       .then((response) => {
@@ -172,9 +169,7 @@ const actions = {
           throw 'Received invalid mission'
         }
 
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         dispatch('showAlert', {
           showAlert: true,
@@ -187,9 +182,7 @@ const actions = {
           params: { missionSlug: response.data.mission.slug }
         })
       }).catch((error) => {
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('createMission', error.response)
@@ -215,11 +208,8 @@ const actions = {
         }
       })
   },
-  createMissionSlot({ commit, dispatch }, payload) {
-    commit({
-      type: 'startWorking',
-      message: 'Creating slot...'
-    })
+  createMissionSlot({ dispatch }, payload) {
+    dispatch('startWorking', 'Creating slot...')
 
     return MissionsApi.createMissionSlot(payload.missionSlug, payload.slotDetails)
       .then((response) => {
@@ -246,9 +236,7 @@ const actions = {
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully created slot <strong>#${payload.slotDetails.orderNumber + 1} ${payload.slotDetails.title}</strong>`
         })
       }).catch((error) => {
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('createMissionSlot', error.response)
@@ -274,11 +262,8 @@ const actions = {
         }
       })
   },
-  deleteMission({ commit, dispatch }, payload) {
-    dispatch({
-      type: 'startWorking',
-      message: 'Deleting mission...'
-    })
+  deleteMission({ dispatch }, payload) {
+    dispatch('startWorking', 'Deleting mission...')
 
     return MissionsApi.deleteMission(payload.missionSlug)
       .then((response) => {
@@ -297,9 +282,7 @@ const actions = {
           throw 'Received invalid mission deletion'
         }
 
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         dispatch('showAlert', {
           showAlert: true,
@@ -309,9 +292,7 @@ const actions = {
 
         router.push({ name: 'missionList' })
       }).catch((error) => {
-        commit({
-          type: 'stopWorking',
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('deleteMission', error.response)
@@ -337,11 +318,8 @@ const actions = {
         }
       })
   },
-  deleteMissionSlot({ commit, dispatch }, payload) {
-    commit({
-      type: 'startWorking',
-      message: 'Deleting slot...'
-    })
+  deleteMissionSlot({ dispatch }, payload) {
+    dispatch('startWorking', 'Deleting slot...')
 
     return MissionsApi.deleteMissionSlot(payload.missionSlug, payload.slotUid)
       .then((response) => {
@@ -368,9 +346,7 @@ const actions = {
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully deleted slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong>`
         })
       }).catch((error) => {
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('deleteMissionSlot', error.response)
@@ -396,11 +372,8 @@ const actions = {
         }
       })
   },
-  deleteMissionSlotGroup({ commit, dispatch }, payload) {
-    commit({
-      type: 'startWorking',
-      message: 'Deleting slot group...'
-    })
+  deleteMissionSlotGroup({ dispatch }, payload) {
+    dispatch('startWorking', 'Deleting slot group...')
 
     return MissionsApi.deleteMissionSlotGroup(payload.missionSlug, payload.slotGroupUid)
       .then((response) => {
@@ -427,9 +400,7 @@ const actions = {
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully deleted slot group <strong>${payload.slotGroupTitle}</strong>`
         })
       }).catch((error) => {
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('deleteMissionSlotGroup', error.response)
@@ -456,10 +427,7 @@ const actions = {
       })
   },
   editMission({ commit, dispatch }, payload) {
-    dispatch({
-      type: 'startWorking',
-      message: 'Editing mission...'
-    })
+    dispatch('startWorking', 'Editing mission...')
 
     return MissionsApi.editMission(payload.missionSlug, payload.updatedMissionDetails)
       .then((response) => {
@@ -484,18 +452,14 @@ const actions = {
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully edited mission <strong>${payload.missionTitle}</strong>`
         })
 
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         commit({
           type: 'setMissionDetails',
           mission: response.data.mission
         })
       }).catch((error) => {
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('editMission', error.response)
@@ -521,11 +485,8 @@ const actions = {
         }
       })
   },
-  editMissionSlot({ commit, dispatch }, payload) {
-    commit({
-      type: 'startWorking',
-      message: 'Editing slot...'
-    })
+  editMissionSlot({ dispatch }, payload) {
+    dispatch('startWorking', 'Editing slot...')
 
     return MissionsApi.editMissionSlot(payload.missionSlug, payload.slotUid, payload.updatedSlotDetails)
       .then((response) => {
@@ -552,9 +513,7 @@ const actions = {
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully edited slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong>`
         })
       }).catch((error) => {
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('editMissionSlot', error.response)
@@ -587,10 +546,7 @@ const actions = {
     })
   },
   getMissionDetails({ commit, dispatch }, payload) {
-    commit({
-      type: 'startWorking',
-      message: 'Loading mission details...'
-    })
+    dispatch('startWorking', 'Loading mission details...')
 
     return MissionsApi.getMissionDetails(payload.missionSlug)
       .then(function (response) {
@@ -614,13 +570,9 @@ const actions = {
           mission: response.data.mission
         })
 
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
       }).catch((error) => {
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('getMissionDetails', error.response)
@@ -647,10 +599,7 @@ const actions = {
       })
   },
   getMissions({ commit, dispatch }, payload) {
-    commit({
-      type: 'startWorking',
-      message: 'Loading missions...'
-    })
+    dispatch('startWorking', 'Loading missions...')
 
     if (_.isNil(payload)) {
       payload = { page: 1 }
@@ -681,13 +630,9 @@ const actions = {
           total: response.data.total
         })
 
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
       }).catch((error) => {
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('getMissions', error.response)
@@ -714,10 +659,7 @@ const actions = {
       })
   },
   getMissionSlotlist({ commit, dispatch }, payload) {
-    commit({
-      type: 'startWorking',
-      message: 'Loading mission slotlist...'
-    })
+    dispatch('startWorking', 'Loading mission slotlist...')
 
     return MissionsApi.getMissionSlotlist(payload.missionSlug)
       .then(function (response) {
@@ -741,13 +683,9 @@ const actions = {
           slotGroups: response.data.slotGroups
         })
 
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
       }).catch((error) => {
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('getMissionSlotlist', error.response)
@@ -774,10 +712,7 @@ const actions = {
       })
   },
   getMissionSlotRegistrations({ commit, dispatch }, payload) {
-    dispatch({
-      type: 'startWorking',
-      message: 'Loading slot registrations...'
-    })
+    dispatch('startWorking', 'Loading slot registrations...')
 
     if (_.isNil(payload.page)) {
       payload.page = 1
@@ -806,13 +741,9 @@ const actions = {
           total: response.data.total
         })
 
-        dispatch({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
       }).catch((error) => {
-        dispatch({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('getMissionSlotRegistrations', error.response)
@@ -838,11 +769,8 @@ const actions = {
         }
       })
   },
-  modifyMissionSlotRegistration({ commit, dispatch }, payload) {
-    commit({
-      type: 'startWorking',
-      message: 'Editing slot registration...'
-    })
+  modifyMissionSlotRegistration({ dispatch }, payload) {
+    dispatch('startWorking', 'Editing slot registration...')
 
     return MissionsApi.modifyMissionSlotRegistration(payload.missionSlug, payload.slotUid, payload.registrationUid, payload.confirm)
       .then((response) => {
@@ -870,9 +798,7 @@ const actions = {
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully modified slot registration`
         })
       }).catch((error) => {
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('modifyMissionSlotRegistration', error.response)
@@ -898,11 +824,8 @@ const actions = {
         }
       })
   },
-  registerForMissionSlot({ commit, dispatch }, payload) {
-    commit({
-      type: 'startWorking',
-      message: 'Registering for slot...'
-    })
+  registerForMissionSlot({ dispatch }, payload) {
+    dispatch('startWorking', 'Registering for slot...')
 
     const comment = _.isNil(payload.comment) || _.isEmpty(payload.comment) ? null : payload.comment
 
@@ -963,11 +886,8 @@ const actions = {
       slotDetails: payload
     })
   },
-  unregisterFromMissionSlot({ commit, dispatch }, payload) {
-    commit({
-      type: 'startWorking',
-      message: 'Unregistering from slot...'
-    })
+  unregisterFromMissionSlot({ dispatch }, payload) {
+    dispatch('startWorking', 'Unregistering from slot...')
 
     return MissionsApi.unregisterFromMissionSlot(payload.missionSlug, payload.slotUid, payload.registrationUid)
       .then((response) => {
@@ -994,9 +914,7 @@ const actions = {
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully unregistered from slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong>`
         })
       }).catch((error) => {
-        commit({
-          type: 'stopWorking'
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('unregisterFromMissionSlot', error.response)

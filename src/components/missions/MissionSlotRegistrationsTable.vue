@@ -1,6 +1,6 @@
-<<template>
+<template>
   <div>
-    <table class="table table-striped">
+    <table class="table table-striped" v-if="missionSlotRegistrations">
       <thead>
         <tr>
           <th :style="playerColumnWidth">Player</th>
@@ -11,9 +11,9 @@
         </tr>
       </thead>
       <tbody>
-        <mission-slot-registrations-row v-for="registration in registrations" :registration="registration" :key="registration.uid"></mission-slot-registrations-row>
+        <mission-slot-registrations-row v-for="registration in missionSlotRegistrations" :registration="registration" :key="registration.uid"></mission-slot-registrations-row>
       </tbody>
-      <tfoot v-show="registrations.length >= 10">
+      <tfoot v-show="missionSlotRegistrations.length >= 10">
         <tr>
           <th :style="playerColumnWidth">Player</th>
           <th style="width: 35%" v-show="isMissionEditor">Comment</th>
@@ -37,12 +37,12 @@ export default {
     isMissionEditor() {
       return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`, `mission.${this.$route.params.missionSlug}.editor`])
     },
+    missionSlotRegistrations() {
+      return this.$store.getters.missionSlotRegistrations
+    },
     playerColumnWidth() {
       return this.isMissionEditor ? 'width: 30%' : 'width: 75%'
     },
-    registrations() {
-      return this.$store.getters.missionSlotRegistrations
-    }
   }
 }
 </script>

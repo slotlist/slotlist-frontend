@@ -103,73 +103,6 @@
     <!-- End of content -->
     <!-- Begin of modals -->
     <div>
-      <b-modal ref="slotDetailsModal" id="slotDetailsModal" v-if="slotDetails" size="lg" @hide="slotDetailsModalClosed">
-        <div slot="modal-title">
-          <h5>Slot details - #{{ slotDetails.orderNumber + 1 }} {{ slotDetails.title }}</h5>
-        </div>
-        <div class="container-fluid">
-          <div class="row font-weight-bold">
-            <div class="col col-1">#</div>
-            <div class="col col-3">Role</div>
-            <div class="col col-5">Player</div>
-            <div class="col col-3">Difficulty</div>
-          </div>
-          <div class="row">
-            <div class="col col-1">{{ slotDetails.orderNumber + 1 }}</div>
-            <div class="col col-3">{{ slotDetails.title }} </div>
-            <div class="col col-5" v-html="optionalAssignee"></div>
-            <div class="col col-3">
-              <i :class="difficultyIcon" aria-hidden="true"></i>
-              <span :class="difficultyColor">{{ difficultyText }}</span>
-            </div>
-          </div>
-          <div class="row font-weight-bold">
-            <div class="col col-1"></div>
-            <div class="col col-6">Description</div>
-            <div class="col col-5">Status</div>
-          </div>
-          <div class="row">
-            <div class="col col-1"></div>
-            <div class="col col-6">{{ slotDetails.shortDescription}}</div>
-            <div class="col col-5" v-html="slotStatus"></div>
-          </div>
-          <hr class="my-4" v-show="slotDetails.description">
-          <div class="row font-weight-bold" v-show="slotDetails.description">
-            <div class="col col-12">Detailed description</div>
-          </div>
-          <div class="row" v-show="slotDetails.description">
-            <div class="col col-12" v-html="slotDetails.description"></div>
-          </div>
-          <hr class="my-4">
-          <div class="row font-weight-bold">
-            <div class="col col-12">Registrations</div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col col-12">
-              <mission-slot-registrations :slotDetails="slotDetails"></mission-slot-registrations>
-            </div>
-          </div>
-        </div>
-        <div slot="modal-footer">
-          <div class="btn-group" role="group" aria-label="Mission slot detail actions">
-            <button type="button" class="btn btn-success" v-show="loggedIn && !slotDetails.registrationUid" :disabled="slotDetails.assignee" @click="slotDetailsRegister">
-              <i class="fa fa-ticket" aria-hidden="true"></i> Register
-            </button>
-            <button type="button" class="btn btn-warning" v-show="loggedIn && slotDetails.registrationUid" @click="slotDetailsUnregister">
-              <i class="fa fa-eraser" aria-hidden="true"></i> Unregister
-            </button>
-            <button type="button" class="btn btn-primary" v-if="isMissionEditor" @click="slotDetailsEdit">
-              <i class="fa fa-edit" aria-hidden="true"></i> Edit
-            </button>
-            <button type="button" class="btn btn-danger" v-if="isMissionEditor" @click="slotDetailsDelete">
-              <i class="fa fa-trash" aria-hidden="true"></i> Delete
-            </button>
-            <button type="button" class="btn btn-secondary" @click="hideSlotDetailsModal">
-              <i class="fa fa-close" aria-hidden="true"></i> Close</button>
-          </div>
-        </div>
-      </b-modal>
       <b-modal ref="slotCreateModal" id="slotCreateModal" size="lg" @show="clearSlotCreateModal" @hide="slotCreateModalClosed">
         <div slot="modal-title">
           <h5>Create slot</h5>
@@ -294,78 +227,6 @@
           </div>
         </div>
       </b-modal>
-      <b-modal ref="slotRegisterModal" id="slotRegisterModal" v-if="slotDetails" @shown="clearSlotRegistrationComment" @hide="slotRegisterModalClosed">
-        <div slot="modal-title">
-          <h5>Register for slot #{{ slotDetails.orderNumber + 1 }} {{ slotDetails.title }}</h5>
-        </div>
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-12">Confirm registration as
-              <span class="font-weight-bold">{{ slotDetails.title }}</span>?</div>
-          </div>
-          <hr class="my-4">
-          <div class="row">
-            <div class="col col-12">
-              <form @submit.stop.prevent="submitSlotRegistration">
-                <b-form-input type="text" maxlength="128" placeholder="Optional comment to the mission creator (max. 128 char)" v-model="slotRegistrationComment"></b-form-input>
-              </form>
-            </div>
-          </div>
-        </div>
-        <div slot="modal-footer">
-          <div class="btn-group" role="group" aria-label="Mission slot register actions">
-            <button type="button" class="btn btn-success" @click="submitSlotRegistration" :disabled="slotDetails.assignee">
-              <i class="fa fa-check" aria-hidden="true"></i> Confirm
-            </button>
-            <button type="button" class="btn btn-secondary" @click="hideSlotRegisterModal">
-              <i class="fa fa-close" aria-hidden="true"></i> Cancel
-            </button>
-          </div>
-        </div>
-      </b-modal>
-      <b-modal ref="slotDeletionModal" id="slotDeletionModal" @hide="slotDeletionModalClosed" v-if="slotDetails">
-        <div slot="modal-title">
-          <h5>Deletion of slot #{{ slotDetails.orderNumber + 1 }} {{ slotDetails.title }}</h5>
-        </div>
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-12">Confirm deletion of slot
-              <span class="font-weight-bold">#{{ slotDetails.orderNumber + 1}} {{ slotDetails.title }}</span>?</div>
-          </div>
-        </div>
-        <div slot="modal-footer">
-          <div class="btn-group" role="group" aria-label="Mission slot deletion actions">
-            <button type="button" class="btn btn-danger" @click="submitSlotDeletion">
-              <i class="fa fa-trash" aria-hidden="true"></i> Delete slot
-            </button>
-            <button type="button" class="btn btn-secondary" @click="hideSlotDeletionModal">
-              <i class="fa fa-close" aria-hidden="true"></i> Cancel
-            </button>
-          </div>
-        </div>
-      </b-modal>
-      <b-modal ref="missionDeletionModal" id="missionDeletionModal" v-if="missionDetails">
-        <div slot="modal-title">
-          <h5>Deletion of mission</h5>
-        </div>
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-12">Confirm deletion of
-              <span class="font-weight-bold">{{ missionDetails.title }}</span> mission?
-            </div>
-          </div>
-        </div>
-        <div slot="modal-footer">
-          <div class="btn-group" role="group" aria-label="Mission deletion actions">
-            <button type="button" class="btn btn-danger" @click="submitMissionDeletion">
-              <i class="fa fa-trash" aria-hidden="true"></i> Delete mission
-            </button>
-            <button type="button" class="btn btn-secondary" @click="hideMissionDeletionModal">
-              <i class="fa fa-close" aria-hidden="true"></i> Cancel
-            </button>
-          </div>
-        </div>
-      </b-modal>
       <b-modal ref="missionEditModal" id="missionEditModal" size="lg" @show="populateMissionEditModal">
         <div slot="modal-title">
           <h5>Edit mission</h5>
@@ -456,52 +317,9 @@
           </div>
         </div>
       </b-modal>
-      <b-modal ref="missionSlotUnregisterModal" id="missionSlotUnregisterModal" v-if="slotDetails" @hide="slotUnregisterModalClosed">
-        <div slot="modal-title">
-          <h5>Unregister from slot #{{ slotDetails.orderNumber + 1 }} {{ slotDetails.title }}</h5>
-        </div>
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-12">Confirm removal of registration for slot
-              <span class="font-weight-bold">{{ slotDetails.title }}</span>?
-            </div>
-          </div>
-          <div class="row" v-show="slotDetails.assignee && slotDetails.assignee.uid === user.uid">
-            <div class="col-12">This will also remove you as the assignee of the slot.</div>
-          </div>
-        </div>
-        <div slot="modal-footer">
-          <div class="btn-group" role="group" aria-label="Mission slot unregister actions">
-            <button type="button" class="btn btn-warning" @click="submitMissionSlotUnregister">
-              <i class="fa fa-eraser" aria-hidden="true"></i> Delete registration
-            </button>
-            <button type="button" class="btn btn-secondary" @click="hideMissionSlotUnregisterModal">
-              <i class="fa fa-close" aria-hidden="true"></i> Cancel
-            </button>
-          </div>
-        </div>
-      </b-modal>
-      <b-modal ref="slotRegistrationConfirmationModal" id="slotRegistrationConfirmationModal" @hide="slotRegistrationConfirmationModalClosed">
-        <div slot="modal-title">
-          <h5>{{ registrationAssign ? 'Assign' : 'Unassign' }} {{ registrationUser }}'s slot</h5>
-        </div>
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-12">Confirm {{ registrationAssign ? 'assigment' : 'removal' }} of {{ registrationUser }}'s slot</div>
-          </div>
-        </div>
-        <div slot="modal-footer">
-          <div class="btn-group" role="group" aria-label="Mission slot registration confirmation actions">
-            <button type="button" :class="registrationButtonClass" @click="submitRegistrationConfirmation">
-              <i :class="registrationIcon" aria-hidden="true"></i> {{ registrationAssign ? 'Assign' : 'Unassign' }}
-            </button>
-            <button type="button" class="btn btn-secondary" @click="hideSlotRegistrationConfirmationModal">
-              <i class="fa fa-close" aria-hidden="true"></i> Cancel
-            </button>
-          </div>
-        </div>
-      </b-modal>
       <mission-create-slot-group-modal></mission-create-slot-group-modal>
+      <mission-slot-details-modal></mission-slot-details-modal>
+      <mission-slot-registration-modal></mission-slot-registration-modal>
     </div>
     <!-- End of modals -->
     <!-- Begin of overlays -->
@@ -531,16 +349,18 @@
 
 <script>
 import * as _ from 'lodash'
-import MissionSlotlist from 'components/missions/MissionSlotlist.vue'
-import MissionSlotRegistrations from 'components/MissionSlotRegistrations.vue'
 import MissionCreateSlotGroupModal from 'components/missions/modals/MissionCreateSlotGroupModal.vue'
+import MissionSlotDetailsModal from 'components/missions/modals/MissionSlotDetailsModal.vue'
+import MissionSlotlist from 'components/missions/MissionSlotlist.vue'
+import MissionSlotRegistrationModal from 'components/missions/modals/MissionSlotRegistrationModal.vue'
 import utils from '../utils'
 
 export default {
   components: {
+    MissionCreateSlotGroupModal,
+    MissionSlotDetailsModal,
     MissionSlotlist,
-    MissionSlotRegistrations,
-    MissionCreateSlotGroupModal
+    MissionSlotRegistrationModal
   },
   data() {
     return {

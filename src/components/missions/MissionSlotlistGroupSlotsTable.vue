@@ -11,7 +11,7 @@
         </tr>
       </thead>
       <tbody>
-        <mission-slotlist-group-slots-row v-for="missionSlot in missionSlots" :missionSlot="missionSlot" :key="missionSlot.uid"></mission-slotlist-group-slots-row>
+        <mission-slotlist-group-slots-row v-for="missionSlot in missionSlots" :missionSlotDetails="missionSlot" :key="missionSlot.uid"></mission-slotlist-group-slots-row>
       </tbody>
       <tfoot v-show="missionSlots.length >= 10">
         <tr>

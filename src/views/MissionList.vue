@@ -2,18 +2,21 @@
   <div>
     <mission-list-table v-if="missions"></mission-list-table>
     <nav v-show="missionsPageCount > 1">
-      <paginate ref="" :pageCount="missionsPageCount" :initial-page="0" :clickHandler="missionsPaginate" :container-class="'pagination justify-content-center'" :page-class="'page-item'" :page-link-class="'page-link'" :prev-class="'page-item'" :prev-link-class="'page-link'" :next-class="'page-item'" :next-link-class="'page-link'"></paginate>
+      <paginate ref="missionsPaginate" :pageCount="missionsPageCount" :initial-page="1" :clickHandler="missionsPaginate" :container-class="'pagination justify-content-center'" :page-class="'page-item'" :page-link-class="'page-link'" :prev-class="'page-item'" :prev-link-class="'page-link'" :next-class="'page-item'" :next-link-class="'page-link'"></paginate>
     </nav>
-    <div class="text-center" v-show="loggedIn">
-      <router-link tag="button" type="button" class="btn btn-success" :to="{name: 'missionCreator'}">
+    <div class="text-center">
+      <router-link tag="button" v-show="loggedIn" type="button" class="btn btn-success" :to="{name: 'missionCreator'}">
         <i class="fa fa-plus" aria-hidden="true"></i> Create mission
       </router-link>
+      <b-btn @click="missionsPaginate(1)">
+        <i class="fa fa-refresh" aria-hidden="true"></i> Refresh
+      </b-btn>
     </div>
   </div>
 </template>
 
 <script>
-import MissionListTable from '../components/MissionListTable.vue'
+import MissionListTable from '../components/missions/MissionListTable.vue'
 import utils from '../utils'
 
 export default {
