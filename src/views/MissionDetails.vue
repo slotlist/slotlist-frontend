@@ -317,8 +317,8 @@
           </div>
         </div>
       </b-modal>
-      <mission-create-slot-group-modal></mission-create-slot-group-modal>
       <mission-slot-details-modal></mission-slot-details-modal>
+      <mission-slot-group-create-modal></mission-slot-group-create-modal>
       <mission-slot-registration-modal></mission-slot-registration-modal>
     </div>
     <!-- End of modals -->
@@ -349,16 +349,16 @@
 
 <script>
 import * as _ from 'lodash'
-import MissionCreateSlotGroupModal from 'components/missions/modals/MissionCreateSlotGroupModal.vue'
 import MissionSlotDetailsModal from 'components/missions/modals/MissionSlotDetailsModal.vue'
+import MissionSlotGroupCreateModal from 'components/missions/modals/MissionSlotGroupCreateModal.vue'
 import MissionSlotlist from 'components/missions/MissionSlotlist.vue'
 import MissionSlotRegistrationModal from 'components/missions/modals/MissionSlotRegistrationModal.vue'
 import utils from '../utils'
 
 export default {
   components: {
-    MissionCreateSlotGroupModal,
     MissionSlotDetailsModal,
+    MissionSlotGroupCreateModal,
     MissionSlotlist,
     MissionSlotRegistrationModal
   },

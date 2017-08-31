@@ -3,7 +3,7 @@
     <mission-slotlist-group v-for="missionSlotGroup in missionSlotGroups" :missionSlotGroup="missionSlotGroup" :key="missionSlotGroup.uid"></mission-slotlist-group>
     <br>
     <div class="text-center">
-      <b-btn variant="success" v-if="isMissionEditor" v-b-modal.createMissionSlotGroupModal>
+      <b-btn variant="success" v-if="isMissionEditor" v-b-modal.missionSlotGroupCreateModal>
         <i class="fa fa-plus" aria-hidden="true"></i> Create slot group
       </b-btn>
       <b-btn @click="refreshMissionSlotlist">
