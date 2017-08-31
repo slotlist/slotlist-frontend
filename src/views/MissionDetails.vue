@@ -261,28 +261,6 @@
       <mission-slot-registration-modal></mission-slot-registration-modal>
     </div>
     <!-- End of modals -->
-    <!-- Begin of overlays -->
-    <div>
-      <div v-if="registeringForSlot">
-        <loading-overlay message="Registering for Mission slot..."></loading-overlay>
-      </div>
-      <div v-if="unregisteringFromSlot">
-        <loading-overlay message="Unregistering from Mission slot..."></loading-overlay>
-      </div>
-      <div v-if="creatingSlot">
-        <loading-overlay message="Creating Mission slot..."></loading-overlay>
-      </div>
-      <div v-if="editingSlot">
-        <loading-overlay message="Editing Mission slot..."></loading-overlay>
-      </div>
-      <div v-if="deletingSlot">
-        <loading-overlay message="Deleting Mission slot..."></loading-overlay>
-      </div>
-      <div v-if="modifyingSlotRegistration">
-        <loading-overlay message="Modifying Mission slot registration..."></loading-overlay>
-      </div>
-    </div>
-    <!-- End of overlays -->
   </div>
 </template>
 
@@ -345,7 +323,6 @@ export default {
           value: 4
         }
       ],
-      slotRegistrationComment: null,
       missionEditTitle: null,
       missionEditShortDescription: null,
       missionEditDescription: null,
@@ -357,13 +334,6 @@ export default {
       missionEditTechSupport: null,
       missionEditRules: null,
       missionEditVisibility: null,
-      slotCreateOrderNumber: null,
-      slotCreateTitle: null,
-      slotCreateDifficulty: null,
-      slotCreateShortDescription: null,
-      slotCreateDescription: null,
-      slotCreateRestricted: false,
-      slotCreateReserve: false,
       slotEditOrderNumber: null,
       slotEditTitle: null,
       slotEditDifficulty: null,
@@ -375,35 +345,11 @@ export default {
     }
   },
   computed: {
-    loaded() {
-      return this.$store.getters.missionDetailsLoaded
-    },
     loggedIn() {
       return this.$store.getters.loggedIn
     },
     user() {
       return this.$store.getters.user
-    },
-    slotlistLoaded() {
-      return this.$store.getters.missionSlotlistLoaded
-    },
-    registeringForSlot() {
-      return this.$store.getters.registeringForMissionSlot
-    },
-    unregisteringFromSlot() {
-      return this.$store.getters.unregisteringFromMissionSlot
-    },
-    creatingSlot() {
-      return this.$store.getters.creatingMissionSlot
-    },
-    editingSlot() {
-      return this.$store.getters.editingMissionSlot
-    },
-    deletingSlot() {
-      return this.$store.getters.deletingMissionSlot
-    },
-    modifyingSlotRegistration() {
-      return this.$store.getters.modifyingMissionSlotRegistration
     },
     isMissionEditor() {
       return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`, `mission.${this.$route.params.missionSlug}.editor`])
@@ -422,27 +368,6 @@ export default {
     },
     optionalRules() {
       return this.missionDetails.rules || "<span class='text-muted font-italic'>not specified</span>"
-    },
-    slotDetails() {
-      return this.$store.getters.missionSlotDetails
-    },
-    showSlotDetails() {
-      return this.$store.getters.showMissionSlotDetails
-    },
-    showSlotCreate() {
-      return this.$store.getters.showMissionSlotCreate
-    },
-    showSlotRegister() {
-      return this.$store.getters.showMissionSlotRegister
-    },
-    showSlotDeletion() {
-      return this.$store.getters.showMissionSlotDeletion
-    },
-    showSlotUnregister() {
-      return this.$store.getters.showMissionSlotUnregister
-    },
-    showSlotRegistrationConfirmation() {
-      return this.$store.getters.showMissionSlotRegistrationConfirmation
     },
     registrationAssign() {
       return this.$store.getters.showMissionSlotRegistrationConfirmationAssign
@@ -476,49 +401,6 @@ export default {
         default:
           return `<span class="text-muted font-italic"><i class="fa fa-question-circle" aria-hidden="true"></i> unknown</span>`
       }
-    },
-    optionalAssignee() {
-      return _.isNil(this.slotDetails.assignee) ? '<span class="text-muted font-italic">not assigned</span>' : this.formatUserWithTag(this.slotDetails.assignee)
-    },
-    difficultyColor() {
-      switch (this.slotDetails.difficulty) {
-        case 0: return 'text-muted'
-        case 1: return 'text-info'
-        case 2: return 'text-primary'
-        case 3: return 'text-warning'
-        case 4: return 'text-danger'
-        default: return ''
-      }
-    },
-    difficultyIcon() {
-      return `${this.difficultyColor} fa fa-thermometer-${this.slotDetails.difficulty} fa-lg`
-    },
-    difficultyText() {
-      switch (this.slotDetails.difficulty) {
-        case 0: return 'Beginner'
-        case 1: return 'Easy'
-        case 2: return 'Medium'
-        case 3: return 'Advanced'
-        case 4: return 'Expert'
-        default: return ''
-      }
-    },
-    slotStatus() {
-      return `${this.slotRestricted} - ${this.slotReserve}`
-    },
-    slotRestricted() {
-      if (this.slotDetails.restricted) {
-        return '<span class="text-primary font-italic">restricted</span>'
-      }
-
-      return '<span>unrestricted</span>'
-    },
-    slotReserve() {
-      if (this.slotDetails.reserve) {
-        return '<span class="text-muted font-italic">reserve</span>'
-      }
-
-      return '<span>regular</span>'
     },
     missionEditTitleState() {
       return _.isNil(this.missionEditTitle) || _.isEmpty(this.missionEditTitle) ? 'danger' : 'success'
@@ -615,48 +497,6 @@ export default {
 
       return options
     },
-    slotCreateOrderNumberState() {
-      return _.isNil(this.slotCreateOrderNumber) && !_.isNumber(this.slotCreateOrderNumber) ? 'danger' : 'success'
-    },
-    slotCreateOrderNumberFeedback() {
-      return _.isNil(this.slotCreateOrderNumber) && !_.isNumber(this.slotCreateOrderNumber) ? 'Please enter an order number' : ''
-    },
-    slotCreateTitleState() {
-      return _.isNil(this.slotCreateTitle) || _.isEmpty(this.slotCreateTitle) ? 'danger' : 'success'
-    },
-    slotCreateTitleFeedback() {
-      return _.isNil(this.slotCreateTitle) || _.isEmpty(this.slotCreateTitle) ? 'Please enter a title' : ''
-    },
-    slotCreateDifficultyState() {
-      return _.isNil(this.slotCreateDifficulty) || !_.isNumber(this.slotCreateDifficulty) ? 'danger' : 'success'
-    },
-    slotCreateDifficultyFeedback() {
-      return _.isNil(this.slotCreateDifficulty) || !_.isNumber(this.slotCreateDifficulty) ? 'Please select a difficulty' : ''
-    },
-    slotCreateRestrictedState() {
-      return 'success'
-    },
-    slotCreateRestrictedFeedback() {
-      return ''
-    },
-    slotCreateReserveState() {
-      return 'success'
-    },
-    slotCreateReserveFeedback() {
-      return ''
-    },
-    slotCreateShortDescriptionState() {
-      return 'success'
-    },
-    slotCreateShortDescriptionFeedback() {
-      return ''
-    },
-    slotCreateDescriptionState() {
-      return 'success'
-    },
-    slotCreateDescriptionFeedback() {
-      return ''
-    },
     slotEditOrderNumberState() {
       return _.isNil(this.slotEditOrderNumber) && !_.isNumber(this.slotEditOrderNumber) ? 'danger' : 'success'
     },
@@ -699,50 +539,17 @@ export default {
     slotEditDescriptionFeedback() {
       return ''
     },
+    slotDetails() {
+      return this.$store.getters.missionSlotDetails
+    }
   },
   methods: {
-    slotCreateOrderNumberFormatter(val) {
-      if (_.isNumber(val)) {
-        return val
-      }
-
-      return parseInt(val, 10)
-    },
     slotEditOrderNumberFormatter(val) {
       if (_.isNumber(val)) {
         return val
       }
 
       return parseInt(val, 10)
-    },
-    slotDetailsModalClosed() {
-      this.$store.dispatch('clearMissionSlotDetails')
-      this.$store.dispatch('clearMissionSlotRegistrations')
-    },
-    slotCreateModalClosed() {
-      this.$store.dispatch('clearMissionSlotCreate')
-    },
-    slotRegisterModalClosed() {
-      this.$store.dispatch('clearMissionSlotRegister')
-    },
-    slotUnregisterModalClosed() {
-      this.$store.dispatch('clearMissionSlotUnregister')
-    },
-    slotDetailsRegister() {
-      this.$refs.slotDetailsModal.hide()
-      this.$store.dispatch('showMissionSlotRegister', this.slotDetails)
-    },
-    slotDetailsUnregister() {
-      this.$refs.slotDetailsModal.hide()
-      this.$store.dispatch('showMissionSlotUnregister', this.slotDetails)
-    },
-    slotDetailsDelete() {
-      this.$refs.slotDetailsModal.hide()
-      this.$store.dispatch('showMissionSlotDeletion', this.slotDetails)
-    },
-    slotDetailsEdit() {
-      this.$refs.slotDetailsModal.hide()
-      this.$refs.slotEditModal.show()
     },
     hideSlotDetailsModal() {
       this.$refs.slotDetailsModal.hide()
