@@ -49,7 +49,7 @@ export default {
       missionSlotGroupCreateData: {
         description: null,
         orderNumber: 1,
-        title: ''
+        title: null
       }
     }
   },

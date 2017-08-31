@@ -15,12 +15,12 @@
 import MissionSlotRegistrationsTable from './MissionSlotRegistrationsTable.vue'
 
 export default {
-  props: [
-    'missionSlotDetails'
-  ],
   components: {
     MissionSlotRegistrationsTable
   },
+  props: [
+    'missionSlotDetails'
+  ],
   methods: {
     refreshMissionSlotRegistrations() {
       this.$store.dispatch('getMissionSlotRegistrations', {

@@ -4,7 +4,7 @@
     <div v-show="missionSlotGroup.description">{{ missionSlotGroup.description }}</div>
     <mission-slotlist-group-slots-table :missionSlots="missionSlotGroup.slots"></mission-slotlist-group-slots-table>
     <div class="text-center" v-if="isMissionEditor">
-      <b-btn variant="success" v-b-modal.createMissionSlotModal>
+      <b-btn variant="success" @click="setMissionSlotGroupDetails" v-b-modal.missionSlotCreateModal>
         <i class="fa fa-plus" aria-hidden="true"></i> Create slot
       </b-btn>
       <click-confirm yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: 'Delete slot group?', yes: 'Confirm', no: 'Cancel'}">
@@ -38,6 +38,9 @@ export default {
         slotGroupUid: this.missionSlotGroup.uid,
         slotGroupTitle: this.missionSlotGroup.title
       })
+    },
+    setMissionSlotGroupDetails() {
+      this.$store.dispatch('setMissionSlotGroupDetails', this.missionSlotGroup);
     }
   }
 }

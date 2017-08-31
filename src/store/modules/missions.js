@@ -14,6 +14,7 @@ const state = {
   missionDetails: null,
   missions: null,
   missionSlotDetails: null,
+  missionSlotGroupDetails: null,
   missionSlotGroups: null,
   missionSlotlistFilter: {},
   missionSlotRegistrationDetails: null,
@@ -34,6 +35,9 @@ const getters = {
   },
   missionSlotDetails() {
     return state.missionSlotDetails
+  },
+  missionSlotGroupDetails() {
+    return state.missionSlotGroupDetails
   },
   missionSlotGroups() {
     if (_.isEmpty(_.keys(state.missionSlotlistFilter))) {
@@ -147,6 +151,11 @@ const actions = {
   clearMissionSlotDetails({ commit }) {
     commit({
       type: 'clearMissionSlotDetails'
+    })
+  },
+  clearMissionSlotGroupDetails({ commit }) {
+    commit({
+      type: 'clearMissionSlotGroupDetails'
     })
   },
   createMission({ dispatch }, payload) {
@@ -886,6 +895,12 @@ const actions = {
       slotDetails: payload
     })
   },
+  setMissionSlotGroupDetails({ commit }, payload) {
+    commit({
+      type: 'setMissionSlotGroupDetails',
+      slotGroupDetails: payload
+    })
+  },
   unregisterFromMissionSlot({ dispatch }, payload) {
     dispatch('startWorking', 'Unregistering from slot...')
 
@@ -950,12 +965,16 @@ const mutations = {
   clearMissionDetails(state) {
     state.missionDetails = null
     state.missionSlotDetails = null
+    state.missionSlotGroupDetails = null
     state.missionSlotGroups = null
     state.missionSlotRegistrations = null
     state.totalMissionSlotRegistrations = 0
   },
   clearMissionSlotDetails(state) {
     state.missionSlotDetails = null
+  },
+  clearMissionSlotGroupDetails(state) {
+    state.missionSlotGroupDetails = null
   },
   setMissionDetails(state, payload) {
     state.missionDetails = payload.mission
@@ -971,6 +990,9 @@ const mutations = {
   },
   setMissionSlotDetails(state, payload) {
     state.missionSlotDetails = payload.slotDetails
+  },
+  setMissionSlotGroupDetails(state, payload) {
+    state.missionSlotGroupDetails = payload.slotGroupDetails
   },
   setMissionSlotlist(state, payload) {
     state.missionSlotGroups = payload.slotGroups

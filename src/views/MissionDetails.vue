@@ -103,68 +103,6 @@
     <!-- End of content -->
     <!-- Begin of modals -->
     <div>
-      <b-modal ref="slotCreateModal" id="slotCreateModal" size="lg" @show="clearSlotCreateModal" @hide="slotCreateModalClosed">
-        <div slot="modal-title">
-          <h5>Create slot</h5>
-        </div>
-        <div class="container-fluid">
-          <b-form @submit.stop.prevent="submitSlotCreate">
-            <div class="row">
-              <div class="col">
-                <b-form-fieldset label="Title" :state="slotCreateTitleState" :feedback="slotCreateTitleFeedback">
-                  <b-form-input v-model="slotCreateTitle" type="text" required></b-form-input>
-                </b-form-fieldset>
-              </div>
-              <div class="col">
-                <b-form-fieldset label="Short description <em>(optional)</em>" :state="slotCreateShortDescriptionState" :feedback="slotCreateShortDescriptionFeedback">
-                  <b-form-input v-model="slotCreateShortDescription" textarea></b-form-input>
-                </b-form-fieldset>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <b-form-fieldset label="Order number" description="Starts at 0 (e.g. orderNumber 0 displayed as slot #1)" :state="slotCreateOrderNumberState" :feedback="slotCreateOrderNumberFeedback">
-                  <b-form-input v-model="slotCreateOrderNumber" type="number" required :formatter="slotCreateOrderNumberFormatter"></b-form-input>
-                </b-form-fieldset>
-              </div>
-              <div class="col">
-                <b-form-fieldset label="Difficulty" :state="slotCreateDifficultyState" :feedback="slotCreateDifficultyFeedback">
-                  <b-form-select v-model="slotCreateDifficulty" :options="slotDifficultyOptions" class="mb-3" required></b-form-select>
-                </b-form-fieldset>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <b-form-fieldset label="Restricted slot" description="Restricted slots are not available to the public, but only to selected players" :state="slotCreateRestrictedState" :feedback="slotCreateRestrictedFeedback">
-                  <b-form-checkbox v-model="slotCreateRestricted"></b-form-checkbox>
-                </b-form-fieldset>
-              </div>
-              <div class="col">
-                <b-form-fieldset label="Reserve slot" description="Reserve slots will only be filled if all other slots have been taken before" :state="slotCreateReserveState" :feedback="slotCreateReserveFeedback">
-                  <b-form-checkbox v-model="slotCreateReserve"></b-form-checkbox>
-                </b-form-fieldset>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <b-form-fieldset label="Description <em>(optional)</em>" :state="slotCreateDescriptionState" :feedback="slotCreateDescriptionFeedback">
-                  <quill-editor v-model="slotCreateDescription" ref="slotCreateDescriptionEditor" :options="editorOptions"></quill-editor>
-                </b-form-fieldset>
-              </div>
-            </div>
-          </b-form>
-        </div>
-        <div slot="modal-footer">
-          <div class="btn-group" role="group" aria-label="Mission slot create actions">
-            <button type="button" class="btn btn-success" @click="submitSlotCreate">
-              <i class="fa fa-plus" aria-hidden="true"></i> Submit
-            </button>
-            <button type="button" class="btn btn-secondary" @click="hideSlotCreateModal">
-              <i class="fa fa-close" aria-hidden="true"></i> Cancel
-            </button>
-          </div>
-        </div>
-      </b-modal>
       <b-modal ref="slotEditModal" id="slotEditModal" v-if="slotDetails" size="lg" @show="populateSlotEditModal">
         <div slot="modal-title">
           <h5>Edit slot #{{ slotDetails.orderNumber }} {{ slotDetails.title }}</h5>
@@ -317,6 +255,7 @@
           </div>
         </div>
       </b-modal>
+      <mission-slot-create-modal></mission-slot-create-modal>
       <mission-slot-details-modal></mission-slot-details-modal>
       <mission-slot-group-create-modal></mission-slot-group-create-modal>
       <mission-slot-registration-modal></mission-slot-registration-modal>
@@ -349,6 +288,7 @@
 
 <script>
 import * as _ from 'lodash'
+import MissionSlotCreateModal from 'components/missions/modals/MissionSlotCreateModal.vue'
 import MissionSlotDetailsModal from 'components/missions/modals/MissionSlotDetailsModal.vue'
 import MissionSlotGroupCreateModal from 'components/missions/modals/MissionSlotGroupCreateModal.vue'
 import MissionSlotlist from 'components/missions/MissionSlotlist.vue'
@@ -357,6 +297,7 @@ import utils from '../utils'
 
 export default {
   components: {
+    MissionSlotCreateModal,
     MissionSlotDetailsModal,
     MissionSlotGroupCreateModal,
     MissionSlotlist,

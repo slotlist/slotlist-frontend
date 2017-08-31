@@ -160,7 +160,7 @@ export default {
       })
     },
     hideMissionSlotDetailsModal() {
-      this.$refs.missionSlotDetailsModal.hide();
+      this.$refs.missionSlotDetailsModal.hide()
     }
   }
 }

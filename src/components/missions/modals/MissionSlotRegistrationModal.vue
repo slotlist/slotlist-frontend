@@ -51,17 +51,17 @@ export default {
     clearMissionSlotRegistrationModalData() {
       this.missionSlotRegistrationData = {
         comment: null
-      };
+      }
     },
     hideMissionSlotRegistrationModal() {
-      this.$refs.missionSlotRegistrationModal.hide();
+      this.$refs.missionSlotRegistrationModal.hide()
     },
     registerForMissionSlot() {
       if (_.isString(this.missionSlotRegistrationData.comment) && _.isEmpty(this.missionSlotRegistrationData.comment)) {
         this.missionSlotRegistrationData.comment = null
       }
 
-      this.hideMissionSlotRegistrationModal();
+      this.hideMissionSlotRegistrationModal()
 
       this.$store.dispatch('registerForMissionSlot', {
         missionSlug: this.$route.params.missionSlug,
