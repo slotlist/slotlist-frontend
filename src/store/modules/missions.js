@@ -19,6 +19,7 @@ const state = {
   missionSlotlistFilter: {},
   missionSlotRegistrationDetails: null,
   missionSlotRegistrations: null,
+  missionSlugAvailable: false,
   totalMissions: 0,
   totalMissionSlotRegistrations: 0
 }
