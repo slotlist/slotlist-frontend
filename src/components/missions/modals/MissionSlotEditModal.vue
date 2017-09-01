@@ -51,7 +51,7 @@
         </b-form>
       </div>
       <div slot="modal-footer">
-        <div class="btn-group" role="group" aria-label="Mission slot create actions">
+        <div class="btn-group" role="group" aria-label="Mission slot edit actions">
           <b-btn variant="success" @click="editMissionSlot">
             <i class="fa fa-plus" aria-hidden="true"></i> Submit
           </b-btn>
