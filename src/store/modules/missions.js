@@ -238,12 +238,12 @@ const actions = {
           throw 'Received invalid mission slot'
         }
 
-        dispatch('getMissionSlotlist', payload.missionSlug)
+        dispatch('getMissionSlotlist', { missionSlug: payload.missionSlug })
 
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully created slot <strong>#${payload.slotDetails.orderNumber + 1} ${payload.slotDetails.title}</strong>`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully created slot <strong>#${payload.slotDetails.orderNumber} ${payload.slotDetails.title}</strong>`
         })
       }).catch((error) => {
         dispatch('stopWorking')
@@ -253,21 +253,21 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create slot <strong>#${payload.slotDetails.orderNumber + 1} ${payload.slotDetails.title}</strong> - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create slot <strong>#${payload.slotDetails.orderNumber} ${payload.slotDetails.title}</strong> - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('createMissionSlot', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create slot <strong>#${payload.slotDetails.orderNumber + 1} ${payload.slotDetails.title}</strong> - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create slot <strong>#${payload.slotDetails.orderNumber} ${payload.slotDetails.title}</strong> - Request failed`
           })
         } else {
           console.error('createMissionSlot', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create slot <strong>#${payload.slotDetails.orderNumber + 1} ${payload.slotDetails.title}</strong> - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create slot <strong>#${payload.slotDetails.orderNumber} ${payload.slotDetails.title}</strong> - Something failed...`
           })
         }
       })
@@ -348,7 +348,7 @@ const actions = {
           throw 'Received invalid mission slot deletion'
         }
 
-        dispatch('getMissionSlotlist', payload.missionSlug)
+        dispatch('getMissionSlotlist', { missionSlug: payload.missionSlug })
 
         dispatch('showAlert', {
           showAlert: true,
@@ -402,7 +402,7 @@ const actions = {
           throw 'Received invalid mission slot group deletion'
         }
 
-        dispatch('getMissionSlotlist', payload.missionSlug)
+        dispatch('getMissionSlotlist', { missionSlug: payload.missionSlug })
 
         dispatch('showAlert', {
           showAlert: true,
@@ -515,7 +515,7 @@ const actions = {
           throw 'Received invalid mission slot'
         }
 
-        dispatch('getMissionSlotlist', payload.missionSlug)
+        dispatch('getMissionSlotlist', { missionSlug: payload.missionSlug })
 
         dispatch('showAlert', {
           showAlert: true,
@@ -800,7 +800,7 @@ const actions = {
           throw 'Received invalid mission slot registration'
         }
 
-        dispatch('getMissionSlotlist', payload.missionSlug)
+        dispatch('getMissionSlotlist', { missionSlug: payload.missionSlug })
 
         dispatch('showAlert', {
           showAlert: true,
@@ -856,7 +856,7 @@ const actions = {
           throw 'Received invalid mission slot registration'
         }
 
-        dispatch('getMissionSlotlist', payload.missionSlug)
+        dispatch('getMissionSlotlist', { missionSlug: payload.missionSlug })
 
         dispatch('showAlert', {
           showAlert: true,
@@ -922,7 +922,7 @@ const actions = {
           throw 'Received invalid mission slot registration deletion'
         }
 
-        dispatch('getMissionSlotlist', payload.missionSlug)
+        dispatch('getMissionSlotlist', { missionSlug: payload.missionSlug })
 
         dispatch('showAlert', {
           showAlert: true,

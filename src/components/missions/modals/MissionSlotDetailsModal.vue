@@ -56,7 +56,7 @@
               <i class="fa fa-eraser" aria-hidden="true"></i> Unregister
             </b-btn>
           </click-confirm> -->
-          <b-btn variant="primary" v-if="isMissionEditor" @click="slotDetailsEdit">
+          <b-btn variant="primary" v-if="isMissionEditor" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotEditModal>
             <i class="fa fa-edit" aria-hidden="true"></i> Edit
           </b-btn>
           <!-- These buttons have been removed for now since they require the click-confirm popover, which doesn't appear to work correctly in modals -->

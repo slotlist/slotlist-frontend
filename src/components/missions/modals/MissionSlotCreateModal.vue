@@ -129,7 +129,7 @@ export default {
       return this.missionSlotCreateData.orderNumber < 0 ? 'danger' : 'success'
     },
     missionSlotCreateTitleFeedback() {
-      return _.isString(this.missionSlotCreateData.title) && !_.isEmpty(this.missionSlotCreateData.title) ? '' : 'Please enter a slot group title'
+      return _.isString(this.missionSlotCreateData.title) && !_.isEmpty(this.missionSlotCreateData.title) ? '' : 'Please enter a slot title'
     },
     missionSlotCreateTitleState() {
       return _.isString(this.missionSlotCreateData.title) && !_.isEmpty(this.missionSlotCreateData.title) ? 'success' : 'danger'
@@ -165,11 +165,11 @@ export default {
         this.missionSlotCreateData.shortDescription = null
       }
 
-      const payload = _.assign({ missionSlug: this.$route.params.missionSlug, slotGroupUid: this.missionSlotGroupDetails.uid }, this.missionSlotCreateData)
+      const payload = _.assign({ slotGroupUid: this.missionSlotGroupDetails.uid }, this.missionSlotCreateData)
 
       this.hideMissionSlotCreateModal()
 
-      this.$store.dispatch('createMissionSlot', payload)
+      this.$store.dispatch('createMissionSlot', { missionSlug: this.$route.params.missionSlug, slotDetails: payload })
     },
     missionSlotCreateOrderNumberFormatter(val) {
       if (_.isNumber(val)) {

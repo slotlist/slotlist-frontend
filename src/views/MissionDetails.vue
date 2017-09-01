@@ -103,68 +103,6 @@
     <!-- End of content -->
     <!-- Begin of modals -->
     <div>
-      <b-modal ref="slotEditModal" id="slotEditModal" v-if="slotDetails" size="lg" @show="populateSlotEditModal">
-        <div slot="modal-title">
-          <h5>Edit slot #{{ slotDetails.orderNumber }} {{ slotDetails.title }}</h5>
-        </div>
-        <div class="container-fluid">
-          <b-form @submit.stop.prevent="submitSlotEdit">
-            <div class="row">
-              <div class="col">
-                <b-form-fieldset label="Title" :state="slotEditTitleState" :feedback="slotEditTitleFeedback">
-                  <b-form-input v-model="slotEditTitle" type="text" required></b-form-input>
-                </b-form-fieldset>
-              </div>
-              <div class="col">
-                <b-form-fieldset label="Short description <em>(optional)</em>" :state="slotEditShortDescriptionState" :feedback="slotEditShortDescriptionFeedback">
-                  <b-form-input v-model="slotEditShortDescription" textarea></b-form-input>
-                </b-form-fieldset>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <b-form-fieldset label="Order number" description="Starts at 0 (e.g. orderNumber 0 displayed as slot #1)" :state="slotEditOrderNumberState" :feedback="slotEditOrderNumberFeedback">
-                  <b-form-input v-model="slotEditOrderNumber" type="number" required :formatter="slotEditOrderNumberFormatter"></b-form-input>
-                </b-form-fieldset>
-              </div>
-              <div class="col">
-                <b-form-fieldset label="Difficulty" :state="slotEditDifficultyState" :feedback="slotEditDifficultyFeedback">
-                  <b-form-select v-model="slotEditDifficulty" :options="slotDifficultyOptions" class="mb-3" required></b-form-select>
-                </b-form-fieldset>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <b-form-fieldset label="Restricted slot" description="Restricted slots are not available to the public, but only to selected players" :state="slotEditRestrictedState" :feedback="slotEditRestrictedFeedback">
-                  <b-form-checkbox v-model="slotEditRestricted"></b-form-checkbox>
-                </b-form-fieldset>
-              </div>
-              <div class="col">
-                <b-form-fieldset label="Reserve slot" description="Reserve slots will only be filled if all other slots have been taken before" :state="slotEditReserveState" :feedback="slotEditReserveFeedback">
-                  <b-form-checkbox v-model="slotEditReserve"></b-form-checkbox>
-                </b-form-fieldset>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <b-form-fieldset label="Description <em>(optional)</em>" :state="slotEditDescriptionState" :feedback="slotEditDescriptionFeedback">
-                  <quill-editor v-model="slotEditDescription" ref="slotEditDescriptionEditor" :options="editorOptions"></quill-editor>
-                </b-form-fieldset>
-              </div>
-            </div>
-          </b-form>
-        </div>
-        <div slot="modal-footer">
-          <div class="btn-group" role="group" aria-label="Mission slot edit actions">
-            <button type="button" class="btn btn-success" @click="submitSlotEdit">
-              <i class="fa fa-edit" aria-hidden="true"></i> Submit changes
-            </button>
-            <button type="button" class="btn btn-secondary" @click="hideSlotEditModal">
-              <i class="fa fa-close" aria-hidden="true"></i> Cancel
-            </button>
-          </div>
-        </div>
-      </b-modal>
       <b-modal ref="missionEditModal" id="missionEditModal" size="lg" @show="populateMissionEditModal">
         <div slot="modal-title">
           <h5>Edit mission</h5>
@@ -257,6 +195,7 @@
       </b-modal>
       <mission-slot-create-modal></mission-slot-create-modal>
       <mission-slot-details-modal></mission-slot-details-modal>
+      <mission-slot-edit-modal></mission-slot-edit-modal>
       <mission-slot-group-create-modal></mission-slot-group-create-modal>
       <mission-slot-registration-modal></mission-slot-registration-modal>
     </div>
@@ -268,6 +207,7 @@
 import * as _ from 'lodash'
 import MissionSlotCreateModal from 'components/missions/modals/MissionSlotCreateModal.vue'
 import MissionSlotDetailsModal from 'components/missions/modals/MissionSlotDetailsModal.vue'
+import MissionSlotEditModal from 'components/missions/modals/MissionSlotEditModal.vue'
 import MissionSlotGroupCreateModal from 'components/missions/modals/MissionSlotGroupCreateModal.vue'
 import MissionSlotlist from 'components/missions/MissionSlotlist.vue'
 import MissionSlotRegistrationModal from 'components/missions/modals/MissionSlotRegistrationModal.vue'
@@ -277,6 +217,7 @@ export default {
   components: {
     MissionSlotCreateModal,
     MissionSlotDetailsModal,
+    MissionSlotEditModal,
     MissionSlotGroupCreateModal,
     MissionSlotlist,
     MissionSlotRegistrationModal
@@ -334,13 +275,6 @@ export default {
       missionEditTechSupport: null,
       missionEditRules: null,
       missionEditVisibility: null,
-      slotEditOrderNumber: null,
-      slotEditTitle: null,
-      slotEditDifficulty: null,
-      slotEditShortDescription: null,
-      slotEditDescription: null,
-      slotEditRestricted: false,
-      slotEditReserve: false,
       missionSlotlistFilter: []
     }
   },
@@ -497,94 +431,11 @@ export default {
 
       return options
     },
-    slotEditOrderNumberState() {
-      return _.isNil(this.slotEditOrderNumber) && !_.isNumber(this.slotEditOrderNumber) ? 'danger' : 'success'
-    },
-    slotEditOrderNumberFeedback() {
-      return _.isNil(this.slotEditOrderNumber) && !_.isNumber(this.slotEditOrderNumber) ? 'Please enter an order number' : ''
-    },
-    slotEditTitleState() {
-      return _.isNil(this.slotEditTitle) || _.isEmpty(this.slotEditTitle) ? 'danger' : 'success'
-    },
-    slotEditTitleFeedback() {
-      return _.isNil(this.slotEditTitle) || _.isEmpty(this.slotEditTitle) ? 'Please enter a title' : ''
-    },
-    slotEditDifficultyState() {
-      return _.isNil(this.slotEditDifficulty) || !_.isNumber(this.slotEditDifficulty) ? 'danger' : 'success'
-    },
-    slotEditDifficultyFeedback() {
-      return _.isNil(this.slotEditDifficulty) || !_.isNumber(this.slotEditDifficulty) ? 'Please select a difficulty' : ''
-    },
-    slotEditRestrictedState() {
-      return 'success'
-    },
-    slotEditRestrictedFeedback() {
-      return ''
-    },
-    slotEditReserveState() {
-      return 'success'
-    },
-    slotEditReserveFeedback() {
-      return ''
-    },
-    slotEditShortDescriptionState() {
-      return 'success'
-    },
-    slotEditShortDescriptionFeedback() {
-      return ''
-    },
-    slotEditDescriptionState() {
-      return 'success'
-    },
-    slotEditDescriptionFeedback() {
-      return ''
-    },
     slotDetails() {
       return this.$store.getters.missionSlotDetails
     }
   },
   methods: {
-    slotEditOrderNumberFormatter(val) {
-      if (_.isNumber(val)) {
-        return val
-      }
-
-      return parseInt(val, 10)
-    },
-    hideSlotDetailsModal() {
-      this.$refs.slotDetailsModal.hide()
-    },
-    hideSlotRegisterModal() {
-      this.$refs.slotRegisterModal.hide()
-    },
-    submitSlotRegistration() {
-      this.$refs.slotRegisterModal.hide()
-      this.$store.dispatch('registerForMissionSlot', {
-        missionSlug: this.$route.params.missionSlug,
-        slotUid: this.slotDetails.uid,
-        slotOrderNumber: this.slotDetails.orderNumber,
-        slotTitle: this.slotDetails.title,
-        comment: this.slotRegistrationComment
-      })
-    },
-    clearSlotRegistrationComment() {
-      this.slotRegistrationComment = null
-    },
-    hideSlotDeletionModal() {
-      this.$refs.slotDeletionModal.hide()
-    },
-    slotDeletionModalClosed() {
-      this.$store.dispatch('clearMissionSlotDeletion')
-    },
-    submitSlotDeletion() {
-      this.$refs.slotDeletionModal.hide()
-      this.$store.dispatch('deleteMissionSlot', {
-        missionSlug: this.$route.params.missionSlug,
-        slotUid: this.slotDetails.uid,
-        slotOrderNumber: this.slotDetails.orderNumber,
-        slotTitle: this.slotDetails.title
-      })
-    },
     showMissionDeletionModal() {
       this.$refs.missionDeletionModal.show()
     },
@@ -657,118 +508,6 @@ export default {
         updatedMissionDetails
       })
     },
-    showMissionSlotUnregisterModal() {
-      this.$refs.missionSlotUnregisterModal.show()
-    },
-    hideMissionSlotUnregisterModal() {
-      this.$refs.missionSlotUnregisterModal.hide()
-    },
-    submitMissionSlotUnregister() {
-      this.$refs.missionSlotUnregisterModal.hide()
-      this.$store.dispatch('unregisterFromMissionSlot', {
-        missionSlug: this.$route.params.missionSlug,
-        slotUid: this.slotDetails.uid,
-        slotOrderNumber: this.slotDetails.orderNumber,
-        slotTitle: this.slotDetails.title,
-        registrationUid: this.slotDetails.registrationUid
-      })
-    },
-    populateSlotEditModal() {
-      this.slotEditOrderNumber = this.slotDetails.orderNumber
-      this.slotEditTitle = this.slotDetails.title
-      this.slotEditDifficulty = this.slotDetails.difficulty
-      this.slotEditShortDescription = this.slotDetails.shortDescription
-      this.slotEditDescription = this.slotDetails.description
-      this.slotEditRestricted = this.slotDetails.restricted
-      this.slotEditReserve = this.slotDetails.reserve
-    },
-    hideSlotEditModal() {
-      this.$refs.slotEditModal.hide()
-    },
-    submitSlotEdit() {
-      this.$refs.slotEditModal.hide()
-
-      const localSlotDetails = {
-        orderNumber: this.slotEditOrderNumber,
-        title: this.slotEditTitle,
-        difficulty: this.slotEditDifficulty,
-        shortDescription: this.slotEditShortDescription,
-        description: this.slotEditDescription,
-        restricted: this.slotEditRestricted,
-        reserve: this.slotEditReserve
-      }
-
-      if (_.isEmpty(localSlotDetails.shortDescription)) {
-        localSlotDetails.shortDescription = null
-      }
-      if (_.isEmpty(localSlotDetails.description)) {
-        localSlotDetails.description = null
-      }
-      if (_.isString(localSlotDetails.orderNumber)) {
-        localSlotDetails.orderNumber = parseInt(localSlotDetails.orderNumber, 10)
-      }
-      if (_.isString(localSlotDetails.difficulty)) {
-        localSlotDetails.difficulty = parseInt(localSlotDetails.difficulty, 10)
-      }
-
-      const updatedSlotDetails = {}
-      _.each(localSlotDetails, (value, key) => {
-        if (!_.isEqual(value, this.slotDetails[key])) {
-          updatedSlotDetails[key] = value
-        }
-      })
-
-      this.$store.dispatch('editMissionSlot', {
-        missionSlug: this.$route.params.missionSlug,
-        slotUid: this.slotDetails.uid,
-        slotOrderNumber: this.slotDetails.orderNumber,
-        slotTitle: this.slotDetails.title,
-        updatedSlotDetails
-      })
-    },
-    clearSlotCreateModal() {
-      this.slotCreateOrderNumber = null
-      this.slotCreateTitle = null
-      this.slotCreateDifficulty = null
-      this.slotCreateShortDescription = null
-      this.slotCreateDescription = null
-      this.slotCreateRestricted = false
-      this.slotCreateReserve = false
-    },
-    hideSlotCreateModal() {
-      this.$refs.slotCreateModal.hide()
-    },
-    submitSlotCreate() {
-      this.$refs.slotCreateModal.hide()
-
-      const slotDetails = {
-        orderNumber: this.slotCreateOrderNumber,
-        title: this.slotCreateTitle,
-        difficulty: this.slotCreateDifficulty,
-        shortDescription: this.slotCreateShortDescription,
-        description: this.slotCreateDescription,
-        restricted: this.slotCreateRestricted,
-        reserve: this.slotCreateReserve
-      }
-
-      if (_.isEmpty(slotDetails.shortDescription)) {
-        slotDetails.shortDescription = null
-      }
-      if (_.isEmpty(slotDetails.description)) {
-        slotDetails.description = null
-      }
-      if (_.isString(slotDetails.orderNumber)) {
-        slotDetails.orderNumber = parseInt(slotDetails.orderNumber, 10)
-      }
-      if (_.isString(slotDetails.difficulty)) {
-        slotDetails.difficulty = parseInt(slotDetails.difficulty, 10)
-      }
-
-      this.$store.dispatch('createMissionSlot', {
-        missionSlug: this.$route.params.missionSlug,
-        slotDetails
-      })
-    },
     slotRegistrationConfirmationModalClosed() {
       this.$store.dispatch('clearMissionSlotRegistrationConfirmation')
     },
@@ -797,26 +536,6 @@ export default {
         })
 
         this.$refs.slotDetailsModal.show()
-      }
-    },
-    showSlotCreate(val) {
-      if (val) {
-        this.$refs.slotCreateModal.show()
-      }
-    },
-    showSlotRegister(val) {
-      if (val) {
-        this.$refs.slotRegisterModal.show()
-      }
-    },
-    showSlotDeletion(val) {
-      if (val) {
-        this.$refs.slotDeletionModal.show()
-      }
-    },
-    showSlotUnregister(val) {
-      if (val) {
-        this.$refs.missionSlotUnregisterModal.show()
       }
     },
     showSlotRegistrationConfirmation(val) {
