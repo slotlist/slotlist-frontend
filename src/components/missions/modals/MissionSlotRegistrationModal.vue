@@ -19,7 +19,7 @@
       </div>
       <div slot="modal-footer">
         <div class="btn-group" role="group" aria-label="Mission slot registration actions">
-          <b-btn variant="success" @click="registerForMissionSlot" :disabled="missionSlotDetails.assignee">
+          <b-btn variant="success" @click="registerForMissionSlot" :disabled="missionSlotDetails.assignee ? true : false">
             <i class="fa fa-check" aria-hidden="true"></i> Confirm
           </b-btn>
           <b-btn @click="hideMissionSlotRegistrationModal">

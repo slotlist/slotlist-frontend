@@ -15,7 +15,7 @@
         <b-btn variant="primary" @click="prepareMissionSlotDetails" v-b-modal.missionSlotDetailsModal>
           <i class="fa fa-info" aria-hidden="true"></i> Details
         </b-btn>
-        <b-btn variant="success" v-if="loggedIn && !missionSlotDetails.registrationUid" :disabled="missionSlotDetails.assignee" @click="setMissionSlotDetails" v-b-modal.missionSlotRegistrationModal>
+        <b-btn variant="success" v-if="loggedIn && !missionSlotDetails.registrationUid" :disabled="missionSlotDetails.assignee ? true : false" @click="setMissionSlotDetails" v-b-modal.missionSlotRegistrationModal>
           <i class="fa fa-ticket" aria-hidden="true"></i> Register
         </b-btn>
         <click-confirm v-if="loggedIn && missionSlotDetails.registrationUid" yes-icon="fa fa-eraser" yes-class="btn btn-warning" button-size="sm" :messages="{title: 'Unregister from slot?', yes: 'Confirm', no: 'Cancel'}">

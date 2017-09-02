@@ -5,12 +5,12 @@
     <td>{{ formatDateTime(registration.createdAt) }}</td>
     <td class="text-center" v-html="formattedConfirmation"></td>
     <td class="text-center" v-if="isMissionEditor">
-      <button type="button" class="btn btn-success btn-sm" v-if="!registration.confirmed" @click="registrationAssign">
+      <b-btn v-if="!registration.confirmed" variant="success" size="sm" @click="modifyMissionSlotRegistration(true)">
         <i class="fa fa-check" aria-hidden="true"></i> Assign
-      </button>
-      <button type="button" class="btn btn-danger btn-sm" v-if="registration.confirmed" @click="registrationUnassign">
-        <i class="fa fa-check" aria-hidden="true"></i> Unassign
-      </button>
+      </b-btn>
+      <b-btn v-if="registration.confirmed" variant="danger" size="sm" @click="modifyMissionSlotRegistration(false)">
+        <i class="fa fa-trash" aria-hidden="true"></i> Unassign
+      </b-btn>
     </td>
   </tr>
 </template>
@@ -36,11 +36,13 @@ export default {
     }
   },
   methods: {
-    registrationAssign() {
-      this.$store.dispatch('showMissionSlotRegistrationConfirmation', { registration: this.registration, assign: true })
-    },
-    registrationUnassign() {
-      this.$store.dispatch('showMissionSlotRegistrationConfirmation', { registration: this.registration, assign: false })
+    modifyMissionSlotRegistration(confirm) {
+      this.$store.dispatch('modifyMissionSlotRegistration', {
+        missionSlug: this.$route.params.missionSlug,
+        slotUid: this.registration.slotUid,
+        registrationUid: this.registration.uid,
+        confirm: confirm
+      })
     }
   }
 }

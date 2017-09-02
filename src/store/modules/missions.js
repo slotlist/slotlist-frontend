@@ -779,7 +779,7 @@ const actions = {
         }
       })
   },
-  modifyMissionSlotRegistration({ dispatch }, payload) {
+  modifyMissionSlotRegistration({ dispatch, state }, payload) {
     dispatch('startWorking', 'Editing slot registration...')
 
     return MissionsApi.modifyMissionSlotRegistration(payload.missionSlug, payload.slotUid, payload.registrationUid, payload.confirm)
@@ -801,6 +801,12 @@ const actions = {
         }
 
         dispatch('getMissionSlotlist', { missionSlug: payload.missionSlug })
+        dispatch('getMissionSlotRegistrations', {
+          missionSlug: payload.missionSlug,
+          slotUid: state.missionSlotDetails.uid,
+          slotOrderNumber: state.missionSlotDetails.orderNumber,
+          slotTitle: state.missionSlotDetails.title
+        })
 
         dispatch('showAlert', {
           showAlert: true,
