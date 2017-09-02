@@ -11,6 +11,9 @@ export const v1 = {
   createMissionSlot(missionSlug, payload) {
     return axios.post(`/v1/missions/${missionSlug}/slots`, _.isArray(payload) ? payload : [payload])
   },
+  createMissionSlotGroup(missionSlug, payload) {
+    return axios.post(`/v1/missions/${missionSlug}/slotGroups`, payload)
+  },
   deleteMission(missionSlug) {
     return axios.delete(`/v1/missions/${missionSlug}`)
   },

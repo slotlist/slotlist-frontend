@@ -272,6 +272,60 @@ const actions = {
         }
       })
   },
+  createMissionSlotGroup({ dispatch }, payload) {
+    dispatch('startWorking', 'Creating slot group...')
+
+    return MissionsApi.createMissionSlotGroup(payload.missionSlug, payload.slotGroupDetails)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Creating mission slot group failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (_.isNil(response.data.slotGroup) || !_.isObject(response.data.slotGroup)) {
+          console.error(response)
+          throw 'Received invalid mission slot group'
+        }
+
+        dispatch('getMissionSlotlist', { missionSlug: payload.missionSlug })
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully created slot group <strong>#${payload.slotGroupDetails.orderNumber} ${payload.slotGroupDetails.title}</strong>`
+        })
+      }).catch((error) => {
+        dispatch('stopWorking')
+
+        if (error.response) {
+          console.error('createMissionSlotGroup', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create slot group <strong>#${payload.slotGroupDetails.orderNumber} ${payload.slotGroupDetails.title}</strong> - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('createMissionSlotGroup', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create slot group <strong>#${payload.slotGroupDetails.orderNumber} ${payload.slotGroupDetails.title}</strong> - Request failed`
+          })
+        } else {
+          console.error('createMissionSlotGroup', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create slot group <strong>#${payload.slotGroupDetails.orderNumber} ${payload.slotGroupDetails.title}</strong> - Something failed...`
+          })
+        }
+      })
+  },
   deleteMission({ dispatch }, payload) {
     dispatch('startWorking', 'Deleting mission...')
 

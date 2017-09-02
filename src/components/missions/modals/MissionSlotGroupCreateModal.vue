@@ -86,7 +86,7 @@ export default {
 
       this.hideMissionSlotGroupCreateModal();
 
-      console.log("createMissionSlotGroup", this.missionSlotGroupCreateData)
+      this.$store.dispatch("createMissionSlotGroup", { missionSlug: this.$route.params.missionSlug, slotGroupDetails: this.missionSlotGroupCreateData })
     },
     missionSlotGroupCreateOrderNumberFormatter(val) {
       if (_.isNumber(val)) {
