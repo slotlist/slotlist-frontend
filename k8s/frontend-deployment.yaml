@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: slotlist-frontend
+  namespace: slotlist
+spec:
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: slotlist-frontend
+    spec:
+      containers:
+        - name: slotlist-frontend
+          image: eu.gcr.io/slotlist-info/slotlist/frontend:latest
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: 10m
+              memory: 50Mi
+            requests:
+              cpu: 3m
+              memory: 25Mi
+          ports:
+            - containerPort: 80

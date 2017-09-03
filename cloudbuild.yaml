@@ -1,0 +1,19 @@
+steps:
+  - name: 'gcr.io/cloud-builders/nodejs/yarn'
+    args: [ 'install' ]
+  - name: 'gcr.io/cloud-builders/nodejs/yarn'
+    args: [ 'build' ]
+    secretEnv: ['SENTRY_DSN']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'build', '-t', 'eu.gcr.io/$PROJECT_ID/slotlist/frontend:latest', '.' ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'build', '-t', 'eu.gcr.io/$PROJECT_ID/slotlist/frontend:$COMMIT_SHA', '.' ]
+
+secrets:
+  - kmsKeyName: projects/slotlist-info/locations/global/keyRings/slotlist-info/cryptoKeys/slotlist-info-frontend
+    secretEnv:
+      SENTRY_DSN: CiQAyjh/q7NMEy4MALOONijhxCFyPm7ca+LhsfFInjgRL7hz/fcSYgApejw1+/3a1kXxJYk9z17rCO3VTR9chnpOnG0ReFCBKu/f3KTRTg3DOpPbdNzSWSyj/y0gy7t10pVXGqnbuPl8uUPLpDLeCbRs33rKBuSB8w5ruX6Ax4PK3i8N+0zMvQrH
+
+images:
+  - 'eu.gcr.io/$PROJECT_ID/slotlist/frontend:latest'
+  - 'eu.gcr.io/$PROJECT_ID/slotlist/frontend:$COMMIT_SHA'

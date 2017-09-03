@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: slotlist-frontend
+  namespace: slotlist
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+spec:
+  rules:
+    - host: staging.slotlist.info
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: slotlist-frontend
+              servicePort: http
