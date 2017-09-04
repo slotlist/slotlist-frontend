@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-jumbotron header="Privacy policy" lead="Last updated: <strong>2017-07-07 16:04</strong>.">
+    <b-jumbotron header="Privacy policy" lead="Last updated: <strong>2017-09-04 11:43</strong>.">
       <p class="text-justify">
         The
         <router-link :to="{name: 'home'}">slotlist.info</router-link> team ("us", "we" or "our") operates the
@@ -39,7 +39,7 @@
         <br>As of now, our Service uses
         <a href="https://cloudflare.com">Cloudflare</a> as a DNS-, CDN- and DDoS protection service as well as
         <a href="https://cloud.google.com">Google Cloud Platform</a> as a hosting provider (with servers currently located in the
-        <code>eu-west1</code> zone in Belgium). Furthermore, we employ services of
+        <code>europe-west3</code> zone in Frankfurt). Furthermore, we employ services of
         <a href="https://sentry.io">sentry.io</a> for error reporting and crash monitoring.
         <br>The respective privacy policies can be found on the companies' websites.
         <br>
@@ -79,7 +79,7 @@
 import utils from '../utils'
 
 export default {
-  created: function () {
+  created: function() {
     utils.setTitle('Privacy')
   }
 }
