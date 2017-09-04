@@ -3,10 +3,10 @@
     <table class="table table-striped" v-if="communities">
       <thead>
         <tr>
-          <th style="width: 15%">Tag</th>
-          <th style="width: 45%">Name</th>
-          <th style="width: 30%">Website</th>
-          <th style="width: 10%" class="text-center">Actions</th>
+          <th style="width: 15%">{{ $t('community.tag') }}</th>
+          <th style="width: 45%">{{ $t('community.name') }}</th>
+          <th style="width: 30%">{{ $t('community.website') }}</th>
+          <th style="width: 10%" class="text-center">{{ $t('misc.actions') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -14,10 +14,10 @@
       </tbody>
       <tfoot v-show="communities.length >= 10">
         <tr>
-          <th style="width: 15%">Tag</th>
-          <th style="width: 45%">Name</th>
-          <th style="width: 30%">Website</th>
-          <th style="width: 10%" class="text-center">Actions</th>
+          <th style="width: 15%">{{ $t('community.tag') }}</th>
+          <th style="width: 45%">{{ $t('community.name') }}</th>
+          <th style="width: 30%">{{ $t('community.website') }}</th>
+          <th style="width: 10%" class="text-center">{{ $t('misc.actions') }}</th>
         </tr>
       </tfoot>
     </table>

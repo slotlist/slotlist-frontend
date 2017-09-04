@@ -3,12 +3,12 @@
     <community-members-table></community-members-table>
     <div class="text-center">
       <div class="btn-group" role="group" aria-label="Community members actions">
-        <button type="button" class="btn btn-secondary" @click="refreshCommunityMembers">
-          <i class="fa fa-refresh" aria-hidden="true"></i> Refresh
-        </button>
-        <button type="button" class="btn btn-primary" v-show="loggedIn && !isCommunityMember" @click="applyToCommunity">
-          <i class="fa fa-user-plus" aria-hidden="true"></i> Apply
-        </button>
+        <b-btn variant="secondary" @click="refreshCommunityMembers">
+          <i class="fa fa-refresh" aria-hidden="true"></i> {{ $t('button.refresh') }}
+        </b-btn>
+        <b-btn variant="primary" v-if="loggedIn && !isCommunityMember" @click="applyToCommunity">
+          <i class="fa fa-user-plus" aria-hidden="true"></i> {{ $t('button.apply') }}
+        </b-btn>
       </div>
     </div>
   </div>

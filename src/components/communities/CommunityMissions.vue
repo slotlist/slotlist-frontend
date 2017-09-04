@@ -6,7 +6,7 @@
     </nav>
     <div class="text-center">
       <button type="button" class="btn btn-secondary" @click="refreshCommunityMissions">
-        <i class="fa fa-refresh" aria-hidden="true"></i> Refresh
+        <i class="fa fa-refresh" aria-hidden="true"></i> {{ $t('button.refresh') }}
       </button>
     </div>
   </div>
@@ -19,7 +19,7 @@ export default {
   components: {
     CommunityMissionsTable
   },
-  beforeCreate: function () {
+  beforeCreate: function() {
     this.$store.dispatch('getCommunityMissions', { communitySlug: this.$route.params.communitySlug })
   },
   computed: {

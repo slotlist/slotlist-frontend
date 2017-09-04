@@ -5,7 +5,7 @@
     <td v-html="optionalCommunityWebsite"></td>
     <td class="text-center">
       <router-link tag="button" class="btn btn-primary btn-sm" :to="{name: 'communityDetails', params: {communitySlug: community.slug}}">
-        <i class="fa fa-info" aria-hidden="true"></i> Details
+        <i class="fa fa-info" aria-hidden="true"></i> {{ $t('misc.details') }}
       </router-link>
     </td>
   </tr>
@@ -20,7 +20,7 @@ export default {
     optionalCommunityWebsite() {
       return _.isString(this.community.website) && !_.isEmpty(this.community.website) ?
         `<a href="${this.community.website}">${this.community.website}</a>` :
-        `<span class="text-muted font-italic">not provided</span>`
+        `<span class="text-muted font-italic">${this.$t('misc.notProvided')}</span>`
     }
   }
 }

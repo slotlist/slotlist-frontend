@@ -3,7 +3,7 @@
     <user-missions-table></user-missions-table>
     <div class="text-center">
       <button type="button" class="btn btn-secondary" @click="refreshUserMissions">
-        <i class="fa fa-refresh" aria-hidden="true"></i> Refresh
+        <i class="fa fa-refresh" aria-hidden="true"></i> {{ $t('button.refresh') }}
       </button>
     </div>
   </div>

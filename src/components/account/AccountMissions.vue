@@ -2,9 +2,9 @@
   <div>
     <account-missions-table></account-missions-table>
     <div class="text-center">
-      <button type="button" class="btn btn-secondary" @click="refreshAccountMissions">
+      <b-btn variant="secondary" @click="refreshAccountMissions">
         <i class="fa fa-refresh" aria-hidden="true"></i> {{ $t('button.refresh') }}
-      </button>
+      </b-btn>
     </div>
   </div>
 </template>

@@ -8,7 +8,7 @@
     </td>
     <td class="text-center">
       <router-link tag="button" class="btn btn-primary btn-sm" :to="{name: 'missionDetails', params: {missionSlug: communityMission.slug}}">
-        <i class="fa fa-info" aria-hidden="true"></i> Details
+        <i class="fa fa-info" aria-hidden="true"></i> {{ $t('button.details') }}
       </router-link>
     </td>
   </tr>
