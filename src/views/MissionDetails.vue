@@ -44,7 +44,7 @@
             <p>{{ formatDateTime(missionDetails.endTime) }}</p>
           </div>
           <div class="col">
-            <h5>{{ $t('mission.briefingTime') }}
+            <h5>{{ $t('mission.briefingTime.short') }}
               <span class="text-muted">({{ $t('mission.abbr.leadership') }})</span>
             </h5>
             <p>{{ formatDateTime(missionDetails.briefingTime) }}</p>

@@ -5,45 +5,45 @@
         <b-form @submit.stop.prevent="createMissionSlot">
           <div class="row">
             <div class="col">
-              <b-form-fieldset label="Title" :state="missionSlotCreateTitleState" :feedback="missionSlotCreateTitleFeedback">
+              <b-form-fieldset :label="$t('mission.title')" :state="missionSlotCreateTitleState" :feedback="missionSlotCreateTitleFeedback">
                 <b-form-input v-model="missionSlotCreateData.title" type="text" required></b-form-input>
               </b-form-fieldset>
             </div>
             <div class="col">
-              <b-form-fieldset label="Short description <em>(optional)</em>" state="success">
+              <b-form-fieldset :label="$t('mission.shortDescription.optional')" state="success">
                 <b-form-input v-model="missionSlotCreateData.shortDescription" textarea></b-form-input>
               </b-form-fieldset>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset label="Order number" description="Used for sorting slot in the mission slotlist" :state="missionSlotCreateOrderNumberState" :feedback="missionSlotCreateOrderNumberFeedback">
+              <b-form-fieldset :label="$t('mission.slot.orderNumber')" :description="$t('mission.slot.orderNumber.description')" :state="missionSlotCreateOrderNumberState" :feedback="missionSlotCreateOrderNumberFeedback">
                 <b-input-group left="#">
                   <b-form-input v-model="missionSlotCreateData.orderNumber" type="number" min="1" :formatter="missionSlotCreateOrderNumberFormatter" required></b-form-input>
                 </b-input-group>
               </b-form-fieldset>
             </div>
             <div class="col">
-              <b-form-fieldset label="Difficulty" state="success">
+              <b-form-fieldset :label="$t('mission.slot.difficulty')" state="success">
                 <b-form-select v-model="missionSlotCreateData.difficulty" :options="missionSlotCreateDifficultyOptions" class="mb-3" required></b-form-select>
               </b-form-fieldset>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset label="Restricted slot" description="Restricted slots are not available to the public, but only to selected players" state="success">
+              <b-form-fieldset :label="$t('mission.slot.restricted.slot')" :description="$t('mission.slot.restricted.description')" state="success">
                 <b-form-checkbox v-model="missionSlotCreateData.restricted"></b-form-checkbox>
               </b-form-fieldset>
             </div>
             <div class="col">
-              <b-form-fieldset label="Reserve slot" description="Reserve slots will only be filled if all other slots have been taken before" state="success">
+              <b-form-fieldset :label="$t('mission.slot.reserve.slot')" :description="$t('mission.slot.reserve.description')" state="success">
                 <b-form-checkbox v-model="missionSlotCreateData.reserve"></b-form-checkbox>
               </b-form-fieldset>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset label="Description <em>(optional)</em>" state="success">
+              <b-form-fieldset :label="$t('mission.slot.description.optional')" state="success">
                 <quill-editor v-model="missionSlotCreateData.description" ref="missionSlotCreateDescriptionEditor" :options="missionSlotCreateDescriptionEditorOptions"></quill-editor>
               </b-form-fieldset>
             </div>
@@ -53,10 +53,10 @@
       <div slot="modal-footer">
         <div class="btn-group" role="group" aria-label="Mission slot create actions">
           <b-btn variant="success" @click="createMissionSlot">
-            <i class="fa fa-plus" aria-hidden="true"></i> Submit
+            <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.submit' ) }}
           </b-btn>
           <b-btn @click="hideMissionSlotCreateModal">
-            <i class="fa fa-close" aria-hidden="true"></i> Cancel
+            <i class="fa fa-close" aria-hidden="true"></i> {{ $t('button.cancel' ) }}
           </b-btn>
         </div>
       </div>
@@ -99,23 +99,23 @@ export default {
       },
       missionSlotCreateDifficultyOptions: [
         {
-          text: 'Beginner',
+          text: this.$t('mission.slot.difficulty.beginner'),
           value: 0
         },
         {
-          text: 'Easy',
+          text: this.$t('mission.slot.difficulty.easy'),
           value: 1
         },
         {
-          text: 'Medium',
+          text: this.$t('mission.slot.difficulty.medium'),
           value: 2
         },
         {
-          text: 'Advanced',
+          text: this.$t('mission.slot.difficulty.advanced'),
           value: 3
         },
         {
-          text: 'Expert',
+          text: this.$t('mission.slot.difficulty.expert'),
           value: 4
         }
       ]
@@ -123,13 +123,13 @@ export default {
   },
   computed: {
     missionSlotCreateOrderNumberFeedback() {
-      return this.missionSlotCreateData.orderNumber < 0 ? 'Please enter an order number' : ''
+      return this.missionSlotCreateData.orderNumber < 0 ? this.$t('mission.feedback.orderNumber') : ''
     },
     missionSlotCreateOrderNumberState() {
       return this.missionSlotCreateData.orderNumber < 0 ? 'danger' : 'success'
     },
     missionSlotCreateTitleFeedback() {
-      return _.isString(this.missionSlotCreateData.title) && !_.isEmpty(this.missionSlotCreateData.title) ? '' : 'Please enter a slot title'
+      return _.isString(this.missionSlotCreateData.title) && !_.isEmpty(this.missionSlotCreateData.title) ? '' : this.$t('mission.feedback.title.slot')
     },
     missionSlotCreateTitleState() {
       return _.isString(this.missionSlotCreateData.title) && !_.isEmpty(this.missionSlotCreateData.title) ? 'success' : 'danger'
@@ -138,7 +138,7 @@ export default {
       return this.$store.getters.missionSlotGroupDetails
     },
     slotCreateTitle() {
-      return `Create slot in slot group #${this.missionSlotGroupDetails.orderNumber} ${this.missionSlotGroupDetails.title}`
+      return `${this.$t('mission.modal.slot.create')} #${this.missionSlotGroupDetails.orderNumber} ${this.missionSlotGroupDetails.title}`
     }
   },
   methods: {

@@ -1,49 +1,49 @@
 <template>
   <div>
-    <b-modal id="missionSlotEditModal" ref="missionSlotEditModal" size="lg" v-if="missionSlotDetails" title="Edit slot" @shown="setMissionSlotEditData">
+    <b-modal id="missionSlotEditModal" ref="missionSlotEditModal" size="lg" v-if="missionSlotDetails" :title="$t('mission.modal.slot.edit')" @shown="setMissionSlotEditData">
       <div class="container-fluid">
         <b-form @submit.stop.prevent="editMissionSlot">
           <div class="row">
             <div class="col">
-              <b-form-fieldset label="Title" :state="missionSlotEditTitleState" :feedback="missionSlotEditTitleFeedback">
+              <b-form-fieldset :label="$t('mission.title')" :state="missionSlotEditTitleState" :feedback="missionSlotEditTitleFeedback">
                 <b-form-input v-model="missionSlotEditData.title" type="text" required></b-form-input>
               </b-form-fieldset>
             </div>
             <div class="col">
-              <b-form-fieldset label="Short description <em>(optional)</em>" state="success">
+              <b-form-fieldset :label="$t('mission.shortDescription.optional')" state="success">
                 <b-form-input v-model="missionSlotEditData.shortDescription" textarea></b-form-input>
               </b-form-fieldset>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset label="Order number" description="Used for sorting slot in the mission slotlist" :state="missionSlotEditOrderNumberState" :feedback="missionSlotEditOrderNumberFeedback">
+              <b-form-fieldset :label="$t('mission.slot.orderNumber')" :description="$t('mission.slot.orderNumber.description')" :state="missionSlotEditOrderNumberState" :feedback="missionSlotEditOrderNumberFeedback">
                 <b-input-group left="#">
                   <b-form-input v-model="missionSlotEditData.orderNumber" type="number" min="1" :formatter="missionSlotEditOrderNumberFormatter" required></b-form-input>
                 </b-input-group>
               </b-form-fieldset>
             </div>
             <div class="col">
-              <b-form-fieldset label="Difficulty" state="success">
+              <b-form-fieldset :label="$t('mission.slot.difficulty')" state="success">
                 <b-form-select v-model="missionSlotEditData.difficulty" :options="missionSlotEditDifficultyOptions" class="mb-3" required></b-form-select>
               </b-form-fieldset>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset label="Restricted slot" description="Restricted slots are not available to the public, but only to selected players" state="success">
+              <b-form-fieldset :label="$t('mission.slot.restricted.slot')" :description="$t('mission.slot.restricted.description')" state="success">
                 <b-form-checkbox v-model="missionSlotEditData.restricted"></b-form-checkbox>
               </b-form-fieldset>
             </div>
             <div class="col">
-              <b-form-fieldset label="Reserve slot" description="Reserve slots will only be filled if all other slots have been taken before" state="success">
+              <b-form-fieldset :label="$t('mission.slot.reserve.slot')" :description="$t('mission.slot.reserve.description')" state="success">
                 <b-form-checkbox v-model="missionSlotEditData.reserve"></b-form-checkbox>
               </b-form-fieldset>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset label="Description <em>(optional)</em>" state="success">
+              <b-form-fieldset :label="$t('mission.slot.description.optional')" state="success">
                 <quill-editor v-model="missionSlotEditData.description" ref="missionSlotEditDescriptionEditor" :options="missionSlotEditDescriptionEditorOptions"></quill-editor>
               </b-form-fieldset>
             </div>
@@ -53,10 +53,10 @@
       <div slot="modal-footer">
         <div class="btn-group" role="group" aria-label="Mission slot edit actions">
           <b-btn variant="success" @click="editMissionSlot">
-            <i class="fa fa-plus" aria-hidden="true"></i> Submit
+            <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.submit' ) }}
           </b-btn>
           <b-btn @click="hideMissionSlotEditModal">
-            <i class="fa fa-close" aria-hidden="true"></i> Cancel
+            <i class="fa fa-close" aria-hidden="true"></i> {{ $t('button.cancel' ) }}
           </b-btn>
         </div>
       </div>
@@ -99,23 +99,23 @@ export default {
       },
       missionSlotEditDifficultyOptions: [
         {
-          text: 'Beginner',
+          text: this.$t('mission.slot.difficulty.beginner'),
           value: 0
         },
         {
-          text: 'Easy',
+          text: this.$t('mission.slot.difficulty.easy'),
           value: 1
         },
         {
-          text: 'Medium',
+          text: this.$t('mission.slot.difficulty.medium'),
           value: 2
         },
         {
-          text: 'Advanced',
+          text: this.$t('mission.slot.difficulty.advanced'),
           value: 3
         },
         {
-          text: 'Expert',
+          text: this.$t('mission.slot.difficulty.expert'),
           value: 4
         }
       ]
@@ -126,13 +126,13 @@ export default {
       return this.$store.getters.missionSlotDetails
     },
     missionSlotEditOrderNumberFeedback() {
-      return this.missionSlotEditData.orderNumber < 0 ? 'Please enter an order number' : ''
+      return this.missionSlotEditData.orderNumber < 0 ? this.$t('mission.feedback.orderNumber') : ''
     },
     missionSlotEditOrderNumberState() {
       return this.missionSlotEditData.orderNumber < 0 ? 'danger' : 'success'
     },
     missionSlotEditTitleFeedback() {
-      return _.isString(this.missionSlotEditData.title) && !_.isEmpty(this.missionSlotEditData.title) ? '' : 'Please enter a slot title'
+      return _.isString(this.missionSlotEditData.title) && !_.isEmpty(this.missionSlotEditData.title) ? '' : this.$t('mission.feedback.title.slot')
     },
     missionSlotEditTitleState() {
       return _.isString(this.missionSlotEditData.title) && !_.isEmpty(this.missionSlotEditData.title) ? 'success' : 'danger'

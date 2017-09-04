@@ -5,71 +5,71 @@
         <b-form @submit.stop.prevent="editMission">
           <div class="row">
             <div class="col">
-              <b-form-fieldset label="Title" :state="missionEditTitleState" :feedback="missionEditTitleFeedback">
+              <b-form-fieldset :label="$t('mission.title')" :state="missionEditTitleState" :feedback="missionEditTitleFeedback">
                 <b-form-input v-model="missionEditData.title" type="text" required></b-form-input>
               </b-form-fieldset>
             </div>
             <div class="col">
-              <b-form-fieldset label="Short description" :state="missionEditShortDescriptionState" :feedback="missionEditShortDescriptionFeedback">
+              <b-form-fieldset :label="$t('mission.shortDescription')" :state="missionEditShortDescriptionState" :feedback="missionEditShortDescriptionFeedback">
                 <b-form-input v-model="missionEditData.shortDescription" textarea required></b-form-input>
               </b-form-fieldset>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset label="Description" :state="missionEditDescriptionState" :feedback="missionEditDescriptionFeedback">
+              <b-form-fieldset :label="$t('mission.description')" :state="missionEditDescriptionState" :feedback="missionEditDescriptionFeedback">
                 <quill-editor v-model="missionEditData.description" ref="missionEditDescriptionEditor" :options="missionEditQuillEditorOptions" required></quill-editor>
               </b-form-fieldset>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset label="Slotting time" :state="missionEditSlottingTimeState" :feedback="missionEditSlottingTimeFeedback">
+              <b-form-fieldset :label="$t('mission.slottingTime')" :state="missionEditSlottingTimeState" :feedback="missionEditSlottingTimeFeedback">
                 <b-form-input v-model="missionEditData.slottingTime" type="text" required placeholder="YYYY-MM-DD hh:mm" :formatter="missionEditTimeFormatter" lazy-formatter></b-form-input>
               </b-form-fieldset>
             </div>
             <div class="col">
-              <b-form-fieldset label="Start time" :state="missionEditStartTimeState" :feedback="missionEditStartTimeFeedback">
+              <b-form-fieldset :label="$t('mission.startTime')" :state="missionEditStartTimeState" :feedback="missionEditStartTimeFeedback">
                 <b-form-input v-model="missionEditData.startTime" type="text" required placeholder="YYYY-MM-DD hh:mm" :formatter="missionEditTimeFormatter" lazy-formatter></b-form-input>
               </b-form-fieldset>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset label="End time" :state="missionEditEndTimeState" :feedback="missionEditEndTimeFeedback">
+              <b-form-fieldset :label="$t('mission.endTime')" :state="missionEditEndTimeState" :feedback="missionEditEndTimeFeedback">
                 <b-form-input v-model="missionEditData.endTime" type="text" required placeholder="YYYY-MM-DD hh:mm" :formatter="missionEditTimeFormatter" lazy-formatter></b-form-input>
               </b-form-fieldset>
             </div>
             <div class="col">
-              <b-form-fieldset label="Briefing time" :state="missionEditBriefingTimeState" :feedback="missionEditBriefingTimeFeedback">
+              <b-form-fieldset :label="$t('mission.briefingTime')" :state="missionEditBriefingTimeState" :feedback="missionEditBriefingTimeFeedback">
                 <b-form-input v-model="missionEditData.briefingTime" type="text" required placeholder="YYYY-MM-DD hh:mm" :formatter="missionEditTimeFormatter" lazy-formatter></b-form-input>
               </b-form-fieldset>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset label="Repository URL <em>(optional)</em>" state="success">
+              <b-form-fieldset :label="$t('mission.repositoryUrl.optional')" state="success">
                 <b-form-input v-model="missionEditData.repositoryUrl" type="text"></b-form-input>
               </b-form-fieldset>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset label="Tech support <em>(optional)</em>" state="success">
+              <b-form-fieldset :label="$t('mission.techSupport.optional')" state="success">
                 <quill-editor v-model="missionEditData.techSupport" ref="missionEditTechSupportEditor" :options="missionEditQuillEditorOptions"></quill-editor>
               </b-form-fieldset>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset label="Rules <em>(optional)</em>" state="success">
+              <b-form-fieldset :label="$t('mission.rules.optional')" state="success">
                 <quill-editor v-model="missionEditData.rules" ref="missionEditRulesEditor" :options="missionEditQuillEditorOptions"></quill-editor>
               </b-form-fieldset>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset label="Visibility" state="success">
+              <b-form-fieldset :label="$t('mission.visibility')" state="success">
                 <b-form-select v-model="missionEditData.visibility" :options="missionEditVisibilityOptions" class="mb-3" required></b-form-select>
               </b-form-fieldset>
             </div>
@@ -79,10 +79,10 @@
       <div slot="modal-footer">
         <div class="btn-group" role="group" aria-label="Mission edit actions">
           <b-btn variant="success" @click="editMission">
-            <i class="fa fa-plus" aria-hidden="true"></i> Submit
+            <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.submit') }}
           </b-btn>
           <b-btn @click="hideMissionEditModal">
-            <i class="fa fa-close" aria-hidden="true"></i> Cancel
+            <i class="fa fa-close" aria-hidden="true"></i> {{ $t('button.cancel') }}
           </b-btn>
         </div>
       </div>
@@ -127,29 +127,7 @@ export default {
           },
         },
         theme: 'snow'
-      },
-      missionEditDifficultyOptions: [
-        {
-          text: 'Beginner',
-          value: 0
-        },
-        {
-          text: 'Easy',
-          value: 1
-        },
-        {
-          text: 'Medium',
-          value: 2
-        },
-        {
-          text: 'Advanced',
-          value: 3
-        },
-        {
-          text: 'Expert',
-          value: 4
-        }
-      ]
+      }
     }
   },
   computed: {
@@ -159,7 +137,7 @@ export default {
     missionEditBriefingTimeFeedback() {
       return _.isString(this.missionEditData.briefingTime)
         && !_.isEmpty(this.missionEditData.briefingTime)
-        && moment(this.missionEditData.briefingTime).isValid ? '' : 'Please enter a briefing time'
+        && moment(this.missionEditData.briefingTime).isValid ? '' : this.$t('mission.feedback.dateTime')
     },
     missionEditBriefingTimeState() {
       return _.isString(this.missionEditData.briefingTime)
@@ -167,7 +145,7 @@ export default {
         && moment(this.missionEditData.briefingTime).isValid ? 'success' : 'danger'
     },
     missionEditDescriptionFeedback() {
-      return _.isString(this.missionEditData.description) && !_.isEmpty(this.missionEditData.description) ? '' : 'Please enter a description'
+      return _.isString(this.missionEditData.description) && !_.isEmpty(this.missionEditData.description) ? '' : this.$t('mission.feedback.description')
     },
     missionEditDescriptionState() {
       return _.isString(this.missionEditData.description) && !_.isEmpty(this.missionEditData.description) ? 'success' : 'danger'
@@ -175,7 +153,7 @@ export default {
     missionEditEndTimeFeedback() {
       return _.isString(this.missionEditData.endTime)
         && !_.isEmpty(this.missionEditData.endTime)
-        && moment(this.missionEditData.endTime).isValid ? '' : 'Please enter a briefing time'
+        && moment(this.missionEditData.endTime).isValid ? '' : this.$t('mission.feedback.dateTime')
     },
     missionEditEndTimeState() {
       return _.isString(this.missionEditData.endTime)
@@ -183,7 +161,7 @@ export default {
         && moment(this.missionEditData.endTime).isValid ? 'success' : 'danger'
     },
     missionEditShortDescriptionFeedback() {
-      return _.isString(this.missionEditData.shortDescription) && !_.isEmpty(this.missionEditData.shortDescription) ? '' : 'Please enter a short description'
+      return _.isString(this.missionEditData.shortDescription) && !_.isEmpty(this.missionEditData.shortDescription) ? '' : this.$t('mission.feedback.shortDescription')
     },
     missionEditShortDescriptionState() {
       return _.isString(this.missionEditData.shortDescription) && !_.isEmpty(this.missionEditData.shortDescription) ? 'success' : 'danger'
@@ -191,7 +169,7 @@ export default {
     missionEditSlottingTimeFeedback() {
       return _.isString(this.missionEditData.slottingTime)
         && !_.isEmpty(this.missionEditData.slottingTime)
-        && moment(this.missionEditData.slottingTime).isValid ? '' : 'Please enter a slotting time'
+        && moment(this.missionEditData.slottingTime).isValid ? '' : this.$t('mission.feedback.dateTime')
     },
     missionEditSlottingTimeState() {
       return _.isString(this.missionEditData.slottingTime)
@@ -201,7 +179,7 @@ export default {
     missionEditStartTimeFeedback() {
       return _.isString(this.missionEditData.startTime)
         && !_.isEmpty(this.missionEditData.startTime)
-        && moment(this.missionEditData.startTime).isValid ? '' : 'Please enter a start time'
+        && moment(this.missionEditData.startTime).isValid ? '' : this.$t('mission.feedback.dateTime')
     },
     missionEditStartTimeState() {
       return _.isString(this.missionEditData.startTime)
@@ -209,7 +187,7 @@ export default {
         && moment(this.missionEditData.startTime).isValid ? 'success' : 'danger'
     },
     missionEditTitleFeedback() {
-      return _.isString(this.missionEditData.title) && !_.isEmpty(this.missionEditData.title) ? '' : 'Please enter a mission title'
+      return _.isString(this.missionEditData.title) && !_.isEmpty(this.missionEditData.title) ? '' : this.$t('mission.feedback.title')
     },
     missionEditTitleState() {
       return _.isString(this.missionEditData.title) && !_.isEmpty(this.missionEditData.title) ? 'success' : 'danger'
@@ -217,16 +195,16 @@ export default {
     missionEditVisibilityOptions() {
       let options = [
         {
-          text: 'mission creator & editors only',
+          text: this.$t('mission.visibility.hidden'),
           value: 'hidden'
         },
         // Disabled for now since the backend doesn't fully support this setting yet
         /* {
-          text: 'selected users',
+          text: this.$t('mission.visibility.private'),
           value: 'private'
         }, */
         {
-          text: 'everyone',
+          text: this.$t('mission.visibility.public'),
           value: 'public'
         }
       ]
@@ -234,7 +212,7 @@ export default {
       if (!_.isNil(this.user.community)) {
         options = [
           {
-            text: 'community members',
+            text: this.$t('mission.visibility.community'),
             value: 'community'
           },
           ...options

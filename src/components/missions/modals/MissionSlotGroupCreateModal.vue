@@ -1,16 +1,16 @@
 <template>
   <div>
-    <b-modal id="missionSlotGroupCreateModal" ref="missionSlotGroupCreateModal" title="Create slot group" @shown="clearMissionSlotGroupCreateData">
+    <b-modal id="missionSlotGroupCreateModal" ref="missionSlotGroupCreateModal" :title="$t('mission.modal.slotGroup.create')" @shown="clearMissionSlotGroupCreateData">
       <div class="container-fluid">
         <b-form @submit.stop.prevent="createMissionSlotGroup">
           <div class="row">
             <div class="col">
-              <b-form-fieldset label="Title" :state="missionSlotGroupCreateTitleState" :feedback="missionSlotGroupCreateTitleFeedback">
+              <b-form-fieldset :label="$t('mission.title')" :state="missionSlotGroupCreateTitleState" :feedback="missionSlotGroupCreateTitleFeedback">
                 <b-form-input v-model="missionSlotGroupCreateData.title" type="text" required></b-form-input>
               </b-form-fieldset>
             </div>
             <div class="col">
-              <b-form-fieldset label="Order number" description="Used for sorting slot groups in the mission slotlist" :state="missionSlotGroupCreateOrderNumberState" :feedback="missionSlotGroupCreateOrderNumberFeedback">
+              <b-form-fieldset :label="$t('mission.slot.orderNumber')" :description="$t('mission.slotGroup.orderNumber.description')" :state="missionSlotGroupCreateOrderNumberState" :feedback="missionSlotGroupCreateOrderNumberFeedback">
                 <b-input-group left="#">
                   <b-form-input v-model="missionSlotGroupCreateData.orderNumber" type="number" min="1" :formatter="missionSlotGroupCreateOrderNumberFormatter" required></b-form-input>
                 </b-input-group>
@@ -19,7 +19,7 @@
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset label="Description <em>(optional)</em>" state="success">
+              <b-form-fieldset :label="$t('mission.slot.description.optional')" state="success">
                 <b-form-input v-model="missionSlotGroupCreateData.description" type="text"></b-form-input>
               </b-form-fieldset>
             </div>
@@ -29,10 +29,10 @@
       <div slot="modal-footer">
         <div class="btn-group" role="group" aria-label="Mission slot group create actions">
           <b-btn variant="success" @click="createMissionSlotGroup">
-            <i class="fa fa-plus" aria-hidden="true"></i> Submit
+            <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.submit') }}
           </b-btn>
           <b-btn @click="hideMissionSlotGroupCreateModal">
-            <i class="fa fa-close" aria-hidden="true"></i> Cancel
+            <i class="fa fa-close" aria-hidden="true"></i> {{ $t('button.cancel') }}
           </b-btn>
         </div>
       </div>
@@ -55,13 +55,13 @@ export default {
   },
   computed: {
     missionSlotGroupCreateOrderNumberFeedback() {
-      return this.missionSlotGroupCreateData.orderNumber < 0 ? 'Please enter an order number' : ''
+      return this.missionSlotGroupCreateData.orderNumber < 0 ? this.$t('mission.feedback.orderNumber') : ''
     },
     missionSlotGroupCreateOrderNumberState() {
       return this.missionSlotGroupCreateData.orderNumber < 0 ? 'danger' : 'success'
     },
     missionSlotGroupCreateTitleFeedback() {
-      return _.isString(this.missionSlotGroupCreateData.title) && !_.isEmpty(this.missionSlotGroupCreateData.title) ? '' : 'Please enter a slot group title'
+      return _.isString(this.missionSlotGroupCreateData.title) && !_.isEmpty(this.missionSlotGroupCreateData.title) ? '' : this.$t('mission.feedback.title.slotGroup')
     },
     missionSlotGroupCreateTitleState() {
       return _.isString(this.missionSlotGroupCreateData.title) && !_.isEmpty(this.missionSlotGroupCreateData.title) ? 'success' : 'danger'

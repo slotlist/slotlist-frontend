@@ -1,16 +1,15 @@
 <template>
   <div>
-    <b-modal id="missionSlotRegistrationModal" ref="missionSlotRegistrationModal" v-if="missionSlotDetails" title="Register for slot" @shown="clearMissionSlotRegistrationModalData">
+    <b-modal id="missionSlotRegistrationModal" ref="missionSlotRegistrationModal" v-if="missionSlotDetails" :title="$t('mission.modal.slot.register')" @shown="clearMissionSlotRegistrationModalData">
       <div class="container-fluid">
         <b-form @submit.stop.prevent="registerForMissionSlot">
           <div class="row">
-            <div class="col-12">Confirm registration as
-              <span class="font-weight-bold">#{{ missionSlotDetails.orderNumber }} {{ missionSlotDetails.title }}</span>?</div>
+            <div class="col-12" v-html="translatedModalText"></div>
           </div>
           <hr class="my-4">
           <div class="row">
             <div class="col col-12">
-              <b-form-fieldset label="Comment <em>(optional)</em>" description="Optional comment to the mission creator (max. 128 char)" state="success">
+              <b-form-fieldset :label="$t('mission.registration.comment.optional')" :description="$t('mission.registration.comment.description')" state="success">
                 <b-form-input v-model="missionSlotRegistrationData.comment" type="text" maxlength="128"></b-form-input>
               </b-form-fieldset>
             </div>
@@ -20,10 +19,10 @@
       <div slot="modal-footer">
         <div class="btn-group" role="group" aria-label="Mission slot registration actions">
           <b-btn variant="success" @click="registerForMissionSlot" :disabled="missionSlotDetails.assignee ? true : false">
-            <i class="fa fa-check" aria-hidden="true"></i> Confirm
+            <i class="fa fa-check" aria-hidden="true"></i> {{ $t('button.confirm') }}
           </b-btn>
           <b-btn @click="hideMissionSlotRegistrationModal">
-            <i class="fa fa-close" aria-hidden="true"></i> Cancel
+            <i class="fa fa-close" aria-hidden="true"></i> {{ $t('button.cancel') }}
           </b-btn>
         </div>
       </div>
@@ -45,6 +44,9 @@ export default {
   computed: {
     missionSlotDetails() {
       return this.$store.getters.missionSlotDetails
+    },
+    translatedModalText() {
+      return this.$t('mission.modal.slot.register.text').replace('{{slotInfo}}', `<span class="font-weight-bold">#${this.missionSlotDetails.orderNumber} ${this.missionSlotDetails.title}</span>`)
     }
   },
   methods: {
