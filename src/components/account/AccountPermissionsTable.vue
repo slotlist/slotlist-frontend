@@ -3,7 +3,7 @@
     <table class="table table-striped" v-if="accountPermissions">
       <thead>
         <tr>
-          <th style="width: 100%">Permission</th>
+          <th style="width: 100%">{{ $t('account.permission') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -11,7 +11,7 @@
       </tbody>
       <tfoot v-show="accountPermissions.length >= 10">
         <tr>
-          <th style="width: 100%">Permission</th>
+          <th style="width: 100%">{{ $t('account.permission') }}</th>
         </tr>
       </tfoot>
     </table>
