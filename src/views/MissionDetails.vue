@@ -5,7 +5,7 @@
       <div class="jumbotron">
         <h1 class="display-4 text-center">{{ missionDetails.title }}</h1>
         <h5 class="text-center">
-          <span class="text-muted">by</span>
+          <span class="text-muted">{{ $t('mission.by') }}</span>
           <router-link :to="{name: 'userDetails', params: {userUid: missionDetails.creator.uid}}">{{ formatUserWithTag(missionDetails.creator) }}</router-link>
         </h5>
         <br>
@@ -13,50 +13,50 @@
         <hr class="my-4">
         <div class="row text-center">
           <div class="col">
-            <h5>Community</h5>
+            <h5>{{ $t('mission.community') }}</h5>
             <p>
               <router-link v-if="missionDetails.community" :to="{name: 'communityDetails', params: {communitySlug: missionDetails.community.slug}}">{{ missionDetails.community.name }}</router-link>
               <span v-if="!missionDetails.community" class="text-muted font-italic">not associated</span>
             </p>
           </div>
           <div class="col">
-            <h5>Repository URL</h5>
+            <h5>{{ $t('mission.repositoryUrl') }}</h5>
             <p v-html="optionalRepositoryUrl"></p>
           </div>
           <div class="col">
-            <h5>Visibility</h5>
+            <h5>{{ $t('mission.visibility') }}</h5>
             <p v-html="formattedMissionVisibility"></p>
           </div>
         </div>
         <div class="row text-center">
           <div class="col">
-            <h5>Slotting time</h5>
+            <h5>{{ $t('mission.slottingTime') }}</h5>
             <p class="font-weight-bold text-success">{{ formatDateTime(missionDetails.slottingTime) }}</p>
           </div>
           <div class="col">
-            <h5>Start time</h5>
+            <h5>{{ $t('mission.startTime') }}</h5>
             <p class="font-weight-bold text-danger">{{ formatDateTime(missionDetails.startTime) }}</p>
           </div>
           <div class="col">
-            <h5>End time
-              <span class="text-muted">(est.)</span>
+            <h5>{{ $t('mission.endTime') }}
+              <span class="text-muted">({{ $t('mission.abbr.estimated') }})</span>
             </h5>
             <p>{{ formatDateTime(missionDetails.endTime) }}</p>
           </div>
           <div class="col">
-            <h5>Briefing
-              <span class="text-muted">(ldrsp.)</span>
+            <h5>{{ $t('mission.briefingTime') }}
+              <span class="text-muted">({{ $t('mission.abbr.leadership') }})</span>
             </h5>
             <p>{{ formatDateTime(missionDetails.briefingTime) }}</p>
           </div>
         </div>
         <div class="row text-center">
           <div class="col">
-            <h5>Techsupport</h5>
+            <h5>{{ $t('mission.techSupport') }}</h5>
             <p v-html="optionalTechSupport"></p>
           </div>
           <div class="col">
-            <h5>Rules</h5>
+            <h5>{{ $t('mission.rules') }}</h5>
             <p v-html="optionalRules"></p>
           </div>
         </div>
@@ -64,11 +64,11 @@
         <div class="row justify-content-center" v-if="isMissionEditor">
           <div class="btn-group" role="group" aria-label="Mission actions">
             <b-btn variant="primary" v-b-modal.missionEditModal>
-              <i class="fa fa-edit" aria-hidden="true"></i> Edit
+              <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit') }}
             </b-btn>
-            <click-confirm v-if="isMissionCreator" yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: 'Delete mission?', yes: 'Confirm', no: 'Cancel'}">
+            <click-confirm yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('mission.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
               <b-btn variant="danger" @click="deleteMission">
-                <i class="fa fa-trash" aria-hidden="true"></i> Delete
+                <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete') }}
               </b-btn>
             </click-confirm>
           </div>
@@ -82,18 +82,18 @@
       <br>
       <div class="card">
         <div class="card-block text-nowrap">
-          <h1>Slotlist</h1>
+          <h1>{{ $t('mission.slotlist') }}</h1>
           <div class="small">
-            <b-form-group label="Filter" label-for="missionSlotlistFilter">
+            <b-form-group :label="$t('mission.slotlist.filter')" label-for="missionSlotlistFilter">
               <div role="group" id="missionSlotlistFilter">
                 <b-form-checkbox v-model="missionSlotlistFilter" name="assigned" value="assigned">
-                  assigned
+                  {{ $t('mission.slotlist.filter.assigned') }}
                 </b-form-checkbox>
                 <b-form-checkbox v-model="missionSlotlistFilter" name="hasRegistrations" value="hasRegistrations">
-                  has registrations
+                  {{ $t('mission.slotlist.filter.hasRegistrations') }}
                 </b-form-checkbox>
                 <b-form-checkbox v-model="missionSlotlistFilter" name="open" value="open">
-                  open
+                  {{ $t('mission.slotlist.filter.open') }}
                 </b-form-checkbox>
               </div>
             </b-form-group>
@@ -156,26 +156,26 @@ export default {
       return this.$store.getters.missionDetails
     },
     optionalRepositoryUrl() {
-      return this.missionDetails.repositoryUrl || "<span class='text-muted font-italic'>not required</span>"
+      return this.missionDetails.repositoryUrl || `<span class='text-muted font-italic'>${this.$t('misc.notProvided')}</span>`
     },
     optionalTechSupport() {
-      return this.missionDetails.techSupport || "<span class='text-muted font-italic'>not provided</span>"
+      return this.missionDetails.techSupport || `<span class='text-muted font-italic'>${this.$t('misc.notProvided')}</span>`
     },
     optionalRules() {
-      return this.missionDetails.rules || "<span class='text-muted font-italic'>not specified</span>"
+      return this.missionDetails.rules || `<span class='text-muted font-italic'>${this.$t('misc.notSpecified')}</span>`
     },
     formattedMissionVisibility() {
       switch (this.missionDetails.visibility) {
         case 'community':
-          return `<span class="text-primary"><i class="fa fa-users" aria-hidden="true"></i> community members</span>`
+          return `<span class="text-primary"><i class="fa fa-users" aria-hidden="true"></i> ${this.$t('mission.visibility.community')}</span>`
         case 'hidden':
-          return `<span class="text-danger"><i class="fa fa-edit" aria-hidden="true"></i> mission creator & editors only</span>`
+          return `<span class="text-danger"><i class="fa fa-edit" aria-hidden="true"></i> ${this.$t('mission.visibility.hidden')}</span>`
         case 'private':
-          return `<span class="text-warning"><i class="fa fa-user-secret" aria-hidden="true"></i> selected users</span>`
+          return `<span class="text-warning"><i class="fa fa-user-secret" aria-hidden="true"></i> ${this.$t('mission.visibility.private')}</span>`
         case 'public':
-          return `<span class="text-success"><i class="fa fa-globe" aria-hidden="true"></i> everyone</span>`
+          return `<span class="text-success"><i class="fa fa-globe" aria-hidden="true"></i> ${this.$t('mission.visibility.public')}</span>`
         default:
-          return `<span class="text-muted font-italic"><i class="fa fa-question-circle" aria-hidden="true"></i> unknown</span>`
+          return `<span class="text-muted font-italic"><i class="fa fa-question-circle" aria-hidden="true"></i> ${this.$t('mission.visibility.default')}</span>`
       }
     }
   },

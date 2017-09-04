@@ -8,7 +8,7 @@
     </td>
     <td class="text-center">
       <b-btn variant="primary" size="sm" :to="{name: 'missionDetails', params: {missionSlug: mission.slug}}">
-        <i class="fa fa-info" aria-hidden="true"></i> Details
+        <i class="fa fa-info" aria-hidden="true"></i> {{ $t('misc.details') }}
       </b-btn>
     </td>
   </tr>

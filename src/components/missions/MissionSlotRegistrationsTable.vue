@@ -3,11 +3,11 @@
     <table class="table table-striped" v-if="missionSlotRegistrations">
       <thead>
         <tr>
-          <th :style="playerColumnWidth">Player</th>
-          <th style="width: 35%" v-show="isMissionEditor">Comment</th>
-          <th style="width: 24%">Registered</th>
-          <th style="width: 1%">Confirmed</th>
-          <th style="width: 10%" class="text-center" v-show="isMissionEditor">Actions</th>
+          <th :style="playerColumnWidth">{{ $t('mission.slot.player') }}</th>
+          <th style="width: 35%" v-show="isMissionEditor">{{ $t('mission.registration.comment') }}</th>
+          <th style="width: 24%">{{ $t('mission.registration.registered') }}</th>
+          <th style="width: 1%">{{ $t('mission.registration.confirmed') }}</th>
+          <th style="width: 10%" class="text-center" v-show="isMissionEditor">{{ $t('misc.actions') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -15,11 +15,11 @@
       </tbody>
       <tfoot v-show="missionSlotRegistrations.length >= 10">
         <tr>
-          <th :style="playerColumnWidth">Player</th>
-          <th style="width: 35%" v-show="isMissionEditor">Comment</th>
-          <th style="width: 24%">Registered</th>
-          <th style="width: 1%">Confirmed</th>
-          <th style="width: 10%" class="text-center" v-show="isMissionEditor">Actions</th>
+          <th :style="playerColumnWidth">{{ $t('mission.slot.player') }}</th>
+          <th style="width: 35%" v-show="isMissionEditor">{{ $t('mission.registration.comment') }}</th>
+          <th style="width: 24%">{{ $t('mission.registration.registered') }}</th>
+          <th style="width: 1%">{{ $t('mission.registration.confirmed') }}</th>
+          <th style="width: 10%" class="text-center" v-show="isMissionEditor">{{ $t('misc.actions') }}</th>
         </tr>
       </tfoot>
     </table>

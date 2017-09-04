@@ -4,12 +4,16 @@ import StatusApi from '../../api/status'
 
 const state = {
   backendVersion: null,
+  locale: null,
   working: null
 }
 
 const getters = {
   backendVersion() {
     return state.backendVersion
+  },
+  locale() {
+    return state.locale
   },
   working() {
     return state.working

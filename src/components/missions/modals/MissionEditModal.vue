@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-modal id="missionEditModal" ref="missionEditModal" size="lg" v-if="missionDetails" title="Edit mission" @shown="setMissionData">
+    <b-modal id="missionEditModal" ref="missionEditModal" size="lg" v-if="missionDetails" :title="$t('mission.modal.edit')" @shown="setMissionData">
       <div class="container-fluid">
         <b-form @submit.stop.prevent="editMission">
           <div class="row">

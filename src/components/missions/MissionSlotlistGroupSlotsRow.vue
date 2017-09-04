@@ -13,19 +13,19 @@
     <td class="text-center">
       <div class="btn-group btn-group-sm" role="group" aria-label="Mission slot actions">
         <b-btn variant="primary" @click="prepareMissionSlotDetails" v-b-modal.missionSlotDetailsModal>
-          <i class="fa fa-info" aria-hidden="true"></i> Details
+          <i class="fa fa-info" aria-hidden="true"></i> {{ $t('misc.details') }}
         </b-btn>
         <b-btn variant="success" v-if="loggedIn && !missionSlotDetails.registrationUid" :disabled="missionSlotDetails.assignee ? true : false" @click="setMissionSlotDetails" v-b-modal.missionSlotRegistrationModal>
-          <i class="fa fa-ticket" aria-hidden="true"></i> Register
+          <i class="fa fa-ticket" aria-hidden="true"></i> {{ $t('button.register') }}
         </b-btn>
-        <click-confirm v-if="loggedIn && missionSlotDetails.registrationUid" yes-icon="fa fa-eraser" yes-class="btn btn-warning" button-size="sm" :messages="{title: 'Unregister from slot?', yes: 'Confirm', no: 'Cancel'}">
+        <click-confirm v-if="loggedIn && missionSlotDetails.registrationUid" yes-icon="fa fa-eraser" yes-class="btn btn-warning" button-size="sm" :messages="{title: $t('mission.slot.confirm.unregister'), yes: $t('button.confirm'), no: $t('button.cancel')}">
           <b-btn variant="warning" size="sm" @click="deleteMissionSlotRegistration">
-            <i class="fa fa-eraser" aria-hidden="true"></i> Unregister
+            <i class="fa fa-eraser" aria-hidden="true"></i> {{ $t('button.unregister') }}
           </b-btn>
         </click-confirm>
         <click-confirm v-if="isMissionEditor" yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: 'Delete slot?', yes: 'Confirm', no: 'Cancel'}">
           <b-btn variant="danger" size="sm" @click="deleteMissionSlotRegistration">
-            <i class="fa fa-trash" aria-hidden="true"></i> Delete
+            <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete') }}
           </b-btn>
         </click-confirm>
       </div>
@@ -66,10 +66,10 @@ export default {
       }
 
       if (!_.isNumber(this.missionSlotDetails.registrationCount) || this.missionSlotDetails.registrationCount <= 0) {
-        return '<span class="text-muted font-italic">not assigned - no registrations</span>'
+        return `<span class="text-muted font-italic">${this.$t('mission.slot.assignee.notAssigned')} - ${this.$tc('mission.slot.assignee.registration', 0)}</span>`
       }
 
-      return `<span class="text-muted font-italic">not assigned - ${this.missionSlotDetails.registrationCount} registration${this.missionSlotDetails.registrationCount > 1 ? 's' : ''}</span>`
+      return `<span class="text-muted font-italic">${this.$t('mission.slot.assignee.notAssigned')} - ${this.missionSlotDetails.registrationCount} ${this.$tc('mission.slot.assignee.registration', this.missionSlotDetails.registrationCount > 1 ? 2 : 1)}</span>`
     },
     isMissionEditor() {
       return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`, `mission.${this.$route.params.missionSlug}.editor`])
@@ -86,9 +86,9 @@ export default {
     },
     titleTooltip() {
       if (this.missionSlotDetails.restricted) {
-        return 'Restricted - not available for everyone'
+        return this.$t('mission.slot.restricted.tooltip')
       } else if (this.missionSlotDetails.reserve) {
-        return 'Reserve - only filled after other slots are taken'
+        return this.$t('mission.slot.reserve.tooltip')
       }
     }
   },

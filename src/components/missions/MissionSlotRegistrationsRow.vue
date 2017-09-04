@@ -6,10 +6,10 @@
     <td class="text-center" v-html="formattedConfirmation"></td>
     <td class="text-center" v-if="isMissionEditor">
       <b-btn v-if="!registration.confirmed" variant="success" size="sm" @click="modifyMissionSlotRegistration(true)">
-        <i class="fa fa-check" aria-hidden="true"></i> Assign
+        <i class="fa fa-check" aria-hidden="true"></i> {{ $t('button.assign') }}
       </b-btn>
       <b-btn v-if="registration.confirmed" variant="danger" size="sm" @click="modifyMissionSlotRegistration(false)">
-        <i class="fa fa-trash" aria-hidden="true"></i> Unassign
+        <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.unassign') }}
       </b-btn>
     </td>
   </tr>
@@ -25,7 +25,7 @@ export default {
   computed: {
     formattedComment() {
       return _.isNil(this.registration.comment) ?
-        '<span class="text-muted font-italic">not provided</span>' :
+        `<span class="text-muted font-italic">${this.$t('misc.notProvided')}</span>` :
         this.registration.comment
     },
     formattedConfirmation() {

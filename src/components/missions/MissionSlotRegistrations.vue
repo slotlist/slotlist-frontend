@@ -4,7 +4,7 @@
     <div class="text-center">
       <div class="btn-group" role="group" aria-label="Mission slot registrations actions">
         <button type="button" class="btn btn-secondary" @click="refreshMissionSlotRegistrations">
-          <i class="fa fa-refresh" aria-hidden="true"></i> Refresh
+          <i class="fa fa-refresh" aria-hidden="true"></i> {{ $t('button.refresh') }}
         </button>
       </div>
     </div>

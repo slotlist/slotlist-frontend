@@ -6,10 +6,10 @@
     </nav>
     <div class="text-center">
       <router-link tag="button" v-show="loggedIn" type="button" class="btn btn-success" :to="{name: 'missionCreator'}">
-        <i class="fa fa-plus" aria-hidden="true"></i> Create mission
+        <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.create.mission') }}
       </router-link>
       <b-btn @click="missionsPaginate(1)">
-        <i class="fa fa-refresh" aria-hidden="true"></i> Refresh
+        <i class="fa fa-refresh" aria-hidden="true"></i> {{ $t('button.refresh') }}
       </b-btn>
     </div>
   </div>

@@ -4,9 +4,9 @@
       <div class="container-fluid">
         <div class="row font-weight-bold">
           <div class="col col-1">#</div>
-          <div class="col col-3">Role</div>
-          <div class="col col-5">Player</div>
-          <div class="col col-3">Difficulty</div>
+          <div class="col col-3">{{ $t('mission.slot.role') }}</div>
+          <div class="col col-5">{{ $t('mission.slot.player') }}</div>
+          <div class="col col-3">{{ $t('mission.slot.difficulty') }}</div>
         </div>
         <div class="row">
           <div class="col col-1">{{ missionSlotDetails.orderNumber + 1 }}</div>
@@ -19,8 +19,8 @@
         </div>
         <div class="row font-weight-bold">
           <div class="col col-1"></div>
-          <div class="col col-6">Description</div>
-          <div class="col col-5">Status</div>
+          <div class="col col-6">{{ $t('mission.slot.description') }}</div>
+          <div class="col col-5">{{ $t('mission.slot.status') }}</div>
         </div>
         <div class="row">
           <div class="col col-1"></div>
@@ -29,14 +29,14 @@
         </div>
         <hr class="my-4" v-show="missionSlotDetails.description">
         <div class="row font-weight-bold" v-show="missionSlotDetails.description">
-          <div class="col col-12">Detailed description</div>
+          <div class="col col-12">{{ $t('mission.slot.detailedDescription') }}</div>
         </div>
         <div class="row" v-show="missionSlotDetails.description">
           <div class="col col-12" v-html="missionSlotDetails.description"></div>
         </div>
         <hr class="my-4">
         <div class="row font-weight-bold">
-          <div class="col col-12">Registrations</div>
+          <div class="col col-12">{{ $t('mission.slot.registrations') }}</div>
         </div>
         <br>
         <div class="row">
@@ -48,25 +48,25 @@
       <div slot="modal-footer">
         <div class="btn-group" role="group" aria-label="Mission slot detail actions">
           <b-btn variant="success" v-if="loggedIn && !missionSlotDetails.registrationUid" :disabled="missionSlotDetails.assignee ? true : false" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotRegistrationModal>
-            <i class="fa fa-ticket" aria-hidden="true"></i> Register
+            <i class="fa fa-ticket" aria-hidden="true"></i> {{ $t('button.register') }}
           </b-btn>
           <!-- These buttons have been removed for now since they require the click-confirm popover, which doesn't appear to work correctly in modals -->
           <!-- <click-confirm v-if="loggedIn && missionSlotDetails.registrationUid" yes-icon="fa fa-eraser" yes-class="btn btn-warning" button-size="sm" :messages="{title: 'Unregister from slot?', yes: 'Confirm', no: 'Cancel'}">
-              <b-btn variant="warning" @click="deleteMissionSlotRegistration">
-                <i class="fa fa-eraser" aria-hidden="true"></i> Unregister
-              </b-btn>
-            </click-confirm> -->
+                              <b-btn variant="warning" @click="deleteMissionSlotRegistration">
+                                <i class="fa fa-eraser" aria-hidden="true"></i> Unregister
+                              </b-btn>
+                            </click-confirm> -->
           <b-btn variant="primary" v-if="isMissionEditor" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotEditModal>
-            <i class="fa fa-edit" aria-hidden="true"></i> Edit
+            <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit') }}
           </b-btn>
           <!-- These buttons have been removed for now since they require the click-confirm popover, which doesn't appear to work correctly in modals -->
           <!-- <click-confirm v-if="isMissionEditor" yes-icon="fa fa-trash" yes-class="btn btn-danger" :messages="{title: 'Delete slot?', yes: 'Confirm', no: 'Cancel'}">
-              <b-btn variant="danger" @click="deleteMissionSlot">
-                <i class="fa fa-trash" aria-hidden="true"></i> Delete
-              </b-btn>
-            </click-confirm> -->
+                              <b-btn variant="danger" @click="deleteMissionSlot">
+                                <i class="fa fa-trash" aria-hidden="true"></i> Delete
+                              </b-btn>
+                            </click-confirm> -->
           <b-btn @click="hideMissionSlotDetailsModal">
-            <i class="fa fa-close" aria-hidden="true"></i> Close
+            <i class="fa fa-close" aria-hidden="true"></i> {{ $t('button.close') }}
           </b-btn>
         </div>
       </div>
@@ -104,11 +104,11 @@ export default {
     },
     difficultyText() {
       switch (this.missionSlotDetails.difficulty) {
-        case 0: return 'Beginner'
-        case 1: return 'Easy'
-        case 2: return 'Medium'
-        case 3: return 'Advanced'
-        case 4: return 'Expert'
+        case 0: return this.$t('mission.slot.difficulty.beginner')
+        case 1: return this.$t('mission.slot.difficulty.easy')
+        case 2: return this.$t('mission.slot.difficulty.medium')
+        case 3: return this.$t('mission.slot.difficulty.advanced')
+        case 4: return this.$t('mission.slot.difficulty.expert')
         default: return ''
       }
     },
@@ -118,10 +118,10 @@ export default {
       }
 
       if (!_.isNumber(this.missionSlotDetails.registrationCount) || this.missionSlotDetails.registrationCount <= 0) {
-        return '<span class="text-muted font-italic">not assigned - no registrations</span>'
+        return `<span class="text-muted font-italic">${this.$t('mission.slot.assignee.notAssigned')} - ${this.$tc('mission.slot.assignee.registration', 0)}</span>`
       }
 
-      return `<span class="text-muted font-italic">not assigned - ${this.missionSlotDetails.registrationCount} registration${this.missionSlotDetails.registrationCount > 1 ? 's' : ''}</span>`
+      return `<span class="text-muted font-italic">${this.$t('mission.slot.assignee.notAssigned')} - ${this.missionSlotDetails.registrationCount} ${this.$tc('mission.slot.assignee.registration', this.missionSlotDetails.registrationCount > 1 ? 2 : 1)}</span>`
     },
     isMissionEditor() {
       return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`, `mission.${this.$route.params.missionSlug}.editor`])
@@ -133,21 +133,21 @@ export default {
       return this.$store.getters.missionSlotDetails
     },
     slotDetailsTitle() {
-      return `Slot details - #${this.missionSlotDetails.orderNumber} ${this.missionSlotDetails.title}`
+      return `${this.$t('mission.modal.slot.details')} - #${this.missionSlotDetails.orderNumber} ${this.missionSlotDetails.title}`
     },
     slotReserve() {
       if (this.missionSlotDetails.reserve) {
-        return '<span class="text-muted font-italic">reserve</span>'
+        return `<span class="text-muted font-italic">${this.$t('mission.slot.reserve')}</span>`
       }
 
-      return '<span>regular</span>'
+      return `<span>${this.$t('mission.slot.reserve.regular')}</span>`
     },
     slotRestricted() {
       if (this.missionSlotDetails.restricted) {
-        return '<span class="text-primary font-italic">restricted</span>'
+        return `<span class="text-primary font-italic">${this.$t('mission.slot.restricted')}</span>`
       }
 
-      return '<span>unrestricted</span>'
+      return `<span>${this.$t('mission.slot.restricted.unrestricted')}</span>`
     },
     slotStatus() {
       return `${this.slotRestricted} - ${this.slotReserve}`

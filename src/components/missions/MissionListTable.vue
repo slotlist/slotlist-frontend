@@ -3,11 +3,11 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th style="width: 15%">Start time</th>
-          <th style="width: 25%">Title</th>
-          <th style="width: 25%">Description</th>
-          <th style="width: 20%">Creator</th>
-          <th style="width: 10%" class="text-center">Actions</th>
+          <th style="width: 15%">{{ $t('mission.list.startTime') }}</th>
+          <th style="width: 25%">{{ $t('mission.list.title') }}</th>
+          <th style="width: 25%">{{ $t('mission.list.description') }}</th>
+          <th style="width: 20%">{{ $t('mission.list.creator') }}</th>
+          <th style="width: 10%" class="text-center">{{ $t('misc.actions') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -15,11 +15,11 @@
       </tbody>
       <tfoot v-show="missions.length >= 10">
         <tr>
-          <th style="width: 15%">Start time</th>
-          <th style="width: 25%">Title</th>
-          <th style="width: 25%">Description</th>
-          <th style="width: 20%">Creator</th>
-          <th style="width: 10%" class="text-center">Actions</th>
+          <th style="width: 15%">{{ $t('mission.list.startTime') }}</th>
+          <th style="width: 25%">{{ $t('mission.list.title') }}</th>
+          <th style="width: 25%">{{ $t('mission.list.description') }}</th>
+          <th style="width: 20%">{{ $t('mission.list.creator') }}</th>
+          <th style="width: 10%" class="text-center">{{ $t('misc.actions') }}</th>
         </tr>
       </tfoot>
     </table>

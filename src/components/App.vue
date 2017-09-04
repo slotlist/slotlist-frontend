@@ -9,39 +9,39 @@
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
             <router-link class="nav-link" to="/">
-              <i class="fa fa-home" aria-hidden="true"></i> Home
+              <i class="fa fa-home" aria-hidden="true"></i> {{ $t('nav.home') }}
             </router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/missions">
-              <i class="fa fa-tasks" aria-hidden="true"></i> Missions
+              <i class="fa fa-tasks" aria-hidden="true"></i> {{ $t('nav.missions') }}
             </router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/communities">
-              <i class="fa fa-users" aria-hidden="true"></i> Communities
+              <i class="fa fa-users" aria-hidden="true"></i> {{ $t('nav.communities') }}
             </router-link>
           </li>
         </ul>
         <ul class="navbar-nav">
-          <li class="nav-item" v-show="loggedIn">
+          <li class="nav-item" v-if="loggedIn">
             <router-link class="nav-link" to="/account">
-              <i class="fa fa-user" aria-hidden="true"></i> Account
+              <i class="fa fa-user" aria-hidden="true"></i> {{ $t('nav.account') }}
             </router-link>
           </li>
-          <li class="nav-item" v-show="!loggedIn">
+          <li class="nav-item" v-if="!loggedIn">
             <router-link class="nav-link text-primary" to="/login">
-              <i class="fa fa-sign-in" aria-hidden="true"></i> Login
+              <i class="fa fa-sign-in" aria-hidden="true"></i> {{ $t('nav.login') }}
             </router-link>
           </li>
-          <li class="nav-item" v-show="loggedIn">
+          <li class="nav-item" v-if="loggedIn">
             <router-link class="nav-link text-danger" to="/" @click.native="logout">
-              <i class="fa fa-sign-out" aria-hidden="true"></i> Logout
+              <i class="fa fa-sign-out" aria-hidden="true"></i> {{ $t('nav.logout') }}
             </router-link>
           </li>
           <li class="nav-item" v-if="$acl.can(['admin.panel'], true)">
             <router-link class="nav-link text-warning" to="/admin">
-              <i class="fa fa-server" aria-hidden="true"></i> Admin Panel
+              <i class="fa fa-server" aria-hidden="true"></i> {{ $t('nav.admin.panel') }}
             </router-link>
           </li>
         </ul>
@@ -76,10 +76,10 @@
           </div>
           <div class="col">
             <span class="text-muted small float-right">
-              <router-link to="/about">About</router-link> |
-              <router-link to="/imprint">Imprint</router-link> |
-              <router-link to="/privacy">Privacy</router-link> |
-              <router-link to="/api">API</router-link> |
+              <router-link to="/about">{{ $t('nav.about') }}</router-link> |
+              <router-link to="/imprint">{{ $t('nav.imprint') }}</router-link> |
+              <router-link to="/privacy">{{ $t('nav.privacy') }}</router-link> |
+              <router-link to="/api">{{ $t('nav.api') }}</router-link> |
               <a href="https://github.com/MorpheusXAUT/slotlist-frontend">
                 <i class="fa fa-github"></i> Frontend</a> |
               <a href="https://github.com/MorpheusXAUT/slotlist-backend">
@@ -146,7 +146,7 @@ export default {
   },
   created: function() {
     utils.clearTitle()
-  },
+  }
 }
 </script>
 

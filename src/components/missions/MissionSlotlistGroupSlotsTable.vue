@@ -4,10 +4,10 @@
       <thead>
         <tr>
           <th style="width: 1%">#</th>
-          <th style="width: 25%">Role</th>
-          <th style="width: 34%">Player</th>
-          <th style="width: 30%">Description</th>
-          <th style="width: 10%" class="text-center">Actions</th>
+          <th style="width: 25%">{{ $t('mission.slot.role') }}</th>
+          <th style="width: 34%">{{ $t('mission.slot.player') }}</th>
+          <th style="width: 30%">{{ $t('mission.slot.description') }}</th>
+          <th style="width: 10%" class="text-center">{{ $t('misc.actions') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -16,10 +16,10 @@
       <tfoot v-show="missionSlots.length >= 10">
         <tr>
           <th style="width: 1%">#</th>
-          <th style="width: 25%">Role</th>
-          <th style="width: 34%">Player</th>
-          <th style="width: 30%">Description</th>
-          <th style="width: 10%" class="text-center">Actions</th>
+          <th style="width: 25%">{{ $t('mission.slot.role') }}</th>
+          <th style="width: 34%">{{ $t('mission.slot.player') }}</th>
+          <th style="width: 30%">{{ $t('mission.slot.description') }}</th>
+          <th style="width: 10%" class="text-center">{{ $t('misc.actions') }}</th>
         </tr>
       </tfoot>
     </table>

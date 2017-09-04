@@ -5,11 +5,11 @@
     <mission-slotlist-group-slots-table :missionSlots="missionSlotGroup.slots"></mission-slotlist-group-slots-table>
     <div class="text-center" v-if="isMissionEditor">
       <b-btn variant="success" @click="setMissionSlotGroupDetails" v-b-modal.missionSlotCreateModal>
-        <i class="fa fa-plus" aria-hidden="true"></i> Create slot
+        <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.create.mission.slot') }}
       </b-btn>
-      <click-confirm yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: 'Delete slot group?', yes: 'Confirm', no: 'Cancel'}">
+      <click-confirm yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('mission.slotGroup.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
         <b-btn variant="danger" @click="deleteMissionSlotGroup">
-          <i class="fa fa-trash" aria-hidden="true"></i> Delete slot group
+          <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete') }}
         </b-btn>
       </click-confirm>
     </div>

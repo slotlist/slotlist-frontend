@@ -4,10 +4,10 @@
     <br>
     <div class="text-center">
       <b-btn variant="success" v-if="isMissionEditor" v-b-modal.missionSlotGroupCreateModal>
-        <i class="fa fa-plus" aria-hidden="true"></i> Create slot group
+        <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.create.mission.slotGroup') }}
       </b-btn>
       <b-btn @click="refreshMissionSlotlist">
-        <i class="fa fa-refresh" aria-hidden="true"></i> Refresh
+        <i class="fa fa-refresh" aria-hidden="true"></i> {{ $t('button.refresh') }}
       </b-btn>
     </div>
   </div>
