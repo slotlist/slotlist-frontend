@@ -7,17 +7,17 @@
         <br>
         <div class="row text-center">
           <div class="col">
-            <h5>Community</h5>
+            <h5>{{ $t('mission.community') }}</h5>
             <p>
               <router-link v-if="userDetails.community" :to="{name: 'communityDetails', params: {communitySlug: userDetails.community.slug}}">{{ userDetails.community.name }}</router-link>
-              <span v-if="!userDetails.community" class="text-muted font-italic">not associated</span>
+              <span v-if="!userDetails.community" class="text-muted font-italic">{{ $t('account.notAssociated') }}</span>
             </p>
           </div>
         </div>
       </div>
       <div class="card">
         <div class="card-block text-nowrap">
-          <h4 class="card-title">Missions</h4>
+          <h4 class="card-title">{{ $t('nav.missions') }}</h4>
           <user-missions></user-missions>
         </div>
       </div>
@@ -43,13 +43,13 @@ export default {
   components: {
     UserMissions
   },
-  beforeCreate: function () {
+  beforeCreate: function() {
     this.$store.dispatch('getUserDetails', this.$route.params.userUid)
   },
-  created: function () {
+  created: function() {
     utils.setTitle('User')
   },
-  beforeDestroy: function () {
+  beforeDestroy: function() {
     this.$store.dispatch('clearUserDetails')
   },
   computed: {

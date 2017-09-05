@@ -6,7 +6,7 @@
     </nav>
     <div class="text-center" v-show="loggedIn">
       <router-link tag="button" type="button" class="btn btn-success" :to="{name: 'communityCreator'}">
-        <i class="fa fa-plus" aria-hidden="true"></i> Create community
+        <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.create.community') }}
       </router-link>
     </div>
   </div>

@@ -23,7 +23,7 @@
             <i class="fa fa-eraser" aria-hidden="true"></i> {{ $t('button.unregister') }}
           </b-btn>
         </click-confirm>
-        <click-confirm v-if="isMissionEditor" yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: 'Delete slot?', yes: 'Confirm', no: 'Cancel'}">
+        <click-confirm v-if="isMissionEditor" yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('mission.slot.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
           <b-btn variant="danger" size="sm" @click="deleteMissionSlotRegistration">
             <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete') }}
           </b-btn>

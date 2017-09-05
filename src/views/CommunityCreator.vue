@@ -1,55 +1,43 @@
 <template>
   <div>
-    <!-- Begin of content -->
     <div>
-      <div>
-        <h3>Create new community</h3>
-      </div>
-      <div>
-        <b-form @submit.stop.prevent="createCommunity">
-          <div class="row">
-            <div class="col">
-              <b-form-fieldset label="Name" :state="communityCreateNameState" :feedback="communityCreateNameFeedback" description="Full name of the community">
-                <b-form-input v-model="communityCreate.name" type="text" required :formatter="communityCreateNameFormatter" lazy-formatter></b-form-input>
-              </b-form-fieldset>
-            </div>
-            <div class="col">
-              <b-form-fieldset label="Slug" :state="communityCreateSlugState" :feedback="communityCreateSlugFeedback" description="Slug to use for community URL, must be unique">
-                <b-input-group :right="communityCreateSlugAvailable">
-                  <b-form-input v-model="communityCreate.slug" type="text" required :formatter="communityCreateSlugFormatter" lazy-formatter></b-form-input>
-                </b-input-group>
-              </b-form-fieldset>
-            </div>
+      <h3>{{ $t('community.creator.title') }}</h3>
+    </div>
+    <div>
+      <b-form @submit.stop.prevent="createCommunity">
+        <div class="row">
+          <div class="col">
+            <b-form-fieldset :label="$t('community.name')" :description="$t('community.name.description')" :state="communityCreateNameState" :feedback="communityCreateNameFeedback">
+              <b-form-input v-model="communityCreate.name" type="text" required :formatter="communityCreateNameFormatter" lazy-formatter></b-form-input>
+            </b-form-fieldset>
           </div>
-          <div class="row">
-            <div class="col">
-              <b-form-fieldset label="Tag" :state="communityCreateTagState" :feedback="communityCreateTagFeedback" description="Community tag to display for all members (prefixed before name)">
-                <b-form-input v-model="communityCreate.tag" type="text" required></b-form-input>
-              </b-form-fieldset>
-            </div>
-            <div class="col">
-              <b-form-fieldset label="Website <em>(optional)</em>" :state="communityCreateWebsiteState" :feedback="communityCreateWebsiteFeedback">
-                <b-form-input v-model="communityCreate.website" type="text"></b-form-input>
-              </b-form-fieldset>
-            </div>
+          <div class="col">
+            <b-form-fieldset :label="$t('community.slug')" :description="$t('community.slug.description')" :state="communityCreateSlugState" :feedback="communityCreateSlugFeedback">
+              <b-input-group :right="communityCreateSlugAvailable">
+                <b-form-input v-model="communityCreate.slug" type="text" required :formatter="communityCreateSlugFormatter" lazy-formatter></b-form-input>
+              </b-input-group>
+            </b-form-fieldset>
           </div>
-        </b-form>
-      </div>
-      <div class="text-center">
-        <button type="button" class="btn btn-success" @click="createCommunity">
-          <i class="fa fa-plus" aria-hidden="true"></i> Create community
-        </button>
-      </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <b-form-fieldset :label="$t('community.tag')" :description="$t('community.tag.description')" :state="communityCreateTagState" :feedback="communityCreateTagFeedback">
+              <b-form-input v-model="communityCreate.tag" type="text" required></b-form-input>
+            </b-form-fieldset>
+          </div>
+          <div class="col">
+            <b-form-fieldset :label="$t('community.website.optional')" :state="communityCreateWebsiteState" :feedback="communityCreateWebsiteFeedback">
+              <b-form-input v-model="communityCreate.website" type="text"></b-form-input>
+            </b-form-fieldset>
+          </div>
+        </div>
+      </b-form>
     </div>
-    <!-- End of content -->
-    <!-- Begin of modals -->
-    <div>
+    <div class="text-center">
+      <b-btn variant="success" @click="createCommunity">
+        <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.create.community') }}
+      </b-btn>
     </div>
-    <!-- End of modals -->
-    <!-- Beging of overlays -->
-    <div>
-    </div>
-    <!-- End of overlays -->
   </div>
 </template>
 
@@ -57,7 +45,7 @@
 import utils from '../utils'
 
 export default {
-  created: function () {
+  created: function() {
     utils.setTitle('Mission Creator')
   },
   data() {
@@ -75,7 +63,7 @@ export default {
       return this.$store.getters.checkingCommunitySlugAvailability
     },
     communityCreateNameFeedback() {
-      return _.isNil(this.communityCreate.name) || _.isEmpty(this.communityCreate.name) ? 'Please enter a name' : ''
+      return _.isNil(this.communityCreate.name) || _.isEmpty(this.communityCreate.name) ? this.$t('community.creator.feedback.name') : ''
     },
     communityCreateNameState() {
       return _.isNil(this.communityCreate.name) || _.isEmpty(this.communityCreate.name) ? 'danger' : 'success'
@@ -93,11 +81,11 @@ export default {
     },
     communityCreateSlugFeedback() {
       if (_.isNil(this.communityCreate.slug) || _.isEmpty(this.communityCreate.slug)) {
-        return 'Enter a slug'
+        return this.$t('community.creator.feedback.slug')
       } else if (this.checkingCommunitySlugAvailability) {
-        return '<em>Checking community slug availability...</em>'
+        return this.$t('community.creator.feedback.slug.checking')
       } else if (!this.communitySlugAvailable) {
-        return 'Community slug not available'
+        return this.$t('community.creator.feedback.slug.notAvailable')
       }
 
       return ''
@@ -112,7 +100,7 @@ export default {
       return '<i class="fa fa-close" aria-hidden="true"></i>'
     },
     communityCreateTagFeedback(proerty) {
-      return _.isNil(this.communityCreate.tag) || _.isEmpty(this.communityCreate.tag) ? 'Please enter a tag' : ''
+      return _.isNil(this.communityCreate.tag) || _.isEmpty(this.communityCreate.tag) ? this.$t('community.creator.feedback.tag') : ''
     },
     communityCreateTagState() {
       return _.isNil(this.communityCreate.tag) || _.isEmpty(this.communityCreate.tag) ? 'danger' : 'success'
@@ -122,7 +110,7 @@ export default {
         return ''
       }
 
-      return this.isCommunityCreateWebsiteValidUrl ? '' : 'Please enter a valid website URL'
+      return this.isCommunityCreateWebsiteValidUrl ? '' : this.$t('community.creator.feedback.website')
     },
     communityCreateWebsiteState() {
       if (_.isNil(this.communityCreate.website) || _.isEmpty(this.communityCreate.website)) {
@@ -156,6 +144,10 @@ export default {
       return val
     },
     createCommunity() {
+      if (_.isEmpty(this.communityCreate.name) || _.isEmpty(this.communityCreate.slug) || _.isEmpty(this.communityCreate.tag)) {
+        return
+      }
+
       if (_.isEmpty(this.communityCreate.website)) {
         this.communityCreate.website = null
       }

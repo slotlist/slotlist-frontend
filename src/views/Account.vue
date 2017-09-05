@@ -20,9 +20,9 @@
             <b-btn variant="primary" v-b-modal.accountEditModal>
               <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit') }}
             </b-btn>
-            <button type="button" class="btn btn-secondary" @click="refreshAuthentication">
+            <b-btn variant="secondary" @click="refreshAuthentication">
               <i class="fa fa-key" aria-hidden="true"></i> {{ $t('button.refresh.authentication') }}
-            </button>
+            </b-btn>
           </div>
         </div>
       </div>

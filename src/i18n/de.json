@@ -1,3 +1,24 @@
 {
-  "button.refresh": "Aktualisieren"
+  "button.accept": "Akzeptieren",
+  "button.apply": "Bewerben",
+  "button.assign": "Zuweisen",
+  "button.cancel": "Abbrechen",
+  "button.close": "Schließen",
+  "button.create.community": "Community erstellen",
+  "button.create.mission": "Mission erstellen",
+  "button.create.mission.slot": "Slot erstellen",
+  "button.create.mission.slotGroup": "Slot-Gruppe erstellen",
+  "button.confirm": "Bestätigen",
+  "button.delete": "Löschen",
+  "button.deny": "Ablehnen",
+  "button.details": "Details",
+  "button.edit": "Bearbeiten",
+  "button.refresh": "Aktualisieren",
+  "button.refresh.authentication": "Authentifizierung aktualisieren",
+  "button.register": "Anmelden",
+  "button.remove": "Entfernen",
+  "button.save": "Speichern",
+  "button.submit": "Abschicken",
+  "button.unassign": "Zuweisung entfernen",
+  "button.unregister": "Abmelden"
 }
