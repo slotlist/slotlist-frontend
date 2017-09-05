@@ -25,7 +25,7 @@ const actions = {
     })
   },
   getUserDetails({ commit, dispatch }, payload) {
-    dispatch('startWorking', 'Loading user details...')
+    dispatch('startWorking', i18n.t('store.getUserDetails'))
 
     return UsersApi.getUserDetails(payload)
       .then(function (response) {
@@ -58,27 +58,27 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load user details - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getUserDetails.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('getUserDetails', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load user details - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getUserDetails.error')} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('getUserDetails', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load user details - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getUserDetails.error')} - ${i18n.t('failed.something')}`
           })
         }
       })
   },
   getUserMissions({ commit, dispatch }, payload) {
-    dispatch('startWorking', 'Loading user missions...')
+    dispatch('startWorking', i18n.t('store.getUserMissions'))
 
     return UsersApi.getUserMissions(payload)
       .then(function (response) {
@@ -111,21 +111,21 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load user missions - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getUserMissions.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('getUserMissions', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load user missions - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getUserMissions.error')} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('getUserMissions', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load user missions - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getUserMissions.error')} - ${i18n.t('failed.something')}`
           })
         }
       })

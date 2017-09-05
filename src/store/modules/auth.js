@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import { i18n } from '../../app'
 import * as _ from 'lodash'
 import jwtDecode from 'jwt-decode'
 import axios from 'axios'
@@ -11,10 +12,8 @@ const state = {
   loggedIn: false,
   loginRedirectUrl: null,
   redirect: null,
-  performingLogin: false,
   token: null,
   decodedToken: null,
-  refreshingToken: false,
   accountDetails: null,
   accountMissions: null,
   accountPermissions: null
@@ -27,14 +26,8 @@ const getters = {
   loggedIn() {
     return state.loggedIn
   },
-  performingLogin() {
-    return state.performingLogin
-  },
   decodedToken() {
     return state.decodedToken
-  },
-  refreshingToken() {
-    return state.refreshingToken
   },
   user() {
     return _.isNil(state.decodedToken) ? {} : state.decodedToken.user
@@ -83,29 +76,27 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to get Steam SSO URL - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getLoginRedirectUrl.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('getLoginRedirectUrl', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to get Steam SSO URL - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getLoginRedirectUrl.error')} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('getLoginRedirectUrl', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to get Steam SSO URL - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getLoginRedirectUrl.error')} - ${i18n.t('failed.something')}`
           })
         }
       })
   },
   performLogin({ commit, dispatch }, payload) {
-    commit({
-      type: "startPerformingLogin"
-    })
+    dispatch('startWorking', i18n.t('store.performLogin'))
 
     return AuthApi.performLogin(payload)
       .then(function (response) {
@@ -132,30 +123,28 @@ const actions = {
           decodedToken: decodedToken
         })
       }).catch((error) => {
-        commit({
-          type: "finishPerformingLogin"
-        })
+        dispatch('stopWorking')
 
         if (error.response) {
           console.error('performLogin', error.response)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to perform login - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.performLogin.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('performLogin', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to perform login - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.performLogin.error')} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('performLogin', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to perform login - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.performLogin.error')} - ${i18n.t('failed.something')}`
           })
         }
       })
@@ -197,9 +186,7 @@ const actions = {
     })
   },
   refreshToken({ commit, dispatch }) {
-    commit({
-      type: "startRefreshingToken"
-    })
+    dispatch('startWorking', i18n.t('store.refreshToken'))
 
     return AuthApi.refreshToken()
       .then(function (response) {
@@ -237,21 +224,21 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to perform login - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.refreshToken.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('refreshToken', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to perform login - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.refreshToken.error')} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('refreshToken', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to perform login - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.refreshToken.error')} - ${i18n.t('failed.something')}`
           })
         }
       })
@@ -263,7 +250,7 @@ const actions = {
     })
   },
   getAccountDetails({ commit, dispatch }) {
-    dispatch('startWorking', 'Loading account details...')
+    dispatch('startWorking', i18n.t('store.getAccountDetails'))
 
     return AuthApi.getAccountDetails()
       .then(function (response) {
@@ -296,21 +283,21 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load account details - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getAccountDetails.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('getAccountDetails', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load account details - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getAccountDetails.error')} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('getAccountDetails', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load account details - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getAccountDetails.error')} - ${i18n.t('failed.something')}`
           })
         }
       })
@@ -321,7 +308,7 @@ const actions = {
     })
   },
   editAccount({ commit, dispatch }, payload) {
-    dispatch('startWorking', 'Updating account details...')
+    dispatch('startWorking', i18n.t('store.editAccount'))
 
     return AuthApi.editAccount(payload.updatedAccountDetails)
       .then(function (response) {
@@ -350,7 +337,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully updated account details`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.editAccount.success')}`
         })
       }).catch((error) => {
         dispatch('stopWorking')
@@ -360,21 +347,21 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to update account details - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editAccount.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('editAccount', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to update account details - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editAccount.error')} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('editAccount', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to update account details - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editAccount.error')} - ${i18n.t('failed.something')}`
           })
         }
       })
@@ -384,12 +371,6 @@ const actions = {
 const mutations = {
   setLoginRedirectUrl(state, payload) {
     state.loginRedirectUrl = payload.url
-  },
-  startPerformingLogin(state) {
-    state.performingLogin = true
-  },
-  finishPerformingLogin(state) {
-    state.performingLogin = false
   },
   startRefreshingToken(state) {
     state.refreshingToken = true

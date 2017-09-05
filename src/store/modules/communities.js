@@ -80,7 +80,7 @@ const getters = {
 
 const actions = {
   applyToCommunity({ dispatch }, payload) {
-    dispatch('startWorking', 'Applying to community...')
+    dispatch('startWorking', i18n.t('store.applyToCommunity'))
 
     return CommunitiesApi.applyToCommunity(payload)
       .then(function (response) {
@@ -104,7 +104,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully applied to community`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.applyToCommunity.success')}`
         })
       }).catch((error) => {
         dispatch('stopWorking')
@@ -114,21 +114,21 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to apply to community - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.applyToCommunity.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('applyToCommunity', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to apply to community - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.applyToCommunity.error')} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('applyToCommunity', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to apply to community - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.applyToCommunity.error')} - ${i18n.t('failed.something')}`
           })
         }
       })
@@ -170,21 +170,21 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to check availability of community slug <strong>${payload}</strong> - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.checkCommunitySlugAvailability.error')} <strong>${payload}</strong> - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('checkingCommunitySlugAvalability', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to check availability of community slug <strong>${payload}</strong> - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.checkCommunitySlugAvailability.error')} <strong>${payload}</strong> - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('checkingCommunitySlugAvalability', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to check availability of community slug <strong>${payload}</strong> - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.checkCommunitySlugAvailability.error')} <strong>${payload}</strong> - ${i18n.t('failed.something')}`
           })
         }
       })
@@ -205,7 +205,7 @@ const actions = {
     })
   },
   createCommunity({ dispatch }, payload) {
-    dispatch('startWorking', 'Creating community...')
+    dispatch('startWorking', i18n.t('store.createCommunity'))
 
     return CommunitiesApi.createCommunity(payload)
       .then(function (response) {
@@ -229,7 +229,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully created community`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.createCommunity.success')}`
         })
 
         router.push({
@@ -244,27 +244,27 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create community - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createCommunity.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('createCommunity', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create community - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createCommunity.error')} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('createCommunity', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create community - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createCommunity.error')} - ${i18n.t('failed.something')}`
           })
         }
       })
   },
   deleteCommunity({ dispatch }, payload) {
-    dispatch('startWorking', 'Deleting community...')
+    dispatch('startWorking', i18n.t('store.deleteCommunity'))
 
     return CommunitiesApi.deleteCommunity(payload.communitySlug)
       .then(function (response) {
@@ -288,7 +288,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully deleted community <strong>${payload.communityName}</strong>`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteCommunity.success')} <strong>${payload.communityName}</strong>`
         })
 
         router.push({ name: 'communityList' })
@@ -300,27 +300,27 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete community <strong>${payload.communityName}</strong> - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteCommunity.error')} <strong>${payload.communityName}</strong> - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('deleteCommunity', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete community <strong>${payload.communityName}</strong> - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteCommunity.error')} <strong>${payload.communityName}</strong> - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('deleteCommunity', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete community <strong>${payload.communityName}</strong> - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteCommunity.error')} <strong>${payload.communityName}</strong> - ${i18n.t('failed.something')}`
           })
         }
       })
   },
   editCommunity({ commit, dispatch }, payload) {
-    dispatch('startWorking', 'Updating community details...')
+    dispatch('startWorking', i18n.t('store.editCommunity'))
 
     return CommunitiesApi.editCommunity(payload.communitySlug, payload.updatedCommunityDetails)
       .then(function (response) {
@@ -349,7 +349,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully updated community details`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.editCommunity.success')}`
         })
       }).catch((error) => {
         dispatch('stopWorking')
@@ -359,27 +359,27 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to update community details - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editCommunity.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('editCommunity', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to update community details - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editCommunity.error')} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('editCommunity', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to update community details - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editCommunity.error')} - ${i18n.t('failed.something')}`
           })
         }
       })
   },
   getCommunities({ commit, dispatch }, payload) {
-    dispatch('startWorking', 'Loading communities...')
+    dispatch('startWorking', i18n.t('store.getCommunities'))
 
     if (_.isNil(payload)) {
       payload = { page: 1 }
@@ -419,27 +419,27 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load communities - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunities.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('getCommunities', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load communities - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunities.error')} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('getCommunities', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load communities - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunities.error')} - ${i18n.t('failed.something')}`
           })
         }
       })
   },
   getCommunityApplications({ commit, dispatch }, payload) {
-    dispatch('startWorking', 'Loading community applications...')
+    dispatch('startWorking', i18n.t('store.getCommunityApplications'))
 
     if (_.isNil(payload.page)) {
       payload.page = 1
@@ -477,27 +477,27 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load community applications - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityApplications.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('getCommunityApplications', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load community applications - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityApplications.error')} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('getCommunityApplications', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load community applications - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityApplications.error')} - ${i18n.t('failed.something')}`
           })
         }
       })
   },
   getCommunityDetails({ commit, dispatch }, payload) {
-    dispatch('startWorking', 'Loading community details...')
+    dispatch('startWorking', i18n.t('store.getCommunityDetails'))
 
     return CommunitiesApi.getCommunityDetails(payload)
       .then(function (response) {
@@ -530,27 +530,27 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load community details - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityDetails.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('getCommunityDetails', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load community details - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityDetails.error')} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('getCommunityDetails', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load community details - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityDetails.error')} - ${i18n.t('failed.something')}`
           })
         }
       })
   },
   getCommunityMissions({ commit, dispatch }, payload) {
-    dispatch('startWorking', 'Loading community missions...')
+    dispatch('startWorking', i18n.t('store.getCommunityMissions'))
 
     if (_.isNil(payload.page)) {
       payload.page = 1
@@ -588,27 +588,27 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load community missions - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityMissions.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('getCommunityMissions', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load community missions - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityMissions.error')} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('getCommunityMissions', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load community missions - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityMissions.error')} - ${i18n.t('failed.something')}`
           })
         }
       })
   },
   processCommunityApplication({ dispatch }, payload) {
-    dispatch('startWorking', 'Processing community application...')
+    dispatch('startWorking', i18n.t('store.processCommunityApplication'))
 
     return CommunitiesApi.processCommunityApplication(payload.communitySlug, payload.applicationUid, payload.accepted)
       .then(function (response) {
@@ -633,7 +633,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully ${payload.accepted ? 'accepted' : 'denied'} community application for user <strong>${payload.applicationUserNickname}</strong>`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.processCommunityApplication.success', { action: payload.accepted ? i18n.t('store.processCommunityApplication.accepted') : i18n.t('store.processCommunityApplication.denied'), nickname: payload.applicationUserNickname })}`
         })
       }).catch((error) => {
         dispatch('stopWorking')
@@ -643,27 +643,27 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to ${payload.accepted ? 'accept' : 'deny'} community application for user <strong>${payload.applicationUserNickname}</strong> - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.processCommunityApplication.error', { action: payload.accepted ? i18n.t('store.processCommunityApplication.accept') : i18n.t('store.processCommunityApplication.deny'), nickname: payload.applicationUserNickname })} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('processCommunityApplication', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to ${payload.accepted ? 'accept' : 'deny'} community application for user <strong>${payload.applicationUserNickname}</strong> - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.processCommunityApplication.error', { action: payload.accepted ? i18n.t('store.processCommunityApplication.accept') : i18n.t('store.processCommunityApplication.deny'), nickname: payload.applicationUserNickname })} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('processCommunityApplication', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to ${payload.accepted ? 'accept' : 'deny'} community application for user <strong>${payload.applicationUserNickname}</strong> - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.processCommunityApplication.error', { action: payload.accepted ? i18n.t('store.processCommunityApplication.accept') : i18n.t('store.processCommunityApplication.deny'), nickname: payload.applicationUserNickname })} - ${i18n.t('failed.something')}`
           })
         }
       })
   },
   removeCommunityMember({ dispatch }, payload) {
-    dispatch('startWorking', 'Removing community member...')
+    dispatch('startWorking', i18n.t('store.removeCommunityMember'))
 
     return CommunitiesApi.removeCommunityMember(payload.communitySlug, payload.memberUid)
       .then(function (response) {
@@ -687,7 +687,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully removed community member <strong>${payload.memberNickname}</strong>`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.removeCommunityMember.success', { nickname: payload.memberNickname })}</strong>`
         })
       }).catch((error) => {
         dispatch('stopWorking')
@@ -697,21 +697,21 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to remove community member <strong>${payload.memberNickname}</strong> - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.removeCommunityMember.error', { nickname: payload.memberNickname })} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('removeCommunityMember', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load community details <strong>${payload.memberNickname}</strong> - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.removeCommunityMember.error', { nickname: payload.memberNickname })} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('removeCommunityMember', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load community details <strong>${payload.memberNickname}</strong> - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.removeCommunityMember.error', { nickname: payload.memberNickname })} - ${i18n.t('failed.something')}`
           })
         }
       })

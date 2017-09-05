@@ -22,9 +22,6 @@
         </p>
       </div>
     </div>
-    <div v-show="performingLogin">
-      <loading-overlay message="Logging in..."></loading-overlay>
-    </div>
   </div>
 </template>
 
@@ -34,14 +31,6 @@ import * as _ from 'lodash'
 import utils from '../utils'
 
 export default {
-  computed: {
-    loginRedirectUrl() {
-      return this.$store.getters.loginRedirectUrl
-    },
-    performingLogin() {
-      return this.$store.getters.performingLogin
-    }
-  },
   beforeCreate: function() {
     this.$store.dispatch('getLoginRedirectUrl')
 
@@ -52,6 +41,11 @@ export default {
   },
   created: function() {
     utils.setTitle(this.$t('nav.login'))
+  },
+  computed: {
+    loginRedirectUrl() {
+      return this.$store.getters.loginRedirectUrl
+    }
   }
 }
 </script>

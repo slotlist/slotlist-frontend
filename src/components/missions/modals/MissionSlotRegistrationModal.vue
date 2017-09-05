@@ -46,7 +46,7 @@ export default {
       return this.$store.getters.missionSlotDetails
     },
     translatedModalText() {
-      return this.$t('mission.modal.slot.register.text').replace('{{slotInfo}}', `<span class="font-weight-bold">#${this.missionSlotDetails.orderNumber} ${this.missionSlotDetails.title}</span>`)
+      return this.$t('mission.modal.slot.register.text', { slotInfo: `<span class="font-weight-bold">#${this.missionSlotDetails.orderNumber} ${this.missionSlotDetails.title}</span>` })
     }
   },
   methods: {

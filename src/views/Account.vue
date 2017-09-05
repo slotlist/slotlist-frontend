@@ -41,9 +41,9 @@
       </div>
     </div>
     <!-- End of content -->
-    <account-edit-modal></account-edit-modal>
     <!-- Begin of modals -->
     <div>
+      <account-edit-modal></account-edit-modal>
     </div>
     <!-- End of modals -->
   </div>
