@@ -44,6 +44,15 @@
               <i class="fa fa-server" aria-hidden="true"></i> {{ $t('nav.admin.panel') }}
             </router-link>
           </li>
+          <li class="nav-item dropdown">
+            <a id="navbarLanguageDropdown" class="nav-link dropdown-toggle text-muted" href="#" data-toggle="dropdown" aria-expanded="false">
+              <i class="fa fa-language" aria-hidden="true"></i> {{ selectedLanguage }}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarLanguageDropdown">
+              <a class="dropdown-item text-muted" href="#" @click.prevent="setLocale('en')">English</a>
+              <a class="dropdown-item text-muted" href="#" @click.prevent="setLocale('de')">Deutsch</a>
+            </div>
+          </li>
         </ul>
       </div>
     </nav>
@@ -98,47 +107,22 @@ import * as _ from 'lodash'
 import utils from '../utils'
 
 export default {
-  computed: {
-    loggedIn() {
-      return this.$store.getters.loggedIn
-    },
-    year() {
-      return new Date().getFullYear()
-    },
-    showAlert() {
-      return this.$store.getters.showAlert
-    },
-    alertVariant() {
-      return this.$store.getters.alertVariant
-    },
-    alertDismissible() {
-      return this.$store.getters.alertDismissible
-    },
-    alertMessage() {
-      return this.$store.getters.alertMessage
-    },
-    working() {
-      return this.$store.getters.working
-    }
-  },
-  methods: {
-    logout() {
-      this.$store.dispatch('performLogout')
-        .then(() => {
-          this.$router.push({ path: '/', query: { logout: true } })
-        })
-    },
-    alertDismissed() {
-      this.$store.dispatch('clearAlert')
-    },
-    alertDismissCountDown(val) {
-      if (val === 1) {
-        console.info('This is gonna look ugly...')
-        this.$store.dispatch('clearAlert')
+  beforeCreate: function() {
+    let locale = this.$ls.get('locale')
+    if (_.isNil(locale) || !_.isString(locale) || _.isEmpty(locale)) {
+      console.info('Locale not defined, retrieving from browser language')
+
+      const userLanguage = navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage;
+      locale = userLanguage.split('-')[0].trim()
+
+      if (!_.isString(locale) || _.isEmpty(locale)) {
+        console.info('Failed to get user language from browser, falling back to English')
+        locale = 'en'
       }
     }
-  },
-  beforeCreate: function() {
+
+    this.$store.dispatch("setLocale", locale)
+
     const token = this.$ls.get('auth-token')
     if (!_.isNil(token)) {
       this.$store.dispatch("setTokenFromLocalStorage", token)
@@ -146,6 +130,58 @@ export default {
   },
   created: function() {
     utils.clearTitle()
+  },
+  computed: {
+    alertDismissible() {
+      return this.$store.getters.alertDismissible
+    },
+    alertMessage() {
+      return this.$store.getters.alertMessage
+    },
+    alertVariant() {
+      return this.$store.getters.alertVariant
+    },
+    loggedIn() {
+      return this.$store.getters.loggedIn
+    },
+    selectedLanguage() {
+      const locale = this.$i18n.locale
+
+      switch (locale) {
+        case 'en': return 'English'
+        case 'de': return 'Deutsch'
+        default: return 'Language'
+      }
+    },
+    showAlert() {
+      return this.$store.getters.showAlert
+    },
+    working() {
+      return this.$store.getters.working
+    },
+    year() {
+      return new Date().getFullYear()
+    }
+  },
+  methods: {
+    alertDismissCountDown(val) {
+      if (val === 1) {
+        console.info('This is gonna look ugly...')
+        this.$store.dispatch('clearAlert')
+      }
+    },
+    alertDismissed() {
+      this.$store.dispatch('clearAlert')
+    },
+    logout() {
+      this.$store.dispatch('performLogout')
+        .then(() => {
+          this.$router.push({ path: '/', query: { logout: true } })
+        })
+    },
+    setLocale(locale) {
+      this.$store.dispatch('setLocale', locale)
+    }
   }
 }
 </script>

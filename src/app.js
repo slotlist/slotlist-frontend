@@ -64,19 +64,9 @@ const i18n = new VueI18n({
 })
 
 Vue.mixin({
-  computed: {
-    locale() {
-      this.$store.getters.locale
-    }
-  },
   methods: {
     formatDateTime: (dateTime) => moment(dateTime).format('Y-MM-DD HH:mm'),
     formatUserWithTag: (user) => _.isNil(user.community) ? user.nickname : `[${user.community.tag}] ${user.nickname}`
-  },
-  watch: {
-    locale() {
-      this.$i18n.locale = this.locale
-    }
   }
 })
 

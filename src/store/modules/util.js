@@ -1,19 +1,17 @@
+import Vue from 'vue'
+import { i18n } from '../../app'
 import * as _ from 'lodash'
 
 import StatusApi from '../../api/status'
 
 const state = {
   backendVersion: null,
-  locale: null,
   working: null
 }
 
 const getters = {
   backendVersion() {
     return state.backendVersion
-  },
-  locale() {
-    return state.locale
   },
   working() {
     return state.working
@@ -77,7 +75,9 @@ const mutations = {
     state.backendVersion = payload.backendVersion
   },
   setLocale(state, payload) {
-    state.locale = payload.locale
+    Vue.ls.set('locale', payload.locale)
+
+    i18n.locale = payload.locale
   },
   startWorking(state, payload) {
     state.working = _.isString(payload.message) && !_.isEmpty(payload.message) ? payload.message : 'Doing something...'
