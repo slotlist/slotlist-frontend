@@ -1,3 +1,4 @@
+import { i18n } from './app'
 import slugger from 'slug'
 
 slugger.charmap['.'] = '-'
@@ -15,7 +16,7 @@ slugger.defaults.mode = 'custom'
 
 export default {
   clearTitle() {
-    document.title = 'slotlist.info - ArmA 3 mission and slotlist management'
+    document.title = `slotlist.info - ${i18n.t('title.browser')}`
   },
   setTitle(suffix) {
     document.title = `slotlist.info - ${suffix}`

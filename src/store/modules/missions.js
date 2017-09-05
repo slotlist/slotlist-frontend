@@ -121,21 +121,21 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to check availability of mission slug <strong>${payload}</strong> - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.checkMissionSlugAvailability', { slug: payload })} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('checkMissionSlugAvailability', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to check availability of mission slug <strong>${payload}</strong> - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.checkMissionSlugAvailability', { slug: payload })} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('checkMissionSlugAvailability', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to check availability of mission slug <strong>${payload}</strong> - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.checkMissionSlugAvailability', { slug: payload })} - ${i18n.t('failed.something')}`
           })
         }
       })
@@ -161,7 +161,7 @@ const actions = {
     })
   },
   createMission({ dispatch }, payload) {
-    dispatch('startWorking', 'Creating missions...')
+    dispatch('startWorking', i18n.t('store.createMissions'))
 
     return MissionsApi.createMission(payload)
       .then((response) => {
@@ -185,7 +185,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully created mission <strong>${payload.title}</strong>`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.createMissions.success', { title: payload.title })}`
         })
 
         router.push({
@@ -200,27 +200,27 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create mission <strong>${payload.title}</strong> - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissions.error', { title: payload.title })} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('createMission', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create mission <strong>${payload.title}</strong> - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissions.error', { title: payload.title })} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('createMission', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create mission <strong>${payload.title}</strong> - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissions.error', { title: payload.title })} - ${i18n.t('failed.something')}`
           })
         }
       })
   },
   createMissionSlot({ dispatch }, payload) {
-    dispatch('startWorking', 'Creating slot...')
+    dispatch('startWorking', i18n.t('store.createMissionSlot'))
 
     return MissionsApi.createMissionSlot(payload.missionSlug, payload.slotDetails)
       .then((response) => {
@@ -244,7 +244,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully created slot <strong>#${payload.slotDetails.orderNumber} ${payload.slotDetails.title}</strong>`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.createMissionSlot.success', { slotInfo: `#${payload.slotDetails.orderNumber} ${payload.slotDetails.title}` })}`
         })
       }).catch((error) => {
         dispatch('stopWorking')
@@ -254,27 +254,27 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create slot <strong>#${payload.slotDetails.orderNumber} ${payload.slotDetails.title}</strong> - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissionSlot.error', { slotInfo: `#${payload.slotDetails.orderNumber} ${payload.slotDetails.title}` })} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('createMissionSlot', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create slot <strong>#${payload.slotDetails.orderNumber} ${payload.slotDetails.title}</strong> - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissionSlot.error', { slotInfo: `#${payload.slotDetails.orderNumber} ${payload.slotDetails.title}` })} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('createMissionSlot', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create slot <strong>#${payload.slotDetails.orderNumber} ${payload.slotDetails.title}</strong> - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissionSlot.error', { slotInfo: `#${payload.slotDetails.orderNumber} ${payload.slotDetails.title}` })} - ${i18n.t('failed.something')}`
           })
         }
       })
   },
   createMissionSlotGroup({ dispatch }, payload) {
-    dispatch('startWorking', 'Creating slot group...')
+    dispatch('startWorking', i18n.t('store.createMissionSlotGroup'))
 
     return MissionsApi.createMissionSlotGroup(payload.missionSlug, payload.slotGroupDetails)
       .then((response) => {
@@ -298,7 +298,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully created slot group <strong>#${payload.slotGroupDetails.orderNumber} ${payload.slotGroupDetails.title}</strong>`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.createMissionSlotGroup.success', { slotInfo: `#${payload.slotGroupDetails.orderNumber} ${payload.slotGroupDetails.title}` })}`
         })
       }).catch((error) => {
         dispatch('stopWorking')
@@ -308,27 +308,27 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create slot group <strong>#${payload.slotGroupDetails.orderNumber} ${payload.slotGroupDetails.title}</strong> - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissionSlotGroup.error', { slotInfo: `#${payload.slotGroupDetails.orderNumber} ${payload.slotGroupDetails.title}` })} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('createMissionSlotGroup', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create slot group <strong>#${payload.slotGroupDetails.orderNumber} ${payload.slotGroupDetails.title}</strong> - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissionSlotGroup.error', { slotInfo: `#${payload.slotGroupDetails.orderNumber} ${payload.slotGroupDetails.title}` })} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('createMissionSlotGroup', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to create slot group <strong>#${payload.slotGroupDetails.orderNumber} ${payload.slotGroupDetails.title}</strong> - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissionSlotGroup.error', { slotInfo: `#${payload.slotGroupDetails.orderNumber} ${payload.slotGroupDetails.title}` })} - ${i18n.t('failed.something')}`
           })
         }
       })
   },
   deleteMission({ dispatch }, payload) {
-    dispatch('startWorking', 'Deleting mission...')
+    dispatch('startWorking', i18n.t('store.deleteMission'))
 
     return MissionsApi.deleteMission(payload.missionSlug)
       .then((response) => {
@@ -352,7 +352,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully deleted mission <strong>${payload.missionTitle}</strong>`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteMission.success', { title: payload.missionTitle })}`
         })
 
         router.push({ name: 'missionList' })
@@ -364,27 +364,27 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete mission <strong>${payload.missionTitle}</strong> - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMission.error', { title: payload.missionTitle })} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('deleteMission', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete mission <strong>${payload.missionTitle}</strong> - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMission.error', { title: payload.missionTitle })} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('deleteMission', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete mission <strong>${payload.missionTitle}</strong> - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMission.error', { title: payload.missionTitle })} - ${i18n.t('failed.something')}`
           })
         }
       })
   },
   deleteMissionSlot({ dispatch }, payload) {
-    dispatch('startWorking', 'Deleting slot...')
+    dispatch('startWorking', i18n.t('store.deleteMissionSlot'))
 
     return MissionsApi.deleteMissionSlot(payload.missionSlug, payload.slotUid)
       .then((response) => {
@@ -408,7 +408,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully deleted slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong>`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlot.success', { slotInfo: `${payload.slotOrderNumber} ${payload.slotTitle}` })}`
         })
       }).catch((error) => {
         dispatch('stopWorking')
@@ -418,27 +418,27 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('deleteMissionSlot', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('deleteMissionSlot', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${i18n.t('failed.something')}`
           })
         }
       })
   },
   deleteMissionSlotGroup({ dispatch }, payload) {
-    dispatch('startWorking', 'Deleting slot group...')
+    dispatch('startWorking', i18n.t('store.deleteMissionSlotGroup'))
 
     return MissionsApi.deleteMissionSlotGroup(payload.missionSlug, payload.slotGroupUid)
       .then((response) => {
@@ -462,7 +462,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully deleted slot group <strong>${payload.slotGroupTitle}</strong>`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlotGroup.success', { title: payload.slotGroupTitle })}`
         })
       }).catch((error) => {
         dispatch('stopWorking')
@@ -472,27 +472,27 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete slot group <strong>${payload.slotGroupTitle}</strong> - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlotGroup.error', { title: payload.slotGroupTitle })} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('deleteMissionSlotGroup', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete slot group <strong>${payload.slotGroupTitle}</strong> - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlotGroup.error', { title: payload.slotGroupTitle })} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('deleteMissionSlotGroup', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to delete slot group <strong>${payload.slotGroupTitle}</strong> - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlotGroup.error', { title: payload.slotGroupTitle })} - ${i18n.t('failed.something')}`
           })
         }
       })
   },
   editMission({ commit, dispatch }, payload) {
-    dispatch('startWorking', 'Editing mission...')
+    dispatch('startWorking', i18n.t('store.editMission'))
 
     return MissionsApi.editMission(payload.missionSlug, payload.updatedMissionDetails)
       .then((response) => {
@@ -514,7 +514,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully edited mission <strong>${payload.missionTitle}</strong>`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.editMission.success', { title: payload.missionTitle })}`
         })
 
         dispatch('stopWorking')
@@ -531,27 +531,27 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to edit mission <strong>${payload.missionTitle}</strong> - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editMission.error', { title: payload.missionTitle })} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('editMission', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to edit mission <strong>${payload.missionTitle}</strong> - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editMission.error', { title: payload.missionTitle })} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('editMission', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to edit mission <strong>${payload.missionTitle}</strong> - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editMission.error', { title: payload.missionTitle })} - ${i18n.t('failed.something')}`
           })
         }
       })
   },
   editMissionSlot({ dispatch }, payload) {
-    dispatch('startWorking', 'Editing slot...')
+    dispatch('startWorking', i18n.t('store.editMissionSlot'))
 
     return MissionsApi.editMissionSlot(payload.missionSlug, payload.slotUid, payload.updatedSlotDetails)
       .then((response) => {
@@ -575,7 +575,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully edited slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong>`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.editMissionSlot.success', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })}`
         })
       }).catch((error) => {
         dispatch('stopWorking')
@@ -585,21 +585,21 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to edit slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('editMissionSlot', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to edit slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('editMissionSlot', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to edit slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${i18n.t('failed.something')}`
           })
         }
       })
@@ -611,7 +611,7 @@ const actions = {
     })
   },
   getMissionDetails({ commit, dispatch }, payload) {
-    dispatch('startWorking', 'Loading mission details...')
+    dispatch('startWorking', i18n.t('store.getMissionDetails'))
 
     return MissionsApi.getMissionDetails(payload.missionSlug)
       .then(function (response) {
@@ -644,27 +644,27 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load mission details - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionDetails.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('getMissionDetails', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load mission details - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionDetails.error')} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('getMissionDetails', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load mission details - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionDetails.error')} - ${i18n.t('failed.something')}`
           })
         }
       })
   },
   getMissions({ commit, dispatch }, payload) {
-    dispatch('startWorking', 'Loading missions...')
+    dispatch('startWorking', i18n.t('store.getMissions'))
 
     if (_.isNil(payload)) {
       payload = { page: 1 }
@@ -704,27 +704,27 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load missions - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissions.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('getMissions', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load missions - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissions.error')} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('getMissions', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load missions - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissions.error')} - ${i18n.t('failed.something')}`
           })
         }
       })
   },
   getMissionSlotlist({ commit, dispatch }, payload) {
-    dispatch('startWorking', 'Loading mission slotlist...')
+    dispatch('startWorking', i18n.t('store.getMissionSlotlist'))
 
     return MissionsApi.getMissionSlotlist(payload.missionSlug)
       .then(function (response) {
@@ -757,27 +757,27 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load mission slotlist - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionSlotlist.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('getMissionSlotlist', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load mission slotlist - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionSlotlist.error')} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('getMissionSlotlist', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to load mission slotlist - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionSlotlist.error')} - ${i18n.t('failed.something')}`
           })
         }
       })
   },
   getMissionSlotRegistrations({ commit, dispatch }, payload) {
-    dispatch('startWorking', 'Loading slot registrations...')
+    dispatch('startWorking', i18n.t('store.getMissionSlotRegistrations'))
 
     if (_.isNil(payload.page)) {
       payload.page = 1
@@ -815,27 +815,27 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to retrieve registrations for slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionSlotRegistrations.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('getMissionSlotRegistrations', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionSlotRegistrations.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('getMissionSlotRegistrations', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionSlotRegistrations.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${i18n.t('failed.something')}`
           })
         }
       })
   },
   modifyMissionSlotRegistration({ dispatch, state }, payload) {
-    dispatch('startWorking', 'Editing slot registration...')
+    dispatch('startWorking', i18n.t('store.modifyMissionSlotRegistration'))
 
     return MissionsApi.modifyMissionSlotRegistration(payload.missionSlug, payload.slotUid, payload.registrationUid, payload.confirm)
       .then((response) => {
@@ -866,7 +866,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully modified slot registration`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.modifyMissionSlotRegistration.success')}`
         })
       }).catch((error) => {
         dispatch('stopWorking')
@@ -876,27 +876,27 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to modify slot registration - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.modifyMissionSlotRegistration.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('modifyMissionSlotRegistration', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to modify slot registration - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.modifyMissionSlotRegistration.error')} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('modifyMissionSlotRegistration', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to modify slot registration - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.modifyMissionSlotRegistration.error')} - ${i18n.t('failed.something')}`
           })
         }
       })
   },
   registerForMissionSlot({ dispatch }, payload) {
-    dispatch('startWorking', 'Registering for slot...')
+    dispatch('startWorking', i18n.t('store.registerForMissionSlot'))
 
     const comment = _.isNil(payload.comment) || _.isEmpty(payload.comment) ? null : payload.comment
 
@@ -922,7 +922,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully registered for slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong>`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.registerForMissionSlot.success', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })}`
         })
       }).catch((error) => {
         dispatch('stopWorking')
@@ -932,21 +932,21 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.registerForMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('registerForMissionSlot', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.registerForMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('registerForMissionSlot', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to register for slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.registerForMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${i18n.t('failed.something')}`
           })
         }
       })
@@ -964,7 +964,7 @@ const actions = {
     })
   },
   unregisterFromMissionSlot({ dispatch }, payload) {
-    dispatch('startWorking', 'Unregistering from slot...')
+    dispatch('startWorking', i18n.t('store.unregisterFromMissionSlot'))
 
     return MissionsApi.unregisterFromMissionSlot(payload.missionSlug, payload.slotUid, payload.registrationUid)
       .then((response) => {
@@ -988,7 +988,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> Successfully unregistered from slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong>`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.unregisterFromMissionSlot.success', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })}`
         })
       }).catch((error) => {
         dispatch('stopWorking')
@@ -998,21 +998,21 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to unregister from slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.unregisterFromMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('unregisterFromMissionSlot', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to unregister from slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Request failed`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.unregisterFromMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('unregisterFromMissionSlot', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> Failed to unregister from slot <strong>#${payload.slotOrderNumber} ${payload.slotTitle}</strong> - Something failed...`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.unregisterFromMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${i18n.t('failed.something')}`
           })
         }
       })
