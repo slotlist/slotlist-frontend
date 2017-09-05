@@ -54,6 +54,15 @@ Vue.component('spinner', VueSimpleSpinner)
 Vue.component('loading-overlay', LoadingOverlay)
 Vue.component('paginate', VuePaginate)
 
+const i18n = new VueI18n({
+  fallbackLocale: 'en',
+  locale: 'en',
+  messages: {
+    de: require('./i18n/de.json'),
+    en: require('./i18n/en.json')
+  }
+})
+
 Vue.mixin({
   computed: {
     locale() {
@@ -71,15 +80,6 @@ Vue.mixin({
   }
 })
 
-const i18n = new VueI18n({
-  fallbackLocale: 'en',
-  locale: 'en',
-  messages: {
-    de: require('./i18n/de.json'),
-    en: require('./i18n/en.json')
-  }
-})
-
 const app = new Vue({
   router,
   store,
@@ -87,4 +87,4 @@ const app = new Vue({
   ...App
 })
 
-export { app, router, store }
+export { app, router, store, i18n }

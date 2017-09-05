@@ -56,6 +56,7 @@
   "misc.details": "Details",
   "misc.notProvided": "not provided",
   "misc.notSpecified": "not specified",
+  "mission": "Mission",
   "mission.abbr.estimated": "est.",
   "mission.abbr.leadership": "ldrsp.",
   "mission.briefingTime": "Briefing time",
@@ -67,6 +68,7 @@
   "mission.creator.addToCommunity": "Add mission to community?",
   "mission.creator.addToCommunity.description": "Adding a mission to your community makes it visible in the community's mission list",
   "mission.creator.title": "Create new mission",
+  "mission.creator.title.browser": "Mission creator",
   "mission.description": "Description",
   "mission.description.description": "Detailed description of mission story, scenario, plot, tasks, etc. Everything your players should know before choosing to participate",
   "mission.endTime": "End time",
@@ -165,5 +167,6 @@
   "nav.login": "Login",
   "nav.logout": "Logout",
   "nav.missions": "Missions",
-  "nav.privacy": "Privacy"
+  "nav.privacy": "Privacy",
+  "user": "User"
 }

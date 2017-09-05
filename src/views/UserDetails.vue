@@ -46,9 +46,6 @@ export default {
   beforeCreate: function() {
     this.$store.dispatch('getUserDetails', this.$route.params.userUid)
   },
-  created: function() {
-    utils.setTitle('User')
-  },
   beforeDestroy: function() {
     this.$store.dispatch('clearUserDetails')
   },

@@ -68,7 +68,7 @@ export default {
     this.$store.dispatch('getAccountDetails')
   },
   created: function() {
-    utils.setTitle('Account')
+    utils.setTitle(this.$t('nav.account'))
   },
   beforeDestroy: function() {
     this.$store.dispatch('clearAccountDetails')

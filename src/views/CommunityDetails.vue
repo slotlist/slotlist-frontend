@@ -83,9 +83,6 @@ export default {
   beforeCreate: function() {
     this.$store.dispatch('getCommunityDetails', this.$route.params.communitySlug)
   },
-  created: function() {
-    utils.setTitle('Community')
-  },
   beforeDestroy: function() {
     this.$store.dispatch('clearCommunityDetails')
   },

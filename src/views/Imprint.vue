@@ -38,8 +38,8 @@
 import utils from '../utils'
 
 export default {
-  created: function () {
-    utils.setTitle('Imprint')
+  created: function() {
+    utils.setTitle(this.$t('nav.imprint'))
   }
 }
 </script>

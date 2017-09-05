@@ -46,7 +46,7 @@ import utils from '../utils'
 
 export default {
   created: function() {
-    utils.setTitle('Mission Creator')
+    utils.setTitle(this.$t('community.creator.title.browser'))
   },
   data() {
     return {

@@ -53,6 +53,12 @@ const actions = {
         }
       })
   },
+  setLocale({ commit }, payload) {
+    commit({
+      type: 'setLocale',
+      locale: payload
+    })
+  },
   startWorking({ commit }, payload) {
     commit({
       type: 'startWorking',
@@ -69,6 +75,9 @@ const actions = {
 const mutations = {
   setBackendVersion(state, payload) {
     state.backendVersion = payload.backendVersion
+  },
+  setLocale(state, payload) {
+    state.locale = payload.locale
   },
   startWorking(state, payload) {
     state.working = _.isString(payload.message) && !_.isEmpty(payload.message) ? payload.message : 'Doing something...'

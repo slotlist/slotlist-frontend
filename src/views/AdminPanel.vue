@@ -10,8 +10,8 @@
 import utils from '../utils'
 
 export default {
-  created: function () {
-    utils.setTitle('Admin panel')
+  created: function() {
+    utils.setTitle(this.$t('nav.admin.panel'))
   }
 }
 </script>

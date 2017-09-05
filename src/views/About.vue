@@ -66,7 +66,7 @@ export default {
     this.$store.dispatch('getBackendVersion')
   },
   created: function() {
-    utils.setTitle('About')
+    utils.setTitle(this.$t('nav.about'))
   },
   computed: {
     backendVersion() {

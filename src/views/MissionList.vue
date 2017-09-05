@@ -27,7 +27,7 @@ export default {
     this.$store.dispatch('getMissions')
   },
   created: function() {
-    utils.setTitle('Missions')
+    utils.setTitle(this.$t('nav.missions'))
   },
   beforeDestroy: function() {
     this.$store.dispatch('clearMissions')

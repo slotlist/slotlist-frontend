@@ -24,7 +24,7 @@ export default {
     this.$store.dispatch('getCommunities')
   },
   created: function() {
-    utils.setTitle('Communities')
+    utils.setTitle(this.$t('nav.communities'))
   },
   beforeDestroy: function() {
     this.$store.dispatch('clearCommunities')

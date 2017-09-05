@@ -1,3 +1,4 @@
+import { i18n } from '../../app'
 import * as _ from 'lodash'
 import utils from '../../utils'
 
@@ -140,7 +141,7 @@ const mutations = {
     state.userDetails = payload.userDetails
     state.userMissions = payload.userDetails.missions
 
-    utils.setTitle(`User ${state.userDetails.nickname}`)
+    utils.setTitle(`${i18n.t('user')} ${state.userDetails.nickname}`)
   },
   setUserMissions(state, payload) {
     state.userMissions = payload.userMissions

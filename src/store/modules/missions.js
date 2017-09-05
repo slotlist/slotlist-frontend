@@ -1,3 +1,4 @@
+import { i18n } from '../../app'
 import * as _ from 'lodash'
 import utils from '../../utils'
 import router from '../../router'
@@ -1039,7 +1040,7 @@ const mutations = {
   },
   setMissionDetails(state, payload) {
     state.missionDetails = payload.mission
-    utils.setTitle(`Mission ${state.missionDetails.title}`)
+    utils.setTitle(`${i18n.t('mission')} ${state.missionDetails.title}`)
   },
   setMissions(state, payload) {
     state.missions = payload.missions

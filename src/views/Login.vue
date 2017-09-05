@@ -42,7 +42,7 @@ export default {
       return this.$store.getters.performingLogin
     }
   },
-  beforeCreate: function () {
+  beforeCreate: function() {
     this.$store.dispatch('getLoginRedirectUrl')
 
     if (_.has(this.$route.query, 'openid.claimed_id')) {
@@ -50,8 +50,8 @@ export default {
       this.$store.dispatch('performLogin', url)
     }
   },
-  created: function () {
-    utils.setTitle('Login')
+  created: function() {
+    utils.setTitle(this.$t('nav.login'))
   }
 }
 </script>

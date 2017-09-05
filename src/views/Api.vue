@@ -58,8 +58,8 @@
 import utils from '../utils'
 
 export default {
-  created: function () {
-    utils.setTitle('API')
+  created: function() {
+    utils.setTitle(this.$t('nav.api'))
   }
 }
 </script>

@@ -335,7 +335,7 @@ export default {
     }
   },
   created: function() {
-    utils.setTitle('Mission Creator')
+    utils.setTitle(this.$t('mission.creator.title.browser'))
   }
 }
 </script>

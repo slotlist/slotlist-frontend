@@ -1,3 +1,4 @@
+import { i18n } from '../../app'
 import * as _ from 'lodash'
 import utils from '../../utils'
 import router from '../../router'
@@ -746,7 +747,7 @@ const mutations = {
     state.communityDetails = payload.communityDetails
     state.communityMembers = null // force community member refresh
 
-    utils.setTitle(`Community ${state.communityDetails.name}`)
+    utils.setTitle(`${i18n.t('mission.community')} ${state.communityDetails.name}`)
   },
   setCommunityMissions(state, payload) {
     state.communityMissions = payload.communityMissions
