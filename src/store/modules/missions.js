@@ -161,7 +161,7 @@ const actions = {
     })
   },
   createMission({ dispatch }, payload) {
-    dispatch('startWorking', i18n.t('store.createMissions'))
+    dispatch('startWorking', i18n.t('store.createMission'))
 
     return MissionsApi.createMission(payload)
       .then((response) => {
@@ -185,7 +185,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.createMissions.success', { title: payload.title })}`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.createMission.success', { title: payload.title })}`
         })
 
         router.push({
@@ -200,21 +200,21 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissions.error', { title: payload.title })} - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMission.error', { title: payload.title })} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('createMission', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissions.error', { title: payload.title })} - ${i18n.t('failed.request')}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMission.error', { title: payload.title })} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('createMission', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissions.error', { title: payload.title })} - ${i18n.t('failed.something')}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMission.error', { title: payload.title })} - ${i18n.t('failed.something')}`
           })
         }
       })

@@ -45,12 +45,10 @@
             </router-link>
           </li>
           <li class="nav-item dropdown">
-            <a id="navbarLanguageDropdown" class="nav-link dropdown-toggle text-muted" href="#" data-toggle="dropdown" aria-expanded="false">
-              <i class="fa fa-language" aria-hidden="true"></i> {{ selectedLanguage }}
-            </a>
+            <a id="navbarLanguageDropdown" class="nav-link dropdown-toggle text-muted" href="#" data-toggle="dropdown" aria-expanded="false" v-html="selectedLanguage"></a>
             <div class="dropdown-menu" aria-labelledby="navbarLanguageDropdown">
-              <a class="dropdown-item text-muted" href="#" @click.prevent="setLocale('en')">English</a>
-              <a class="dropdown-item text-muted" href="#" @click.prevent="setLocale('de')">Deutsch</a>
+              <a class="dropdown-item text-muted" href="#" @click.prevent="setLocale('en')"><img src="/flags/gb.png"> English</a>
+              <a class="dropdown-item text-muted" href="#" @click.prevent="setLocale('de')"><img src="/flags/de.png"> Deutsch</a>
             </div>
           </li>
         </ul>
@@ -148,9 +146,9 @@ export default {
       const locale = this.$i18n.locale
 
       switch (locale) {
-        case 'en': return 'English'
-        case 'de': return 'Deutsch'
-        default: return 'Language'
+        case 'en': return '<img src="/flags/gb.png"> English'
+        case 'de': return '<img src="/flags/de.png"> Deutsch'
+        default: return '<i class="fa fa-language" aria-hidden="true"> Language'
       }
     },
     showAlert() {

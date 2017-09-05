@@ -114,7 +114,7 @@ export default {
     optionalCommunityWebsite() {
       return _.isString(this.communityDetails.website) && !_.isEmpty(this.communityDetails.website) ?
         `<a href="${this.communityDetails.website}">${this.communityDetails.website}</a>` :
-        `<span class="text-muted font-italic">not provided</span>`
+        `<span class="text-muted font-italic">${this.$t('misc.notProvided')}</span>`
     }
   },
   methods: {
