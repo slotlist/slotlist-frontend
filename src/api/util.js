@@ -1,6 +1,6 @@
 import axios from 'axios'
 import * as _ from 'lodash'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import store from '../store'
 import router from '../router'
 

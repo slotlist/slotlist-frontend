@@ -5,8 +5,15 @@
         <b-form @submit.stop.prevent="editAccount">
           <div class="row">
             <div class="col">
-              <b-form-fieldset label="Nickname" :state="accountEditNicknameState" :feedback="accountEditNicknameFeedback">
+              <b-form-fieldset :label="$t('community.application.nickname')" :state="accountEditNicknameState" :feedback="accountEditNicknameFeedback">
                 <b-form-input v-model="accountEditData.nickname" type="text" required></b-form-input>
+              </b-form-fieldset>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <b-form-fieldset :label="$t('account.timezone')" state="success">
+                <b-form-select v-model="accountEditTimezone" :options="accountEditTimezoneOptions" required></b-form-select>
               </b-form-fieldset>
             </div>
           </div>
@@ -28,13 +35,15 @@
 
 <script>
 import * as _ from 'lodash'
+import moment from 'moment-timezone'
 
 export default {
   data() {
     return {
       accountEditData: {
         nickname: null
-      }
+      },
+      accountEditTimezone: null
     }
   },
   computed: {
@@ -46,6 +55,14 @@ export default {
     },
     accountEditNicknameState() {
       return _.isNil(this.accountEditData.nickname) || _.isEmpty(this.accountEditData.nickname) ? 'danger' : 'success'
+    },
+    accountEditTimezoneOptions() {
+      return _.map(moment.tz.names(), (name) => {
+        return { value: name, text: name }
+      })
+    },
+    timezone() {
+      return this.$store.getters.timezone
     }
   },
   methods: {
@@ -63,17 +80,22 @@ export default {
 
       this.hideAccountEditModal()
 
-      if (_.isEmpty(updatedAccountDetails)) {
+      const timezoneUpdated = this.accountEditTimezone !== this.timezone
+      if (timezoneUpdated) {
+        this.$store.dispatch('setTimezone', this.accountEditTimezone)
+      }
+
+      if (_.isEmpty(updatedAccountDetails) && !timezoneUpdated) {
         return this.$store.dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'warning',
           alertMessage: `<i class="fa fa-warning" aria-hidden="true"></i> ${this.$t('account.noChanges')}`
         })
+      } else if (!_.isEmpty(updatedAccountDetails)) {
+        this.$store.dispatch('editAccount', {
+          updatedAccountDetails
+        })
       }
-
-      this.$store.dispatch('editAccount', {
-        updatedAccountDetails
-      })
     },
     hideAccountEditModal() {
       this.$refs.accountEditModal.hide()
@@ -82,6 +104,7 @@ export default {
       this.accountEditData = {
         nickname: this.accountDetails.nickname
       }
+      this.accountEditTimezone = this.timezone
     }
   }
 }

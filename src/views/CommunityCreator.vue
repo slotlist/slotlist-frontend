@@ -126,7 +126,7 @@ export default {
       // Taken from: https://stackoverflow.com/a/5717133 @ 2017-08-04 09:43
       const urlPattern = /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(\:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i
       return urlPattern.test(this.communityCreate.website)
-    },
+    }
   },
   methods: {
     communityCreateNameFormatter(val) {

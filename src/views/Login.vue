@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div v-show="!performingLogin">
-      <div class="jumbotron">
+    <div>
+      <div class="jumbotron" v-if="!working">
         <h1 class="display-3">Sign in using Steam</h1>
         <p class="lead">
           <router-link to="/">slotlist.info</router-link> uses Steam OpenID authentication. This allows you to use your existing Steam account to log into our site.
@@ -45,6 +45,9 @@ export default {
   computed: {
     loginRedirectUrl() {
       return this.$store.getters.loginRedirectUrl
+    },
+    working() {
+      return this.$store.getters.working
     }
   }
 }

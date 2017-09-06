@@ -101,6 +101,7 @@
 
 <script>
 import * as _ from 'lodash'
+import moment from 'moment-timezone'
 
 import utils from '../utils'
 
@@ -120,6 +121,20 @@ export default {
     }
 
     this.$store.dispatch("setLocale", locale)
+
+    let timezone = this.$ls.get('timezone')
+    if (_.isNil(timezone) || !_.isString(timezone) || _.isEmpty(timezone)) {
+      console.info('Timezone not defined, guessing from browser settings')
+
+      timezone = moment.tz.guess()
+
+      if (!_.isString(timezone) || _.isEmpty(timezone)) {
+        console.info('Failed to get user timezone from browser, falling back to UTC')
+        timezone = 'Etc/UTC'
+      }
+    }
+
+    this.$store.dispatch("setTimezone", timezone)
 
     const token = this.$ls.get('auth-token')
     if (!_.isNil(token)) {

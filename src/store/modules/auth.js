@@ -3,7 +3,7 @@ import { i18n } from '../../app'
 import * as _ from 'lodash'
 import jwtDecode from 'jwt-decode'
 import axios from 'axios'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import router from '../../router'
 
 import AuthApi from '../../api/auth'
@@ -122,6 +122,8 @@ const actions = {
           token: response.data.token,
           decodedToken: decodedToken
         })
+
+        dispatch('stopWorking')
       }).catch((error) => {
         dispatch('stopWorking')
 
@@ -389,8 +391,6 @@ const mutations = {
     state.token = payload.token
     state.decodedToken = payload.decodedToken
     state.loggedIn = true
-    state.performingLogin = false
-    state.refreshingToken = false
 
     const redirect = Vue.ls.get('auth-redirect')
     if (!_.isNil(redirect)) {
@@ -406,8 +406,6 @@ const mutations = {
     state.token = null
     state.decodedToken = null
     state.loggedIn = false
-    state.performingLogin = false
-    state.refreshingToken = false
   },
   setRedirect(state, payload) {
     if (_.isNil(Vue.ls.get('auth-redirect'))) {

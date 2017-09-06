@@ -1,5 +1,5 @@
 import * as _ from 'lodash'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm'
 import 'bootstrap-vue/dist/bootstrap-vue.css'

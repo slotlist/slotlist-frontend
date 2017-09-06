@@ -13,6 +13,12 @@
               <span v-if="!accountDetails.community" class="text-muted font-italic">{{ $t('account.notAssociated') }}</span>
             </p>
           </div>
+          <div class="col">
+            <h5>{{ $t('account.timezone') }}</h5>
+            <p>{{ timezone }}
+              <span class="text-muted small" if="currentTime">({{ $t('account.currentTime') }} {{ currentTime }})</span>
+            </p>
+          </div>
         </div>
         <hr class="my-4">
         <div class="row justify-content-center">
@@ -51,6 +57,7 @@
 
 <script>
 import * as _ from 'lodash'
+import moment from 'moment-timezone'
 
 import AccountEditModal from '../components/account/modals/AccountEditModal.vue'
 import AccountMissions from '../components/account/AccountMissions.vue'
@@ -69,13 +76,30 @@ export default {
   },
   created: function() {
     utils.setTitle(this.$t('nav.account'))
+
+    this.currentTimeSetInterval = setInterval(() => {
+      this.currentTime = moment().format('Y-MM-DD HH:mm:ss')
+    }, 1000)
   },
   beforeDestroy: function() {
     this.$store.dispatch('clearAccountDetails')
+
+    if (!_.isNil(this.currentTimeSetInterval)) {
+      clearInterval(this.currentTimeSetInterval)
+    }
+  },
+  data() {
+    return {
+      currentTime: null,
+      currentTimeSetInterval: null
+    }
   },
   computed: {
     accountDetails() {
       return this.$store.getters.accountDetails
+    },
+    timezone() {
+      return this.$store.getters.timezone
     }
   },
   methods: {

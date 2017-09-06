@@ -101,7 +101,7 @@
 </template>
 
 <script>
-import moment from 'moment'
+import moment from 'moment-timezone'
 import utils from '../utils'
 
 export default {
@@ -144,8 +144,10 @@ export default {
     user() {
       return this.$store.getters.user
     },
-    creatingMission() {
-      return this.$store.getters.creatingMission
+    isMissionCreateRepositoryUrlValidUrl() {
+      // Taken from: https://stackoverflow.com/a/5717133 @ 2017-08-04 09:43
+      const urlPattern = /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(\:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i
+      return urlPattern.test(this.missionCreateRepositoryUrl)
     },
     missionCreateTitleState() {
       return _.isNil(this.missionCreateTitle) || _.isEmpty(this.missionCreateTitle) ? 'danger' : 'success'
@@ -226,11 +228,19 @@ export default {
     missionCreateBriefingTimeFeedback() {
       return _.isNil(this.missionCreateBriefingTime) || _.isEmpty(this.missionCreateBriefingTime) || !moment(this.missionCreateBriefingTime).isValid() ? this.$t('mission.feedback.dateTime') : ''
     },
-    missionCreateRepositoryUrlState() {
-      return 'success'
-    },
     missionCreateRepositoryUrlFeedback() {
-      return ''
+      if (_.isNil(this.missionCreateRepositoryUrl) || _.isEmpty(this.missionCreateRepositoryUrl)) {
+        return ''
+      }
+
+      return this.isMissionCreateRepositoryUrlValidUrl ? '' : this.$t('mission.feedback.repositoryUrl')
+    },
+    missionCreateRepositoryUrlState() {
+      if (_.isNil(this.missionCreateRepositoryUrl) || _.isEmpty(this.missionCreateRepositoryUrl)) {
+        return 'success'
+      }
+
+      return this.isMissionCreateRepositoryUrlValidUrl ? 'success' : 'danger'
     },
     missionCreateTechSupportState() {
       return 'success'
@@ -310,10 +320,10 @@ export default {
         slug: this.missionCreateSlug,
         shortDescription: this.missionCreateShortDescription,
         description: this.missionCreateDescription,
-        slottingTime: this.missionCreateSlottingTime,
-        startTime: this.missionCreateStartTime,
-        endTime: this.missionCreateEndTime,
-        briefingTime: this.missionCreateBriefingTime,
+        slottingTime: moment(this.missionCreateSlottingTime).utc().format(),
+        startTime: moment(this.missionCreateStartTime).utc().format(),
+        endTime: moment(this.missionCreateEndTime).utc().format(),
+        briefingTime: moment(this.missionCreateBriefingTime).utc().format(),
         repositoryUrl: this.missionCreateRepositoryUrl,
         techSupport: this.missionCreateTechSupport,
         rules: this.missionCreateRules,

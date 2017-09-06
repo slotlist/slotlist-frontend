@@ -1,12 +1,14 @@
 import Vue from 'vue'
 import { i18n } from '../../app'
 import * as _ from 'lodash'
+import moment from 'moment-timezone'
 
 import StatusApi from '../../api/status'
 
 const state = {
   backendVersion: null,
-  working: null
+  working: null,
+  timezone: null
 }
 
 const getters = {
@@ -15,6 +17,9 @@ const getters = {
   },
   working() {
     return state.working
+  },
+  timezone() {
+    return state.timezone
   }
 }
 
@@ -57,6 +62,12 @@ const actions = {
       locale: payload
     })
   },
+  setTimezone({ commit }, payload) {
+    commit({
+      type: 'setTimezone',
+      timezone: payload
+    })
+  },
   startWorking({ commit }, payload) {
     commit({
       type: 'startWorking',
@@ -78,6 +89,13 @@ const mutations = {
     Vue.ls.set('locale', payload.locale)
 
     i18n.locale = payload.locale
+  },
+  setTimezone(state, payload) {
+    Vue.ls.set('timezone', payload.timezone)
+
+    state.timezone = payload.timezone
+
+    moment.tz.setDefault(payload.timezone)
   },
   startWorking(state, payload) {
     state.working = _.isString(payload.message) && !_.isEmpty(payload.message) ? payload.message : 'Doing something...'
