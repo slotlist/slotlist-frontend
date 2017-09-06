@@ -641,6 +641,17 @@ const actions = {
 
         if (error.response) {
           console.error('getMissionDetails', error.response)
+
+          if (error.response.status === 404) {
+            dispatch('showAlert', {
+              showAlert: true,
+              alertVariant: 'warning',
+              alertMessage: `<i class="fa fa-question" aria-hidden="true"></i> ${i18n.t('store.getMissionDetails.error.notFound', { slug: payload.missionSlug })}`
+            })
+
+            return router.push({ name: 'missionList' })
+          }
+
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
@@ -754,6 +765,12 @@ const actions = {
 
         if (error.response) {
           console.error('getMissionSlotlist', error.response)
+
+          if (error.response.status === 404) {
+            // Redirect + alert is handled by getMissionDetails endpoint
+            return
+          }
+
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',

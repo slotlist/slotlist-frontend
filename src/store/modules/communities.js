@@ -527,6 +527,17 @@ const actions = {
 
         if (error.response) {
           console.error('getCommunityDetails', error.response)
+
+          if (error.response.status === 404) {
+            dispatch('showAlert', {
+              showAlert: true,
+              alertVariant: 'warning',
+              alertMessage: `<i class="fa fa-question" aria-hidden="true"></i> ${i18n.t('store.getCommunityDetails.error.notFound', { slug: payload })}`
+            })
+
+            return router.push({ name: 'communityList' })
+          }
+
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
