@@ -80,7 +80,7 @@ import utils from '../utils'
 
 export default {
   created: function() {
-    utils.setTitle(this.$t('privacy'))
+    utils.setTitle(this.$t('nav.privacy'))
   }
 }
 </script>

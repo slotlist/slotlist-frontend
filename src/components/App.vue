@@ -71,7 +71,7 @@
           <div class="col">
             <span class="text-muted small float-left">
               Copyright &copy; {{ year }}
-              <router-link to="/">slotlist.info</router-link>. All rights reserved.
+              <router-link to="/">slotlist.info</router-link>. {{ $t('rights.reserved') }}.
             </span>
           </div>
           <div class="col text-center">

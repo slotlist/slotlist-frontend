@@ -2,6 +2,8 @@
   <div>
     <b-jumbotron header="API documentation" lead="slotlist.info provides a public JSON REST API to all of its users">
       <p class="text-justify">
+        <span v-if="$i18n.locale === 'de'" class="font-weight-bold text-danger">Diese API-Information ist nur in Englisch verfügbar, da die eigentliche
+          <a href="https://api.slotlist.info/documentation">API-Dokumentation</a> auch nur in englischer Sprache ausgeliefert wird. Für etwaige Fragen stehen wir trotzdem gerne zur Verfügung.<br><br></span>
         You can use this API to integrate
         <router-link :to="{name: 'home'}">slotlist.info</router-link>'s mission and slotlists into your own community page and provide a better overview of your missions right alongside your own community's web appearance.
         <br>

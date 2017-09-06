@@ -1,80 +1,25 @@
 <template>
   <div>
-    <b-jumbotron header="About slotlist.info">
-      <p class="text-justify">
-        <router-link :to="{name: 'home'}">slotlist.info</router-link> was created by
-        <a href="https://github.com/MorpheusXAUT">MorpheusXAUT</a> due to being fed up of having to register in countless ArmA community forums just to participate in ArmA missions. The tools allows for easier creating and management of missions and provides easy and direct access to all users - all that's required is a Steam account, and you should already have that, otherwise you wouldn't be playing ArmA
-        <i class="fa fa-smile-o"></i>
-        <br>
-        <br> This service is provided to you for free without any guarantees of uptime or availability - we might shut down
-        <router-link :to="{name: 'home'}">slotlist.info</router-link> without any additional warnings at any time. Since it's our goal to provide an easy tool to a broad number of ArmA enthusiats, we aim for the highest availability and longevity possible and thus appreciate any feedback you have for us.
-      </p>
-      <h4>Development</h4>
-      <p class="text-justify">
-        <router-link :to="{name: 'home'}">slotlist.info</router-link> is currently solely developed by
-        <a href="https://github.com/MorpheusXAUT">MorpheusXAUT</a>. The website's frontend and backend source code repositories as well as the current versions deployed can be found below. Please include this information is bug reports as it helps with narrowing down issues.
-        <dl class="row">
-          <dt class="col-1">frontend</dt>
-          <dd class="col-2">
-            <a href="https://github.com/MorpheusXAUT/slotlist-frontend">
-              <i class="fa fa-github" aria-hidden="true"></i> slotlist-frontend</a>
-          </dd>
-          <dd class="col-9">
-            <span v-show="frontendVersion">{{ frontendVersion }}</span>
-          </dd>
-          <dt class="col-1">backend</dt>
-          <dd class="col-2">
-            <a href="https://github.com/MorpheusXAUT/slotlist-backend">
-              <i class="fa fa-github" aria-hidden="true"></i> slotlist-backend</a>
-          </dd>
-          <dd class="col-9">
-            <span v-show="backendVersion">{{ backendVersion }}</span>
-          </dd>
-        </dl>
-        You can also use these repositories and their respective issue trackers to report any bugs you encounter - or use one of the contact methods available, as mentioned below.
-      </p>
-      <h4>Contact us</h4>
-      <p class="text-justify">
-        Should you run into any issues or bugs or have a suggestion for our site, feel free to:
-        <dl class="row">
-          <dt class="col-sm-3">open an issue on GitHub</dt>
-          <dd class="col-sm-9">
-            <a href="https://github.com/MorpheusXAUT/slotlist-frontend/issues">issue tracker</a>
-          </dd>
-          <dt class="col-sm-3">email us directly</dt>
-          <dd class="col-sm-9">
-            <a href="mailto:hello@slotlist.info">hello@slotlist.info</a>
-          </dd>
-          <dt class="col-sm-3">join our Discord server</dt>
-          <dd class="col-sm-9">
-            <a href="https://discord.gg/QZ5HpwT">Discord</a>
-          </dd>
-        </dl>
-        Contact details for legal inquiries can be found on the
-        <router-link :to="{name: 'imprint'}">imprint</router-link>.
-      </p>
-    </b-jumbotron>
+    <about-de v-if="$i18n.locale === 'de'"></about-de>
+    <about-en v-else></about-en>
   </div>
 </template>
 
 <script>
-import * as _ from 'lodash'
+import AboutDe from '../i18n/views/About.de.vue'
+import AboutEn from '../i18n/views/About.en.vue'
 import utils from '../utils'
 
 export default {
+  components: {
+    AboutDe,
+    AboutEn
+  },
   beforeCreate: function() {
     this.$store.dispatch('getBackendVersion')
   },
   created: function() {
     utils.setTitle(this.$t('nav.about'))
-  },
-  computed: {
-    backendVersion() {
-      return _.startsWith(this.$store.getters.backendVersion, 'v') ? this.$store.getters.backendVersion : `v${this.$store.getters.backendVersion}`
-    },
-    frontendVersion() {
-      return _.startsWith(process.env.FRONTEND_VERSION, 'v') ? process.env.FRONTEND_VERSION : `v${process.env.FRONTEND_VERSION}`
-    }
   }
 }
 </script>
