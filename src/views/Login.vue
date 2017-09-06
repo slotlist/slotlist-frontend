@@ -1,36 +1,22 @@
 <template>
   <div>
-    <div>
-      <div class="jumbotron" v-if="!working">
-        <h1 class="display-3">Sign in using Steam</h1>
-        <p class="lead">
-          <router-link to="/">slotlist.info</router-link> uses Steam OpenID authentication. This allows you to use your existing Steam account to log into our site.
-        </p>
-        <hr class="my-4">
-        <p>
-          The site will not be able to read or store your Steam login credentials or perform any action regarding your Steam account.
-          <br> We will only receive your SteamID as well as some other public information such as your username.
-          <br> The information provided by Steam will be used to create a unique user in our backend for you, allowing you to use all features on
-          <router-link to="/">slotlist.info</router-link>.
-          <br> More information regarding the privacy policy of this site can be found
-          <router-link to="/privacy">here</router-link>.
-        </p>
-        <p v-if="loginRedirectUrl" class="lead text-center">
-          <a :href="loginRedirectUrl">
-            <img src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_01.png" alt="Sign in through Steam" title="Yes, this login banner looks atrocious, unfortunately Valve forces us to use it >.< Anyways, click to sign in through Steam">
-          </a>
-        </p>
-      </div>
-    </div>
+    <login-de v-if="$i18n.locale === 'de'"></login-de>
+    <login-en v-else></login-en>
   </div>
 </template>
 
 <script>
+import LoginDe from '../i18n/views/Login.de.vue'
+import LoginEn from '../i18n/views/Login.en.vue'
 import * as _ from 'lodash'
 
 import utils from '../utils'
 
 export default {
+  components: {
+    LoginDe,
+    LoginEn
+  },
   beforeCreate: function() {
     this.$store.dispatch('getLoginRedirectUrl')
 
@@ -41,14 +27,6 @@ export default {
   },
   created: function() {
     utils.setTitle(this.$t('nav.login'))
-  },
-  computed: {
-    loginRedirectUrl() {
-      return this.$store.getters.loginRedirectUrl
-    },
-    working() {
-      return this.$store.getters.working
-    }
   }
 }
 </script>
