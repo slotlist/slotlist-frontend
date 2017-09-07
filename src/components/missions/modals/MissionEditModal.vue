@@ -18,7 +18,7 @@
           <div class="row">
             <div class="col">
               <b-form-fieldset :label="$t('mission.description')" :state="missionEditDescriptionState" :feedback="missionEditDescriptionFeedback">
-                <quill-editor v-model="missionEditData.description" ref="missionEditDescriptionEditor" :options="missionEditQuillEditorOptions" required></quill-editor>
+                <quill-editor v-model="missionEditData.description" ref="missionEditDescriptionEditor" :options="missionEditDescriptionQuillEditorOptions" required></quill-editor>
               </b-form-fieldset>
             </div>
           </div>
@@ -110,14 +110,36 @@ export default {
         title: null,
         visibility: null
       },
+      missionEditDescriptionQuillEditorOptions: {
+        modules: {
+          toolbar: [
+            [{ 'size': ['small', false, 'large', 'huge'] }, { 'header': 1 }, { 'header': 2 }, { 'color': [] }],
+            ['bold', 'italic'],
+            [{ 'align': [] }, { 'indent': '-1' }, { 'indent': '+1' }],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            ['link', 'image', 'video'],
+            ['clean']
+          ],
+          history: {
+            delay: 1000,
+            maxStack: 50,
+            userOnly: false
+          },
+          imageDrop: true,
+          imageResize: {
+            modules: ['Resize', 'DisplaySize']
+          }
+        },
+        theme: 'snow'
+      },
       missionEditQuillEditorOptions: {
         modules: {
           toolbar: [
             [{ 'size': ['small', false, 'large', 'huge'] }, { 'header': 1 }, { 'header': 2 }, { 'color': [] }],
             ['bold', 'italic'],
-            [{ 'indent': '-1' }, { 'indent': '+1' }],
-            [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'align': [] }],
-            ['link', 'image', 'video'],
+            [{ 'align': [] }, { 'indent': '-1' }, { 'indent': '+1' }],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            ['link'],
             ['clean']
           ],
           history: {
