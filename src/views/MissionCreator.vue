@@ -114,7 +114,7 @@ export default {
             ['bold', 'italic'],
             [{ 'indent': '-1' }, { 'indent': '+1' }],
             [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'align': [] }],
-            ['link', 'image'],
+            ['link', 'image', 'video'],
             ['clean']
           ],
           history: {
@@ -122,6 +122,10 @@ export default {
             maxStack: 50,
             userOnly: false
           },
+          imageDrop: true,
+          imageResize: {
+            modules: ['Resize', 'DisplaySize']
+          }
         },
         theme: 'snow'
       },

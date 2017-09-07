@@ -12,7 +12,6 @@ import Raven from 'raven-js'
 import RavenVue from 'raven-js/plugins/vue'
 import VueACL from './plugins/acl'
 import VueLocalStorage from 'vue-ls'
-import VueQuillEditor from 'vue-quill-editor'
 import VueSimpleSpinner from 'vue-simple-spinner'
 import VueClickConfirm from 'click-confirm'
 import VuePaginate from 'vuejs-paginate'
@@ -44,6 +43,15 @@ Vue.use(VueACL, {
 Vue.use(VueLocalStorage, {
   namespace: 'sl__'
 })
+
+import Quill from 'quill'
+import { ImageDrop } from 'quill-image-drop-module'
+import ImageResize from 'quill-image-resize-module'
+
+Quill.register('modules/imageDrop', ImageDrop)
+Quill.register('modules/imageResize', ImageResize)
+
+import VueQuillEditor from 'vue-quill-editor'
 
 Vue.use(VueQuillEditor)
 
