@@ -45,10 +45,8 @@ Vue.use(VueLocalStorage, {
 })
 
 import Quill from 'quill'
-import { ImageDrop } from 'quill-image-drop-module'
 import ImageResize from 'quill-image-resize-module'
 
-Quill.register('modules/imageDrop', ImageDrop)
 Quill.register('modules/imageResize', ImageResize)
 
 import VueQuillEditor from 'vue-quill-editor'

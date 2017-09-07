@@ -4496,12 +4496,6 @@ quill-delta@3.6.1:
     extend "^3.0.1"
     fast-diff "1.1.1"
 
-quill-image-drop-module@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/quill-image-drop-module/-/quill-image-drop-module-1.0.3.tgz#0e5ec8329dd67a12126f166b191bf64d2057a7d3"
-  dependencies:
-    quill "^1.2.2"
-
 quill-image-resize-module@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/quill-image-resize-module/-/quill-image-resize-module-3.0.0.tgz#0fd93746a837336d95b2f536140416a623c71771"
