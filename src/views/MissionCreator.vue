@@ -122,7 +122,6 @@ export default {
             maxStack: 50,
             userOnly: false
           },
-          imageDrop: true,
           imageResize: {
             modules: ['Resize', 'DisplaySize']
           }
@@ -144,7 +143,6 @@ export default {
             maxStack: 50,
             userOnly: false
           },
-          imageDrop: true,
           imageResize: {
             modules: ['Resize', 'DisplaySize']
           }
