@@ -9,7 +9,7 @@
           <div class="col col-3">{{ $t('mission.slot.difficulty') }}</div>
         </div>
         <div class="row">
-          <div class="col col-1">{{ missionSlotDetails.orderNumber + 1 }}</div>
+          <div class="col col-1">{{ missionSlotDetails.orderNumber }}</div>
           <div class="col col-3">{{ missionSlotDetails.title }} </div>
           <div class="col col-5" v-html="formattedAssignee"></div>
           <div class="col col-3">
@@ -50,21 +50,9 @@
           <b-btn variant="success" v-if="loggedIn && !missionSlotDetails.registrationUid" :disabled="missionSlotDetails.assignee ? true : false" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotRegistrationModal>
             <i class="fa fa-ticket" aria-hidden="true"></i> {{ $t('button.register') }}
           </b-btn>
-          <!-- These buttons have been removed for now since they require the click-confirm popover, which doesn't appear to work correctly in modals -->
-          <!-- <click-confirm v-if="loggedIn && missionSlotDetails.registrationUid" yes-icon="fa fa-eraser" yes-class="btn btn-warning" button-size="sm" :messages="{title: 'Unregister from slot?', yes: 'Confirm', no: 'Cancel'}">
-                              <b-btn variant="warning" @click="deleteMissionSlotRegistration">
-                                <i class="fa fa-eraser" aria-hidden="true"></i> Unregister
-                              </b-btn>
-                            </click-confirm> -->
           <b-btn variant="primary" v-if="isMissionEditor" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotEditModal>
             <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit') }}
           </b-btn>
-          <!-- These buttons have been removed for now since they require the click-confirm popover, which doesn't appear to work correctly in modals -->
-          <!-- <click-confirm v-if="isMissionEditor" yes-icon="fa fa-trash" yes-class="btn btn-danger" :messages="{title: 'Delete slot?', yes: 'Confirm', no: 'Cancel'}">
-                              <b-btn variant="danger" @click="deleteMissionSlot">
-                                <i class="fa fa-trash" aria-hidden="true"></i> Delete
-                              </b-btn>
-                            </click-confirm> -->
           <b-btn @click="hideMissionSlotDetailsModal">
             <i class="fa fa-close" aria-hidden="true"></i> {{ $t('button.close') }}
           </b-btn>

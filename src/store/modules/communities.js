@@ -639,7 +639,7 @@ const actions = {
         }
 
         dispatch('getCommunityDetails', payload.communitySlug)
-        dispatch('getCommunityApplications', payload.communitySlug)
+        dispatch('getCommunityApplications', { communitySlug: payload.communitySlug })
 
         dispatch('showAlert', {
           showAlert: true,
