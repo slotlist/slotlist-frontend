@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-modal id="missionSlotGroupCreateModal" ref="missionSlotGroupCreateModal" :title="$t('mission.modal.slotGroup.create')" @shown="clearMissionSlotGroupCreateData">
+    <b-modal id="missionSlotGroupCreateModal" ref="missionSlotGroupCreateModal" :title="$t('mission.modal.slotGroup.create')" @shown="clearMissionSlotGroupCreateData" no-close-on-backdrop>
       <div class="container-fluid">
         <b-form @submit.stop.prevent="createMissionSlotGroup">
           <div class="row">

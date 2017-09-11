@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-modal id="missionSlotRegistrationModal" ref="missionSlotRegistrationModal" v-if="missionSlotDetails" :title="$t('mission.modal.slot.register')" @shown="clearMissionSlotRegistrationModalData">
+    <b-modal id="missionSlotRegistrationModal" ref="missionSlotRegistrationModal" v-if="missionSlotDetails" :title="$t('mission.modal.slot.register')" @shown="clearMissionSlotRegistrationModalData" no-close-on-backdrop>
       <div class="container-fluid">
         <b-form @submit.stop.prevent="registerForMissionSlot">
           <div class="row">

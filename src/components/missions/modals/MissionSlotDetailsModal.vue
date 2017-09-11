@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-modal id="missionSlotDetailsModal" ref="missionSlotDetailsModal" v-if="missionSlotDetails" size="lg" :title="slotDetailsTitle">
+    <b-modal id="missionSlotDetailsModal" ref="missionSlotDetailsModal" v-if="missionSlotDetails" size="lg" :title="slotDetailsTitle" no-close-on-backdrop>
       <div class="container-fluid">
         <div class="row font-weight-bold">
           <div class="col col-1">#</div>

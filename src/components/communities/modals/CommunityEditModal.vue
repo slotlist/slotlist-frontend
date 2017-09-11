@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-modal ref="communityEditModal" id="communityEditModal" size="lg" :title="$t('community.modal.edit')" @show="setCommunityEditData">
+    <b-modal ref="communityEditModal" id="communityEditModal" size="lg" :title="$t('community.modal.edit')" @show="setCommunityEditData" no-close-on-backdrop>
       <div class="container-fluid">
         <b-form @submit.stop.prevent="editCommunity">
           <div class="row">
