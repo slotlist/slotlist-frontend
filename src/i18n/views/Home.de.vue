@@ -6,7 +6,7 @@
       <br>Das
       <router-link :to="{name: 'communityList'}">Community</router-link> Feature erlaubt es Communities, ihre Gemeinschaft auf unserer Website zu präsentieren und dadurch weiter ihre Mitglieder und deren erstellte Missionen zu bewerben.
       <br>Da
-      <router-link :to="{name: 'home'}">slotlist.info</router-link> Steam Single Sign On benutzt, wird keine lästige Registrierung und ein weiterer Account auf noch einer weiteren Seite benötigt - alle Authentifizierung wird sicher von den Steam Servern erledigt. Zum Loslegen einfach
+      <router-link :to="{name: 'home'}">slotlist.info</router-link> Steam Single Sign-on benutzt, wird keine lästige Registrierung und ein weiterer Account auf noch einer weiteren Seite benötigt - alle Authentifizierung wird sicher von den Steam Servern erledigt. Zum Loslegen einfach
       <router-link :to="{name: 'login'}">anmelden</router-link> und
       <router-link :to="{name:'missionCreator'}">eine neue Mission erstellen</router-link>!
       <br>

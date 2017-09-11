@@ -6,7 +6,7 @@
       <br>The
       <router-link :to="{name: 'communityList'}">communities</router-link> feature also allows you to represent your ArmA community on our website, further advertising your community's members and the missions created by them.
       <br>Since
-      <router-link :to="{name: 'home'}">slotlist.info</router-link> uses Steam Single Sign On, there's no need for your to create yet another account on a different website - all authentication is securely handled by Steam servers. You can get started right away by
+      <router-link :to="{name: 'home'}">slotlist.info</router-link> uses Steam Single Sign-on, there's no need for your to create yet another account on a different website - all authentication is securely handled by Steam servers. You can get started right away by
       <router-link :to="{name: 'login'}">logging in</router-link> and
       <router-link :to="{name:'missionCreator'}">creating a new mission</router-link>!
       <br>
