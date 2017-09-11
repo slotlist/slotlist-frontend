@@ -48,8 +48,8 @@
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset :label="$t('mission.repositoryUrl.optional')" :state="missionEditRepositoryUrlState" :feedback="missionEditRepositoryUrlFeedback">
-                <b-form-input v-model="missionEditData.repositoryUrl" type="text"></b-form-input>
+              <b-form-fieldset :label="$t('mission.repositoryUrl.optional')" state="success" :description="$t('mission.repositoryUrl.description')">
+                <quill-editor v-model="missionEditData.repositoryUrl" ref="missionEditrepositoryUrlEditor" :options="missionEditQuillEditorOptions"></quill-editor>
               </b-form-fieldset>
             </div>
           </div>
@@ -155,11 +155,6 @@ export default {
     }
   },
   computed: {
-    isMissionEditRepositoryUrlValidUrl() {
-      // Taken from: https://stackoverflow.com/a/5717133 @ 2017-08-04 09:43
-      const urlPattern = /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(\:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i
-      return urlPattern.test(this.missionEditData.repositoryUrl)
-    },
     missionDetails() {
       return this.$store.getters.missionDetails
     },
@@ -188,20 +183,6 @@ export default {
       return _.isString(this.missionEditData.endTime)
         && !_.isEmpty(this.missionEditData.endTime)
         && moment(this.missionEditData.endTime).isValid ? 'success' : 'danger'
-    },
-    missionEditRepositoryUrlFeedback() {
-      if (_.isNil(this.missionEditData.repositoryUrl) || _.isEmpty(this.missionEditData.repositoryUrl)) {
-        return ''
-      }
-
-      return this.isMissionEditRepositoryUrlValidUrl ? '' : this.$t('mission.feedback.repositoryUrl')
-    },
-    missionEditRepositoryUrlState() {
-      if (_.isNil(this.missionEditData.repositoryUrl) || _.isEmpty(this.missionEditData.repositoryUrl)) {
-        return 'success'
-      }
-
-      return this.isMissionEditRepositoryUrlValidUrl ? 'success' : 'danger'
     },
     missionEditShortDescriptionFeedback() {
       return _.isString(this.missionEditData.shortDescription) && !_.isEmpty(this.missionEditData.shortDescription) ? '' : this.$t('mission.feedback.shortDescription')

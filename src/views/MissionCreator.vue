@@ -59,8 +59,8 @@
         </div>
         <div class="row">
           <div class="col">
-            <b-form-fieldset :label="$t('mission.repositoryUrl.optional')" :state="missionCreateRepositoryUrlState" :feedback="missionCreateRepositoryUrlFeedback">
-              <b-form-input v-model="missionCreateRepositoryUrl" type="text"></b-form-input>
+            <b-form-fieldset :label="$t('mission.repositoryUrl.optional')" state="success" :description="$t('mission.repositoryUrl.description')">
+              <quill-editor v-model="missionCreateRepositoryUrl" ref="missionCreateRepositoryUrlEditor" :options="editorOptions"></quill-editor>
             </b-form-fieldset>
           </div>
         </div>
@@ -168,11 +168,6 @@ export default {
     user() {
       return this.$store.getters.user
     },
-    isMissionCreateRepositoryUrlValidUrl() {
-      // Taken from: https://stackoverflow.com/a/5717133 @ 2017-08-04 09:43
-      const urlPattern = /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(\:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i
-      return urlPattern.test(this.missionCreateRepositoryUrl)
-    },
     missionCreateTitleState() {
       return _.isNil(this.missionCreateTitle) || _.isEmpty(this.missionCreateTitle) ? 'danger' : 'success'
     },
@@ -251,20 +246,6 @@ export default {
     },
     missionCreateBriefingTimeFeedback() {
       return _.isNil(this.missionCreateBriefingTime) || _.isEmpty(this.missionCreateBriefingTime) || !moment(this.missionCreateBriefingTime).isValid() ? this.$t('mission.feedback.dateTime') : ''
-    },
-    missionCreateRepositoryUrlFeedback() {
-      if (_.isNil(this.missionCreateRepositoryUrl) || _.isEmpty(this.missionCreateRepositoryUrl)) {
-        return ''
-      }
-
-      return this.isMissionCreateRepositoryUrlValidUrl ? '' : this.$t('mission.feedback.repositoryUrl')
-    },
-    missionCreateRepositoryUrlState() {
-      if (_.isNil(this.missionCreateRepositoryUrl) || _.isEmpty(this.missionCreateRepositoryUrl)) {
-        return 'success'
-      }
-
-      return this.isMissionCreateRepositoryUrlValidUrl ? 'success' : 'danger'
     },
     missionCreateTechSupportState() {
       return 'success'
