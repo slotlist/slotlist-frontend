@@ -6,7 +6,7 @@
       <span :class="titleColor">{{ missionSlotDetails.title }}</span>
     </td>
     <td v-html="formattedAssignee"></td>
-    <td v-if="missionSlotDetails.shortDescription">{{ missionSlotDetails.shortDescription }}</td>
+    <td v-if="missionSlotDetails.description">{{ missionSlotDetails.description }}</td>
     <td class="text-center">
       <div class="btn-group btn-group-sm" role="group" aria-label="Mission slot actions">
         <b-btn variant="primary" @click="prepareMissionSlotDetails" v-b-modal.missionSlotDetailsModal>

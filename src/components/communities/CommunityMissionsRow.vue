@@ -2,7 +2,7 @@
   <tr>
     <td>{{ formatDateTime(communityMission.startTime) }}</td>
     <td>{{ communityMission.title }}</td>
-    <td>{{ communityMission.shortDescription }}</td>
+    <td>{{ communityMission.description }}</td>
     <td>
       <router-link :to="{name: 'userDetails', params: {userUid: communityMission.creator.uid}}">{{ formatUserWithTag(communityMission.creator) }}</router-link>
     </td>

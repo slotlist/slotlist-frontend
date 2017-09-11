@@ -24,15 +24,15 @@
         </div>
         <div class="row">
           <div class="col col-1"></div>
-          <div class="col col-6">{{ missionSlotDetails.shortDescription}}</div>
+          <div class="col col-6">{{ missionSlotDetails.description}}</div>
           <div class="col col-5" v-html="slotStatus"></div>
         </div>
-        <hr class="my-4" v-show="missionSlotDetails.description">
-        <div class="row font-weight-bold" v-show="missionSlotDetails.description">
+        <hr class="my-4" v-show="missionSlotDetails.detailedDescription">
+        <div class="row font-weight-bold" v-show="missionSlotDetails.detailedDescription">
           <div class="col col-12">{{ $t('mission.slot.detailedDescription') }}</div>
         </div>
-        <div class="row" v-show="missionSlotDetails.description">
-          <div class="col col-12" v-html="missionSlotDetails.description"></div>
+        <div class="row" v-show="missionSlotDetails.detailedDescription">
+          <div class="col col-12" v-html="missionSlotDetails.detailedDescription"></div>
         </div>
         <hr class="my-4">
         <div class="row font-weight-bold">

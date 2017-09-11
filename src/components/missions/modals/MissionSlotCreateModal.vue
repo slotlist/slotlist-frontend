@@ -10,8 +10,8 @@
               </b-form-fieldset>
             </div>
             <div class="col">
-              <b-form-fieldset :label="$t('mission.shortDescription.optional')" state="success">
-                <b-form-input v-model="missionSlotCreateData.shortDescription" textarea></b-form-input>
+              <b-form-fieldset :label="$t('mission.description.optional')" state="success">
+                <b-form-input v-model="missionSlotCreateData.description" textarea></b-form-input>
               </b-form-fieldset>
             </div>
           </div>
@@ -43,8 +43,8 @@
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset :label="$t('mission.slot.description.optional')" state="success">
-                <quill-editor v-model="missionSlotCreateData.description" ref="missionSlotCreateDescriptionEditor" :options="missionSlotCreateDescriptionEditorOptions"></quill-editor>
+              <b-form-fieldset :label="$t('mission.slot.detailedDescription.optional')" state="success">
+                <quill-editor v-model="missionSlotCreateData.detailedDescription" ref="missionSlotCreateDetailedDescriptionEditor" :options="missionSlotCreateDetailedDescriptionEditorOptions"></quill-editor>
               </b-form-fieldset>
             </div>
           </div>
@@ -71,15 +71,15 @@ export default {
   data() {
     return {
       missionSlotCreateData: {
-        description: null,
+        detailedDescription: null,
         difficulty: 0,
         orderNumber: 1,
         reserve: false,
         restricted: false,
-        shortDescription: null,
+        description: null,
         title: null
       },
-      missionSlotCreateDescriptionEditorOptions: {
+      missionSlotCreateDetailedDescriptionEditorOptions: {
         modules: {
           toolbar: [
             [{ 'size': ['small', false, 'large', 'huge'] }, { 'header': 1 }, { 'header': 2 }, { 'color': [] }],
@@ -147,12 +147,12 @@ export default {
   methods: {
     clearMissionSlotCreateData() {
       this.missionSlotCreateData = {
-        description: null,
+        detailedDescription: null,
         difficulty: 0,
         orderNumber: 1,
         reserve: false,
         restricted: false,
-        shortDescription: null,
+        description: null,
         title: null
       }
     },
@@ -161,11 +161,11 @@ export default {
         return
       }
 
+      if (_.isString(this.missionSlotCreateData.detailedDescription) && _.isEmpty(this.missionSlotCreateData.detailedDescription)) {
+        this.missionSlotCreateData.detailedDescription = null
+      }
       if (_.isString(this.missionSlotCreateData.description) && _.isEmpty(this.missionSlotCreateData.description)) {
         this.missionSlotCreateData.description = null
-      }
-      if (_.isString(this.missionSlotCreateData.shortDescription) && _.isEmpty(this.missionSlotCreateData.shortDescription)) {
-        this.missionSlotCreateData.shortDescription = null
       }
 
       const payload = _.assign({ slotGroupUid: this.missionSlotGroupDetails.uid }, this.missionSlotCreateData)
