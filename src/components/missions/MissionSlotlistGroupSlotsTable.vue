@@ -4,9 +4,9 @@
       <thead>
         <tr>
           <th style="width: 1%">#</th>
-          <th style="width: 25%">{{ $t('mission.slot.role') }}</th>
-          <th style="width: 34%">{{ $t('mission.slot.player') }}</th>
-          <th style="width: 30%">{{ $t('mission.slot.description') }}</th>
+          <th :style="missionSlotRoleStyle">{{ $t('mission.slot.role') }}</th>
+          <th :style="missionSlotPlayerStyle">{{ $t('mission.slot.player') }}</th>
+          <th style="width: 30%" v-if="hasAnyMissionSlotDescription">{{ $t('mission.slot.description') }}</th>
           <th style="width: 10%" class="text-center">{{ $t('misc.actions') }}</th>
         </tr>
       </thead>
@@ -16,9 +16,9 @@
       <tfoot v-show="missionSlots.length >= 10">
         <tr>
           <th style="width: 1%">#</th>
-          <th style="width: 25%">{{ $t('mission.slot.role') }}</th>
-          <th style="width: 34%">{{ $t('mission.slot.player') }}</th>
-          <th style="width: 30%">{{ $t('mission.slot.description') }}</th>
+          <th :style="missionSlotRoleStyle">{{ $t('mission.slot.role') }}</th>
+          <th :style="missionSlotPlayerStyle">{{ $t('mission.slot.player') }}</th>
+          <th style="width: 30%" v-if="hasAnyMissionSlotDescription">{{ $t('mission.slot.description') }}</th>
           <th style="width: 10%" class="text-center">{{ $t('misc.actions') }}</th>
         </tr>
       </tfoot>
@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import * as _ from 'lodash'
+
 import MissionSlotlistGroupSlotsRow from './MissionSlotlistGroupSlotsRow.vue'
 
 export default {
@@ -35,6 +37,27 @@ export default {
   },
   props: [
     'missionSlots'
-  ]
+  ],
+  computed: {
+    hasAnyMissionSlotDescription() {
+      return _.some(this.missionSlots, (slot) => {
+        return !_.isNil(slot.shortDescription)
+      });
+    },
+    missionSlotPlayerStyle() {
+      if (this.hasAnyMissionSlotDescription) {
+        return 'width: 34%'
+      } else {
+        return 'width: 49%'
+      }
+    },
+    missionSlotRoleStyle() {
+      if (this.hasAnyMissionSlotDescription) {
+        return 'width: 25%'
+      } else {
+        return 'width: 40%'
+      }
+    }
+  }
 }
 </script>

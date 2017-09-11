@@ -3,13 +3,10 @@
     <td>{{ missionSlotDetails.orderNumber }}</td>
     <td>
       <i :class="difficultyIcon" aria-hidden="true"></i>
-      <b-tooltip v-if="missionSlotDetails.restricted || missionSlotDetails.reserve" :content="titleTooltip">
-        <span :class="titleColor">{{ missionSlotDetails.title }}</span>
-      </b-tooltip>
-      <span v-if="!missionSlotDetails.restricted && !missionSlotDetails.reserve" :class="titleColor">{{ missionSlotDetails.title }}</span>
+      <span :class="titleColor">{{ missionSlotDetails.title }}</span>
     </td>
     <td v-html="formattedAssignee"></td>
-    <td>{{ missionSlotDetails.shortDescription }}</td>
+    <td v-if="missionSlotDetails.shortDescription">{{ missionSlotDetails.shortDescription }}</td>
     <td class="text-center">
       <div class="btn-group btn-group-sm" role="group" aria-label="Mission slot actions">
         <b-btn variant="primary" @click="prepareMissionSlotDetails" v-b-modal.missionSlotDetailsModal>

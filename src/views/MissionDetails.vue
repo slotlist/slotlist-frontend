@@ -31,11 +31,11 @@
         <div class="row text-center">
           <div class="col">
             <h5>{{ $t('mission.slottingTime') }}</h5>
-            <p class="font-weight-bold text-success">{{ formatDateTime(missionDetails.slottingTime) }}</p>
+            <p>{{ formatDateTime(missionDetails.slottingTime) }}</p>
           </div>
           <div class="col">
             <h5>{{ $t('mission.startTime') }}</h5>
-            <p class="font-weight-bold text-danger">{{ formatDateTime(missionDetails.startTime) }}</p>
+            <p>{{ formatDateTime(missionDetails.startTime) }}</p>
           </div>
           <div class="col">
             <h5>{{ $t('mission.endTime') }}
