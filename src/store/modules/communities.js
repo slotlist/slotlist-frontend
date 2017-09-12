@@ -104,7 +104,8 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.applyToCommunity.success')}`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.applyToCommunity.success')}`,
+          scrollToTop: true
         })
       }).catch((error) => {
         dispatch('stopWorking')

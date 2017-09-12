@@ -39,6 +39,9 @@ const actions = {
     if (_.isNil(payload.alertDismissible)) {
       payload.alertDismissible = true
     }
+    if (_.isNil(payload.scrollToTop)) {
+      payload.scrollToTop = false
+    }
 
     commit({
       type: 'showAlert',
@@ -48,7 +51,9 @@ const actions = {
       alertMessage: payload.alertMessage
     })
 
-    window.scrollTo(0, 0)
+    if (payload.scrollToTop || payload.alertVariant.toLowerCase() === 'warning' || payload.alertVariant.toLowerCase() === 'danger') {
+      window.scrollTo(0, 0)
+    }
   },
   clearAlert({ commit }) {
     commit({
