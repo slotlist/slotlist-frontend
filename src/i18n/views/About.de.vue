@@ -5,13 +5,13 @@
       <a href="https://github.com/MorpheusXAUT">MorpheusXAUT</a> entwickelt, da das andauernde Neu-Registrieren bei zahllosen ArmA-Communities, nur um bei deren Missionen mitzuspielen, nervig wurde. Das Tool erlaubt eine einfachere Erstellung und Verwaltung von Missionen und bietet schnellen und direkten Zugang für alle Benutzer - alles was dafür benötigt wird, ist ein Steam Account - und diesen sollte jeder hoffentlich haben, ansonsten wird das ArmA-Spielen schwer
       <i class="fa fa-smile-o"></i>
       <br>
-      <br> Dieser Service wird gratis und ohne jegliche Garantie über Verfügbarkeit oder Erreichbarkeit angeboten - wir können
-      <router-link :to="{name: 'home'}">slotlist.info</router-link> jederzeit und ohne weitere Vorwarnungen beendigen. Da es unser Ziel ist, ein einfach Mittel für eine breite Anzahl an ArmA-Enthusiasten zur Verfügung zu stellen, bemühen wir uns, die höchste Verfügbarkeit und Langlebigkeit zu erreichen und freuen uns dabei über jedes Feedback.
+      <br>Dieser Service wird gratis und ohne jegliche Garantie über Verfügbarkeit oder Erreichbarkeit angeboten - wir können
+      <router-link :to="{name: 'home'}">slotlist.info</router-link> ederzeit und ohne weitere Vorwarnungen beendigen. Da es unser Ziel ist, ein einfaches Mittel für eine breite Anzahl an ArmA-Enthusiasten zur Verfügung zu stellen, bemühen wir uns, die höchste Verfügbarkeit und Langlebigkeit zu erreichen und freuen uns dabei über jedes Feedback.
     </p>
     <h4>Entwicklung</h4>
     <p class="text-justify">
-      <router-link :to="{name: 'home'}">slotlist.info</router-link> wird aktuell von
-      <a href="https://github.com/MorpheusXAUT">MorpheusXAUT</a> alleine entwickelt. Die Repostories des Frontend- und Backend-Sourcecodes sowie die aktuell eingesetzten Versionen können unterhalb gefunden werden. Bitte inkludiere diese Informationen in jegliche Fehlermeldungen, da es die Fehlersuche erleichtert.
+      <router-link :to="{name: 'home'}">slotlist.info</router-link> wird aktuell ausschließlich von
+      <a href="https://github.com/MorpheusXAUT">MorpheusXAUT</a> entwickelt. Die Repostories des Frontend- und Backend-Sourcecodes sowie die aktuell eingesetzten Versionen können unterhalb gefunden werden. Bitte gib diese Informationen in jeglichen Fehlermeldungen an, da es die Fehlersuche erleichtert.
       <dl class="row">
         <dt class="col-1">Frontend</dt>
         <dd class="col-2">
@@ -64,6 +64,14 @@
           <a href="http://spezialeinheit-luchs.de">[SeL] LeWarz</a>
         </dt>
         <dd class="col-sm-10">für das Vorschlagen von Features und Funktionalitäten, dem Testen der Services und dem allgemeinen Feedback</dd>
+        <dt class="col-sm-2">
+          <a href="http://spezialeinheit-luchs.de">[SeL] Belbo</a>
+        </dt>
+        <dd class="col-sm-10">für Feature-Vorschläge und -Feedback sowie dem Korrekturlesen meiner teils wirren Übersetzungen</dd>
+        <dt class="col-sm-2">
+          <a href="http://spezialeinheit-luchs.de">[SeL] Sinus</a>
+        </dt>
+        <dd class="col-sm-10">für Feedback zum Aufbau und Design der Seite, allgemeinem Testing und dem Füllen meiner Datenbank mit Datenmüll</dd>
       </dl>
     </p>
   </b-jumbotron>

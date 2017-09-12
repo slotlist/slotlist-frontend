@@ -64,6 +64,14 @@
           <a href="http://spezialeinheit-luchs.de">[SeL] LeWarz</a>
         </dt>
         <dd class="col-sm-10">for suggesting features and functionality, testing the service and providing general feedback</dd>
+        <dt class="col-sm-2">
+          <a href="http://spezialeinheit-luchs.de">[SeL] Belbo</a>
+        </dt>
+        <dd class="col-sm-10">for feature suggestions and feedback as well as proofreading my partly random translations</dd>
+        <dt class="col-sm-2">
+          <a href="http://spezialeinheit-luchs.de">[SeL] Sinus</a>
+        </dt>
+        <dd class="col-sm-10">for feedback regarding the structure and design of the site, general testing and filling my database with trash data</dd>
       </dl>
     </p>
   </b-jumbotron>

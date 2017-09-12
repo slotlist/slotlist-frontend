@@ -1,12 +1,12 @@
 <template>
   <b-jumbotron header="Anmeldung via Steam" lead="slotlist.info benutzt Steam OpenID Authentifizierung. Du kannst daher deinen bestehenden Steam Account benutzen, um dich auf unserer Seite einzuloggen." v-if="!working">
     <p class="text-justify">
-      Die Website kann weder deine Steam-Anmeldedaten lesen noch speichern oder irgendeine Aktion mit deinem Steam-Account durchführen.
-      <br> Wir erhalten einzig die SteamID und einige öffentlich ersichtlichen Daten (wie z.B. den Nickname) über deinen Account.
-      <br> Die Informationen, welche Steam an uns übermittelt, werden dazu verwendet, einen eindeutigen Benutzer in unserem Backend zu erstellen. Dadurch können alle Funktionen von
+      Die Website kann weder deine Steam-Anmeldedaten lesen, noch speichern oder irgendeine Aktion mit deinem Steam Account durchführen.
+      <br>Wir erhalten einzig die SteamID und einige öffentlich ersichtlichen Daten (wie z.B. den Nicknamen) über deinen Account.
+      <br>Die Informationen, welche Steam an uns übermittelt, werden dazu verwendet, einen eindeutigen Benutzer in unserem Backend zu erstellen. Dadurch können alle notwendigen Funktionen von
       <router-link to="/">slotlist.info</router-link> verwendet werden.
-      <br> Genauere Details bezüglich der Datenschutzerklärung dieser Website können
-      <router-link to="/privacy">here</router-link> gefunden werden.
+      <br>Genauere Details bezüglich der Datenschutzerklärung dieser Website können
+      <router-link to="/privacy">hier</router-link> gefunden werden.
     </p>
     <p v-if="loginRedirectUrl" class="lead text-center">
       <a :href="loginRedirectUrl">
