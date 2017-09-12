@@ -50,6 +50,9 @@
           <b-btn variant="success" v-if="loggedIn && !missionSlotDetails.registrationUid" :disabled="missionSlotDetails.assignee ? true : false" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotRegistrationModal>
             <i class="fa fa-ticket" aria-hidden="true"></i> {{ $t('button.register') }}
           </b-btn>
+          <b-btn variant="secondary" v-if="isMissionEditor" @click="duplicateMissionSlot">
+            <i class="fa fa-files-o" aria-hidden="true"></i> {{ $t('button.duplicate.mission.slot') }}
+          </b-btn>
           <b-btn variant="primary" v-if="isMissionEditor" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotEditModal>
             <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit') }}
           </b-btn>
@@ -158,6 +161,22 @@ export default {
         slotOrderNumber: this.missionSlotDetails.orderNumber,
         slotTitle: this.missionSlotDetails.title
       })
+    },
+    duplicateMissionSlot() {
+      const slotDetails = {
+        title: this.missionSlotDetails.title,
+        orderNumber: this.missionSlotDetails.orderNumber + 1,
+        difficulty: this.missionSlotDetails.difficulty,
+        description: this.missionSlotDetails.description,
+        detailedDescription: this.missionSlotDetails.detailedDescription,
+        restricted: this.missionSlotDetails.restricted,
+        reserve: this.missionSlotDetails.reserve,
+        slotGroupUid: this.missionSlotDetails.slotGroupUid
+      }
+
+      this.hideMissionSlotDetailsModal();
+
+      this.$store.dispatch('createMissionSlot', { missionSlug: this.$route.params.missionSlug, slotDetails: slotDetails });
     },
     hideMissionSlotDetailsModal() {
       this.$refs.missionSlotDetailsModal.hide()

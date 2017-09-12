@@ -220,7 +220,9 @@ const actions = {
       })
   },
   createMissionSlot({ dispatch }, payload) {
-    dispatch('startWorking', i18n.t('store.createMissionSlot'))
+    const slotCount = _.isArray(payload.slotDetails) ? payload.slotDetails.length : 1
+
+    dispatch('startWorking', i18n.tc('store.createMissionSlot', slotCount, { count: slotCount }))
 
     return MissionsApi.createMissionSlot(payload.missionSlug, payload.slotDetails)
       .then((response) => {
@@ -244,7 +246,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.createMissionSlot.success', { slotInfo: `#${payload.slotDetails.orderNumber} ${payload.slotDetails.title}` })}`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.tc('store.createMissionSlot.success', slotCount, { count: slotCount })}`
         })
       }).catch((error) => {
         dispatch('stopWorking')
@@ -254,21 +256,21 @@ const actions = {
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissionSlot.error', { slotInfo: `#${payload.slotDetails.orderNumber} ${payload.slotDetails.title}` })} - ${error.response.data.message}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.tc('store.createMissionSlot.error', slotCount, { count: slotCount })} - ${error.response.data.message}`
           })
         } else if (error.request) {
           console.error('createMissionSlot', error.request)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissionSlot.error', { slotInfo: `#${payload.slotDetails.orderNumber} ${payload.slotDetails.title}` })} - ${i18n.t('failed.request')}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.tc('store.createMissionSlot.error', slotCount, { count: slotCount })} - ${i18n.t('failed.request')}`
           })
         } else {
           console.error('createMissionSlot', error.message)
           dispatch('showAlert', {
             showAlert: true,
             alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissionSlot.error', { slotInfo: `#${payload.slotDetails.orderNumber} ${payload.slotDetails.title}` })} - ${i18n.t('failed.something')}`
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.tc('store.createMissionSlot.error', slotCount, { count: slotCount })} - ${i18n.t('failed.something')}`
           })
         }
       })
@@ -487,6 +489,83 @@ const actions = {
             showAlert: true,
             alertVariant: 'danger',
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlotGroup.error', { title: payload.slotGroupTitle })} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
+  duplicateMissionSlotGroup({ dispatch }, payload) {
+    dispatch('startWorking', i18n.t('store.duplicateMissionSlotGroup'))
+
+    const slotGroupDetails = {
+      description: payload.missionSlotGroup.description,
+      orderNumber: payload.missionSlotGroup.orderNumber + 1,
+      title: payload.missionSlotGroup.title
+    }
+
+    return MissionsApi.createMissionSlotGroup(payload.missionSlug, slotGroupDetails)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Creating mission slot group failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (_.isNil(response.data.slotGroup) || !_.isObject(response.data.slotGroup)) {
+          console.error(response)
+          throw 'Received invalid mission slot group'
+        }
+
+        const slotGroupUid = response.data.slotGroup.uid
+
+        const slotDetails = _.map(payload.missionSlotGroup.slots, (slot) => {
+          return {
+            detailedDescription: slot.detailedDescription,
+            difficulty: slot.difficulty,
+            orderNumber: slot.orderNumber,
+            reserve: slot.reserve,
+            restricted: slot.restricted,
+            description: slot.description,
+            title: slot.title,
+            slotGroupUid
+          }
+        })
+
+        return dispatch('createMissionSlot', { missionSlug: payload.missionSlug, slotDetails })
+      }).then(() => {
+        dispatch('getMissionSlotlist', { missionSlug: payload.missionSlug })
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.duplicateMissionSlotGroup.success', { slotGroupInfo: `#${payload.missionSlotGroup.orderNumber} ${payload.missionSlotGroup.title}` })}`
+        })
+      }).catch((error) => {
+        dispatch('stopWorking')
+
+        if (error.response) {
+          console.error('duplicateMissionSlotGroup', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.duplicateMissionSlotGroup.error', { slotGroupInfo: `#${payload.missionSlotGroup.orderNumber} ${payload.missionSlotGroup.title}` })} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('duplicateMissionSlotGroup', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.duplicateMissionSlotGroup.error', { slotGroupInfo: `#${payload.missionSlotGroup.orderNumber} ${payload.missionSlotGroup.title}` })} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          console.error('duplicateMissionSlotGroup', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.duplicateMissionSlotGroup.error', { slotGroupInfo: `#${payload.missionSlotGroup.orderNumber} ${payload.missionSlotGroup.title}` })} - ${i18n.t('failed.something')}`
           })
         }
       })
