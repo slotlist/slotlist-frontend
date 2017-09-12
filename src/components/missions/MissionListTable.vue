@@ -5,7 +5,7 @@
         <tr>
           <th style="width: 15%">{{ $t('mission.list.startTime') }}</th>
           <th style="width: 25%">{{ $t('mission.list.title') }}</th>
-          <th style="width: 25%">{{ $t('mission.list.description') }}</th>
+          <th style="width: 30%">{{ $t('mission.list.description') }}</th>
           <th style="width: 20%">{{ $t('mission.list.creator') }}</th>
           <th style="width: 10%" class="text-center">{{ $t('misc.actions') }}</th>
         </tr>
@@ -17,7 +17,7 @@
         <tr>
           <th style="width: 15%">{{ $t('mission.list.startTime') }}</th>
           <th style="width: 25%">{{ $t('mission.list.title') }}</th>
-          <th style="width: 25%">{{ $t('mission.list.description') }}</th>
+          <th style="width: 30%">{{ $t('mission.list.description') }}</th>
           <th style="width: 20%">{{ $t('mission.list.creator') }}</th>
           <th style="width: 10%" class="text-center">{{ $t('misc.actions') }}</th>
         </tr>
