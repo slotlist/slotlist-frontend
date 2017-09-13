@@ -39,6 +39,15 @@ export default {
     placeholder: {
       type: String,
       default: null
+    },
+    initialValue: {
+      type: String,
+      default: null
+    }
+  },
+  created: function() {
+    if (!_.isNil(this.initialValue)) {
+      this.value = this.initialValue
     }
   },
   data() {

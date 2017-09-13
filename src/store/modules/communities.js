@@ -19,6 +19,7 @@ const state = {
   communityMembers: null,
   communityMissions: null,
   communitySlugAvailable: false,
+  searchCommunities: false,
   totalCommunities: 0,
   totalCommunityApplications: 0,
   totalCommunityMissions: 0
@@ -75,6 +76,9 @@ const getters = {
   },
   communitySlugAvailable() {
     return state.communitySlugAvailable
+  },
+  searchCommunities() {
+    return state.searchCommunities
   }
 }
 
@@ -727,6 +731,72 @@ const actions = {
           })
         }
       })
+  },
+  searchCommunities({ dispatch, commit }, payload) {
+    commit({
+      type: 'searchingCommunities',
+      searching: true
+    })
+
+    return CommunitiesApi.searchCommunities(payload)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Removing community member failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (_.isNil(response.data.communities) || !_.isArray(response.data.communities)) {
+          console.error(response)
+          throw "Received invalid communities"
+        }
+
+        commit({
+          type: 'searchingCommunities',
+          searching: false
+        })
+
+        const communities = _.map(response.data.communities, (community) => {
+          return {
+            title: community.name,
+            value: community
+          }
+        })
+
+        return communities
+      }).catch((error) => {
+        commit({
+          type: 'searchingCommunities',
+          searching: false
+        })
+
+        if (error.response) {
+          console.error('searchCommunities', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.searchCommunities.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('searchCommunities', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.searchCommunities.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          console.error('searchCommunities', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.searchCommunities.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
   }
 }
 
@@ -746,6 +816,9 @@ const mutations = {
   clearCommunitySlugAvailability(state) {
     state.checkingCommunitySlugAvalability = false
     state.communitySlug = false
+  },
+  searchingCommunities(state, payload) {
+    state.searchCommunities = payload.searching
   },
   setCommunities(state, payload) {
     state.communities = payload.communities

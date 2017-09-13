@@ -527,7 +527,7 @@ const actions = {
             difficulty: slot.difficulty,
             orderNumber: slot.orderNumber,
             reserve: slot.reserve,
-            restricted: slot.restricted,
+            restrictedCommunityUid: _.isNil(slot.restrictedCommunity) ? null : slot.restrictedCommunity.uid,
             description: slot.description,
             title: slot.title,
             slotGroupUid

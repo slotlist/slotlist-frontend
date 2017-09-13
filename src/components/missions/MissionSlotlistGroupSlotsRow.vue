@@ -2,8 +2,8 @@
   <tr>
     <td>{{ missionSlotDetails.orderNumber }}</td>
     <td>
-      <i :class="difficultyIcon" aria-hidden="true"></i>
-      <span :class="titleColor">{{ missionSlotDetails.title }}</span>
+      <i :class="difficultyIcon" aria-hidden="true"></i>&nbsp;
+      <span :class="titleColor" v-html="formattedTitle"></span>
     </td>
     <td v-html="formattedAssignee"></td>
     <td v-if="missionSlotDetails.description">{{ missionSlotDetails.description }}</td>
@@ -12,7 +12,7 @@
         <b-btn variant="primary" @click="prepareMissionSlotDetails" v-b-modal.missionSlotDetailsModal>
           <i class="fa fa-info" aria-hidden="true"></i> {{ $t('misc.details') }}
         </b-btn>
-        <b-btn variant="success" v-if="loggedIn && !missionSlotDetails.registrationUid" :disabled="missionSlotDetails.assignee ? true : false" @click="setMissionSlotDetails" v-b-modal.missionSlotRegistrationModal>
+        <b-btn variant="success" v-if="loggedIn && !missionSlotDetails.registrationUid" :disabled="!canRegisterForSlot" @click="setMissionSlotDetails" v-b-modal.missionSlotRegistrationModal>
           <i class="fa fa-ticket" aria-hidden="true"></i> {{ $t('button.register') }}
         </b-btn>
         <click-confirm v-if="loggedIn && missionSlotDetails.registrationUid" yes-icon="fa fa-eraser" yes-class="btn btn-warning" button-size="sm" :messages="{title: $t('mission.slot.confirm.unregister'), yes: $t('button.confirm'), no: $t('button.cancel')}">
@@ -21,7 +21,7 @@
           </b-btn>
         </click-confirm>
         <click-confirm v-if="isMissionEditor" yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('mission.slot.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
-          <b-btn variant="danger" size="sm" @click="deleteMissionSlotRegistration">
+          <b-btn variant="danger" size="sm" @click="deleteMissionSlot">
             <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete') }}
           </b-btn>
         </click-confirm>
@@ -38,6 +38,20 @@ export default {
     'missionSlotDetails'
   ],
   computed: {
+    canRegisterForSlot() {
+      const user = this.$store.getters.user
+      let userCommunityUid = null;
+      if (!_.isNil(user) && !_.isNil(user.community)) {
+        userCommunityUid = user.community.uid
+      }
+
+      let restrictedCommunityUid = null;
+      if (!_.isNil(this.missionSlotDetails.restrictedCommunity)) {
+        restrictedCommunityUid = this.missionSlotDetails.restrictedCommunity.uid
+      }
+
+      return _.isNil(this.missionSlotDetails.assignee) && (_.isNil(restrictedCommunityUid) || _.isEqual(userCommunityUid, restrictedCommunityUid))
+    },
     difficultyColor() {
       switch (this.missionSlotDetails.difficulty) {
         case 0:
@@ -68,6 +82,13 @@ export default {
 
       return `<span class="text-muted font-italic">${this.$t('mission.slot.assignee.notAssigned')} - ${this.missionSlotDetails.registrationCount} ${this.$tc('mission.slot.assignee.registration', this.missionSlotDetails.registrationCount > 1 ? 2 : 1)}</span>`
     },
+    formattedTitle() {
+      if (_.isNil(this.missionSlotDetails.restrictedCommunity)) {
+        return this.missionSlotDetails.title
+      }
+
+      return `${this.missionSlotDetails.title} - [${this.missionSlotDetails.restrictedCommunity.tag}]`
+    },
     isMissionEditor() {
       return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`, `mission.${this.$route.params.missionSlug}.editor`])
     },
@@ -75,14 +96,14 @@ export default {
       return this.$store.getters.loggedIn
     },
     titleColor() {
-      if (this.missionSlotDetails.restricted) {
-        return 'text-primary font-italic'
+      if (!_.isNil(this.missionSlotDetails.restrictedCommunity)) {
+        return 'text-primary'
       } else if (this.missionSlotDetails.reserve) {
         return 'text-muted font-italic'
       }
     },
     titleTooltip() {
-      if (this.missionSlotDetails.restricted) {
+      if (!_.isNil(this.missionSlotDetails.restrictedCommunity)) {
         return this.$t('mission.slot.restricted.tooltip')
       } else if (this.missionSlotDetails.reserve) {
         return this.$t('mission.slot.reserve.tooltip')

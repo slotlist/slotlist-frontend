@@ -47,7 +47,7 @@
       </div>
       <div slot="modal-footer">
         <div class="btn-group" role="group" aria-label="Mission slot detail actions">
-          <b-btn variant="success" v-if="loggedIn && !missionSlotDetails.registrationUid" :disabled="missionSlotDetails.assignee ? true : false" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotRegistrationModal>
+          <b-btn variant="success" v-if="loggedIn && !missionSlotDetails.registrationUid" :disabled="!canRegisterForSlot" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotRegistrationModal>
             <i class="fa fa-ticket" aria-hidden="true"></i> {{ $t('button.register') }}
           </b-btn>
           <b-btn variant="secondary" v-if="isMissionEditor" @click="duplicateMissionSlot">
@@ -74,6 +74,20 @@ export default {
     MissionSlotRegistrations
   },
   computed: {
+    canRegisterForSlot() {
+      const user = this.$store.getters.user
+      let userCommunityUid = null;
+      if (!_.isNil(user) && !_.isNil(user.community)) {
+        userCommunityUid = user.community.uid
+      }
+
+      let restrictedCommunityUid = null;
+      if (!_.isNil(this.missionSlotDetails.restrictedCommunity)) {
+        restrictedCommunityUid = this.missionSlotDetails.restrictedCommunity.uid
+      }
+
+      return _.isNil(this.missionSlotDetails.assignee) && (_.isNil(restrictedCommunityUid) || _.isEqual(userCommunityUid, restrictedCommunityUid))
+    },
     difficultyColor() {
       switch (this.missionSlotDetails.difficulty) {
         case 0:
@@ -134,8 +148,8 @@ export default {
       return `<span>${this.$t('mission.slot.reserve.regular')}</span>`
     },
     slotRestricted() {
-      if (this.missionSlotDetails.restricted) {
-        return `<span class="text-primary font-italic">${this.$t('mission.slot.restricted')}</span>`
+      if (!_.isNil(this.missionSlotDetails.restrictedCommunity)) {
+        return `<span class="text-primary">${this.$t('mission.slot.restricted', { communityInfo: `[${this.missionSlotDetails.restrictedCommunity.tag}] ${this.missionSlotDetails.restrictedCommunity.name}` })}</span>`
       }
 
       return `<span>${this.$t('mission.slot.restricted.unrestricted')}</span>`
@@ -169,7 +183,7 @@ export default {
         difficulty: this.missionSlotDetails.difficulty,
         description: this.missionSlotDetails.description,
         detailedDescription: this.missionSlotDetails.detailedDescription,
-        restricted: this.missionSlotDetails.restricted,
+        restrictedCommunityUid: _.isNil(this.missionSlotDetails.restrictedCommunity) ? null : this.missionSlotDetails.restrictedCommunity.uid,
         reserve: this.missionSlotDetails.reserve,
         slotGroupUid: this.missionSlotDetails.slotGroupUid
       }
