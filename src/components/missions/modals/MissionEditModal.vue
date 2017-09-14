@@ -10,15 +10,15 @@
               </b-form-fieldset>
             </div>
             <div class="col">
-              <b-form-fieldset :label="$t('mission.shortDescription')" :state="missionEditShortDescriptionState" :feedback="missionEditShortDescriptionFeedback">
-                <b-form-input v-model="missionEditData.shortDescription" textarea required></b-form-input>
+              <b-form-fieldset :label="$t('mission.description')" :state="missionEditdescriptionState" :feedback="missionEditdescriptionFeedback">
+                <b-form-input v-model="missionEditData.description" textarea required></b-form-input>
               </b-form-fieldset>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset :label="$t('mission.description')" :state="missionEditDescriptionState" :feedback="missionEditDescriptionFeedback">
-                <quill-editor v-model="missionEditData.description" ref="missionEditDescriptionEditor" :options="missionEditDescriptionQuillEditorOptions" required></quill-editor>
+              <b-form-fieldset :label="$t('mission.detailedDescription')" :state="missionEditDetailedDescriptionState" :feedback="missionEditDetailedDescriptionFeedback">
+                <quill-editor v-model="missionEditData.detailedDescription" ref="missionEditDetailedDescriptionEditor" :options="missionEditDetailedDescriptionQuillEditorOptions" required></quill-editor>
               </b-form-fieldset>
             </div>
           </div>
@@ -99,18 +99,18 @@ export default {
     return {
       missionEditData: {
         briefingTime: null,
-        description: null,
+        detailedDescription: null,
         endTime: null,
         repositoryUrl: null,
         rules: null,
-        shortDescription: null,
+        description: null,
         slottingTime: null,
         startTime: null,
         techSupport: null,
         title: null,
         visibility: null
       },
-      missionEditDescriptionQuillEditorOptions: {
+      missionEditDetailedDescriptionQuillEditorOptions: {
         modules: {
           toolbar: [
             [{ 'size': ['small', false, 'large', 'huge'] }, { 'header': 1 }, { 'header': 2 }, { 'color': [] }],
@@ -168,11 +168,11 @@ export default {
         && !_.isEmpty(this.missionEditData.briefingTime)
         && moment(this.missionEditData.briefingTime).isValid ? 'success' : 'danger'
     },
-    missionEditDescriptionFeedback() {
-      return _.isString(this.missionEditData.description) && !_.isEmpty(this.missionEditData.description) ? '' : this.$t('mission.feedback.description')
+    missionEditDetailedDescriptionFeedback() {
+      return _.isString(this.missionEditData.detailedDescription) && !_.isEmpty(this.missionEditData.detailedDescription) ? '' : this.$t('mission.feedback.detailedDescription')
     },
-    missionEditDescriptionState() {
-      return _.isString(this.missionEditData.description) && !_.isEmpty(this.missionEditData.description) ? 'success' : 'danger'
+    missionEditDetailedDescriptionState() {
+      return _.isString(this.missionEditData.detailedDescription) && !_.isEmpty(this.missionEditData.detailedDescription) ? 'success' : 'danger'
     },
     missionEditEndTimeFeedback() {
       return _.isString(this.missionEditData.endTime)
@@ -184,11 +184,11 @@ export default {
         && !_.isEmpty(this.missionEditData.endTime)
         && moment(this.missionEditData.endTime).isValid ? 'success' : 'danger'
     },
-    missionEditShortDescriptionFeedback() {
-      return _.isString(this.missionEditData.shortDescription) && !_.isEmpty(this.missionEditData.shortDescription) ? '' : this.$t('mission.feedback.shortDescription')
+    missionEditdescriptionFeedback() {
+      return _.isString(this.missionEditData.description) && !_.isEmpty(this.missionEditData.description) ? '' : this.$t('mission.feedback.description')
     },
-    missionEditShortDescriptionState() {
-      return _.isString(this.missionEditData.shortDescription) && !_.isEmpty(this.missionEditData.shortDescription) ? 'success' : 'danger'
+    missionEditdescriptionState() {
+      return _.isString(this.missionEditData.description) && !_.isEmpty(this.missionEditData.description) ? 'success' : 'danger'
     },
     missionEditSlottingTimeFeedback() {
       return _.isString(this.missionEditData.slottingTime)
@@ -296,11 +296,11 @@ export default {
     setMissionData() {
       this.missionEditData = {
         briefingTime: moment(this.missionDetails.briefingTime).format('Y-MM-DD HH:mm'),
-        description: this.missionDetails.description,
+        detailedDescription: this.missionDetails.detailedDescription,
         endTime: moment(this.missionDetails.endTime).format('Y-MM-DD HH:mm'),
         repositoryUrl: this.missionDetails.repositoryUrl,
         rules: this.missionDetails.rules,
-        shortDescription: this.missionDetails.shortDescription,
+        description: this.missionDetails.description,
         slottingTime: moment(this.missionDetails.slottingTime).format('Y-MM-DD HH:mm'),
         startTime: moment(this.missionDetails.startTime).format('Y-MM-DD HH:mm'),
         techSupport: this.missionDetails.techSupport,

@@ -24,15 +24,15 @@
         </div>
         <div class="row">
           <div class="col col-1"></div>
-          <div class="col col-6">{{ missionSlotDetails.shortDescription}}</div>
+          <div class="col col-6">{{ missionSlotDetails.description}}</div>
           <div class="col col-5" v-html="slotStatus"></div>
         </div>
-        <hr class="my-4" v-show="missionSlotDetails.description">
-        <div class="row font-weight-bold" v-show="missionSlotDetails.description">
+        <hr class="my-4" v-show="missionSlotDetails.detailedDescription">
+        <div class="row font-weight-bold" v-show="missionSlotDetails.detailedDescription">
           <div class="col col-12">{{ $t('mission.slot.detailedDescription') }}</div>
         </div>
-        <div class="row" v-show="missionSlotDetails.description">
-          <div class="col col-12" v-html="missionSlotDetails.description"></div>
+        <div class="row" v-show="missionSlotDetails.detailedDescription">
+          <div class="col col-12" v-html="missionSlotDetails.detailedDescription"></div>
         </div>
         <hr class="my-4">
         <div class="row font-weight-bold">
@@ -47,8 +47,11 @@
       </div>
       <div slot="modal-footer">
         <div class="btn-group" role="group" aria-label="Mission slot detail actions">
-          <b-btn variant="success" v-if="loggedIn && !missionSlotDetails.registrationUid" :disabled="missionSlotDetails.assignee ? true : false" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotRegistrationModal>
+          <b-btn variant="success" v-if="loggedIn && !missionSlotDetails.registrationUid" :disabled="!canRegisterForSlot" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotRegistrationModal>
             <i class="fa fa-ticket" aria-hidden="true"></i> {{ $t('button.register') }}
+          </b-btn>
+          <b-btn variant="secondary" v-if="isMissionEditor" @click="duplicateMissionSlot">
+            <i class="fa fa-files-o" aria-hidden="true"></i> {{ $t('button.duplicate.mission.slot') }}
           </b-btn>
           <b-btn variant="primary" v-if="isMissionEditor" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotEditModal>
             <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit') }}
@@ -71,6 +74,20 @@ export default {
     MissionSlotRegistrations
   },
   computed: {
+    canRegisterForSlot() {
+      const user = this.$store.getters.user
+      let userCommunityUid = null;
+      if (!_.isNil(user) && !_.isNil(user.community)) {
+        userCommunityUid = user.community.uid
+      }
+
+      let restrictedCommunityUid = null;
+      if (!_.isNil(this.missionSlotDetails.restrictedCommunity)) {
+        restrictedCommunityUid = this.missionSlotDetails.restrictedCommunity.uid
+      }
+
+      return _.isNil(this.missionSlotDetails.assignee) && (_.isNil(restrictedCommunityUid) || _.isEqual(userCommunityUid, restrictedCommunityUid))
+    },
     difficultyColor() {
       switch (this.missionSlotDetails.difficulty) {
         case 0:
@@ -131,8 +148,8 @@ export default {
       return `<span>${this.$t('mission.slot.reserve.regular')}</span>`
     },
     slotRestricted() {
-      if (this.missionSlotDetails.restricted) {
-        return `<span class="text-primary font-italic">${this.$t('mission.slot.restricted')}</span>`
+      if (!_.isNil(this.missionSlotDetails.restrictedCommunity)) {
+        return `<span class="text-primary">${this.$t('mission.slot.restricted', { communityInfo: `[${this.missionSlotDetails.restrictedCommunity.tag}] ${this.missionSlotDetails.restrictedCommunity.name}` })}</span>`
       }
 
       return `<span>${this.$t('mission.slot.restricted.unrestricted')}</span>`
@@ -158,6 +175,22 @@ export default {
         slotOrderNumber: this.missionSlotDetails.orderNumber,
         slotTitle: this.missionSlotDetails.title
       })
+    },
+    duplicateMissionSlot() {
+      const slotDetails = {
+        title: this.missionSlotDetails.title,
+        orderNumber: this.missionSlotDetails.orderNumber + 1,
+        difficulty: this.missionSlotDetails.difficulty,
+        description: this.missionSlotDetails.description,
+        detailedDescription: this.missionSlotDetails.detailedDescription,
+        restrictedCommunityUid: _.isNil(this.missionSlotDetails.restrictedCommunity) ? null : this.missionSlotDetails.restrictedCommunity.uid,
+        reserve: this.missionSlotDetails.reserve,
+        slotGroupUid: this.missionSlotDetails.slotGroupUid
+      }
+
+      this.hideMissionSlotDetailsModal();
+
+      this.$store.dispatch('createMissionSlot', { missionSlug: this.$route.params.missionSlug, slotDetails: slotDetails });
     },
     hideMissionSlotDetailsModal() {
       this.$refs.missionSlotDetailsModal.hide()

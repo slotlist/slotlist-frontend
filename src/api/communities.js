@@ -33,6 +33,9 @@ export const v1 = {
   },
   removeCommunityMember(communitySlug, memberUid) {
     return axios.delete(`/v1/communities/${communitySlug}/members/${memberUid}`)
+  },
+  searchCommunities(payload) {
+    return axios.get(`/v1/communities?search=${payload}`)
   }
 }
 

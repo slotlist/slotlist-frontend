@@ -20,7 +20,7 @@ import Api from '../views/Api'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'hash',
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -116,5 +116,5 @@ export default new Router({
       component: Api
     }
   ],
-  linkExactActiveClass: "active"
+  linkExactActiveClass: 'active'
 })

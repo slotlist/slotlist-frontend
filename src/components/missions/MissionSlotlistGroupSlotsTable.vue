@@ -41,7 +41,7 @@ export default {
   computed: {
     hasAnyMissionSlotDescription() {
       return _.some(this.missionSlots, (slot) => {
-        return !_.isNil(slot.shortDescription)
+        return !_.isNil(slot.description)
       });
     },
     missionSlotPlayerStyle() {

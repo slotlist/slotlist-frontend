@@ -1,5 +1,5 @@
 <template>
-  <b-jumbotron header="Privacy policy" lead="Last updated: <strong>2017-09-11 14:45</strong>.">
+  <b-jumbotron header="Privacy policy" lead="Last updated: <strong>2017-09-12 10:22</strong>.">
     <p class="text-justify">
       The
       <router-link :to="{name: 'home'}">slotlist.info</router-link> team ("us", "we" or "our") operates the

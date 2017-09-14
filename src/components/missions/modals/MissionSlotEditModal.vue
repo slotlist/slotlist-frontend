@@ -10,8 +10,8 @@
               </b-form-fieldset>
             </div>
             <div class="col">
-              <b-form-fieldset :label="$t('mission.shortDescription.optional')" state="success">
-                <b-form-input v-model="missionSlotEditData.shortDescription" textarea></b-form-input>
+              <b-form-fieldset :label="$t('mission.description.optional')" state="success">
+                <b-form-input v-model="missionSlotEditData.description" textarea></b-form-input>
               </b-form-fieldset>
             </div>
           </div>
@@ -41,10 +41,17 @@
               </b-form-fieldset>
             </div>
           </div>
+          <div class="row" v-if="missionSlotEditData.restricted">
+            <div class="col">
+              <b-form-fieldset :label="$t('mission.slot.restricted.selection')" :description="$t('mission.slot.restricted.selection.description')" :state="missionSlotEditRestrictedCommunityState">
+                <typeahead action="searchCommunities" actionIndicator="searchingCommunities" :onHit="restrictedSlotCommunitySelected" :initialValue="restrictedSlotTypeaheadInitialValue"></typeahead>
+              </b-form-fieldset>
+            </div>
+          </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset :label="$t('mission.slot.description.optional')" state="success">
-                <quill-editor v-model="missionSlotEditData.description" ref="missionSlotEditDescriptionEditor" :options="missionSlotEditDescriptionEditorOptions"></quill-editor>
+              <b-form-fieldset :label="$t('mission.slot.detailedDescription.optional')" state="success">
+                <quill-editor v-model="missionSlotEditData.detailedDescription" ref="missionSlotEditDetailedDescriptionEditor" :options="missionSlotEditDetailedDescriptionEditorOptions"></quill-editor>
               </b-form-fieldset>
             </div>
           </div>
@@ -71,15 +78,16 @@ export default {
   data() {
     return {
       missionSlotEditData: {
-        description: null,
+        detailedDescription: null,
         difficulty: 0,
         orderNumber: 1,
         reserve: false,
         restricted: false,
-        shortDescription: null,
+        restrictedCommunityUid: null,
+        description: null,
         title: null
       },
-      missionSlotEditDescriptionEditorOptions: {
+      missionSlotEditDetailedDescriptionEditorOptions: {
         modules: {
           toolbar: [
             [{ 'size': ['small', false, 'large', 'huge'] }, { 'header': 1 }, { 'header': 2 }, { 'color': [] }],
@@ -134,40 +142,60 @@ export default {
     missionSlotEditOrderNumberState() {
       return this.missionSlotEditData.orderNumber < 0 ? 'danger' : 'success'
     },
+    missionSlotEditRestrictedCommunityState() {
+      return this.missionSlotEditData.restricted && _.isNil(this.missionSlotEditData.restrictedCommunityUid) ? 'danger' : 'success'
+    },
     missionSlotEditTitleFeedback() {
       return _.isString(this.missionSlotEditData.title) && !_.isEmpty(this.missionSlotEditData.title) ? '' : this.$t('mission.feedback.title.slot')
     },
     missionSlotEditTitleState() {
       return _.isString(this.missionSlotEditData.title) && !_.isEmpty(this.missionSlotEditData.title) ? 'success' : 'danger'
+    },
+    restrictedSlotTypeaheadInitialValue() {
+      return _.isNil(this.missionSlotDetails.restrictedCommunity) ? null : this.missionSlotDetails.restrictedCommunity.name
     }
   },
   methods: {
     setMissionSlotEditData() {
       this.missionSlotEditData = {
-        description: this.missionSlotDetails.description,
+        detailedDescription: this.missionSlotDetails.detailedDescription,
         difficulty: this.missionSlotDetails.difficulty,
         orderNumber: this.missionSlotDetails.orderNumber,
         reserve: this.missionSlotDetails.reserve,
-        restricted: this.missionSlotDetails.restricted,
-        shortDescription: this.missionSlotDetails.shortDescription,
+        restricted: !_.isNil(this.missionSlotDetails.restrictedCommunity),
+        restrictedCommunityUid: _.isNil(this.missionSlotDetails.restrictedCommunity) ? null : this.missionSlotDetails.restrictedCommunity.uid,
+        description: this.missionSlotDetails.description,
         title: this.missionSlotDetails.title
       }
     },
     editMissionSlot() {
       if (_.isEmpty(this.missionSlotEditData.title)) {
         return
+      } else if (this.missionSlotEditData.restricted && (_.isNil(this.missionSlotEditData.restrictedCommunityUid) || _.isEmpty(this.missionSlotEditData.restrictedCommunityUid))) {
+        return
       }
 
+      if (_.isString(this.missionSlotEditData.detailedDescription) && _.isEmpty(this.missionSlotEditData.detailedDescription)) {
+        this.missionSlotEditData.detailedDescription = null
+      }
       if (_.isString(this.missionSlotEditData.description) && _.isEmpty(this.missionSlotEditData.description)) {
         this.missionSlotEditData.description = null
-      }
-      if (_.isString(this.missionSlotEditData.shortDescription) && _.isEmpty(this.missionSlotEditData.shortDescription)) {
-        this.missionSlotEditData.shortDescription = null
       }
 
       const updatedMissionSlotDetails = {}
       _.each(this.missionSlotEditData, (value, key) => {
-        if (!_.isEqual(value, this.missionSlotDetails[key])) {
+        if (key.toLowerCase() === 'restricted') {
+          if (!value && !_.isNil(this.missionSlotDetails.restrictedCommunity)) {
+            updatedMissionSlotDetails.restrictedCommunityUid = null
+          }
+          return
+        } else if (key.toLowerCase() === 'restrictedcommunityuid') {
+          const oldRestrictedCommunityUid = _.isNil(this.missionSlotDetails.restrictedCommunity) ? null : this.missionSlotDetails.restrictedCommunity.uid
+          if (!_.isEqual(value, oldRestrictedCommunityUid)) {
+            updatedMissionSlotDetails.restrictedCommunityUid = value
+          }
+          return
+        } else if (!_.isEqual(value, this.missionSlotDetails[key])) {
           updatedMissionSlotDetails[key] = value
         }
       })
@@ -195,6 +223,9 @@ export default {
     },
     hideMissionSlotEditModal() {
       this.$refs.missionSlotEditModal.hide()
+    },
+    restrictedSlotCommunitySelected(item) {
+      this.missionSlotEditData.restrictedCommunityUid = item.value.uid
     }
   }
 }

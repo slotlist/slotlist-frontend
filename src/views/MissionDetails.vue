@@ -9,7 +9,7 @@
           <router-link :to="{name: 'userDetails', params: {userUid: missionDetails.creator.uid}}">{{ formatUserWithTag(missionDetails.creator) }}</router-link>
         </h5>
         <br>
-        <p class="lead text-justify">{{ missionDetails.shortDescription }}</p>
+        <p class="lead text-justify">{{ missionDetails.description }}</p>
         <hr class="my-4">
         <div class="row text-center">
           <div class="col">
@@ -76,7 +76,7 @@
       </div>
       <div class="card">
         <div class="card-block text-nowrap">
-          <div class="html ql-editor text-justify" v-html="missionDetails.description"></div>
+          <div class="html ql-editor text-justify" v-html="missionDetails.detailedDescription"></div>
         </div>
       </div>
       <br>

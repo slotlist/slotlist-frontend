@@ -10,8 +10,8 @@
               </b-form-fieldset>
             </div>
             <div class="col">
-              <b-form-fieldset :label="$t('mission.shortDescription.optional')" state="success">
-                <b-form-input v-model="missionSlotCreateData.shortDescription" textarea></b-form-input>
+              <b-form-fieldset :label="$t('mission.description.optional')" state="success">
+                <b-form-input v-model="missionSlotCreateData.description" textarea></b-form-input>
               </b-form-fieldset>
             </div>
           </div>
@@ -41,10 +41,17 @@
               </b-form-fieldset>
             </div>
           </div>
+          <div class="row" v-if="missionSlotCreateData.restricted">
+            <div class="col">
+              <b-form-fieldset :label="$t('mission.slot.restricted.selection')" :description="$t('mission.slot.restricted.selection.description')" :state="missionSlotCreateRestrictedCommunityState">
+                <typeahead action="searchCommunities" actionIndicator="searchingCommunities" :onHit="restrictedSlotCommunitySelected"></typeahead>
+              </b-form-fieldset>
+            </div>
+          </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset :label="$t('mission.slot.description.optional')" state="success">
-                <quill-editor v-model="missionSlotCreateData.description" ref="missionSlotCreateDescriptionEditor" :options="missionSlotCreateDescriptionEditorOptions"></quill-editor>
+              <b-form-fieldset :label="$t('mission.slot.detailedDescription.optional')" state="success">
+                <quill-editor v-model="missionSlotCreateData.detailedDescription" ref="missionSlotCreateDetailedDescriptionEditor" :options="missionSlotCreateDetailedDescriptionEditorOptions"></quill-editor>
               </b-form-fieldset>
             </div>
           </div>
@@ -71,15 +78,16 @@ export default {
   data() {
     return {
       missionSlotCreateData: {
-        description: null,
+        detailedDescription: null,
         difficulty: 0,
         orderNumber: 1,
         reserve: false,
         restricted: false,
-        shortDescription: null,
+        restrictedCommunityUid: null,
+        description: null,
         title: null
       },
-      missionSlotCreateDescriptionEditorOptions: {
+      missionSlotCreateDetailedDescriptionEditorOptions: {
         modules: {
           toolbar: [
             [{ 'size': ['small', false, 'large', 'huge'] }, { 'header': 1 }, { 'header': 2 }, { 'color': [] }],
@@ -131,6 +139,9 @@ export default {
     missionSlotCreateOrderNumberState() {
       return this.missionSlotCreateData.orderNumber < 0 ? 'danger' : 'success'
     },
+    missionSlotCreateRestrictedCommunityState() {
+      return this.missionSlotCreateData.restricted && _.isNil(this.missionSlotCreateData.restrictedCommunityUid) ? 'danger' : 'success'
+    },
     missionSlotCreateTitleFeedback() {
       return _.isString(this.missionSlotCreateData.title) && !_.isEmpty(this.missionSlotCreateData.title) ? '' : this.$t('mission.feedback.title.slot')
     },
@@ -147,28 +158,34 @@ export default {
   methods: {
     clearMissionSlotCreateData() {
       this.missionSlotCreateData = {
-        description: null,
+        detailedDescription: null,
         difficulty: 0,
         orderNumber: 1,
         reserve: false,
         restricted: false,
-        shortDescription: null,
+        restrictedCommunityUid: null,
+        description: null,
         title: null
       }
     },
     createMissionSlot() {
       if (_.isEmpty(this.missionSlotCreateData.title)) {
         return
+      } else if (this.missionSlotCreateData.restricted && (_.isNil(this.missionSlotCreateData.restrictedCommunityUid) || _.isEmpty(this.missionSlotCreateData.restrictedCommunityUid))) {
+        return
       }
 
+      if (_.isString(this.missionSlotCreateData.detailedDescription) && _.isEmpty(this.missionSlotCreateData.detailedDescription)) {
+        this.missionSlotCreateData.detailedDescription = null
+      }
       if (_.isString(this.missionSlotCreateData.description) && _.isEmpty(this.missionSlotCreateData.description)) {
         this.missionSlotCreateData.description = null
       }
-      if (_.isString(this.missionSlotCreateData.shortDescription) && _.isEmpty(this.missionSlotCreateData.shortDescription)) {
-        this.missionSlotCreateData.shortDescription = null
+      if (_.isString(this.missionSlotCreateData.restrictedCommunityUid) && _.isEmpty(this.missionSlotCreateData.restrictedCommunityUid)) {
+        this.missionSlotCreateData.restrictedCommunityUid = null
       }
 
-      const payload = _.assign({ slotGroupUid: this.missionSlotGroupDetails.uid }, this.missionSlotCreateData)
+      const payload = _.assign({ slotGroupUid: this.missionSlotGroupDetails.uid }, _.omit(this.missionSlotCreateData, 'restricted'))
 
       this.hideMissionSlotCreateModal()
 
@@ -183,6 +200,9 @@ export default {
     },
     hideMissionSlotCreateModal() {
       this.$refs.missionSlotCreateModal.hide()
+    },
+    restrictedSlotCommunitySelected(item) {
+      this.missionSlotCreateData.restrictedCommunityUid = item.value.uid
     }
   }
 }

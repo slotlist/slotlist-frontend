@@ -4,6 +4,7 @@ import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import '../static/tables.css'
 import { sync } from 'vuex-router-sync'
 import App from './components/App'
 import router from './router'
@@ -16,6 +17,7 @@ import VueSimpleSpinner from 'vue-simple-spinner'
 import VueClickConfirm from 'click-confirm'
 import VuePaginate from 'vuejs-paginate'
 import VueI18n from 'vue-i18n'
+import Typeahead from './components/Typeahead.vue'
 import LoadingOverlay from './components/LoadingOverlay.vue'
 
 // Black-require API/axios utils
@@ -59,6 +61,7 @@ Vue.component('click-confirm', VueClickConfirm)
 Vue.component('spinner', VueSimpleSpinner)
 Vue.component('loading-overlay', LoadingOverlay)
 Vue.component('paginate', VuePaginate)
+Vue.component('typeahead', Typeahead)
 
 const i18n = new VueI18n({
   fallbackLocale: 'en',

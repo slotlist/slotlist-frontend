@@ -21,15 +21,15 @@
         </div>
         <div class="row">
           <div class="col">
-            <b-form-fieldset :label="$t('mission.shortDescription')" :description="$t('mission.shortDescription.description')" :state="missionCreateShortDescriptionState" :feedback="missionCreateShortDescriptionFeedback">
-              <b-form-input v-model="missionCreateShortDescription" textarea required></b-form-input>
+            <b-form-fieldset :label="$t('mission.description')" :description="$t('mission.description.description')" :state="missionCreatedescriptionState" :feedback="missionCreatedescriptionFeedback">
+              <b-form-input v-model="missionCreatedescription" textarea required></b-form-input>
             </b-form-fieldset>
           </div>
         </div>
         <div class="row">
           <div class="col">
-            <b-form-fieldset :label="$t('mission.description')" :description="$t('mission.description.description')" :state="missionCreateDescriptionState" :feedback="missionCreateDescriptionFeedback">
-              <quill-editor v-model="missionCreateDescription" ref="missionCreateDescriptionEditor" :options="descriptionEditorOptions" required></quill-editor>
+            <b-form-fieldset :label="$t('mission.detailedDescription')" :description="$t('mission.detailedDescription.description')" :state="missionCreateDetailedDescriptionState" :feedback="missionCreateDetailedDescriptionFeedback">
+              <quill-editor v-model="missionCreateDetailedDescription" ref="missionCreateDetailedDescriptionEditor" :options="descriptionEditorOptions" required></quill-editor>
             </b-form-fieldset>
           </div>
         </div>
@@ -151,8 +151,8 @@ export default {
       },
       missionCreateTitle: null,
       missionCreateSlug: null,
-      missionCreateShortDescription: null,
-      missionCreateDescription: null,
+      missionCreatedescription: null,
+      missionCreateDetailedDescription: null,
       missionCreateSlottingTime: null,
       missionCreateStartTime: null,
       missionCreateEndTime: null,
@@ -211,17 +211,17 @@ export default {
     missionSlugAvailable() {
       return this.$store.getters.missionSlugAvailable
     },
-    missionCreateShortDescriptionState() {
-      return _.isNil(this.missionCreateShortDescription) || _.isEmpty(this.missionCreateShortDescription) ? 'danger' : 'success'
+    missionCreatedescriptionState() {
+      return _.isNil(this.missionCreatedescription) || _.isEmpty(this.missionCreatedescription) ? 'danger' : 'success'
     },
-    missionCreateShortDescriptionFeedback() {
-      return _.isNil(this.missionCreateShortDescription) || _.isEmpty(this.missionCreateShortDescription) ? this.$t('mission.feedback.shortDescription') : ''
+    missionCreatedescriptionFeedback() {
+      return _.isNil(this.missionCreatedescription) || _.isEmpty(this.missionCreatedescription) ? this.$t('mission.feedback.description') : ''
     },
-    missionCreateDescriptionState() {
-      return _.isNil(this.missionCreateDescription) || _.isEmpty(this.missionCreateDescription) ? 'danger' : 'success'
+    missionCreateDetailedDescriptionState() {
+      return _.isNil(this.missionCreateDetailedDescription) || _.isEmpty(this.missionCreateDetailedDescription) ? 'danger' : 'success'
     },
-    missionCreateDescriptionFeedback() {
-      return _.isNil(this.missionCreateDescription) || _.isEmpty(this.missionCreateDescription) ? this.$t('mission.feedback.description') : ''
+    missionCreateDetailedDescriptionFeedback() {
+      return _.isNil(this.missionCreateDetailedDescription) || _.isEmpty(this.missionCreateDetailedDescription) ? this.$t('mission.feedback.detailedDescription') : ''
     },
     missionCreateSlottingTimeState() {
       return _.isNil(this.missionCreateSlottingTime) || _.isEmpty(this.missionCreateSlottingTime) || !moment(this.missionCreateSlottingTime).isValid() ? 'danger' : 'success'
@@ -323,8 +323,8 @@ export default {
       const missionDetails = {
         title: this.missionCreateTitle,
         slug: this.missionCreateSlug,
-        shortDescription: this.missionCreateShortDescription,
-        description: this.missionCreateDescription,
+        description: this.missionCreatedescription,
+        detailedDescription: this.missionCreateDetailedDescription,
         slottingTime: moment(this.missionCreateSlottingTime).utc().format(),
         startTime: moment(this.missionCreateStartTime).utc().format(),
         endTime: moment(this.missionCreateEndTime).utc().format(),
