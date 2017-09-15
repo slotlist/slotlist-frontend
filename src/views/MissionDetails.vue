@@ -9,6 +9,10 @@
           <router-link :to="{name: 'userDetails', params: {userUid: missionDetails.creator.uid}}">{{ formatUserWithTag(missionDetails.creator) }}</router-link>
         </h5>
         <br>
+        <div class="text-center" v-if="missionDetails.bannerImageUrl">
+          <img :src="missionDetails.bannerImageUrl">
+          <br><br>
+        </div>
         <p class="lead text-justify">{{ missionDetails.description }}</p>
         <hr class="my-4">
         <div class="row">
@@ -62,16 +66,17 @@
         </div>
         <hr class="my-4" v-if="isMissionEditor">
         <div class="row justify-content-center" v-if="isMissionEditor">
-          <div class="btn-group" role="group" aria-label="Mission actions">
-            <b-btn variant="primary" v-b-modal.missionEditModal>
-              <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit') }}
+          <b-btn variant="primary" v-b-modal.missionEditModal>
+            <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit') }}
+          </b-btn>&nbsp;
+          <b-btn variant="primary" v-b-modal.missionBannerImageModal>
+            <i class="fa fa-picture-o" aria-hidden="true"></i> {{ $t('button.edit.mission.bannerImage') }}
+          </b-btn>&nbsp;
+          <click-confirm yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('mission.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
+            <b-btn variant="danger" @click="deleteMission">
+              <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete') }}
             </b-btn>
-            <click-confirm yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('mission.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
-              <b-btn variant="danger" @click="deleteMission">
-                <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete') }}
-              </b-btn>
-            </click-confirm>
-          </div>
+          </click-confirm>
         </div>
       </div>
       <div class="card">
@@ -105,6 +110,7 @@
     <!-- End of content -->
     <!-- Begin of modals -->
     <div>
+      <mission-banner-image-modal></mission-banner-image-modal>
       <mission-edit-modal></mission-edit-modal>
       <mission-slot-create-modal></mission-slot-create-modal>
       <mission-slot-details-modal></mission-slot-details-modal>
@@ -118,6 +124,7 @@
 
 <script>
 import * as _ from 'lodash'
+import MissionBannerImageModal from 'components/missions/modals/MissionBannerImageModal.vue'
 import MissionEditModal from 'components/missions/modals/MissionEditModal.vue'
 import MissionSlotCreateModal from 'components/missions/modals/MissionSlotCreateModal.vue'
 import MissionSlotDetailsModal from 'components/missions/modals/MissionSlotDetailsModal.vue'
@@ -129,6 +136,7 @@ import utils from '../utils'
 
 export default {
   components: {
+    MissionBannerImageModal,
     MissionEditModal,
     MissionSlotCreateModal,
     MissionSlotDetailsModal,

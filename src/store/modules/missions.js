@@ -1114,6 +1114,66 @@ const actions = {
           })
         }
       })
+  },
+  uploadMissionBannerImage({ dispatch, commit }, payload) {
+    dispatch('startWorking', i18n.t('store.uploadMissionBannerImage'))
+
+    return MissionsApi.uploadMissionBannerImage(payload.missionSlug, payload.imageType, payload.imageData)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Uploading mission banner image failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (_.isNil(response.data.mission) || !_.isObject(response.data.mission)) {
+          console.error(response)
+          throw 'Received invalid mission banner image upload'
+        }
+
+        commit({
+          type: 'setMissionDetails',
+          mission: response.data.mission
+        })
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.uploadMissionBannerImage.success')}`,
+          scrollToTop: true
+        })
+
+        dispatch('stopWorking')
+      }).catch((error) => {
+        dispatch('stopWorking')
+
+        if (error.response) {
+          console.error('uploadMissionBannerImage', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.uploadMissionBannerImage.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('uploadMissionBannerImage', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.uploadMissionBannerImage.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          console.error('uploadMissionBannerImage', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.uploadMissionBannerImage.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
   }
 }
 
@@ -1135,6 +1195,14 @@ const mutations = {
   },
   clearMissionSlotGroupDetails(state) {
     state.missionSlotGroupDetails = null
+  },
+  setMissionBannerImageUrl(state, payload) {
+    if (_.isNil(state.missionDetails)) {
+      console.warn('setMissionBannerImageUrl', 'Somehow lost mission details while uploading banner image... Oh well')
+      return
+    }
+
+    state.missionDetails.bannerImageUrl = payload.bannerImageUrl
   },
   setMissionDetails(state, payload) {
     state.missionDetails = payload.mission

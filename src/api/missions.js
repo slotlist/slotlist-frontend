@@ -49,6 +49,9 @@ export const v1 = {
   },
   unregisterFromMissionSlot(missionSlug, slotUid, registrationUid) {
     return axios.delete(`/v1/missions/${missionSlug}/slots/${slotUid}/registrations/${registrationUid}`)
+  },
+  uploadMissionBannerImage(missionSlug, imageType, imageData) {
+    return axios.put(`/v1/missions/${missionSlug}/bannerImage`, { imageType, image: imageData })
   }
 }
 
