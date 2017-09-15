@@ -11,8 +11,8 @@
         <br>
         <p class="lead text-justify">{{ missionDetails.description }}</p>
         <hr class="my-4">
-        <div class="row text-center">
-          <div class="col">
+        <div class="row">
+          <div class="col text-center">
             <h5>{{ $t('mission.community') }}</h5>
             <p>
               <router-link v-if="missionDetails.community" :to="{name: 'communityDetails', params: {communitySlug: missionDetails.community.slug}}">{{ missionDetails.community.name }}</router-link>
@@ -20,10 +20,10 @@
             </p>
           </div>
           <div class="col">
-            <h5>{{ $t('mission.repositoryUrl') }}</h5>
-            <p v-html="optionalRepositoryUrl"></p>
+            <h5 class="text-center">{{ $t('mission.repositoryUrl') }}</h5>
+            <p class="html ql-editor" v-html="optionalRepositoryUrl"></p>
           </div>
-          <div class="col">
+          <div class="col text-center">
             <h5>{{ $t('mission.visibility') }}</h5>
             <p v-html="formattedMissionVisibility"></p>
           </div>
@@ -50,14 +50,14 @@
             <p>{{ formatDateTime(missionDetails.briefingTime) }}</p>
           </div>
         </div>
-        <div class="row text-center">
+        <div class="row">
           <div class="col">
-            <h5>{{ $t('mission.techSupport') }}</h5>
-            <p v-html="optionalTechSupport"></p>
+            <h5 class="text-center">{{ $t('mission.techSupport') }}</h5>
+            <p class="html ql-editor" v-html="optionalTechSupport"></p>
           </div>
           <div class="col">
-            <h5>{{ $t('mission.rules') }}</h5>
-            <p v-html="optionalRules"></p>
+            <h5 class="text-center">{{ $t('mission.rules') }}</h5>
+            <p class="html ql-editor" v-html="optionalRules"></p>
           </div>
         </div>
         <hr class="my-4" v-if="isMissionEditor">
@@ -76,7 +76,7 @@
       </div>
       <div class="card">
         <div class="card-block text-nowrap">
-          <div class="html ql-editor text-justify" v-html="missionDetails.detailedDescription"></div>
+          <div class="html ql-editor" v-html="missionDetails.detailedDescription"></div>
         </div>
       </div>
       <br>
@@ -156,13 +156,13 @@ export default {
       return this.$store.getters.missionDetails
     },
     optionalRepositoryUrl() {
-      return this.missionDetails.repositoryUrl || `<span class='text-muted font-italic'>${this.$t('misc.notProvided')}</span>`
+      return this.missionDetails.repositoryUrl || `<div class='text-muted font-italic text-center'>${this.$t('misc.notProvided')}</div>`
     },
     optionalTechSupport() {
-      return this.missionDetails.techSupport || `<span class='text-muted font-italic'>${this.$t('misc.notProvided')}</span>`
+      return this.missionDetails.techSupport || `<div class='text-muted font-italic text-center'>${this.$t('misc.notProvided')}</div>`
     },
     optionalRules() {
-      return this.missionDetails.rules || `<span class='text-muted font-italic'>${this.$t('misc.notSpecified')}</span>`
+      return this.missionDetails.rules || `<div class='text-muted font-italic text-center'>${this.$t('misc.notSpecified')}</div>`
     },
     formattedMissionVisibility() {
       switch (this.missionDetails.visibility) {
