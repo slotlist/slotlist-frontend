@@ -9,10 +9,14 @@
           <router-link :to="{name: 'userDetails', params: {userUid: missionDetails.creator.uid}}">{{ formatUserWithTag(missionDetails.creator) }}</router-link>
         </h5>
         <br>
+        <div class="text-center" v-if="missionDetails.bannerImageUrl">
+          <img :src="missionDetails.bannerImageUrl" style="max-width: 100%; max-height: 480px">
+          <br><br>
+        </div>
         <p class="lead text-justify">{{ missionDetails.description }}</p>
         <hr class="my-4">
-        <div class="row text-center">
-          <div class="col">
+        <div class="row">
+          <div class="col text-center">
             <h5>{{ $t('mission.community') }}</h5>
             <p>
               <router-link v-if="missionDetails.community" :to="{name: 'communityDetails', params: {communitySlug: missionDetails.community.slug}}">{{ missionDetails.community.name }}</router-link>
@@ -20,10 +24,10 @@
             </p>
           </div>
           <div class="col">
-            <h5>{{ $t('mission.repositoryUrl') }}</h5>
-            <p v-html="optionalRepositoryUrl"></p>
+            <h5 class="text-center">{{ $t('mission.repositoryUrl') }}</h5>
+            <p class="html ql-editor" v-html="optionalRepositoryUrl"></p>
           </div>
-          <div class="col">
+          <div class="col text-center">
             <h5>{{ $t('mission.visibility') }}</h5>
             <p v-html="formattedMissionVisibility"></p>
           </div>
@@ -50,33 +54,34 @@
             <p>{{ formatDateTime(missionDetails.briefingTime) }}</p>
           </div>
         </div>
-        <div class="row text-center">
+        <div class="row">
           <div class="col">
-            <h5>{{ $t('mission.techSupport') }}</h5>
-            <p v-html="optionalTechSupport"></p>
+            <h5 class="text-center">{{ $t('mission.techSupport') }}</h5>
+            <p class="html ql-editor" v-html="optionalTechSupport"></p>
           </div>
           <div class="col">
-            <h5>{{ $t('mission.rules') }}</h5>
-            <p v-html="optionalRules"></p>
+            <h5 class="text-center">{{ $t('mission.rules') }}</h5>
+            <p class="html ql-editor" v-html="optionalRules"></p>
           </div>
         </div>
         <hr class="my-4" v-if="isMissionEditor">
         <div class="row justify-content-center" v-if="isMissionEditor">
-          <div class="btn-group" role="group" aria-label="Mission actions">
-            <b-btn variant="primary" v-b-modal.missionEditModal>
-              <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit') }}
+          <b-btn variant="primary" v-b-modal.missionEditModal>
+            <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit') }}
+          </b-btn>&nbsp;
+          <b-btn variant="primary" v-b-modal.missionBannerImageModal>
+            <i class="fa fa-picture-o" aria-hidden="true"></i> {{ $t('button.edit.mission.bannerImage') }}
+          </b-btn>&nbsp;
+          <click-confirm yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('mission.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
+            <b-btn variant="danger" @click="deleteMission">
+              <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete') }}
             </b-btn>
-            <click-confirm yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('mission.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
-              <b-btn variant="danger" @click="deleteMission">
-                <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete') }}
-              </b-btn>
-            </click-confirm>
-          </div>
+          </click-confirm>
         </div>
       </div>
       <div class="card">
         <div class="card-block text-nowrap">
-          <div class="html ql-editor text-justify" v-html="missionDetails.detailedDescription"></div>
+          <div class="html ql-editor" v-html="missionDetails.detailedDescription"></div>
         </div>
       </div>
       <br>
@@ -105,6 +110,7 @@
     <!-- End of content -->
     <!-- Begin of modals -->
     <div>
+      <mission-banner-image-modal></mission-banner-image-modal>
       <mission-edit-modal></mission-edit-modal>
       <mission-slot-create-modal></mission-slot-create-modal>
       <mission-slot-details-modal></mission-slot-details-modal>
@@ -118,6 +124,7 @@
 
 <script>
 import * as _ from 'lodash'
+import MissionBannerImageModal from 'components/missions/modals/MissionBannerImageModal.vue'
 import MissionEditModal from 'components/missions/modals/MissionEditModal.vue'
 import MissionSlotCreateModal from 'components/missions/modals/MissionSlotCreateModal.vue'
 import MissionSlotDetailsModal from 'components/missions/modals/MissionSlotDetailsModal.vue'
@@ -129,6 +136,7 @@ import utils from '../utils'
 
 export default {
   components: {
+    MissionBannerImageModal,
     MissionEditModal,
     MissionSlotCreateModal,
     MissionSlotDetailsModal,
@@ -156,13 +164,13 @@ export default {
       return this.$store.getters.missionDetails
     },
     optionalRepositoryUrl() {
-      return this.missionDetails.repositoryUrl || `<span class='text-muted font-italic'>${this.$t('misc.notProvided')}</span>`
+      return this.missionDetails.repositoryUrl || `<div class='text-muted font-italic text-center'>${this.$t('misc.notProvided')}</div>`
     },
     optionalTechSupport() {
-      return this.missionDetails.techSupport || `<span class='text-muted font-italic'>${this.$t('misc.notProvided')}</span>`
+      return this.missionDetails.techSupport || `<div class='text-muted font-italic text-center'>${this.$t('misc.notProvided')}</div>`
     },
     optionalRules() {
-      return this.missionDetails.rules || `<span class='text-muted font-italic'>${this.$t('misc.notSpecified')}</span>`
+      return this.missionDetails.rules || `<div class='text-muted font-italic text-center'>${this.$t('misc.notSpecified')}</div>`
     },
     formattedMissionVisibility() {
       switch (this.missionDetails.visibility) {
