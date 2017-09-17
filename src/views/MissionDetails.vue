@@ -10,7 +10,7 @@
         </h5>
         <br>
         <div class="text-center" v-if="missionDetails.bannerImageUrl">
-          <img :src="missionDetails.bannerImageUrl">
+          <img :src="missionDetails.bannerImageUrl" style="max-width: 100%; max-height: 480px">
           <br><br>
         </div>
         <p class="lead text-justify">{{ missionDetails.description }}</p>

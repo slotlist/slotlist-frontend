@@ -17,6 +17,9 @@ export const v1 = {
   deleteMission(missionSlug) {
     return axios.delete(`/v1/missions/${missionSlug}`)
   },
+  deleteMissionBannerImage(missionSlug) {
+    return axios.delete(`/v1/missions/${missionSlug}/bannerImage`)
+  },
   deleteMissionSlot(missionSlug, slotUid) {
     return axios.delete(`/v1/missions/${missionSlug}/slots/${slotUid}`)
   },
