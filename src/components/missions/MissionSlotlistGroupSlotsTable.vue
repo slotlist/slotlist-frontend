@@ -3,10 +3,10 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th style="width: 1%">#</th>
+          <th style="width: 6%">#</th>
           <th :style="missionSlotRoleStyle">{{ $t('mission.slot.role') }}</th>
           <th :style="missionSlotPlayerStyle">{{ $t('mission.slot.player') }}</th>
-          <th style="width: 30%" v-if="hasAnyMissionSlotDescription">{{ $t('mission.slot.description') }}</th>
+          <th style="width: 28%" v-if="hasAnyMissionSlotDescription">{{ $t('mission.slot.description') }}</th>
           <th style="width: 10%" class="text-center">{{ $t('misc.actions') }}</th>
         </tr>
       </thead>
@@ -15,10 +15,10 @@
       </tbody>
       <tfoot v-show="missionSlots.length >= 10">
         <tr>
-          <th style="width: 1%">#</th>
+          <th style="width: 6%">#</th>
           <th :style="missionSlotRoleStyle">{{ $t('mission.slot.role') }}</th>
           <th :style="missionSlotPlayerStyle">{{ $t('mission.slot.player') }}</th>
-          <th style="width: 30%" v-if="hasAnyMissionSlotDescription">{{ $t('mission.slot.description') }}</th>
+          <th style="width: 28%" v-if="hasAnyMissionSlotDescription">{{ $t('mission.slot.description') }}</th>
           <th style="width: 10%" class="text-center">{{ $t('misc.actions') }}</th>
         </tr>
       </tfoot>
@@ -46,14 +46,14 @@ export default {
     },
     missionSlotPlayerStyle() {
       if (this.hasAnyMissionSlotDescription) {
-        return 'width: 34%'
+        return 'width: 28%'
       } else {
-        return 'width: 49%'
+        return 'width: 45%'
       }
     },
     missionSlotRoleStyle() {
       if (this.hasAnyMissionSlotDescription) {
-        return 'width: 25%'
+        return 'width: 27%'
       } else {
         return 'width: 40%'
       }

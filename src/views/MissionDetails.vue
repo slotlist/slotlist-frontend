@@ -116,6 +116,7 @@
       <mission-slot-details-modal></mission-slot-details-modal>
       <mission-slot-edit-modal></mission-slot-edit-modal>
       <mission-slot-group-create-modal></mission-slot-group-create-modal>
+      <mission-slot-group-edit-modal></mission-slot-group-edit-modal>
       <mission-slot-registration-modal></mission-slot-registration-modal>
     </div>
     <!-- End of modals -->
@@ -130,6 +131,7 @@ import MissionSlotCreateModal from 'components/missions/modals/MissionSlotCreate
 import MissionSlotDetailsModal from 'components/missions/modals/MissionSlotDetailsModal.vue'
 import MissionSlotEditModal from 'components/missions/modals/MissionSlotEditModal.vue'
 import MissionSlotGroupCreateModal from 'components/missions/modals/MissionSlotGroupCreateModal.vue'
+import MissionSlotGroupEditModal from 'components/missions/modals/MissionSlotGroupEditModal.vue'
 import MissionSlotlist from 'components/missions/MissionSlotlist.vue'
 import MissionSlotRegistrationModal from 'components/missions/modals/MissionSlotRegistrationModal.vue'
 import utils from '../utils'
@@ -142,6 +144,7 @@ export default {
     MissionSlotDetailsModal,
     MissionSlotEditModal,
     MissionSlotGroupCreateModal,
+    MissionSlotGroupEditModal,
     MissionSlotlist,
     MissionSlotRegistrationModal
   },
