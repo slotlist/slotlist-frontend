@@ -746,6 +746,60 @@ const actions = {
         }
       })
   },
+  editMissionSlotGroup({ dispatch }, payload) {
+    dispatch('startWorking', i18n.t('store.editMissionSlotGroup'))
+
+    return MissionsApi.editMissionSlotGroup(payload.missionSlug, payload.slotGroupUid, payload.updatedSlotGroupDetails)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Editing mission slot group failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (_.isNil(response.data.slotGroup) || !_.isObject(response.data.slotGroup)) {
+          console.error(response)
+          throw 'Received invalid mission slot group'
+        }
+
+        dispatch('getMissionSlotlist', { missionSlug: payload.missionSlug })
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.editMissionSlotGroup.success')}`
+        })
+      }).catch((error) => {
+        dispatch('stopWorking')
+
+        if (error.response) {
+          console.error('editMissionSlotGroup', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editMissionSlotGroup.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('editMissionSlotGroup', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editMissionSlotGroup.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          console.error('editMissionSlotGroup', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editMissionSlotGroup.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
   filterMissionSlotlist({ commit }, payload) {
     commit({
       type: 'setMissionSlotlistFilter',
@@ -776,8 +830,6 @@ const actions = {
           type: 'setMissionDetails',
           mission: response.data.mission
         })
-
-        dispatch('stopWorking')
       }).catch((error) => {
         dispatch('stopWorking')
 

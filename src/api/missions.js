@@ -32,6 +32,9 @@ export const v1 = {
   editMissionSlot(missionSlug, slotUid, payload) {
     return axios.patch(`/v1/missions/${missionSlug}/slots/${slotUid}`, payload)
   },
+  editMissionSlotGroup(missionSlug, slotGroupUid, payload) {
+    return axios.patch(`/v1/missions/${missionSlug}/slotGroups/${slotGroupUid}`, payload)
+  },
   getMissionDetails(missionSlug) {
     return axios.get(`/v1/missions/${missionSlug}`)
   },

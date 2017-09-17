@@ -7,6 +7,9 @@
       <b-btn variant="success" @click="setMissionSlotGroupDetails" v-b-modal.missionSlotCreateModal>
         <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.create.mission.slot') }}
       </b-btn>
+      <b-btn variant="primary" @click="setMissionSlotGroupDetails" v-b-modal.missionSlotGroupEditModal>
+        <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit.mission.slotGroup') }}
+      </b-btn>
       <b-btn variant="secondary" @click="duplicateMissionSlotGroup">
         <i class="fa fa-files-o" aria-hidden="true"></i> {{ $t('button.duplicate.mission.slotGroup') }}
       </b-btn>
