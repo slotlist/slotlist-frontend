@@ -100,6 +100,8 @@
   "mission.feedback.visibility": "Sichtbarkeits-Einstellung auswählen",
   "mission.list.creator": "Ersteller",
   "mission.list.description": "Beschreibung",
+  "mission.list.filter": "Filter",
+  "mission.list.filter.ended": "Beendete Missionen inkludieren",
   "mission.list.startTime": "Start-Zeit",
   "mission.list.title": "Titel",
   "mission.modal.bannerImage": "Banner-Bild bearbeiten",

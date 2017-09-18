@@ -123,9 +123,9 @@ const actions = {
           decodedToken: decodedToken
         })
 
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.performLogin'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.performLogin'))
 
         if (error.response) {
           console.error('performLogin', error.response)
@@ -214,10 +214,10 @@ const actions = {
           token: response.data.token,
           decodedToken: decodedToken
         })
+
+        dispatch('stopWorking', i18n.t('store.refreshToken'))
       }).catch((error) => {
-        commit({
-          type: "finishRefreshingToken"
-        })
+        dispatch('stopWorking', i18n.t('store.refreshToken'))
 
         dispatch('performLogout')
 
@@ -276,9 +276,9 @@ const actions = {
           accountDetails: response.data.user
         })
 
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.getAccountDetails'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.getAccountDetails'))
 
         if (error.response) {
           console.error('getAccountDetails', error.response)
@@ -334,15 +334,15 @@ const actions = {
           accountDetails: response.data.user
         })
 
-        dispatch('stopWorking')
-
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.editAccount.success')}`
         })
+
+        dispatch('stopWorking', i18n.t('store.editAccount'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.editAccount'))
 
         if (error.response) {
           console.error('editAccount', error.response)

@@ -13,6 +13,7 @@ const limits = {
 const state = {
   checkingMissionSlugAvailability: false,
   missionDetails: null,
+  missionListFilter: {},
   missions: null,
   missionSlotDetails: null,
   missionSlotGroupDetails: null,
@@ -180,8 +181,6 @@ const actions = {
           throw 'Received invalid mission'
         }
 
-        dispatch('stopWorking')
-
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
@@ -192,8 +191,10 @@ const actions = {
           name: 'missionDetails',
           params: { missionSlug: response.data.mission.slug }
         })
+
+        dispatch('stopWorking', i18n.t('store.createMission'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.createMission'))
 
         if (error.response) {
           console.error('createMission', error.response)
@@ -248,8 +249,10 @@ const actions = {
           alertVariant: 'success',
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.tc('store.createMissionSlot.success', slotCount, { count: slotCount })}`
         })
+
+        dispatch('stopWorking', i18n.tc('store.createMissionSlot', slotCount, { count: slotCount }))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.tc('store.createMissionSlot', slotCount, { count: slotCount }))
 
         if (error.response) {
           console.error('createMissionSlot', error.response)
@@ -302,8 +305,10 @@ const actions = {
           alertVariant: 'success',
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.createMissionSlotGroup.success', { slotInfo: `#${payload.slotGroupDetails.orderNumber} ${payload.slotGroupDetails.title}` })}`
         })
+
+        dispatch('stopWorking', i18n.t('store.createMissionSlotGroup'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.createMissionSlotGroup'))
 
         if (error.response) {
           console.error('createMissionSlotGroup', error.response)
@@ -349,8 +354,6 @@ const actions = {
           throw 'Received invalid mission deletion'
         }
 
-        dispatch('stopWorking')
-
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
@@ -358,8 +361,10 @@ const actions = {
         })
 
         router.push({ name: 'missionList' })
+
+        dispatch('stopWorking', i18n.t('store.deleteMission'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.deleteMission'))
 
         if (error.response) {
           console.error('deleteMission', error.response)
@@ -420,9 +425,9 @@ const actions = {
           scrollToTop: true
         })
 
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.deleteMissionBannerImage'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.deleteMissionBannerImage'))
 
         if (error.response) {
           console.error('deleteMissionBannerImage', error.response)
@@ -475,8 +480,10 @@ const actions = {
           alertVariant: 'success',
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlot.success', { slotInfo: `${payload.slotOrderNumber} ${payload.slotTitle}` })}`
         })
+
+        dispatch('stopWorking', i18n.t('store.deleteMissionSlot'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.deleteMissionSlot'))
 
         if (error.response) {
           console.error('deleteMissionSlot', error.response)
@@ -529,8 +536,10 @@ const actions = {
           alertVariant: 'success',
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlotGroup.success', { title: payload.slotGroupTitle })}`
         })
+
+        dispatch('stopWorking', i18n.t('store.deleteMissionSlotGroup'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.deleteMissionSlotGroup'))
 
         if (error.response) {
           console.error('deleteMissionSlotGroup', error.response)
@@ -606,8 +615,10 @@ const actions = {
           alertVariant: 'success',
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.duplicateMissionSlotGroup.success', { slotGroupInfo: `#${payload.missionSlotGroup.orderNumber} ${payload.missionSlotGroup.title}` })}`
         })
+
+        dispatch('stopWorking', i18n.t('store.duplicateMissionSlotGroup'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.duplicateMissionSlotGroup'))
 
         if (error.response) {
           console.error('duplicateMissionSlotGroup', error.response)
@@ -659,14 +670,14 @@ const actions = {
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.editMission.success', { title: payload.missionTitle })}`
         })
 
-        dispatch('stopWorking')
-
         commit({
           type: 'setMissionDetails',
           mission: response.data.mission
         })
+
+        dispatch('stopWorking', i18n.t('store.editMission'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.editMission'))
 
         if (error.response) {
           console.error('editMission', error.response)
@@ -719,8 +730,10 @@ const actions = {
           alertVariant: 'success',
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.editMissionSlot.success', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })}`
         })
+
+        dispatch('stopWorking', i18n.t('store.editMissionSlot'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.editMissionSlot'))
 
         if (error.response) {
           console.error('editMissionSlot', error.response)
@@ -773,8 +786,10 @@ const actions = {
           alertVariant: 'success',
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.editMissionSlotGroup.success')}`
         })
+
+        dispatch('stopWorking', i18n.t('store.editMissionSlotGroup'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.editMissionSlotGroup'))
 
         if (error.response) {
           console.error('editMissionSlotGroup', error.response)
@@ -799,6 +814,14 @@ const actions = {
           })
         }
       })
+  },
+  filterMissionList({ commit, dispatch }, payload) {
+    commit({
+      type: 'setMissionListFilter',
+      missionListFilter: payload
+    })
+
+    dispatch('getMissions')
   },
   filterMissionSlotlist({ commit }, payload) {
     commit({
@@ -830,8 +853,10 @@ const actions = {
           type: 'setMissionDetails',
           mission: response.data.mission
         })
+
+        dispatch('stopWorking', i18n.t('store.getMissionDetails'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.getMissionDetails'))
 
         if (error.response) {
           console.error('getMissionDetails', error.response)
@@ -868,7 +893,7 @@ const actions = {
         }
       })
   },
-  getMissions({ commit, dispatch }, payload) {
+  getMissions({ commit, dispatch, state }, payload) {
     dispatch('startWorking', i18n.t('store.getMissions'))
 
     if (_.isNil(payload)) {
@@ -877,7 +902,9 @@ const actions = {
       payload.page = 1
     }
 
-    return MissionsApi.getMissions(limits.missions, (payload.page - 1) * limits.missions)
+    let includeEnded = _.has(state.missionListFilter, 'ended')
+
+    return MissionsApi.getMissions(limits.missions, (payload.page - 1) * limits.missions, includeEnded)
       .then(function (response) {
         if (response.status !== 200) {
           console.error(response)
@@ -900,9 +927,9 @@ const actions = {
           total: response.data.total
         })
 
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.getMissions'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.getMissions'))
 
         if (error.response) {
           console.error('getMissions', error.response)
@@ -953,9 +980,9 @@ const actions = {
           slotGroups: response.data.slotGroups
         })
 
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.getMissionSlotlist'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.getMissionSlotlist'))
 
         if (error.response) {
           console.error('getMissionSlotlist', error.response)
@@ -1017,9 +1044,9 @@ const actions = {
           total: response.data.total
         })
 
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.getMissionSlotRegistrations'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.getMissionSlotRegistrations'))
 
         if (error.response) {
           console.error('getMissionSlotRegistrations', error.response)
@@ -1055,7 +1082,6 @@ const actions = {
           throw 'Modifying mission slot registration failed'
         }
 
-
         if (_.isEmpty(response.data)) {
           console.error(response)
           throw 'Received empty response'
@@ -1079,8 +1105,10 @@ const actions = {
           alertVariant: 'success',
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.modifyMissionSlotRegistration.success')}`
         })
+
+        dispatch('stopWorking', i18n.t('store.modifyMissionSlotRegistration'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.modifyMissionSlotRegistration'))
 
         if (error.response) {
           console.error('modifyMissionSlotRegistration', error.response)
@@ -1136,8 +1164,10 @@ const actions = {
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.registerForMissionSlot.success', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })}`,
           scrollToTop: true
         })
+
+        dispatch('stopWorking', i18n.t('store.registerForMissionSlot'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.registerForMissionSlot'))
 
         if (error.response) {
           console.error('registerForMissionSlot', error.response)
@@ -1203,8 +1233,10 @@ const actions = {
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.unregisterFromMissionSlot.success', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })}`,
           scrollToTop: true
         })
+
+        dispatch('stopWorking', i18n.t('store.unregisterFromMissionSlot'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.unregisterFromMissionSlot'))
 
         if (error.response) {
           console.error('unregisterFromMissionSlot', error.response)
@@ -1262,9 +1294,9 @@ const actions = {
           scrollToTop: true
         })
 
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.uploadMissionBannerImage'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.uploadMissionBannerImage'))
 
         if (error.response) {
           console.error('uploadMissionBannerImage', error.response)
@@ -1339,6 +1371,14 @@ const mutations = {
   },
   setMissionSlotlist(state, payload) {
     state.missionSlotGroups = payload.slotGroups
+  },
+  setMissionListFilter(state, payload) {
+    const filter = {}
+    _.each(payload.missionListFilter, (f) => {
+      filter[f] = true
+    })
+
+    state.missionListFilter = filter
   },
   setMissionSlotlistFilter(state, payload) {
     const filter = {}
