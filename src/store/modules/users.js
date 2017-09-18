@@ -49,9 +49,9 @@ const actions = {
           userDetails: response.data.user
         })
 
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.getUserDetails'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.getUserDetails'))
 
         if (error.response) {
           console.error('getUserDetails', error.response)
@@ -102,9 +102,9 @@ const actions = {
           userMissions: response.data.missions
         })
 
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.getUserMissions'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.getUserMissions'))
 
         if (error.response) {
           console.error('getUserMissions', error.response)

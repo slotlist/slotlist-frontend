@@ -103,16 +103,16 @@ const actions = {
           throw "Received invalid community application status"
         }
 
-        dispatch('stopWorking')
-
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.applyToCommunity.success')}`,
           scrollToTop: true
         })
+
+        dispatch('stopWorking', i18n.t('store.applyToCommunity'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.applyToCommunity'))
 
         if (error.response) {
           console.error('applyToCommunity', error.response)
@@ -229,8 +229,6 @@ const actions = {
           throw "Received invalid community"
         }
 
-        dispatch('stopWorking')
-
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
@@ -241,8 +239,10 @@ const actions = {
           name: 'communityDetails',
           params: { communitySlug: response.data.community.slug }
         })
+
+        dispatch('stopWorking', i18n.t('store.createCommunity'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.createCommunity'))
 
         if (error.response) {
           console.error('createCommunity', error.response)
@@ -288,8 +288,6 @@ const actions = {
           throw "Received invalid community deletion"
         }
 
-        dispatch('stopWorking')
-
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
@@ -297,8 +295,10 @@ const actions = {
         })
 
         router.push({ name: 'communityList' })
+
+        dispatch('stopWorking', i18n.t('store.deleteCommunity'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.deleteCommunity'))
 
         if (error.response) {
           console.error('deleteCommunity', error.response)
@@ -349,15 +349,15 @@ const actions = {
           communityDetails: response.data.community
         })
 
-        dispatch('stopWorking')
-
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.editCommunity.success')}`
         })
+
+        dispatch('stopWorking', i18n.t('store.editCommunity'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.editCommunity'))
 
         if (error.response) {
           console.error('editCommunity', error.response)
@@ -415,9 +415,9 @@ const actions = {
           total: response.data.total
         })
 
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.getCommunities'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.getCommunities'))
 
         if (error.response) {
           console.error('getCommunities', error.response)
@@ -473,9 +473,9 @@ const actions = {
           total: response.data.total
         })
 
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.getCommunityApplications'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.getCommunityApplications'))
 
         if (error.response) {
           console.error('getCommunityApplications', error.response)
@@ -526,9 +526,9 @@ const actions = {
           communityDetails: response.data.community
         })
 
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.getCommunityDetails'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.getCommunityDetails'))
 
         if (error.response) {
           console.error('getCommunityDetails', error.response)
@@ -595,9 +595,9 @@ const actions = {
           total: response.data.total
         })
 
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.getCommunityMissions'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.getCommunityMissions'))
 
         if (error.response) {
           console.error('getCommunityMissions', error.response)
@@ -651,8 +651,10 @@ const actions = {
           alertVariant: 'success',
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.processCommunityApplication.success', { action: payload.accepted ? i18n.t('store.processCommunityApplication.accepted') : i18n.t('store.processCommunityApplication.denied'), nickname: payload.applicationUserNickname })}`
         })
+
+        dispatch('stopWorking', i18n.t('store.processCommunityApplication'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.processCommunityApplication'))
 
         if (error.response) {
           console.error('processCommunityApplication', error.response)
@@ -705,8 +707,10 @@ const actions = {
           alertVariant: 'success',
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.removeCommunityMember.success', { nickname: payload.memberNickname })}</strong>`
         })
+
+        dispatch('stopWorking', i18n.t('store.removeCommunityMember'))
       }).catch((error) => {
-        dispatch('stopWorking')
+        dispatch('stopWorking', i18n.t('store.removeCommunityMember'))
 
         if (error.response) {
           console.error('removeCommunityMember', error.response)

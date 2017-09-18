@@ -7,7 +7,7 @@ import StatusApi from '../../api/status'
 
 const state = {
   backendVersion: null,
-  working: null,
+  activeWork: [],
   timezone: null
 }
 
@@ -16,7 +16,7 @@ const getters = {
     return state.backendVersion
   },
   working() {
-    return state.working
+    return state.activeWork.length > 0 ? state.activeWork[0] : null
   },
   timezone() {
     return state.timezone
@@ -74,9 +74,10 @@ const actions = {
       message: payload
     })
   },
-  stopWorking({ commit }) {
+  stopWorking({ commit }, payload) {
     commit({
-      type: 'stopWorking'
+      type: 'stopWorking',
+      message: payload
     })
   }
 }
@@ -98,10 +99,15 @@ const mutations = {
     moment.tz.setDefault(payload.timezone)
   },
   startWorking(state, payload) {
-    state.working = _.isString(payload.message) && !_.isEmpty(payload.message) ? payload.message : 'Doing something...'
+    const message = _.isString(payload.message) && !_.isEmpty(payload.message) ? payload.message : 'Doing something...'
+
+    state.activeWork.push(message)
+    state.activeWork = _.uniq(state.activeWork)
   },
-  stopWorking(state) {
-    state.working = null
+  stopWorking(state, payload) {
+    const message = _.isString(payload.message) && !_.isEmpty(payload.message) ? payload.message : 'Doing something...'
+
+    state.activeWork = _.uniq(state.activeWork).filter((w) => !_.isEqual(w, message))
   }
 }
 
