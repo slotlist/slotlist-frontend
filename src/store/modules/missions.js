@@ -13,6 +13,7 @@ const limits = {
 const state = {
   checkingMissionSlugAvailability: false,
   missionDetails: null,
+  missionListFilter: {},
   missions: null,
   missionSlotDetails: null,
   missionSlotGroupDetails: null,
@@ -800,6 +801,14 @@ const actions = {
         }
       })
   },
+  filterMissionList({ commit, dispatch }, payload) {
+    commit({
+      type: 'setMissionListFilter',
+      missionListFilter: payload
+    })
+
+    dispatch('getMissions')
+  },
   filterMissionSlotlist({ commit }, payload) {
     commit({
       type: 'setMissionSlotlistFilter',
@@ -868,7 +877,7 @@ const actions = {
         }
       })
   },
-  getMissions({ commit, dispatch }, payload) {
+  getMissions({ commit, dispatch, state }, payload) {
     dispatch('startWorking', i18n.t('store.getMissions'))
 
     if (_.isNil(payload)) {
@@ -877,7 +886,9 @@ const actions = {
       payload.page = 1
     }
 
-    return MissionsApi.getMissions(limits.missions, (payload.page - 1) * limits.missions)
+    let includeEnded = _.has(state.missionListFilter, 'ended')
+
+    return MissionsApi.getMissions(limits.missions, (payload.page - 1) * limits.missions, includeEnded)
       .then(function (response) {
         if (response.status !== 200) {
           console.error(response)
@@ -1054,7 +1065,6 @@ const actions = {
           console.error(response)
           throw 'Modifying mission slot registration failed'
         }
-
 
         if (_.isEmpty(response.data)) {
           console.error(response)
@@ -1339,6 +1349,14 @@ const mutations = {
   },
   setMissionSlotlist(state, payload) {
     state.missionSlotGroups = payload.slotGroups
+  },
+  setMissionListFilter(state, payload) {
+    const filter = {}
+    _.each(payload.missionListFilter, (f) => {
+      filter[f] = true
+    })
+
+    state.missionListFilter = filter
   },
   setMissionSlotlistFilter(state, payload) {
     const filter = {}

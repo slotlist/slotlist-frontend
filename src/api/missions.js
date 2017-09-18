@@ -38,8 +38,8 @@ export const v1 = {
   getMissionDetails(missionSlug) {
     return axios.get(`/v1/missions/${missionSlug}`)
   },
-  getMissions(limit = 10, offset = 0) {
-    return axios.get(`/v1/missions?limit=${limit}&offset=${offset}`)
+  getMissions(limit = 10, offset = 0, includeEnded = false) {
+    return axios.get(`/v1/missions?limit=${limit}&offset=${offset}&includeEnded=${includeEnded}`)
   },
   getMissionSlotlist(missionSlug) {
     return axios.get(`/v1/missions/${missionSlug}/slots`)

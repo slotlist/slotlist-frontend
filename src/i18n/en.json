@@ -100,6 +100,8 @@
   "mission.feedback.visibility": "Please select a visibility setting",
   "mission.list.creator": "Creator",
   "mission.list.description": "Description",
+  "mission.list.filter": "Filter",
+  "mission.list.filter.ended": "Include ended missions",
   "mission.list.startTime": "Start time",
   "mission.list.title": "Title",
   "mission.modal.bannerImage": "Edit banner image",
