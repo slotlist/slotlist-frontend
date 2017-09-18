@@ -2,7 +2,7 @@
   <div>
     <mission-list-table v-if="missions"></mission-list-table>
     <nav v-show="missionsPageCount > 1">
-      <paginate ref="missionsPaginate" :pageCount="missionsPageCount" :initial-page="1" :clickHandler="missionsPaginate" :container-class="'pagination justify-content-center'" :page-class="'page-item'" :page-link-class="'page-link'" :prev-class="'page-item'" :prev-link-class="'page-link'" :next-class="'page-item'" :next-link-class="'page-link'"></paginate>
+      <paginate ref="missionsPaginate" :pageCount="missionsPageCount" :initial-page="0" :clickHandler="missionsPaginate" :container-class="'pagination justify-content-center'" :page-class="'page-item'" :page-link-class="'page-link'" :prev-class="'page-item'" :prev-link-class="'page-link'" :next-class="'page-item'" :next-link-class="'page-link'"></paginate>
     </nav>
     <div class="small">
       <b-form-group :label="$t('mission.list.filter')" label-for="missionListFilter">
