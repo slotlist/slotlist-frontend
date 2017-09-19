@@ -15,7 +15,7 @@
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset :label="$t('mission.bannerImage')" :state="missionBannerImageState" :feedback="missionBannerImageFeedback">
+              <b-form-fieldset :label="$t('mission.bannerImage')" :state="missionBannerImageState" :feedback="missionBannerImageFeedback" :description="$t('mission.bannerImage.description')">
                 <b-form-file id="missionBannerImageSelection" ref="missionBannerImageSelection" v-model="missionBannerImageData.file" accept="image/jpeg, image/png, image/gif" :choose-label="$t('mission.bannerImage.choose')"></b-form-file>
               </b-form-fieldset>
             </div>

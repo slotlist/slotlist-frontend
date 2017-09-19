@@ -5,44 +5,44 @@
         <b-form @submit.stop.prevent="editMission">
           <div class="row">
             <div class="col">
-              <b-form-fieldset :label="$t('mission.title')" :state="missionEditTitleState" :feedback="missionEditTitleFeedback">
+              <b-form-fieldset :label="$t('mission.title')" :state="missionEditTitleState" :feedback="missionEditTitleFeedback" :description="$t('mission.title.description')">
                 <b-form-input v-model="missionEditData.title" type="text" required></b-form-input>
               </b-form-fieldset>
             </div>
             <div class="col">
-              <b-form-fieldset :label="$t('mission.description')" :state="missionEditdescriptionState" :feedback="missionEditdescriptionFeedback">
+              <b-form-fieldset :label="$t('mission.description')" :state="missionEditdescriptionState" :feedback="missionEditdescriptionFeedback" :description="$t('mission.description.description')">
                 <b-form-input v-model="missionEditData.description" textarea required></b-form-input>
               </b-form-fieldset>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset :label="$t('mission.detailedDescription')" :state="missionEditDetailedDescriptionState" :feedback="missionEditDetailedDescriptionFeedback">
+              <b-form-fieldset :label="$t('mission.detailedDescription')" :state="missionEditDetailedDescriptionState" :feedback="missionEditDetailedDescriptionFeedback" :description="$t('mission.detailedDescription.description')">
                 <quill-editor v-model="missionEditData.detailedDescription" ref="missionEditDetailedDescriptionEditor" :options="missionEditDetailedDescriptionQuillEditorOptions" required></quill-editor>
               </b-form-fieldset>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset :label="$t('mission.slottingTime')" :state="missionEditSlottingTimeState" :feedback="missionEditSlottingTimeFeedback">
-                <b-form-input v-model="missionEditData.slottingTime" type="text" required placeholder="YYYY-MM-DD hh:mm" :formatter="missionEditTimeFormatter" lazy-formatter></b-form-input>
+              <b-form-fieldset :label="$t('mission.slottingTime')" :state="missionEditSlottingTimeState" :feedback="missionEditSlottingTimeFeedback" :description="$t('mission.slottingTime.description')">
+                <b-form-input v-model="missionEditData.slottingTime" type="text" required placeholder="YYYY-MM-DD HH:mm" :formatter="missionEditTimeFormatter" lazy-formatter></b-form-input>
               </b-form-fieldset>
             </div>
             <div class="col">
-              <b-form-fieldset :label="$t('mission.startTime')" :state="missionEditStartTimeState" :feedback="missionEditStartTimeFeedback">
-                <b-form-input v-model="missionEditData.startTime" type="text" required placeholder="YYYY-MM-DD hh:mm" :formatter="missionEditTimeFormatter" lazy-formatter></b-form-input>
+              <b-form-fieldset :label="$t('mission.startTime')" :state="missionEditStartTimeState" :feedback="missionEditStartTimeFeedback" :description="$t('mission.startTime.description')">
+                <b-form-input v-model="missionEditData.startTime" type="text" required placeholder="YYYY-MM-DD HH:mm" :formatter="missionEditTimeFormatter" lazy-formatter></b-form-input>
               </b-form-fieldset>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset :label="$t('mission.endTime')" :state="missionEditEndTimeState" :feedback="missionEditEndTimeFeedback">
-                <b-form-input v-model="missionEditData.endTime" type="text" required placeholder="YYYY-MM-DD hh:mm" :formatter="missionEditTimeFormatter" lazy-formatter></b-form-input>
+              <b-form-fieldset :label="$t('mission.endTime')" :state="missionEditEndTimeState" :feedback="missionEditEndTimeFeedback" :description="$t('mission.endTime.description')">
+                <b-form-input v-model="missionEditData.endTime" type="text" required placeholder="YYYY-MM-DD HH:mm" :formatter="missionEditTimeFormatter" lazy-formatter></b-form-input>
               </b-form-fieldset>
             </div>
             <div class="col">
-              <b-form-fieldset :label="$t('mission.briefingTime')" :state="missionEditBriefingTimeState" :feedback="missionEditBriefingTimeFeedback">
-                <b-form-input v-model="missionEditData.briefingTime" type="text" required placeholder="YYYY-MM-DD hh:mm" :formatter="missionEditTimeFormatter" lazy-formatter></b-form-input>
+              <b-form-fieldset :label="$t('mission.briefingTime')" :state="missionEditBriefingTimeState" :feedback="missionEditBriefingTimeFeedback" :description="$t('mission.briefingTime.description')">
+                <b-form-input v-model="missionEditData.briefingTime" type="text" required placeholder="YYYY-MM-DD HH:mm" :formatter="missionEditTimeFormatter" lazy-formatter></b-form-input>
               </b-form-fieldset>
             </div>
           </div>
@@ -55,21 +55,21 @@
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset :label="$t('mission.techSupport.optional')" state="success">
+              <b-form-fieldset :label="$t('mission.techSupport.optional')" state="success" :description="$t('mission.techSupport.description')">
                 <quill-editor v-model="missionEditData.techSupport" ref="missionEditTechSupportEditor" :options="missionEditQuillEditorOptions"></quill-editor>
               </b-form-fieldset>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset :label="$t('mission.rules.optional')" state="success">
+              <b-form-fieldset :label="$t('mission.rules.optional')" state="success" :description="$t('mission.rules.description')">
                 <quill-editor v-model="missionEditData.rules" ref="missionEditRulesEditor" :options="missionEditQuillEditorOptions"></quill-editor>
               </b-form-fieldset>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset :label="$t('mission.visibility')" state="success">
+              <b-form-fieldset :label="$t('mission.visibility')" state="success" :description="$t('mission.visibility.description')">
                 <b-form-select v-model="missionEditData.visibility" :options="missionEditVisibilityOptions" class="mb-3" required></b-form-select>
               </b-form-fieldset>
             </div>

@@ -5,12 +5,12 @@
         <b-form @submit.stop.prevent="createMissionSlotGroup">
           <div class="row">
             <div class="col">
-              <b-form-fieldset :label="$t('mission.title')" :state="missionSlotGroupCreateTitleState" :feedback="missionSlotGroupCreateTitleFeedback">
+              <b-form-fieldset :label="$t('mission.slotGroup.title')" :state="missionSlotGroupCreateTitleState" :feedback="missionSlotGroupCreateTitleFeedback" :description="$t('mission.slotGroup.title.description')">
                 <b-form-input v-model="missionSlotGroupCreateData.title" type="text" required></b-form-input>
               </b-form-fieldset>
             </div>
             <div class="col">
-              <b-form-fieldset :label="$t('mission.slot.orderNumber')" :description="$t('mission.slotGroup.orderNumber.description')" :state="missionSlotGroupCreateOrderNumberState" :feedback="missionSlotGroupCreateOrderNumberFeedback">
+              <b-form-fieldset :label="$t('mission.slotGroup.orderNumber')" :state="missionSlotGroupCreateOrderNumberState" :feedback="missionSlotGroupCreateOrderNumberFeedback" :description="$t('mission.slotGroup.orderNumber.description')">
                 <b-input-group left="#">
                   <b-form-input v-model="missionSlotGroupCreateData.orderNumber" type="number" min="1" :formatter="missionSlotGroupCreateOrderNumberFormatter" required></b-form-input>
                 </b-input-group>
@@ -19,7 +19,7 @@
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset :label="$t('mission.slot.description.optional')" state="success">
+              <b-form-fieldset :label="$t('mission.slotGroup.description.optional')" state="success" :description="$t('mission.slotGroup.description.description')">
                 <b-form-input v-model="missionSlotGroupCreateData.description" type="text"></b-form-input>
               </b-form-fieldset>
             </div>

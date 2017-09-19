@@ -6,7 +6,7 @@
       <i class="fa fa-smile-o"></i>
       <br>
       <br>Dieser Service wird gratis und ohne jegliche Garantie über Verfügbarkeit oder Erreichbarkeit angeboten - wir können
-      <router-link :to="{name: 'home'}">slotlist.info</router-link> ederzeit und ohne weitere Vorwarnungen beendigen. Da es unser Ziel ist, ein einfaches Mittel für eine breite Anzahl an ArmA-Enthusiasten zur Verfügung zu stellen, bemühen wir uns, die höchste Verfügbarkeit und Langlebigkeit zu erreichen und freuen uns dabei über jedes Feedback.
+      <router-link :to="{name: 'home'}">slotlist.info</router-link> jederzeit und ohne weitere Vorwarnungen beendigen. Da es unser Ziel ist, ein einfaches Mittel für eine breite Anzahl an ArmA-Enthusiasten zur Verfügung zu stellen, bemühen wir uns, die höchste Verfügbarkeit und Langlebigkeit zu erreichen und freuen uns dabei über jedes Feedback.
     </p>
     <h4>Entwicklung</h4>
     <p class="text-justify">
