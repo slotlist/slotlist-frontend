@@ -5,52 +5,52 @@
         <b-form @submit.stop.prevent="editMissionSlot">
           <div class="row">
             <div class="col">
-              <b-form-fieldset :label="$t('mission.title')" :state="missionSlotEditTitleState" :feedback="missionSlotEditTitleFeedback">
+              <b-form-fieldset :label="$t('mission.slot.title')" :state="missionSlotEditTitleState" :feedback="missionSlotEditTitleFeedback" :description="$t('mission.slot.title.description')">
                 <b-form-input v-model="missionSlotEditData.title" type="text" required></b-form-input>
               </b-form-fieldset>
             </div>
             <div class="col">
-              <b-form-fieldset :label="$t('mission.description.optional')" state="success">
+              <b-form-fieldset :label="$t('mission.slot.description.optional')" state="success" :description="$t('mission.slot.description.description')">
                 <b-form-input v-model="missionSlotEditData.description" textarea></b-form-input>
               </b-form-fieldset>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset :label="$t('mission.slot.orderNumber')" :description="$t('mission.slot.orderNumber.description')" :state="missionSlotEditOrderNumberState" :feedback="missionSlotEditOrderNumberFeedback">
+              <b-form-fieldset :label="$t('mission.slot.orderNumber')" :state="missionSlotEditOrderNumberState" :feedback="missionSlotEditOrderNumberFeedback" :description="$t('mission.slot.orderNumber.description')">
                 <b-input-group left="#">
                   <b-form-input v-model="missionSlotEditData.orderNumber" type="number" min="1" :formatter="missionSlotEditOrderNumberFormatter" required></b-form-input>
                 </b-input-group>
               </b-form-fieldset>
             </div>
             <div class="col">
-              <b-form-fieldset :label="$t('mission.slot.difficulty')" state="success">
+              <b-form-fieldset :label="$t('mission.slot.difficulty')" state="success" :description="$t('mission.slot.difficulty.description')">
                 <b-form-select v-model="missionSlotEditData.difficulty" :options="missionSlotEditDifficultyOptions" class="mb-3" required></b-form-select>
               </b-form-fieldset>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset :label="$t('mission.slot.restricted.slot')" :description="$t('mission.slot.restricted.description')" state="success">
+              <b-form-fieldset :label="$t('mission.slot.restricted.slot')" state="success" :description="$t('mission.slot.restricted.description')">
                 <b-form-checkbox v-model="missionSlotEditData.restricted"></b-form-checkbox>
               </b-form-fieldset>
             </div>
             <div class="col">
-              <b-form-fieldset :label="$t('mission.slot.reserve.slot')" :description="$t('mission.slot.reserve.description')" state="success">
+              <b-form-fieldset :label="$t('mission.slot.reserve.slot')" state="success" :description="$t('mission.slot.reserve.description')">
                 <b-form-checkbox v-model="missionSlotEditData.reserve"></b-form-checkbox>
               </b-form-fieldset>
             </div>
           </div>
           <div class="row" v-if="missionSlotEditData.restricted">
             <div class="col">
-              <b-form-fieldset :label="$t('mission.slot.restricted.selection')" :description="$t('mission.slot.restricted.selection.description')" :state="missionSlotEditRestrictedCommunityState">
+              <b-form-fieldset :label="$t('mission.slot.restricted.selection')" :state="missionSlotEditRestrictedCommunityState" :description="$t('mission.slot.restricted.selection.description')">
                 <typeahead action="searchCommunities" actionIndicator="searchingCommunities" :onHit="restrictedSlotCommunitySelected" :initialValue="restrictedSlotTypeaheadInitialValue"></typeahead>
               </b-form-fieldset>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset :label="$t('mission.slot.detailedDescription.optional')" state="success">
+              <b-form-fieldset :label="$t('mission.slot.detailedDescription.optional')" state="success" :description="$t('mission.slot.detailedDescription.description')">
                 <quill-editor v-model="missionSlotEditData.detailedDescription" ref="missionSlotEditDetailedDescriptionEditor" :options="missionSlotEditDetailedDescriptionEditorOptions"></quill-editor>
               </b-form-fieldset>
             </div>

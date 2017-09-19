@@ -7,12 +7,12 @@
       <b-form @submit.stop.prevent="submitMissionCreate">
         <div class="row">
           <div class="col">
-            <b-form-fieldset :label="$t('mission.title')" :description="$t('mission.title.description')" :state="missionCreateTitleState" :feedback="missionCreateTitleFeedback">
+            <b-form-fieldset :label="$t('mission.title')" :state="missionCreateTitleState" :feedback="missionCreateTitleFeedback" :description="$t('mission.title.description')">
               <b-form-input v-model="missionCreateTitle" type="text" required :formatter="missionCreateTitleFormatter" lazy-formatter></b-form-input>
             </b-form-fieldset>
           </div>
           <div class="col">
-            <b-form-fieldset :label="$t('mission.slug')" :description="$t('mission.slug.description')" :state="missionCreateSlugState" :feedback="missionCreateSlugFeedback">
+            <b-form-fieldset :label="$t('mission.slug')" :state="missionCreateSlugState" :feedback="missionCreateSlugFeedback" :description="$t('mission.slug.description')">
               <b-input-group :right="missionCreateSlugAvailable">
                 <b-form-input v-model="missionCreateSlug" type="text" required :formatter="missionCreateSlugFormatter" lazy-formatter></b-form-input>
               </b-input-group>
@@ -21,39 +21,39 @@
         </div>
         <div class="row">
           <div class="col">
-            <b-form-fieldset :label="$t('mission.description')" :description="$t('mission.description.description')" :state="missionCreatedescriptionState" :feedback="missionCreatedescriptionFeedback">
+            <b-form-fieldset :label="$t('mission.description')" :state="missionCreatedescriptionState" :feedback="missionCreatedescriptionFeedback" :description="$t('mission.description.description')">
               <b-form-input v-model="missionCreatedescription" textarea required></b-form-input>
             </b-form-fieldset>
           </div>
         </div>
         <div class="row">
           <div class="col">
-            <b-form-fieldset :label="$t('mission.detailedDescription')" :description="$t('mission.detailedDescription.description')" :state="missionCreateDetailedDescriptionState" :feedback="missionCreateDetailedDescriptionFeedback">
+            <b-form-fieldset :label="$t('mission.detailedDescription')" :state="missionCreateDetailedDescriptionState" :feedback="missionCreateDetailedDescriptionFeedback" :description="$t('mission.detailedDescription.description')">
               <quill-editor v-model="missionCreateDetailedDescription" ref="missionCreateDetailedDescriptionEditor" :options="descriptionEditorOptions" required></quill-editor>
             </b-form-fieldset>
           </div>
         </div>
         <div class="row">
           <div class="col">
-            <b-form-fieldset :label="$t('mission.slottingTime')" :description="$t('mission.slottingTime.description')" :state="missionCreateSlottingTimeState" :feedback="missionCreateSlottingTimeFeedback">
-              <b-form-input v-model="missionCreateSlottingTime" type="text" required placeholder="YYYY-MM-DD hh:mm" :formatter="missionCreateTimeFormatter" lazy-formatter></b-form-input>
+            <b-form-fieldset :label="$t('mission.slottingTime')" :state="missionCreateSlottingTimeState" :feedback="missionCreateSlottingTimeFeedback" :description="$t('mission.slottingTime.description')">
+              <b-form-input v-model="missionCreateSlottingTime" type="text" required placeholder="YYYY-MM-DD HH:mm" :formatter="missionCreateTimeFormatter" lazy-formatter></b-form-input>
             </b-form-fieldset>
           </div>
           <div class="col">
-            <b-form-fieldset :label="$t('mission.startTime')" :state="missionCreateStartTimeState" :feedback="missionCreateStartTimeFeedback">
-              <b-form-input v-model="missionCreateStartTime" type="text" required placeholder="YYYY-MM-DD hh:mm" :formatter="missionCreateTimeFormatter" lazy-formatter></b-form-input>
+            <b-form-fieldset :label="$t('mission.startTime')" :state="missionCreateStartTimeState" :feedback="missionCreateStartTimeFeedback" :description="$t('mission.startTime.description')">
+              <b-form-input v-model="missionCreateStartTime" type="text" required placeholder="YYYY-MM-DD HH:mm" :formatter="missionCreateTimeFormatter" lazy-formatter></b-form-input>
             </b-form-fieldset>
           </div>
         </div>
         <div class="row">
           <div class="col">
-            <b-form-fieldset :label="$t('mission.endTime')" :state="missionCreateEndTimeState" :feedback="missionCreateEndTimeFeedback">
-              <b-form-input v-model="missionCreateEndTime" type="text" required placeholder="YYYY-MM-DD hh:mm" :formatter="missionCreateTimeFormatter" lazy-formatter></b-form-input>
+            <b-form-fieldset :label="$t('mission.endTime')" :state="missionCreateEndTimeState" :feedback="missionCreateEndTimeFeedback" :description="$t('mission.endTime.description')">
+              <b-form-input v-model="missionCreateEndTime" type="text" required placeholder="YYYY-MM-DD HH:mm" :formatter="missionCreateTimeFormatter" lazy-formatter></b-form-input>
             </b-form-fieldset>
           </div>
           <div class="col">
-            <b-form-fieldset :label="$t('mission.briefingTime')" :state="missionCreateBriefingTimeState" :feedback="missionCreateBriefingTimeFeedback">
-              <b-form-input v-model="missionCreateBriefingTime" type="text" required placeholder="YYYY-MM-DD hh:mm" :formatter="missionCreateTimeFormatter" lazy-formatter></b-form-input>
+            <b-form-fieldset :label="$t('mission.briefingTime')" :state="missionCreateBriefingTimeState" :feedback="missionCreateBriefingTimeFeedback" :description="$t('mission.briefingTime.description')">
+              <b-form-input v-model="missionCreateBriefingTime" type="text" required placeholder="YYYY-MM-DD HH:mm" :formatter="missionCreateTimeFormatter" lazy-formatter></b-form-input>
             </b-form-fieldset>
           </div>
         </div>
@@ -66,26 +66,26 @@
         </div>
         <div class="row">
           <div class="col">
-            <b-form-fieldset :label="$t('mission.techSupport.optional')" :state="missionCreateTechSupportState" :feedback="missionCreateTechSupportFeedback">
+            <b-form-fieldset :label="$t('mission.techSupport.optional')" :state="missionCreateTechSupportState" :feedback="missionCreateTechSupportFeedback" :description="$t('mission.techSupport.description')">
               <quill-editor v-model="missionCreateTechSupport" ref="missionCreateTechSupportEditor" :options="editorOptions"></quill-editor>
             </b-form-fieldset>
           </div>
         </div>
         <div class="row">
           <div class="col">
-            <b-form-fieldset :label="$t('mission.rules.optional')" :state="missionCreateRulesState" :feedback="missionCreateRulesFeedback">
+            <b-form-fieldset :label="$t('mission.rules.optional')" :state="missionCreateRulesState" :feedback="missionCreateRulesFeedback" :description="$t('mission.rules.description')">
               <quill-editor v-model="missionCreateRules" ref="missionCreateRulesEditor" :options="editorOptions"></quill-editor>
             </b-form-fieldset>
           </div>
         </div>
         <div class="row">
           <div class="col text-center" v-show="user.community">
-            <b-form-fieldset :label="$t('mission.creator.addToCommunity')" :description="$t('mission.creator.addToCommunity.description')" :state="missionCreateAddToCommunityState" :feedback="missionCreateAddToCommunityFeedback">
+            <b-form-fieldset :label="$t('mission.creator.addToCommunity')" :state="missionCreateAddToCommunityState" :feedback="missionCreateAddToCommunityFeedback" :description="$t('mission.creator.addToCommunity.description')">
               <b-form-checkbox v-model="missionCreateAddToCommunity"></b-form-checkbox>
             </b-form-fieldset>
           </div>
           <div class="col">
-            <b-form-fieldset :label="$t('mission.visibility')" :state="missionCreateVisibilityState" :feedback="missionCreateVisibilityFeedback">
+            <b-form-fieldset :label="$t('mission.visibility')" :state="missionCreateVisibilityState" :feedback="missionCreateVisibilityFeedback" :description="$t('mission.visibility.description')">
               <b-form-select v-model="missionCreateVisibility" :options="missionCreateVisibilityOptions" class="mb-3" required></b-form-select>
             </b-form-fieldset>
           </div>
