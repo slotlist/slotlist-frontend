@@ -265,6 +265,8 @@
   "store.getCommunities.error": "Failed to load communities",
   "store.getCommunityApplications": "Loading community applications...",
   "store.getCommunityApplications.error": "Failed to load community applications",
+  "store.getCommunityApplicationStatus": "Loading community application status...",
+  "store.getCommunityApplicationStatus.error": "Failed to load community application status",
   "store.getCommunityDetails": "Loading community details...",
   "store.getCommunityDetails.error": "Failed to load community details",
   "store.getCommunityDetails.error.notFound": "A community with the slug <strong>{slug}</strong> was not found",

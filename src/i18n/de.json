@@ -265,6 +265,8 @@
   "store.getCommunities.error": "Laden der Communities ist fehlgeschlagen",
   "store.getCommunityApplications": "Community-Bewerbungen werden geladen...",
   "store.getCommunityApplications.error": "Laden der Community-Bewerbungen ist fehlgeschlagen",
+  "store.getCommunityApplicationStatus": "Status der Community-Bewerbung wird geladen...",
+  "store.getCommunityApplicationStatus.error": "Laden des Status der Community-Bewerbung ist fehlgeschlagen",
   "store.getCommunityDetails": "Communitydetails werden geladen...",
   "store.getCommunityDetails.error": "Laden der Communitydetails ist fehlgeschlagen",
   "store.getCommunityDetails.error.notFound": "Eine Community mit dem Slug <strong>{slug}</strong> wurde nicht gefunden",
