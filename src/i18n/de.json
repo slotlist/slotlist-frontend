@@ -26,6 +26,7 @@
   "button.edit.mission.slotGroup": "Slotgruppe bearbeiten",
   "button.refresh": "Aktualisieren",
   "button.refresh.authentication": "Authentifizierung aktualisieren",
+  "button.refresh.authentication.explanation": "Du kannst die Authentifizierung aktualisieren, um sicherzustellen, dass deinem Account die korrekten Berechtigungen, Community o.ä. zugewiesen wurden.<br>Nachdem du in eine Community aufgenommen wurdest, ist eine Aktualisierung von­nö­ten, bevor die Community korrekt in deinem Account angezeigt wird und du Community-Missionen erstellen kannst.",
   "button.register": "Anmelden",
   "button.remove": "Entfernen",
   "button.save": "Speichern",

@@ -87,7 +87,7 @@ export default {
     this.$store.dispatch('clearCommunityDetails')
   },
   created: function() {
-    if (!this.isCommunityMember) {
+    if (this.loggedIn && !this.isCommunityMember) {
       this.$store.dispatch('getCommunityApplicationStatus', this.$route.params.communitySlug)
     }
   },
