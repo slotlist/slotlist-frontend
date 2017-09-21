@@ -93,6 +93,8 @@
   "mission.endTime": "End-Zeit",
   "mission.endTime.description": "Geschätztes Datum und Uhrzeit, zu dem die Mission enden wird",
   "mission.feedback.dateTime": "Valides Datum und Uhrzeit eingeben",
+  "mission.feedback.dateTime.afterSlotting": "Spielbeginn-Zeit muss nach der Slotting-Zeit sein",
+  "mission.feedback.dateTime.afterStart": "End-Zeit der Mission muss nach der Spielbeginn-Zeit sein",
   "mission.feedback.detailedDescription": "Detaillierte Beschreibung eingeben",
   "mission.feedback.orderNumber": "Sortier-Nummer eingeben",
   "mission.feedback.description": "Beschreibung eingeben",

@@ -93,6 +93,8 @@
   "mission.endTime": "End time",
   "mission.endTime.description": "Estimated date and time the mission will end at",
   "mission.feedback.dateTime": "Please enter a valid date and time",
+  "mission.feedback.dateTime.afterSlotting": "Start time must be after slotting time",
+  "mission.feedback.dateTime.afterStart": "End time must be after start time",
   "mission.feedback.detailedDescription": "Please enter a detailed description",
   "mission.feedback.orderNumber": "Please enter an order number",
   "mission.feedback.description": "Please enter a short description",

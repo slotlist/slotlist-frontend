@@ -229,16 +229,88 @@ export default {
       return _.isNil(this.missionCreateSlottingTime) || _.isEmpty(this.missionCreateSlottingTime) || !moment(this.missionCreateSlottingTime).isValid() ? this.$t('mission.feedback.dateTime') : ''
     },
     missionCreateStartTimeState() {
-      return _.isNil(this.missionCreateStartTime) || _.isEmpty(this.missionCreateStartTime) || !moment(this.missionCreateStartTime).isValid() ? 'danger' : 'success'
+      if (_.isNil(this.missionCreateStartTime) || _.isEmpty(this.missionCreateStartTime)) {
+        return 'danger'
+      }
+
+      const startTime = moment(this.missionCreateStartTime)
+      if (!startTime.isValid()) {
+        return 'danger'
+      }
+
+      const slottingTime = moment(this.missionCreateSlottingTime)
+      if (!slottingTime.isValid()) {
+        return 'danger'
+      }
+
+      if (startTime < slottingTime) {
+        return 'danger'
+      }
+
+      return 'success'
     },
     missionCreateStartTimeFeedback() {
-      return _.isNil(this.missionCreateStartTime) || _.isEmpty(this.missionCreateStartTime) || !moment(this.missionCreateStartTime).isValid() ? this.$t('mission.feedback.dateTime') : ''
+      if (_.isNil(this.missionCreateStartTime) || _.isEmpty(this.missionCreateStartTime)) {
+        return this.$t('mission.feedback.dateTime')
+      }
+
+      const startTime = moment(this.missionCreateStartTime)
+      if (!startTime.isValid()) {
+        return this.$t('mission.feedback.dateTime')
+      }
+
+      const slottingTime = moment(this.missionCreateSlottingTime)
+      if (!slottingTime.isValid()) {
+        return this.$t('mission.feedback.dateTime')
+      }
+
+      if (startTime < slottingTime) {
+        return this.$t('mission.feedback.dateTime.afterSlotting')
+      }
+
+      return ''
     },
     missionCreateEndTimeState() {
-      return _.isNil(this.missionCreateEndTime) || _.isEmpty(this.missionCreateEndTime) || !moment(this.missionCreateEndTime).isValid() ? 'danger' : 'success'
+      if (_.isNil(this.missionCreateEndTime) || _.isEmpty(this.missionCreateEndTime)) {
+        return 'danger'
+      }
+
+      const endTime = moment(this.missionCreateEndTime)
+      if (!endTime.isValid()) {
+        return 'danger'
+      }
+
+      const startTime = moment(this.missionCreateStartTime)
+      if (!startTime.isValid()) {
+        return 'danger'
+      }
+
+      if (endTime < startTime) {
+        return 'danger'
+      }
+
+      return 'success'
     },
     missionCreateEndTimeFeedback() {
-      return _.isNil(this.missionCreateEndTime) || _.isEmpty(this.missionCreateEndTime) || !moment(this.missionCreateEndTime).isValid() ? this.$t('mission.feedback.dateTime') : ''
+      if (_.isNil(this.missionCreateEndTime) || _.isEmpty(this.missionCreateEndTime)) {
+        return this.$t('mission.feedback.dateTime')
+      }
+
+      const endTime = moment(this.missionCreateEndTime)
+      if (!endTime.isValid()) {
+        return this.$t('mission.feedback.dateTime')
+      }
+
+      const startTime = moment(this.missionCreateStartTime)
+      if (!startTime.isValid()) {
+        return this.$t('mission.feedback.dateTime')
+      }
+
+      if (endTime < startTime) {
+        return this.$t('mission.feedback.dateTime.afterStart')
+      }
+
+      return ''
     },
     missionCreateBriefingTimeState() {
       return _.isNil(this.missionCreateBriefingTime) || _.isEmpty(this.missionCreateBriefingTime) || !moment(this.missionCreateBriefingTime).isValid() ? 'danger' : 'success'

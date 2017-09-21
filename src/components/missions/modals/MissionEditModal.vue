@@ -10,7 +10,7 @@
               </b-form-fieldset>
             </div>
             <div class="col">
-              <b-form-fieldset :label="$t('mission.description')" :state="missionEditdescriptionState" :feedback="missionEditdescriptionFeedback" :description="$t('mission.description.description')">
+              <b-form-fieldset :label="$t('mission.description')" :state="missionEditDescriptionState" :feedback="missionEditDescriptionFeedback" :description="$t('mission.description.description')">
                 <b-form-input v-model="missionEditData.description" textarea required></b-form-input>
               </b-form-fieldset>
             </div>
@@ -174,19 +174,51 @@ export default {
       return _.isString(this.missionEditData.detailedDescription) && !_.isEmpty(this.missionEditData.detailedDescription) ? 'success' : 'danger'
     },
     missionEditEndTimeFeedback() {
-      return _.isString(this.missionEditData.endTime)
-        && !_.isEmpty(this.missionEditData.endTime)
-        && moment(this.missionEditData.endTime).isValid ? '' : this.$t('mission.feedback.dateTime')
+      if (_.isNil(this.missionEditData.endTime) || _.isEmpty(this.missionEditData.endTime)) {
+        return this.$t('mission.feedback.dateTime')
+      }
+
+      const endTime = moment(this.missionEditData.endTime)
+      if (!endTime.isValid()) {
+        return this.$t('mission.feedback.dateTime')
+      }
+
+      const startTime = moment(this.missionEditData.startTime)
+      if (!startTime.isValid()) {
+        return this.$t('mission.feedback.dateTime')
+      }
+
+      if (endTime < startTime) {
+        return this.$t('mission.feedback.dateTime.afterStart')
+      }
+
+      return ''
     },
     missionEditEndTimeState() {
-      return _.isString(this.missionEditData.endTime)
-        && !_.isEmpty(this.missionEditData.endTime)
-        && moment(this.missionEditData.endTime).isValid ? 'success' : 'danger'
+      if (_.isNil(this.missionEditData.endTime) || _.isEmpty(this.missionEditData.endTime)) {
+        return 'danger'
+      }
+
+      const endTime = moment(this.missionEditData.endTime)
+      if (!endTime.isValid()) {
+        return 'danger'
+      }
+
+      const startTime = moment(this.missionEditData.startTime)
+      if (!startTime.isValid()) {
+        return 'danger'
+      }
+
+      if (endTime < startTime) {
+        return 'danger'
+      }
+
+      return 'success'
     },
-    missionEditdescriptionFeedback() {
+    missionEditDescriptionFeedback() {
       return _.isString(this.missionEditData.description) && !_.isEmpty(this.missionEditData.description) ? '' : this.$t('mission.feedback.description')
     },
-    missionEditdescriptionState() {
+    missionEditDescriptionState() {
       return _.isString(this.missionEditData.description) && !_.isEmpty(this.missionEditData.description) ? 'success' : 'danger'
     },
     missionEditSlottingTimeFeedback() {
@@ -200,14 +232,46 @@ export default {
         && moment(this.missionEditData.slottingTime).isValid ? 'success' : 'danger'
     },
     missionEditStartTimeFeedback() {
-      return _.isString(this.missionEditData.startTime)
-        && !_.isEmpty(this.missionEditData.startTime)
-        && moment(this.missionEditData.startTime).isValid ? '' : this.$t('mission.feedback.dateTime')
+      if (_.isNil(this.missionEditData.startTime) || _.isEmpty(this.missionEditData.startTime)) {
+        return this.$t('mission.feedback.dateTime')
+      }
+
+      const startTime = moment(this.missionEditData.startTime)
+      if (!startTime.isValid()) {
+        return this.$t('mission.feedback.dateTime')
+      }
+
+      const slottingTime = moment(this.missionEditData.slottingTime)
+      if (!slottingTime.isValid()) {
+        return this.$t('mission.feedback.dateTime')
+      }
+
+      if (startTime < slottingTime) {
+        return this.$t('mission.feedback.dateTime.afterSlotting')
+      }
+
+      return ''
     },
     missionEditStartTimeState() {
-      return _.isString(this.missionEditData.startTime)
-        && !_.isEmpty(this.missionEditData.startTime)
-        && moment(this.missionEditData.startTime).isValid ? 'success' : 'danger'
+      if (_.isNil(this.missionEditData.startTime) || _.isEmpty(this.missionEditData.startTime)) {
+        return 'danger'
+      }
+
+      const startTime = moment(this.missionEditData.startTime)
+      if (!startTime.isValid()) {
+        return 'danger'
+      }
+
+      const slottingTime = moment(this.missionEditData.slottingTime)
+      if (!slottingTime.isValid()) {
+        return 'danger'
+      }
+
+      if (startTime < slottingTime) {
+        return 'danger'
+      }
+
+      return 'success'
     },
     missionEditTitleFeedback() {
       return _.isString(this.missionEditData.title) && !_.isEmpty(this.missionEditData.title) ? '' : this.$t('mission.feedback.title')
