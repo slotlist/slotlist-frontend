@@ -2,8 +2,12 @@
   <tr>
     <td>{{ missionSlotDetails.orderNumber }}</td>
     <td>
-      <i :class="difficultyIcon" aria-hidden="true"></i>&nbsp;
-      <span :class="titleColor" v-html="formattedTitle"></span>
+      <div v-if="!missionSlotDetails.restrictedCommunity && !missionSlotDetails.reserve">
+        <i :class="difficultyIcon" aria-hidden="true"></i> {{ missionSlotDetails.title }}
+      </div>
+      <b-popover v-if="missionSlotDetails.restrictedCommunity || missionSlotDetails.reserve" :content="titlePopoverContent" :triggers="['hover']">
+        <span :class="titleColor" v-html="formattedTitle"></span>
+      </b-popover>
     </td>
     <td v-html="formattedAssignee"></td>
     <td v-if="hasAnyMissionSlotDescription">{{ missionSlotDetails.description }}</td>
@@ -85,10 +89,10 @@ export default {
     },
     formattedTitle() {
       if (_.isNil(this.missionSlotDetails.restrictedCommunity)) {
-        return this.missionSlotDetails.title
+        return `<i class="${this.difficultyIcon}" aria-hidden="true"></i> ${this.missionSlotDetails.title}`
       }
 
-      return `${this.missionSlotDetails.title} - [${this.missionSlotDetails.restrictedCommunity.tag}]`
+      return `<i class="${this.difficultyIcon}" aria-hidden="true"></i> ${this.missionSlotDetails.title} - [${this.missionSlotDetails.restrictedCommunity.tag}]`
     },
     isMissionEditor() {
       return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`, `mission.${this.$route.params.missionSlug}.editor`])
@@ -103,11 +107,11 @@ export default {
         return 'text-muted font-italic'
       }
     },
-    titleTooltip() {
+    titlePopoverContent() {
       if (!_.isNil(this.missionSlotDetails.restrictedCommunity)) {
-        return this.$t('mission.slot.restricted.tooltip')
+        return this.$t('mission.slot.restricted.popover', { communityInfo: `[${this.missionSlotDetails.restrictedCommunity.tag}] ${this.missionSlotDetails.restrictedCommunity.name}` })
       } else if (this.missionSlotDetails.reserve) {
-        return this.$t('mission.slot.reserve.tooltip')
+        return this.$t('mission.slot.reserve.popover')
       }
     }
   },

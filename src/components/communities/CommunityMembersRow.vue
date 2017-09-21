@@ -2,7 +2,7 @@
   <tr>
     <td>
       <div v-if="!isShawalla">{{ communityMember.nickname }}</div>
-      <b-tooltip v-if="isShawalla" content='<i class="fa fa-wheelchair fa-2x text-center" aria-hidden="true"></i>'>{{ communityMember.nickname }}</b-tooltip>
+      <b-popover v-if="isShawalla" content='<i class="fa fa-wheelchair fa-2x text-center" aria-hidden="true"></i>' :triggers="['hover']">{{ communityMember.nickname }}</b-popover>
     </td>
     <td class="text-center" v-html="formattedCommunityLeader"></td>
     <td class="text-center">
