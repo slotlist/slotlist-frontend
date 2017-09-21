@@ -86,6 +86,11 @@ export default {
   beforeDestroy: function() {
     this.$store.dispatch('clearCommunityDetails')
   },
+  created: function() {
+    if (this.loggedIn && !this.isCommunityMember) {
+      this.$store.dispatch('getCommunityApplicationStatus', this.$route.params.communitySlug)
+    }
+  },
   data() {
     return {
       communityEdit: {
@@ -107,6 +112,17 @@ export default {
     },
     isCommunityFounder() {
       return this.$acl.can([`community.${this.$route.params.communitySlug}.founder`])
+    },
+    isCommunityMember() {
+      const user = this.$store.getters.user
+
+      if (_.isNil(user)) {
+        return false
+      } else if (_.isNil(user.community)) {
+        return false
+      }
+
+      return user.community.slug === this.$route.params.communitySlug
     },
     loggedIn() {
       return this.$store.getters.loggedIn

@@ -22,6 +22,9 @@ export const v1 = {
   getCommunityApplications(communitySlug, limit = 10, offset = 0) {
     return axios.get(`/v1/communities/${communitySlug}/applications?limit=${limit}&offset=${offset}`)
   },
+  getCommunityApplicationStatus(communitySlug) {
+    return axios.get(`/v1/communities/${communitySlug}/applications/status`)
+  },
   getCommunityDetails(communitySlug) {
     return axios.get(`/v1/communities/${communitySlug}`)
   },

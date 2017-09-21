@@ -6,7 +6,7 @@
         <b-btn variant="secondary" @click="refreshCommunityMembers">
           <i class="fa fa-refresh" aria-hidden="true"></i> {{ $t('button.refresh') }}
         </b-btn>
-        <b-btn variant="primary" v-if="loggedIn && !isCommunityMember" @click="applyToCommunity">
+        <b-btn variant="primary" v-if="loggedIn" :disabled="isCommunityMember || communityApplicationStatus !== null" @click="applyToCommunity">
           <i class="fa fa-user-plus" aria-hidden="true"></i> {{ $t('button.apply') }}
         </b-btn>
       </div>
@@ -22,6 +22,9 @@ export default {
     CommunityMembersTable
   },
   computed: {
+    communityApplicationStatus() {
+      return this.$store.getters.communityApplicationStatus
+    },
     isCommunityMember() {
       const user = this.$store.getters.user
 

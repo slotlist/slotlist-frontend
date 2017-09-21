@@ -15,6 +15,7 @@ const state = {
   checkingCommunitySlugAvalability: false,
   communities: null,
   communityApplications: null,
+  communityApplicationStatus: null,
   communityDetails: null,
   communityMembers: null,
   communityMissions: null,
@@ -37,6 +38,9 @@ const getters = {
   },
   communityApplicationsPageCount() {
     return Math.ceil(state.totalCommunityApplications / limits.communityApplications)
+  },
+  communityApplicationStatus() {
+    return state.communityApplicationStatus
   },
   communityDetails() {
     return state.communityDetails
@@ -109,6 +113,8 @@ const actions = {
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.applyToCommunity.success')}`,
           scrollToTop: true
         })
+
+        dispatch('getCommunityApplicationStatus', payload)
 
         dispatch('stopWorking', i18n.t('store.applyToCommunity'))
       }).catch((error) => {
@@ -501,6 +507,65 @@ const actions = {
         }
       })
   },
+  getCommunityApplicationStatus({ commit, dispatch }, payload) {
+    dispatch('startWorking', i18n.t('store.getCommunityApplicationStatus'))
+
+    return CommunitiesApi.getCommunityApplicationStatus(payload)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Retrieving community application status failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (_.isNil(response.data.application) || !_.isObject(response.data.application)) {
+          console.error(response)
+          throw "Received invalid community application status"
+        }
+
+        commit({
+          type: 'setCommunityApplicationStatus',
+          application: response.data.application
+        })
+
+        dispatch('stopWorking', i18n.t('store.getCommunityApplicationStatus'))
+      }).catch((error) => {
+        dispatch('stopWorking', i18n.t('store.getCommunityApplicationStatus'))
+
+        // Extra check for error response if no application has been sent in
+        if (error.response && error.response.status === 404 && error.response.data && error.response.data.message === 'Community application not found') {
+          commit({
+            type: 'setCommunityApplicationStatus',
+            application: null
+          })
+        } else if (error.response) {
+          console.error('getCommunityApplicationStatus', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityApplicationStatus.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('getCommunityApplicationStatus', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityApplicationStatus.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          console.error('getCommunityApplicationStatus', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityApplicationStatus.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
   getCommunityDetails({ commit, dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.getCommunityDetails'))
 
@@ -831,6 +896,9 @@ const mutations = {
   setCommunityApplications(state, payload) {
     state.communityApplications = payload.communityApplications
     state.totalCommunityApplications = payload.total
+  },
+  setCommunityApplicationStatus(state, payload) {
+    state.communityApplicationStatus = payload.application
   },
   setCommunityDetails(state, payload) {
     state.communityDetails = payload.communityDetails

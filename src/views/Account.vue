@@ -26,9 +26,11 @@
             <b-btn variant="primary" v-b-modal.accountEditModal>
               <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit') }}
             </b-btn>
-            <b-btn variant="secondary" @click="refreshAuthentication">
-              <i class="fa fa-key" aria-hidden="true"></i> {{ $t('button.refresh.authentication') }}
-            </b-btn>
+            <b-popover :content="$t('button.refresh.authentication.explanation')" :triggers="['hover']">
+              <b-btn variant="secondary" @click="refreshAuthentication">
+                <i class="fa fa-key" aria-hidden="true"></i> {{ $t('button.refresh.authentication') }}
+              </b-btn>
+            </b-popover>
           </div>
         </div>
       </div>
