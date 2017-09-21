@@ -15,8 +15,8 @@
         </div>
         <p class="lead text-justify">{{ missionDetails.description }}</p>
         <hr class="my-4">
-        <div class="row">
-          <div class="col text-center">
+        <div class="row text-center">
+          <div class="col">
             <h5>{{ $t('mission.community') }}</h5>
             <p>
               <router-link v-if="missionDetails.community" :to="{name: 'communityDetails', params: {communitySlug: missionDetails.community.slug}}">{{ missionDetails.community.name }}</router-link>
@@ -24,10 +24,10 @@
             </p>
           </div>
           <div class="col">
-            <h5 class="text-center">{{ $t('mission.repositoryUrl') }}</h5>
-            <p class="html ql-editor" v-html="optionalRepositoryUrl"></p>
+            <h5>{{ $t('mission.repositoryUrl') }}</h5>
+            <p class="html ql-editor text-center" v-html="optionalRepositoryUrl"></p>
           </div>
-          <div class="col text-center">
+          <div class="col">
             <h5>{{ $t('mission.visibility') }}</h5>
             <p v-html="formattedMissionVisibility"></p>
           </div>
@@ -54,14 +54,14 @@
             <p>{{ formatDateTime(missionDetails.briefingTime) }}</p>
           </div>
         </div>
-        <div class="row">
+        <div class="row text-center">
           <div class="col">
-            <h5 class="text-center">{{ $t('mission.techSupport') }}</h5>
-            <p class="html ql-editor" v-html="optionalTechSupport"></p>
+            <h5>{{ $t('mission.techSupport') }}</h5>
+            <p class="html ql-editor text-center" v-html="optionalTechSupport"></p>
           </div>
           <div class="col">
-            <h5 class="text-center">{{ $t('mission.rules') }}</h5>
-            <p class="html ql-editor" v-html="optionalRules"></p>
+            <h5>{{ $t('mission.rules') }}</h5>
+            <p class="html ql-editor text-center" v-html="optionalRules"></p>
           </div>
         </div>
         <hr class="my-4" v-if="isMissionEditor">
@@ -167,13 +167,13 @@ export default {
       return this.$store.getters.missionDetails
     },
     optionalRepositoryUrl() {
-      return this.missionDetails.repositoryUrl || `<div class='text-muted font-italic text-center'>${this.$t('misc.notProvided')}</div>`
+      return this.missionDetails.repositoryUrl || `<div class='text-muted font-italic'>${this.$t('misc.notProvided')}</div>`
     },
     optionalTechSupport() {
-      return this.missionDetails.techSupport || `<div class='text-muted font-italic text-center'>${this.$t('misc.notProvided')}</div>`
+      return this.missionDetails.techSupport || `<div class='text-muted font-italic'>${this.$t('misc.notProvided')}</div>`
     },
     optionalRules() {
-      return this.missionDetails.rules || `<div class='text-muted font-italic text-center'>${this.$t('misc.notSpecified')}</div>`
+      return this.missionDetails.rules || `<div class='text-muted font-italic'>${this.$t('misc.notSpecified')}</div>`
     },
     formattedMissionVisibility() {
       switch (this.missionDetails.visibility) {

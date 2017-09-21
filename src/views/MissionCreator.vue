@@ -133,7 +133,6 @@ export default {
           toolbar: [
             [{ 'size': ['small', false, 'large', 'huge'] }, { 'header': 1 }, { 'header': 2 }, { 'color': [] }],
             ['bold', 'italic'],
-            [{ 'align': [] }, { 'indent': '-1' }, { 'indent': '+1' }],
             [{ 'list': 'ordered' }, { 'list': 'bullet' }],
             ['link'],
             ['clean']
