@@ -30,6 +30,7 @@
           <div class="col">
             <b-form-fieldset :label="$t('mission.detailedDescription')" :state="missionCreateDetailedDescriptionState" :feedback="missionCreateDetailedDescriptionFeedback" :description="$t('mission.detailedDescription.description')">
               <quill-editor v-model="missionCreateDetailedDescription" ref="missionCreateDetailedDescriptionEditor" :options="descriptionEditorOptions" required></quill-editor>
+              <editor-explanation></editor-explanation>
             </b-form-fieldset>
           </div>
         </div>
@@ -61,6 +62,7 @@
           <div class="col">
             <b-form-fieldset :label="$t('mission.repositoryUrl.optional')" state="success" :description="$t('mission.repositoryUrl.description')">
               <quill-editor v-model="missionCreateRepositoryUrl" ref="missionCreateRepositoryUrlEditor" :options="editorOptions"></quill-editor>
+              <editor-explanation></editor-explanation>
             </b-form-fieldset>
           </div>
         </div>
@@ -68,6 +70,7 @@
           <div class="col">
             <b-form-fieldset :label="$t('mission.techSupport.optional')" :state="missionCreateTechSupportState" :feedback="missionCreateTechSupportFeedback" :description="$t('mission.techSupport.description')">
               <quill-editor v-model="missionCreateTechSupport" ref="missionCreateTechSupportEditor" :options="editorOptions"></quill-editor>
+              <editor-explanation></editor-explanation>
             </b-form-fieldset>
           </div>
         </div>
@@ -75,6 +78,7 @@
           <div class="col">
             <b-form-fieldset :label="$t('mission.rules.optional')" :state="missionCreateRulesState" :feedback="missionCreateRulesFeedback" :description="$t('mission.rules.description')">
               <quill-editor v-model="missionCreateRules" ref="missionCreateRulesEditor" :options="editorOptions"></quill-editor>
+              <editor-explanation></editor-explanation>
             </b-form-fieldset>
           </div>
         </div>
