@@ -52,6 +52,7 @@
             <div class="col">
               <b-form-fieldset :label="$t('mission.slot.detailedDescription.optional')" state="success" :description="$t('mission.slot.detailedDescription.description')">
                 <quill-editor v-model="missionSlotEditData.detailedDescription" ref="missionSlotEditDetailedDescriptionEditor" :options="missionSlotEditDetailedDescriptionEditorOptions"></quill-editor>
+                <editor-explanation></editor-explanation>
               </b-form-fieldset>
             </div>
           </div>

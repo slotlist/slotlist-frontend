@@ -19,6 +19,7 @@
             <div class="col">
               <b-form-fieldset :label="$t('mission.detailedDescription')" :state="missionEditDetailedDescriptionState" :feedback="missionEditDetailedDescriptionFeedback" :description="$t('mission.detailedDescription.description')">
                 <quill-editor v-model="missionEditData.detailedDescription" ref="missionEditDetailedDescriptionEditor" :options="missionEditDetailedDescriptionQuillEditorOptions" required></quill-editor>
+                <editor-explanation></editor-explanation>
               </b-form-fieldset>
             </div>
           </div>
@@ -50,6 +51,7 @@
             <div class="col">
               <b-form-fieldset :label="$t('mission.repositoryUrl.optional')" state="success" :description="$t('mission.repositoryUrl.description')">
                 <quill-editor v-model="missionEditData.repositoryUrl" ref="missionEditrepositoryUrlEditor" :options="missionEditQuillEditorOptions"></quill-editor>
+                <editor-explanation></editor-explanation>
               </b-form-fieldset>
             </div>
           </div>
@@ -57,6 +59,7 @@
             <div class="col">
               <b-form-fieldset :label="$t('mission.techSupport.optional')" state="success" :description="$t('mission.techSupport.description')">
                 <quill-editor v-model="missionEditData.techSupport" ref="missionEditTechSupportEditor" :options="missionEditQuillEditorOptions"></quill-editor>
+                <editor-explanation></editor-explanation>
               </b-form-fieldset>
             </div>
           </div>
@@ -64,6 +67,7 @@
             <div class="col">
               <b-form-fieldset :label="$t('mission.rules.optional')" state="success" :description="$t('mission.rules.description')">
                 <quill-editor v-model="missionEditData.rules" ref="missionEditRulesEditor" :options="missionEditQuillEditorOptions"></quill-editor>
+                <editor-explanation></editor-explanation>
               </b-form-fieldset>
             </div>
           </div>
@@ -154,6 +158,14 @@ export default {
     }
   },
   computed: {
+    editorExplanationContent() {
+      let content = '<img src="https://slotlist-info.storage.googleapis.com/images/static/editor-explanation.png"><ol>'
+      _.times(8, (i) => {
+        content += `<li>${this.$t('editor.explanation.' + (i + 1))}</li>`
+      });
+      content += `</ol><div class="text-center">${this.$t('editor.explanation.missing')}</div>`
+      return content
+    },
     missionDetails() {
       return this.$store.getters.missionDetails
     },
