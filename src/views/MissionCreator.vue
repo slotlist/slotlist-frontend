@@ -21,8 +21,8 @@
         </div>
         <div class="row">
           <div class="col">
-            <b-form-fieldset :label="$t('mission.description')" :state="missionCreatedescriptionState" :feedback="missionCreatedescriptionFeedback" :description="$t('mission.description.description')">
-              <b-form-input v-model="missionCreatedescription" textarea required></b-form-input>
+            <b-form-fieldset :label="$t('mission.description')" :state="missionCreateDescriptionState" :feedback="missionCreateDescriptionFeedback" :description="$t('mission.description.description')">
+              <b-form-input v-model="missionCreateDescription" textarea required></b-form-input>
             </b-form-fieldset>
           </div>
         </div>
@@ -83,8 +83,8 @@
           </div>
         </div>
         <div class="row">
-          <div class="col text-center" v-show="user.community">
-            <b-form-fieldset :label="$t('mission.creator.addToCommunity')" :state="missionCreateAddToCommunityState" :feedback="missionCreateAddToCommunityFeedback" :description="$t('mission.creator.addToCommunity.description')">
+          <div class="col text-center" v-if="user.community">
+            <b-form-fieldset :label="$t('mission.creator.addToCommunity')" :state="missionCreateAddToCommunityState" :feedback="missionCreateAddToCommunityFeedback" :description="missionCreateAddToCommunityDescription">
               <b-form-checkbox v-model="missionCreateAddToCommunity"></b-form-checkbox>
             </b-form-fieldset>
           </div>
@@ -154,7 +154,7 @@ export default {
       },
       missionCreateTitle: null,
       missionCreateSlug: null,
-      missionCreatedescription: null,
+      missionCreateDescription: null,
       missionCreateDetailedDescription: null,
       missionCreateSlottingTime: null,
       missionCreateStartTime: null,
@@ -214,11 +214,14 @@ export default {
     missionSlugAvailable() {
       return this.$store.getters.missionSlugAvailable
     },
-    missionCreatedescriptionState() {
-      return _.isNil(this.missionCreatedescription) || _.isEmpty(this.missionCreatedescription) ? 'danger' : 'success'
+    missionCreateAddToCommunityDescription() {
+      return this.$t('mission.creator.addToCommunity.description', { communityInfo: `[${this.user.community.tag}] ${this.user.community.name}` })
     },
-    missionCreatedescriptionFeedback() {
-      return _.isNil(this.missionCreatedescription) || _.isEmpty(this.missionCreatedescription) ? this.$t('mission.feedback.description') : ''
+    missionCreateDescriptionState() {
+      return _.isNil(this.missionCreateDescription) || _.isEmpty(this.missionCreateDescription) ? 'danger' : 'success'
+    },
+    missionCreateDescriptionFeedback() {
+      return _.isNil(this.missionCreateDescription) || _.isEmpty(this.missionCreateDescription) ? this.$t('mission.feedback.description') : ''
     },
     missionCreateDetailedDescriptionState() {
       return _.isNil(this.missionCreateDetailedDescription) || _.isEmpty(this.missionCreateDetailedDescription) ? 'danger' : 'success'
@@ -398,7 +401,7 @@ export default {
       const missionDetails = {
         title: this.missionCreateTitle,
         slug: this.missionCreateSlug,
-        description: this.missionCreatedescription,
+        description: this.missionCreateDescription,
         detailedDescription: this.missionCreateDetailedDescription,
         slottingTime: moment(this.missionCreateSlottingTime).utc().format(),
         startTime: moment(this.missionCreateStartTime).utc().format(),
