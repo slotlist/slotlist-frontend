@@ -10,6 +10,12 @@
           <b-form-checkbox v-model="missionListFilter" name="ended" value="ended">
             {{ $t('mission.list.filter.ended') }}
           </b-form-checkbox>
+          <b-form-checkbox v-if="loggedIn" v-model="missionListFilter" name="assigned" value="assigned">
+            {{ $t('mission.list.filter.assigned') }}
+          </b-form-checkbox>
+          <b-form-checkbox v-if="loggedIn" v-model="missionListFilter" name="registered" value="registered">
+            {{ $t('mission.list.filter.registered') }}
+          </b-form-checkbox>
         </div>
       </b-form-group>
     </div>
