@@ -97,6 +97,9 @@
                 <b-form-checkbox v-model="missionSlotlistFilter" name="hasRegistrations" value="hasRegistrations">
                   {{ $t('mission.slotlist.filter.hasRegistrations') }}
                 </b-form-checkbox>
+                <b-form-checkbox v-model="missionSlotlistFilter" name="restricted" value="restricted">
+                  {{ $t('mission.slotlist.filter.restricted') }}
+                </b-form-checkbox>
                 <b-form-checkbox v-model="missionSlotlistFilter" name="open" value="open">
                   {{ $t('mission.slotlist.filter.open') }}
                 </b-form-checkbox>
@@ -147,6 +150,9 @@ export default {
     MissionSlotGroupEditModal,
     MissionSlotlist,
     MissionSlotRegistrationModal
+  },
+  created: function() {
+    this.missionSlotlistFilter = this.$store.getters.missionSlotlistFilter
   },
   data() {
     return {

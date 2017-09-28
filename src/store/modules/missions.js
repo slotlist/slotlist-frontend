@@ -33,8 +33,24 @@ const getters = {
   missionDetails() {
     return state.missionDetails
   },
+  missionListFilter() {
+    return _.keys(state.missionListFilter)
+  },
   missions() {
-    return state.missions
+    if (_.isEmpty(_.keys(state.missionListFilter)) || (_.keys(state.missionListFilter).length === 1 && _.has(state.missionListFilter, 'ended'))) {
+      return state.missions
+    }
+
+    const filteredMissions = []
+    _.each(state.missions, (mission) => {
+      if (_.has(state.missionListFilter, 'assigned') && mission.isAssignedToAnySlot) {
+        filteredMissions.push(mission)
+      } else if (_.has(state.missionListFilter, 'registered') && mission.isRegisteredForAnySlot) {
+        filteredMissions.push(mission)
+      }
+    })
+
+    return filteredMissions
   },
   missionSlotDetails() {
     return state.missionSlotDetails
@@ -57,6 +73,8 @@ const getters = {
           filteredSlots.push(slot)
         } else if (_.has(state.missionSlotlistFilter, 'open') && _.isNil(slot.assignee) && slot.registrationCount <= 0) {
           filteredSlots.push(slot)
+        } else if (_.has(state.missionSlotlistFilter, 'restricted') && !_.isNil(slot.restrictedCommunity)) {
+          filteredSlots.push(slot)
         }
       })
 
@@ -66,6 +84,9 @@ const getters = {
     })
 
     return filteredSlotGroups
+  },
+  missionSlotlistFilter() {
+    return _.keys(state.missionSlotlistFilter)
   },
   missionSlotRegistrationDetails() {
     return state.missionSlotRegistrationDetails
@@ -815,13 +836,18 @@ const actions = {
         }
       })
   },
-  filterMissionList({ commit, dispatch }, payload) {
+  filterMissionList({ commit, dispatch, state }, payload) {
+    const hadEndedFilter = _.has(state.missionListFilter, 'ended')
+
     commit({
       type: 'setMissionListFilter',
       missionListFilter: payload
     })
 
-    dispatch('getMissions')
+    const hasEndedFilter = _.has(state.missionListFilter, 'ended')
+    if ((hadEndedFilter && !hasEndedFilter) || (!hadEndedFilter && hasEndedFilter)) {
+      dispatch('getMissions')
+    }
   },
   filterMissionSlotlist({ commit }, payload) {
     commit({
