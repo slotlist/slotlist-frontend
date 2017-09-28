@@ -38,6 +38,9 @@ export const v1 = {
   getMissionDetails(missionSlug) {
     return axios.get(`/v1/missions/${missionSlug}`)
   },
+  getMissionPermissions(missionSlug, limit = 10, offset = 0) {
+    return axios.get(`/v1/missions/${missionSlug}/permissions?limit=${limit}&offset=${offset}`)
+  },
   getMissions(limit = 10, offset = 0, includeEnded = false) {
     return axios.get(`/v1/missions?limit=${limit}&offset=${offset}&includeEnded=${includeEnded}`)
   },

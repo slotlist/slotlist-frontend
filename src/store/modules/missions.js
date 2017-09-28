@@ -6,6 +6,7 @@ import router from '../../router'
 import MissionsApi from '../../api/missions'
 
 const limits = {
+  missionPermissions: 10,
   missions: 10,
   missionSlotRegistrations: 10
 }
@@ -14,6 +15,7 @@ const state = {
   checkingMissionSlugAvailability: false,
   missionDetails: null,
   missionListFilter: {},
+  missionPermissions: null,
   missions: null,
   missionSlotDetails: null,
   missionSlotGroupDetails: null,
@@ -22,6 +24,7 @@ const state = {
   missionSlotRegistrationDetails: null,
   missionSlotRegistrations: null,
   missionSlugAvailable: false,
+  totalMissionPermissions: 0,
   totalMissions: 0,
   totalMissionSlotRegistrations: 0
 }
@@ -35,6 +38,12 @@ const getters = {
   },
   missionListFilter() {
     return _.keys(state.missionListFilter)
+  },
+  missionPermissions() {
+    return state.missionPermissions
+  },
+  missionPermissionsPageCount() {
+    return Math.ceil(state.totalMissionPermissions / limits.missionPermissions)
   },
   missions() {
     if (_.isEmpty(_.keys(state.missionListFilter)) || (_.keys(state.missionListFilter).length === 1 && _.has(state.missionListFilter, 'ended'))) {
@@ -919,6 +928,64 @@ const actions = {
         }
       })
   },
+  getMissionPermissions({ commit, dispatch }, payload) {
+    dispatch('startWorking', i18n.t('store.getMissionPermissions'))
+
+    if (_.isNil(payload.page)) {
+      payload.page = 1
+    }
+
+    return MissionsApi.getMissionPermissions(payload.missionSlug, limits.missionPermissions, (payload.page - 1) * limits.missionPermissions)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Retrieving mission permissions failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (_.isNil(response.data.permissions) || !_.isArray(response.data.permissions)) {
+          console.error(response)
+          throw 'Received invalid mission permissions'
+        }
+
+        commit({
+          type: 'setMissionPermissions',
+          permissions: response.data.permissions,
+          total: response.data.total
+        })
+
+        dispatch('stopWorking', i18n.t('store.getMissionPermissions'))
+      }).catch((error) => {
+        dispatch('stopWorking', i18n.t('store.getMissionPermissions'))
+
+        if (error.response) {
+          console.error('getMissionPermissions', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionPermissions.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('getMissionPermissions', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionPermissions.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          console.error('getMissionPermissions', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionPermissions.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
   getMissions({ commit, dispatch, state }, payload) {
     dispatch('startWorking', i18n.t('store.getMissions'))
 
@@ -1357,10 +1424,12 @@ const mutations = {
   },
   clearMissionDetails(state) {
     state.missionDetails = null
+    state.missionPermissions = null
     state.missionSlotDetails = null
     state.missionSlotGroupDetails = null
     state.missionSlotGroups = null
     state.missionSlotRegistrations = null
+    state.totalMissionPermissions = 0
     state.totalMissionSlotRegistrations = 0
   },
   clearMissionSlotDetails(state) {
@@ -1380,6 +1449,10 @@ const mutations = {
   setMissionDetails(state, payload) {
     state.missionDetails = payload.mission
     utils.setTitle(`${i18n.t('mission')} ${state.missionDetails.title}`)
+  },
+  setMissionPermissions(state, payload) {
+    state.missionPermissions = payload.permissions
+    state.totalMissionPermissions = payload.total
   },
   setMissions(state, payload) {
     state.missions = payload.missions

@@ -20,7 +20,7 @@ const state = {
   communityMembers: null,
   communityMissions: null,
   communitySlugAvailable: false,
-  searchCommunities: false,
+  searchingCommunities: false,
   totalCommunities: 0,
   totalCommunityApplications: 0,
   totalCommunityMissions: 0
@@ -81,8 +81,8 @@ const getters = {
   communitySlugAvailable() {
     return state.communitySlugAvailable
   },
-  searchCommunities() {
-    return state.searchCommunities
+  searchingCommunities() {
+    return state.searchingCommunities
   }
 }
 
@@ -811,7 +811,7 @@ const actions = {
       .then(function (response) {
         if (response.status !== 200) {
           console.error(response)
-          throw "Removing community member failed"
+          throw "Searching communities failed"
         }
 
         if (_.isEmpty(response.data)) {
@@ -887,7 +887,7 @@ const mutations = {
     state.communitySlug = false
   },
   searchingCommunities(state, payload) {
-    state.searchCommunities = payload.searching
+    state.searchingCommunities = payload.searching
   },
   setCommunities(state, payload) {
     state.communities = payload.communities

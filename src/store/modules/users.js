@@ -5,11 +5,15 @@ import utils from '../../utils'
 import UsersApi from '../../api/users'
 
 const state = {
+  searchingUsers: false,
   userDetails: null,
   userMissions: null
 }
 
 const getters = {
+  searchingUsers() {
+    return state.searchingUsers
+  },
   userDetails() {
     return state.userDetails
   },
@@ -129,6 +133,72 @@ const actions = {
           })
         }
       })
+  },
+  searchUsers({ dispatch, commit }, payload) {
+    commit({
+      type: 'searchingUsers',
+      searching: true
+    })
+
+    return UsersApi.searchUsers(payload)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Searching users failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (_.isNil(response.data.users) || !_.isArray(response.data.users)) {
+          console.error(response)
+          throw "Received invalid users"
+        }
+
+        commit({
+          type: 'searchingUsers',
+          searching: false
+        })
+
+        const users = _.map(response.data.users, (user) => {
+          return {
+            title: user.nickname,
+            value: user
+          }
+        })
+
+        return users
+      }).catch((error) => {
+        commit({
+          type: 'searchingUsers',
+          searching: false
+        })
+
+        if (error.response) {
+          console.error('searchUsers', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.searchUsers.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('searchUsers', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.searchUsers.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          console.error('searchUsers', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.searchUsers.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
   }
 }
 
@@ -136,6 +206,9 @@ const mutations = {
   clearUserDetails(state) {
     state.userDetails = null
     state.userMissions = null
+  },
+  searchingUsers(state, payload) {
+    state.searchingUsers = payload.searching
   },
   setUserDetails(state, payload) {
     state.userDetails = payload.userDetails

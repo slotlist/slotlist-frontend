@@ -6,6 +6,9 @@ export const v1 = {
   },
   getUserMissions(userUid) {
     return axios.get(`/v1/users/${userUid}/missions`)
+  },
+  searchUsers(payload) {
+    return axios.get(`/v1/users?search=${payload}`)
   }
 }
 
