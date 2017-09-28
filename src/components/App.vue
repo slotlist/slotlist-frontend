@@ -198,30 +198,3 @@ export default {
   }
 }
 </script>
-
-<style>
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  /* Margin bottom by footer height plus extra spacing */
-  margin-bottom: 75px;
-}
-
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  /* Set fixed height of footer */
-  height: 60px;
-  line-height: 60px;
-  background-color: #f5f5f5;
-}
-
-.footer>.container {
-  padding-right: 15px;
-  padding-left: 15px;
-}
-</style>

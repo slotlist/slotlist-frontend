@@ -218,16 +218,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.ql-container .ql-editor {
-  min-height: 25em;
-  padding-bottom: 1em;
-  max-height: 25em;
-}
-
-.html {
-  overflow-y: auto;
-  border-top: none;
-}
-</style>
