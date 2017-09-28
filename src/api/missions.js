@@ -8,6 +8,9 @@ export const v1 = {
   createMission(payload) {
     return axios.post('/v1/missions', payload)
   },
+  createMissionPermission(missionSlug, payload) {
+    return axios.post(`/v1/missions/${missionSlug}/permissions`, payload)
+  },
   createMissionSlot(missionSlug, payload) {
     return axios.post(`/v1/missions/${missionSlug}/slots`, _.isArray(payload) ? payload : [payload])
   },

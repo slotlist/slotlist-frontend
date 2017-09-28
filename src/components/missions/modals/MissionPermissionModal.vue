@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-modal id="missionPermissionModal" ref="missionPermissionModal" size="lg" v-if="missionPermissions" :title="$t('mission.modal.permission')" no-close-on-backdrop>
+    <b-modal id="missionPermissionModal" ref="missionPermissionModal" size="lg" :title="$t('mission.modal.permission')" @shown="setMissionPermissions" no-close-on-backdrop>
       <div class="container-fluid">
         <div class="row font-weight-bold">
           <div class="col col-12">{{ $t('mission.permission.existing') }}</div>
@@ -22,7 +22,7 @@
               <div class="row">
                 <div class="col">
                   <b-form-fieldset :label="$t('mission.permission.user.selection')" :state="missionPermissionCreateUserState" :description="$t('mission.permission.user.selection.description')">
-                    <typeahead action="searchUsers" actionIndicator="searchingUsers" :onHit="permissionUserSelected"></typeahead>
+                    <typeahead ref="missionPermissionCreateUserTypeahead" action="searchUsers" actionIndicator="searchingUsers" :onHit="permissionUserSelected"></typeahead>
                   </b-form-fieldset>
                 </div>
                 <div class="col">
@@ -61,9 +61,6 @@ export default {
   components: {
     MissionPermissions
   },
-  beforeCreate: function() {
-    this.$store.dispatch('getMissionPermissions', { missionSlug: this.$route.params.missionSlug })
-  },
   data() {
     return {
       missionPermissionCreate: {
@@ -71,8 +68,8 @@ export default {
         permission: null
       },
       missionPermissionCreatePermissionOptions: [
-        { value: 'creator', text: this.$t('mission.permission.creator'), disabled: true },
-        { value: 'editor', text: this.$t('mission.permission.editor') }
+        { value: 'editor', text: this.$t('mission.permission.editor') },
+        { value: 'creator', text: this.$t('mission.permission.creator'), disabled: true }
       ]
     }
   },
@@ -96,11 +93,14 @@ export default {
       this.hideMissionPermissionModal()
 
       const permission = `mission.${this.$route.params.missionSlug}.${this.missionPermissionCreate.permission}`
+      const permissionDetails = {
+        userUid: this.missionPermissionCreate.userUid,
+        permission
+      }
 
       this.$store.dispatch('createMissionPermission', {
         missionSlug: this.$route.params.missionSlug,
-        userUid: this.missionPermissionCreate.userUid,
-        permission
+        permissionDetails
       })
     },
     hideMissionPermissionModal() {
@@ -108,6 +108,16 @@ export default {
     },
     permissionUserSelected(item) {
       this.missionPermissionCreate.userUid = item.value.uid
+    },
+    setMissionPermissions() {
+      this.$store.dispatch('getMissionPermissions', { missionSlug: this.$route.params.missionSlug })
+
+      this.missionPermissionCreate = {
+        userUid: null,
+        permission: null
+      }
+
+      this.$refs.missionPermissionCreateUserTypeahead.reset()
     }
   }
 }
