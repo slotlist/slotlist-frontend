@@ -33,8 +33,11 @@ const getters = {
   missionDetails() {
     return state.missionDetails
   },
+  missionListFilter() {
+    return _.keys(state.missionListFilter)
+  },
   missions() {
-    if (_.isEmpty(_.keys(state.missionListFilter))) {
+    if (_.isEmpty(_.keys(state.missionListFilter)) || (_.keys(state.missionListFilter).length === 1 && _.has(state.missionListFilter, 'ended'))) {
       return state.missions
     }
 
@@ -81,6 +84,9 @@ const getters = {
     })
 
     return filteredSlotGroups
+  },
+  missionSlotlistFilter() {
+    return _.keys(state.missionSlotlistFilter)
   },
   missionSlotRegistrationDetails() {
     return state.missionSlotRegistrationDetails
@@ -838,7 +844,8 @@ const actions = {
       missionListFilter: payload
     })
 
-    if (hadEndedFilter || _.has(state.missionListFilter, 'ended')) {
+    const hasEndedFilter = _.has(state.missionListFilter, 'ended')
+    if ((hadEndedFilter && !hasEndedFilter) || (!hadEndedFilter && hasEndedFilter)) {
       dispatch('getMissions')
     }
   },

@@ -151,6 +151,9 @@ export default {
     MissionSlotlist,
     MissionSlotRegistrationModal
   },
+  created: function() {
+    this.missionSlotlistFilter = this.$store.getters.missionSlotlistFilter
+  },
   data() {
     return {
       missionSlotlistFilter: []

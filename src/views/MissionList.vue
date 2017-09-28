@@ -42,6 +42,8 @@ export default {
     this.$store.dispatch('getMissions')
   },
   created: function() {
+    this.missionListFilter = this.$store.getters.missionListFilter
+
     utils.setTitle(this.$t('nav.missions'))
   },
   beforeDestroy: function() {
