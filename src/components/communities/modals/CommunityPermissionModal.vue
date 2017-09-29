@@ -66,14 +66,16 @@ export default {
       communityPermissionCreate: {
         userUid: null,
         permission: null
-      },
-      communityPermissionCreatePermissionOptions: [
-        { value: 'leader', text: this.$t('community.permission.leader') },
-        { value: 'recruitment', text: this.$t('community.permission.recruitment') }
-      ]
+      }
     }
   },
   computed: {
+    communityPermissionCreatePermissionOptions() {
+      return [
+        { value: 'leader', text: this.$t('community.permission.leader') },
+        { value: 'recruitment', text: this.$t('community.permission.recruitment') }
+      ]
+    },
     communityPermissionCreatePermissionState() {
       return _.isNil(this.communityPermissionCreate.permission) ? 'danger' : 'success'
     },

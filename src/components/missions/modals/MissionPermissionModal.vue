@@ -66,13 +66,15 @@ export default {
       missionPermissionCreate: {
         userUid: null,
         permission: null
-      },
-      missionPermissionCreatePermissionOptions: [
-        { value: 'editor', text: this.$t('mission.permission.editor') }
-      ]
+      }
     }
   },
   computed: {
+    missionPermissionCreatePermissionOptions() {
+      return [
+        { value: 'editor', text: this.$t('mission.permission.editor') }
+      ]
+    },
     missionPermissionCreatePermissionState() {
       return _.isNil(this.missionPermissionCreate.permission) ? 'danger' : 'success'
     },
