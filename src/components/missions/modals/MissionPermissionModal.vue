@@ -68,8 +68,7 @@ export default {
         permission: null
       },
       missionPermissionCreatePermissionOptions: [
-        { value: 'editor', text: this.$t('mission.permission.editor') },
-        { value: 'creator', text: this.$t('mission.permission.creator'), disabled: true }
+        { value: 'editor', text: this.$t('mission.permission.editor') }
       ]
     }
   },
@@ -90,13 +89,18 @@ export default {
         return
       }
 
-      this.hideMissionPermissionModal()
-
       const permission = `mission.${this.$route.params.missionSlug}.${this.missionPermissionCreate.permission}`
       const permissionDetails = {
         userUid: this.missionPermissionCreate.userUid,
         permission
       }
+
+      this.missionPermissionCreate = {
+        userUid: null,
+        permission: null
+      }
+
+      this.$refs.missionPermissionCreateUserTypeahead.reset()
 
       this.$store.dispatch('createMissionPermission', {
         missionSlug: this.$route.params.missionSlug,

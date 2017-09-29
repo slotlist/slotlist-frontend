@@ -273,9 +273,10 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.createMissionPermission.success')}`,
-          scrollToTop: true
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.createMissionPermission.success')}`
         })
+
+        dispatch('getMissionPermissions', { missionSlug: payload.missionSlug })
 
         dispatch('stopWorking', i18n.t('store.createMissionPermission'))
       }).catch((error) => {
@@ -534,6 +535,62 @@ const actions = {
             showAlert: true,
             alertVariant: 'danger',
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionBannerImage.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
+  deleteMissionPermission({ dispatch }, payload) {
+    dispatch('startWorking', i18n.t('store.deleteMissionPermission'))
+
+    return MissionsApi.deleteMissionPermission(payload.missionSlug, payload.permissionUid)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Deleting mission permission failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (response.data.success !== true) {
+          console.error(response)
+          throw 'Received invalid mission permission deletion'
+        }
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteMissionPermission.success')}`
+        })
+
+        dispatch('getMissionPermissions', { missionSlug: payload.missionSlug })
+
+        dispatch('stopWorking', i18n.t('store.deleteMissionPermission'))
+      }).catch((error) => {
+        dispatch('stopWorking', i18n.t('store.deleteMissionPermission'))
+
+        if (error.response) {
+          console.error('deleteMissionPermission', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionPermission.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('deleteMissionPermission', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionPermission.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          console.error('deleteMissionPermission', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionPermission.error')} - ${i18n.t('failed.something')}`
           })
         }
       })

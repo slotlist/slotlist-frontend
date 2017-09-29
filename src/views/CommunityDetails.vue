@@ -52,14 +52,10 @@
     </div>
     <!-- End of content -->
     <!-- Begin of modals -->
-    <div>
-      <community-edit-modal></community-edit-modal>
+    <div v-if="loggedIn">
+      <community-edit-modal v-if="canEditCommunity"></community-edit-modal>
     </div>
     <!-- End of modals -->
-    <!-- Begin of overlays -->
-    <div>
-    </div>
-    <!-- End of overlays -->
   </div>
 </template>
 
