@@ -10,8 +10,14 @@ export const v1 = {
   createCommunity(payload) {
     return axios.post('/v1/communities', payload)
   },
+  createCommunityPermission(communitySlug, payload) {
+    return axios.post(`/v1/communities/${communitySlug}/permissions`, payload)
+  },
   deleteCommunity(communitySlug) {
     return axios.delete(`/v1/communities/${communitySlug}`)
+  },
+  deleteCommunityPermission(communitySlug, permissionUid) {
+    return axios.delete(`/v1/communities/${communitySlug}/permissions/${permissionUid}`)
   },
   editCommunity(communitySlug, payload) {
     return axios.patch(`/v1/communities/${communitySlug}`, payload)
@@ -30,6 +36,9 @@ export const v1 = {
   },
   getCommunityMissions(communitySlug, limit = 10, offset = 0) {
     return axios.get(`/v1/communities/${communitySlug}/missions?limit=${limit}&offset=${offset}`)
+  },
+  getCommunityPermissions(communitySlug, limit = 10, offset = 0) {
+    return axios.get(`/v1/communities/${communitySlug}/permissions?limit=${limit}&offset=${offset}`)
   },
   processCommunityApplication(communitySlug, applicationUid, accepted) {
     return axios.patch(`/v1/communities/${communitySlug}/applications/${applicationUid}`, { status: accepted ? 'accepted' : 'denied' })
