@@ -120,7 +120,7 @@ export default {
       }
     }
 
-    this.$store.dispatch("setLocale", locale)
+    this.$store.dispatch('setLocale', locale)
 
     let timezone = this.$ls.get('timezone')
     if (_.isNil(timezone) || !_.isString(timezone) || _.isEmpty(timezone)) {
@@ -134,11 +134,14 @@ export default {
       }
     }
 
-    this.$store.dispatch("setTimezone", timezone)
+    this.$store.dispatch('setTimezone', timezone)
 
     const token = this.$ls.get('auth-token')
     if (!_.isNil(token)) {
-      this.$store.dispatch("setTokenFromLocalStorage", token)
+      this.$store.dispatch('setTokenFromLocalStorage', token)
+        .then(() => {
+          this.$store.dispatch('refreshToken', { silent: true })
+        })
     }
   },
   created: function() {
