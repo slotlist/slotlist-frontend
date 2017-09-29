@@ -217,6 +217,8 @@ const actions = {
 
         const decodedToken = jwtDecode(response.data.token)
 
+        Vue.ls.set('auth-token-last-refreshed', moment().utc())
+
         commit({
           type: "setToken",
           token: response.data.token,

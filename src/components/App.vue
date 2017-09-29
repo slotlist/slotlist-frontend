@@ -140,7 +140,10 @@ export default {
     if (!_.isNil(token)) {
       this.$store.dispatch('setTokenFromLocalStorage', token)
         .then(() => {
-          this.$store.dispatch('refreshToken', { silent: true })
+          const lastRefreshedAt = this.$ls.get('auth-token-last-refreshed')
+          if (_.isNil(lastRefreshedAt) || moment(lastRefreshedAt) <= moment().subtract(1, 'hour')) {
+            this.$store.dispatch('refreshToken', { silent: true })
+          }
         })
     }
   },

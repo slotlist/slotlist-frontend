@@ -72,10 +72,10 @@
           <b-btn variant="primary" v-b-modal.missionBannerImageModal>
             <i class="fa fa-picture-o" aria-hidden="true"></i> {{ $t('button.edit.mission.bannerImage') }}
           </b-btn>&nbsp;
-          <b-btn variant="primary" v-b-modal.missionPermissionModal>
+          <b-btn variant="primary" v-if="isMissionCreator" v-b-modal.missionPermissionModal>
             <i class="fa fa-key" aria-hidden="true"></i> {{ $t('button.edit.mission.permissions') }}
           </b-btn>&nbsp;
-          <click-confirm yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('mission.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
+          <click-confirm v-if="isMissionCreator" yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('mission.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
             <b-btn variant="danger" @click="deleteMission">
               <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete') }}
             </b-btn>

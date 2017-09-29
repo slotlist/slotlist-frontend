@@ -16,15 +16,15 @@
           </div>
         </div>
         <hr class="my-4" v-show="canEditCommunity">
-        <div class="row justify-content-center" v-show="canEditCommunity">
+        <div class="row justify-content-center" v-if="canEditCommunity">
           <b-btn variant="primary" v-b-modal.communityEditModal>
             <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit') }}
           </b-btn>&nbsp;
-          <b-btn variant="primary" v-b-modal.communityPermissionModal>
+          <b-btn variant="primary" v-if="isCommunityFounder" v-b-modal.communityPermissionModal>
             <i class="fa fa-key" aria-hidden="true"></i> {{ $t('button.edit.community.permissions') }}
           </b-btn>&nbsp;
-          <click-confirm v-show="isCommunityFounder" yes-icon="fa fa-trash" yes-class="btn btn-danger" :messages="{title: $t('community.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
-            <b-btn variant="danger" v-if="isCommunityFounder" @click="deleteCommunity">
+          <click-confirm v-if="isCommunityFounder" yes-icon="fa fa-trash" yes-class="btn btn-danger" :messages="{title: $t('community.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
+            <b-btn variant="danger" @click="deleteCommunity">
               <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete') }}
             </b-btn>
           </click-confirm>
