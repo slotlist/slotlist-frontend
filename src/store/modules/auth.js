@@ -187,8 +187,16 @@ const actions = {
       decodedToken: decodedToken
     })
   },
-  refreshToken({ commit, dispatch }) {
-    dispatch('startWorking', i18n.t('store.refreshToken'))
+  refreshToken({ commit, dispatch }, payload) {
+    if (_.isNil(payload)) {
+      payload = { silent: false }
+    } else if (_.isNil(payload.silent)) {
+      payload.silent = false
+    }
+
+    if (!payload.silent) {
+      dispatch('startWorking', i18n.t('store.refreshToken'))
+    }
 
     return AuthApi.refreshToken()
       .then(function (response) {
@@ -209,15 +217,21 @@ const actions = {
 
         const decodedToken = jwtDecode(response.data.token)
 
+        Vue.ls.set('auth-token-last-refreshed', moment().utc())
+
         commit({
           type: "setToken",
           token: response.data.token,
           decodedToken: decodedToken
         })
 
-        dispatch('stopWorking', i18n.t('store.refreshToken'))
+        if (!payload.silent) {
+          dispatch('stopWorking', i18n.t('store.refreshToken'))
+        }
       }).catch((error) => {
-        dispatch('stopWorking', i18n.t('store.refreshToken'))
+        if (!payload.silent) {
+          dispatch('stopWorking', i18n.t('store.refreshToken'))
+        }
 
         dispatch('performLogout')
 

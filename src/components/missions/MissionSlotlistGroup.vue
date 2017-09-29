@@ -62,9 +62,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.click-confirm {
-  display: inline;
-}
-</style>

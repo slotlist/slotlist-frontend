@@ -72,7 +72,10 @@
           <b-btn variant="primary" v-b-modal.missionBannerImageModal>
             <i class="fa fa-picture-o" aria-hidden="true"></i> {{ $t('button.edit.mission.bannerImage') }}
           </b-btn>&nbsp;
-          <click-confirm yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('mission.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
+          <b-btn variant="primary" v-if="isMissionCreator" v-b-modal.missionPermissionModal>
+            <i class="fa fa-key" aria-hidden="true"></i> {{ $t('button.edit.mission.permissions') }}
+          </b-btn>&nbsp;
+          <click-confirm v-if="isMissionCreator" yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('mission.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
             <b-btn variant="danger" @click="deleteMission">
               <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete') }}
             </b-btn>
@@ -112,15 +115,16 @@
     </div>
     <!-- End of content -->
     <!-- Begin of modals -->
-    <div>
-      <mission-banner-image-modal></mission-banner-image-modal>
-      <mission-edit-modal></mission-edit-modal>
-      <mission-slot-create-modal></mission-slot-create-modal>
-      <mission-slot-details-modal></mission-slot-details-modal>
-      <mission-slot-edit-modal></mission-slot-edit-modal>
-      <mission-slot-group-create-modal></mission-slot-group-create-modal>
-      <mission-slot-group-edit-modal></mission-slot-group-edit-modal>
-      <mission-slot-registration-modal></mission-slot-registration-modal>
+    <div v-if="loggedIn">
+      <mission-banner-image-modal v-if="isMissionEditor"></mission-banner-image-modal>
+      <mission-edit-modal v-if="isMissionEditor"></mission-edit-modal>
+      <mission-permission-modal v-if="isMissionCreator"></mission-permission-modal>
+      <mission-slot-create-modal v-if="isMissionEditor"></mission-slot-create-modal>
+      <mission-slot-details-modal v-if="isMissionEditor"></mission-slot-details-modal>
+      <mission-slot-edit-modal v-if="isMissionEditor"></mission-slot-edit-modal>
+      <mission-slot-group-create-modal v-if="isMissionEditor"></mission-slot-group-create-modal>
+      <mission-slot-group-edit-modal v-if="isMissionEditor"></mission-slot-group-edit-modal>
+      <mission-slot-registration-modal v-if="isMissionEditor"></mission-slot-registration-modal>
     </div>
     <!-- End of modals -->
   </div>
@@ -130,6 +134,7 @@
 import * as _ from 'lodash'
 import MissionBannerImageModal from 'components/missions/modals/MissionBannerImageModal.vue'
 import MissionEditModal from 'components/missions/modals/MissionEditModal.vue'
+import MissionPermissionModal from 'components/missions/modals/MissionPermissionModal.vue'
 import MissionSlotCreateModal from 'components/missions/modals/MissionSlotCreateModal.vue'
 import MissionSlotDetailsModal from 'components/missions/modals/MissionSlotDetailsModal.vue'
 import MissionSlotEditModal from 'components/missions/modals/MissionSlotEditModal.vue'
@@ -143,6 +148,7 @@ export default {
   components: {
     MissionBannerImageModal,
     MissionEditModal,
+    MissionPermissionModal,
     MissionSlotCreateModal,
     MissionSlotDetailsModal,
     MissionSlotEditModal,
@@ -151,8 +157,15 @@ export default {
     MissionSlotlist,
     MissionSlotRegistrationModal
   },
+  beforeCreate: function() {
+    this.$store.dispatch('getMissionDetails', { missionSlug: this.$route.params.missionSlug })
+    this.$store.dispatch('getMissionSlotlist', { missionSlug: this.$route.params.missionSlug })
+  },
   created: function() {
     this.missionSlotlistFilter = this.$store.getters.missionSlotlistFilter
+  },
+  beforeDestroy: function() {
+    this.$store.dispatch('clearMissionDetails')
   },
   data() {
     return {
@@ -208,26 +221,6 @@ export default {
     missionSlotlistFilter(val) {
       this.$store.dispatch('filterMissionSlotlist', val)
     }
-  },
-  beforeCreate: function() {
-    this.$store.dispatch('getMissionDetails', { missionSlug: this.$route.params.missionSlug })
-    this.$store.dispatch('getMissionSlotlist', { missionSlug: this.$route.params.missionSlug })
-  },
-  beforeDestroy: function() {
-    this.$store.dispatch('clearMissionDetails')
   }
 }
 </script>
-
-<style>
-.ql-container .ql-editor {
-  min-height: 25em;
-  padding-bottom: 1em;
-  max-height: 25em;
-}
-
-.html {
-  overflow-y: auto;
-  border-top: none;
-}
-</style>

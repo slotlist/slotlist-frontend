@@ -16,17 +16,18 @@
           </div>
         </div>
         <hr class="my-4" v-show="canEditCommunity">
-        <div class="row justify-content-center" v-show="canEditCommunity">
-          <div class="btn-group" role="group" aria-label="Community actions">
-            <b-btn variant="primary" v-b-modal.communityEditModal>
-              <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit') }}
+        <div class="row justify-content-center" v-if="canEditCommunity">
+          <b-btn variant="primary" v-b-modal.communityEditModal>
+            <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit') }}
+          </b-btn>&nbsp;
+          <b-btn variant="primary" v-if="isCommunityFounder" v-b-modal.communityPermissionModal>
+            <i class="fa fa-key" aria-hidden="true"></i> {{ $t('button.edit.community.permissions') }}
+          </b-btn>&nbsp;
+          <click-confirm v-if="isCommunityFounder" yes-icon="fa fa-trash" yes-class="btn btn-danger" :messages="{title: $t('community.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
+            <b-btn variant="danger" @click="deleteCommunity">
+              <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete') }}
             </b-btn>
-            <click-confirm v-show="isCommunityFounder" yes-icon="fa fa-trash" yes-class="btn btn-danger" :messages="{title: $t('community.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
-              <b-btn variant="danger" v-if="isCommunityFounder" @click="deleteCommunity">
-                <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete') }}
-              </b-btn>
-            </click-confirm>
-          </div>
+          </click-confirm>
         </div>
       </div>
       <div class="card">
@@ -52,14 +53,11 @@
     </div>
     <!-- End of content -->
     <!-- Begin of modals -->
-    <div>
-      <community-edit-modal></community-edit-modal>
+    <div v-if="loggedIn">
+      <community-edit-modal v-if="canEditCommunity"></community-edit-modal>
+      <community-permission-modal v-if="isCommunityFounder"></community-permission-modal>
     </div>
     <!-- End of modals -->
-    <!-- Begin of overlays -->
-    <div>
-    </div>
-    <!-- End of overlays -->
   </div>
 </template>
 
@@ -70,6 +68,7 @@ import CommunityApplications from '../components/communities/CommunityApplicatio
 import CommunityEditModal from '../components/communities/modals/CommunityEditModal.vue'
 import CommunityMembers from '../components/communities/CommunityMembers.vue'
 import CommunityMissions from '../components/communities/CommunityMissions.vue'
+import CommunityPermissionModal from '../components/communities/modals/CommunityPermissionModal.vue'
 
 import utils from '../utils'
 
@@ -78,7 +77,8 @@ export default {
     CommunityApplications,
     CommunityEditModal,
     CommunityMembers,
-    CommunityMissions
+    CommunityMissions,
+    CommunityPermissionModal
   },
   beforeCreate: function() {
     this.$store.dispatch('getCommunityDetails', this.$route.params.communitySlug)

@@ -8,7 +8,8 @@ import CommunitiesApi from '../../api/communities'
 const limits = {
   communities: 10,
   communityApplications: 10,
-  communityMissions: 10
+  communityMissions: 10,
+  communityPermissions: 10
 }
 
 const state = {
@@ -19,11 +20,13 @@ const state = {
   communityDetails: null,
   communityMembers: null,
   communityMissions: null,
+  communityPermissions: null,
   communitySlugAvailable: false,
-  searchCommunities: false,
+  searchingCommunities: false,
   totalCommunities: 0,
   totalCommunityApplications: 0,
-  totalCommunityMissions: 0
+  totalCommunityMissions: 0,
+  totalCommunityPermissions: 0
 }
 
 const getters = {
@@ -78,11 +81,17 @@ const getters = {
   communityMissionsPageCount() {
     return Math.ceil(state.totalCommunityMissions / limits.communityMissions)
   },
+  communityPermissions() {
+    return state.communityPermissions
+  },
+  communityPermissionsPageCount() {
+    return Math.ceil(state.totalCommunityPermissions / limits.communityPermissions)
+  },
   communitySlugAvailable() {
     return state.communitySlugAvailable
   },
-  searchCommunities() {
-    return state.searchCommunities
+  searchingCommunities() {
+    return state.searchingCommunities
   }
 }
 
@@ -274,6 +283,63 @@ const actions = {
         }
       })
   },
+  createCommunityPermission({ dispatch }, payload) {
+    dispatch('startWorking', i18n.t('store.createCommunityPermission'))
+
+    return CommunitiesApi.createCommunityPermission(payload.communitySlug, payload.permissionDetails)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Creating community permission failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (_.isNil(response.data.permission) || !_.isObject(response.data.permission)) {
+          console.error(response)
+          throw 'Received invalid community permission'
+        }
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.createCommunityPermission.success')}`
+        })
+
+        dispatch('getCommunityPermissions', { communitySlug: payload.communitySlug })
+        dispatch('getCommunityDetails', payload.communitySlug)
+
+        dispatch('stopWorking', i18n.t('store.createCommunityPermission'))
+      }).catch((error) => {
+        dispatch('stopWorking', i18n.t('store.createCommunityPermission'))
+
+        if (error.response) {
+          console.error('createCommunityPermission', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createCommunityPermission.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('createCommunityPermission', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createCommunityPermission.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          console.error('createCommunityPermission', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createCommunityPermission.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
   deleteCommunity({ dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.deleteCommunity'))
 
@@ -326,6 +392,63 @@ const actions = {
             showAlert: true,
             alertVariant: 'danger',
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteCommunity.error')} <strong>${payload.communityName}</strong> - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
+  deleteCommunityPermission({ dispatch }, payload) {
+    dispatch('startWorking', i18n.t('store.deleteCommunityPermission'))
+
+    return CommunitiesApi.deleteCommunityPermission(payload.communitySlug, payload.permissionUid)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Deleting community permission failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (response.data.success !== true) {
+          console.error(response)
+          throw 'Received invalid community permission deletion'
+        }
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteCommunityPermission.success')}`
+        })
+
+        dispatch('getCommunityPermissions', { communitySlug: payload.communitySlug })
+        dispatch('getCommunityDetails', payload.communitySlug)
+
+        dispatch('stopWorking', i18n.t('store.deleteCommunityPermission'))
+      }).catch((error) => {
+        dispatch('stopWorking', i18n.t('store.deleteCommunityPermission'))
+
+        if (error.response) {
+          console.error('deleteCommunityPermission', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteCommunityPermission.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('deleteCommunityPermission', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteCommunityPermission.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          console.error('deleteCommunityPermission', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteCommunityPermission.error')} - ${i18n.t('failed.something')}`
           })
         }
       })
@@ -688,6 +811,64 @@ const actions = {
         }
       })
   },
+  getCommunityPermissions({ commit, dispatch }, payload) {
+    dispatch('startWorking', i18n.t('store.getCommunityPermissions'))
+
+    if (_.isNil(payload.page)) {
+      payload.page = 1
+    }
+
+    return CommunitiesApi.getCommunityPermissions(payload.communitySlug, limits.communityPermissions, (payload.page - 1) * limits.communityPermissions)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Retrieving community permissions failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (_.isNil(response.data.permissions) || !_.isArray(response.data.permissions)) {
+          console.error(response)
+          throw 'Received invalid mission permissions'
+        }
+
+        commit({
+          type: 'setCommunityPermissions',
+          permissions: response.data.permissions,
+          total: response.data.total
+        })
+
+        dispatch('stopWorking', i18n.t('store.getCommunityPermissions'))
+      }).catch((error) => {
+        dispatch('stopWorking', i18n.t('store.getCommunityPermissions'))
+
+        if (error.response) {
+          console.error('getCommunityPermissions', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityPermissions.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          console.error('getCommunityPermissions', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityPermissions.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          console.error('getCommunityPermissions', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityPermissions.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
   processCommunityApplication({ dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.processCommunityApplication'))
 
@@ -811,7 +992,7 @@ const actions = {
       .then(function (response) {
         if (response.status !== 200) {
           console.error(response)
-          throw "Removing community member failed"
+          throw "Searching communities failed"
         }
 
         if (_.isEmpty(response.data)) {
@@ -879,15 +1060,17 @@ const mutations = {
     state.communityDetails = null
     state.communityMembers = null
     state.communityMissions = null
+    state.communityPermissions = null
     state.totalCommunityApplications = 0
     state.totalCommunityMissions = 0
+    state.totalCommunityPermissions = 0
   },
   clearCommunitySlugAvailability(state) {
     state.checkingCommunitySlugAvalability = false
     state.communitySlug = false
   },
   searchingCommunities(state, payload) {
-    state.searchCommunities = payload.searching
+    state.searchingCommunities = payload.searching
   },
   setCommunities(state, payload) {
     state.communities = payload.communities
@@ -909,6 +1092,10 @@ const mutations = {
   setCommunityMissions(state, payload) {
     state.communityMissions = payload.communityMissions
     state.totalCommunityMissions = payload.total
+  },
+  setCommunityPermissions(state, payload) {
+    state.communityPermissions = payload.permissions
+    state.totalCommunityPermissions = payload.total
   },
   setCommunitySlugAvailability(state, payload) {
     state.checkCommunitySlugAvailability = false

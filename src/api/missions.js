@@ -8,6 +8,9 @@ export const v1 = {
   createMission(payload) {
     return axios.post('/v1/missions', payload)
   },
+  createMissionPermission(missionSlug, payload) {
+    return axios.post(`/v1/missions/${missionSlug}/permissions`, payload)
+  },
   createMissionSlot(missionSlug, payload) {
     return axios.post(`/v1/missions/${missionSlug}/slots`, _.isArray(payload) ? payload : [payload])
   },
@@ -19,6 +22,9 @@ export const v1 = {
   },
   deleteMissionBannerImage(missionSlug) {
     return axios.delete(`/v1/missions/${missionSlug}/bannerImage`)
+  },
+  deleteMissionPermission(missionSlug, permissionUid) {
+    return axios.delete(`/v1/missions/${missionSlug}/permissions/${permissionUid}`)
   },
   deleteMissionSlot(missionSlug, slotUid) {
     return axios.delete(`/v1/missions/${missionSlug}/slots/${slotUid}`)
@@ -37,6 +43,9 @@ export const v1 = {
   },
   getMissionDetails(missionSlug) {
     return axios.get(`/v1/missions/${missionSlug}`)
+  },
+  getMissionPermissions(missionSlug, limit = 10, offset = 0) {
+    return axios.get(`/v1/missions/${missionSlug}/permissions?limit=${limit}&offset=${offset}`)
   },
   getMissions(limit = 10, offset = 0, includeEnded = false) {
     return axios.get(`/v1/missions?limit=${limit}&offset=${offset}&includeEnded=${includeEnded}`)
