@@ -2,6 +2,7 @@ import { i18n } from '../../app'
 import * as _ from 'lodash'
 import utils from '../../utils'
 import router from '../../router'
+import Raven from 'raven-js'
 
 import CommunitiesApi from '../../api/communities'
 
@@ -127,6 +128,8 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.applyToCommunity'))
       }).catch((error) => {
+        Raven.captureException(error, { extra: { module: 'communities', function: 'applyToCommunity' } })
+
         dispatch('stopWorking', i18n.t('store.applyToCommunity'))
 
         if (error.response) {
@@ -180,6 +183,8 @@ const actions = {
           available: response.data.available
         })
       }).catch((error) => {
+        Raven.captureException(error, { extra: { module: 'communities', function: 'checkCommunitySlugAvailability' } })
+
         commit({
           type: 'setCommunitySlugAvailability',
           available: false
@@ -257,6 +262,8 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.createCommunity'))
       }).catch((error) => {
+        Raven.captureException(error, { extra: { module: 'communities', function: 'createCommunity' } })
+
         dispatch('stopWorking', i18n.t('store.createCommunity'))
 
         if (error.response) {
@@ -314,6 +321,8 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.createCommunityPermission'))
       }).catch((error) => {
+        Raven.captureException(error, { extra: { module: 'communities', function: 'createCommunityPermission' } })
+
         dispatch('stopWorking', i18n.t('store.createCommunityPermission'))
 
         if (error.response) {
@@ -370,6 +379,8 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.deleteCommunity'))
       }).catch((error) => {
+        Raven.captureException(error, { extra: { module: 'communities', function: 'deleteCommunity' } })
+
         dispatch('stopWorking', i18n.t('store.deleteCommunity'))
 
         if (error.response) {
@@ -427,6 +438,8 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.deleteCommunityPermission'))
       }).catch((error) => {
+        Raven.captureException(error, { extra: { module: 'communities', function: 'deleteCommunityPermission' } })
+
         dispatch('stopWorking', i18n.t('store.deleteCommunityPermission'))
 
         if (error.response) {
@@ -486,6 +499,8 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.editCommunity'))
       }).catch((error) => {
+        Raven.captureException(error, { extra: { module: 'communities', function: 'editCommunity' } })
+
         dispatch('stopWorking', i18n.t('store.editCommunity'))
 
         if (error.response) {
@@ -546,6 +561,8 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.getCommunities'))
       }).catch((error) => {
+        Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunities' } })
+
         dispatch('stopWorking', i18n.t('store.getCommunities'))
 
         if (error.response) {
@@ -604,6 +621,8 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.getCommunityApplications'))
       }).catch((error) => {
+        Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityApplications' } })
+
         dispatch('stopWorking', i18n.t('store.getCommunityApplications'))
 
         if (error.response) {
@@ -657,6 +676,8 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.getCommunityApplicationStatus'))
       }).catch((error) => {
+        Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityApplicationStatus' } })
+
         dispatch('stopWorking', i18n.t('store.getCommunityApplicationStatus'))
 
         // Extra check for error response if no application has been sent in
@@ -716,6 +737,8 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.getCommunityDetails'))
       }).catch((error) => {
+        Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityDetails' } })
+
         dispatch('stopWorking', i18n.t('store.getCommunityDetails'))
 
         if (error.response) {
@@ -785,6 +808,8 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.getCommunityMissions'))
       }).catch((error) => {
+        Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityMissions' } })
+
         dispatch('stopWorking', i18n.t('store.getCommunityMissions'))
 
         if (error.response) {
@@ -843,6 +868,8 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.getCommunityPermissions'))
       }).catch((error) => {
+        Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityPermissions' } })
+
         dispatch('stopWorking', i18n.t('store.getCommunityPermissions'))
 
         if (error.response) {
@@ -900,6 +927,8 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.processCommunityApplication'))
       }).catch((error) => {
+        Raven.captureException(error, { extra: { module: 'communities', function: 'processCommunityApplication' } })
+
         dispatch('stopWorking', i18n.t('store.processCommunityApplication'))
 
         if (error.response) {
@@ -956,6 +985,8 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.removeCommunityMember'))
       }).catch((error) => {
+        Raven.captureException(error, { extra: { module: 'communities', function: 'removeCommunityMember' } })
+
         dispatch('stopWorking', i18n.t('store.removeCommunityMember'))
 
         if (error.response) {
@@ -1019,6 +1050,8 @@ const actions = {
 
         return communities
       }).catch((error) => {
+        Raven.captureException(error, { extra: { module: 'communities', function: 'searchCommunities' } })
+
         commit({
           type: 'searchingCommunities',
           searching: false

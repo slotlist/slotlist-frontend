@@ -5,6 +5,7 @@ import jwtDecode from 'jwt-decode'
 import axios from 'axios'
 import moment from 'moment-timezone'
 import router from '../../router'
+import Raven from 'raven-js'
 
 import AuthApi from '../../api/auth'
 
@@ -71,6 +72,8 @@ const actions = {
           url: response.data.url
         })
       }).catch((error) => {
+        Raven.captureException(error, { extra: { module: 'auth', function: 'getLoginRedirectUrl' } })
+
         if (error.response) {
           console.error('getLoginRedirectUrl', error.response)
           dispatch('showAlert', {
@@ -125,6 +128,8 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.performLogin'))
       }).catch((error) => {
+        Raven.captureException(error, { extra: { module: 'auth', function: 'performLogin' } })
+
         dispatch('stopWorking', i18n.t('store.performLogin'))
 
         if (error.response) {
@@ -229,6 +234,8 @@ const actions = {
           dispatch('stopWorking', i18n.t('store.refreshToken'))
         }
       }).catch((error) => {
+        Raven.captureException(error, { extra: { module: 'auth', function: 'refreshToken' } })
+
         if (!payload.silent) {
           dispatch('stopWorking', i18n.t('store.refreshToken'))
         }
@@ -292,6 +299,8 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.getAccountDetails'))
       }).catch((error) => {
+        Raven.captureException(error, { extra: { module: 'auth', function: 'getAccountDetails' } })
+
         dispatch('stopWorking', i18n.t('store.getAccountDetails'))
 
         if (error.response) {
@@ -356,6 +365,8 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.editAccount'))
       }).catch((error) => {
+        Raven.captureException(error, { extra: { module: 'auth', function: 'editAccount' } })
+
         dispatch('stopWorking', i18n.t('store.editAccount'))
 
         if (error.response) {
@@ -406,6 +417,8 @@ const mutations = {
     state.decodedToken = payload.decodedToken
     state.loggedIn = true
 
+    Raven.setUserContext(state.decodedToken)
+
     const redirect = Vue.ls.get('auth-redirect')
     if (!_.isNil(redirect)) {
       Vue.ls.remove('auth-redirect')
@@ -420,6 +433,8 @@ const mutations = {
     state.token = null
     state.decodedToken = null
     state.loggedIn = false
+
+    Raven.setUserContext()
   },
   setRedirect(state, payload) {
     if (_.isNil(Vue.ls.get('auth-redirect'))) {

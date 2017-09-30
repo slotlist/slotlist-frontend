@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { i18n } from '../../app'
 import * as _ from 'lodash'
 import moment from 'moment-timezone'
+import Raven from 'raven-js'
 
 import StatusApi from '../../api/status'
 
@@ -47,6 +48,8 @@ const actions = {
           backendVersion: response.data.version
         })
       }).catch((error) => {
+        Raven.captureException(error, { extra: { module: 'util', function: 'getBackendVersion' } })
+
         if (error.response) {
           console.error('getBackendVersion', error.response)
         } else if (error.request) {
