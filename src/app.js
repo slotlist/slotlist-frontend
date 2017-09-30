@@ -33,8 +33,11 @@ require('./api/mock')
 if (process.env.SENTRY_DSN) {
   console.info('Configuring sentry.io integration')
   Raven
-    .config(process.env.SENTRY_DSN)
-    .addPlugin(RavenVue, Vue)
+    .config(process.env.SENTRY_DSN, {
+      autoBreadcrumbs: true,
+      environment: process.env.NODE_ENV || 'unknown',
+      release: process.env.FRONTEND_VERSION || 'unknown'
+    }).addPlugin(RavenVue, Vue)
     .install()
 }
 
