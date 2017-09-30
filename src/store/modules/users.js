@@ -1,6 +1,7 @@
 import { i18n } from '../../app'
 import * as _ from 'lodash'
 import utils from '../../utils'
+import Raven from 'raven-js'
 
 import UsersApi from '../../api/users'
 
@@ -55,6 +56,8 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.getUserDetails'))
       }).catch((error) => {
+        Raven.captureException(error, { extra: { module: 'users', function: 'getUserDetails' } })
+
         dispatch('stopWorking', i18n.t('store.getUserDetails'))
 
         if (error.response) {
@@ -108,6 +111,8 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.getUserMissions'))
       }).catch((error) => {
+        Raven.captureException(error, { extra: { module: 'users', function: 'getUserMissions' } })
+
         dispatch('stopWorking', i18n.t('store.getUserMissions'))
 
         if (error.response) {
@@ -171,6 +176,8 @@ const actions = {
 
         return users
       }).catch((error) => {
+        Raven.captureException(error, { extra: { module: 'users', function: 'searchUsers' } })
+
         commit({
           type: 'searchingUsers',
           searching: false
