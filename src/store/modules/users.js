@@ -56,8 +56,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.getUserDetails'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'users', function: 'getUserDetails' } })
-
         dispatch('stopWorking', i18n.t('store.getUserDetails'))
 
         if (error.response) {
@@ -68,6 +66,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getUserDetails.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'users', function: 'getUserDetails' } })
           console.error('getUserDetails', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -75,6 +74,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getUserDetails.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'users', function: 'getUserDetails' } })
           console.error('getUserDetails', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -111,8 +111,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.getUserMissions'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'users', function: 'getUserMissions' } })
-
         dispatch('stopWorking', i18n.t('store.getUserMissions'))
 
         if (error.response) {
@@ -123,6 +121,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getUserMissions.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'users', function: 'getUserMissions' } })
           console.error('getUserMissions', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -130,6 +129,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getUserMissions.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'users', function: 'getUserMissions' } })
           console.error('getUserMissions', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -176,8 +176,6 @@ const actions = {
 
         return users
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'users', function: 'searchUsers' } })
-
         commit({
           type: 'searchingUsers',
           searching: false
@@ -191,6 +189,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.searchUsers.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'users', function: 'searchUsers' } })
           console.error('searchUsers', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -198,6 +197,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.searchUsers.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'users', function: 'searchUsers' } })
           console.error('searchUsers', error.message)
           dispatch('showAlert', {
             showAlert: true,

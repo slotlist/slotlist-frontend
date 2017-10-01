@@ -13,6 +13,7 @@ const state = {
   loggedIn: false,
   loginRedirectUrl: null,
   redirect: null,
+  refreshingToken: false,
   token: null,
   decodedToken: null,
   accountDetails: null,
@@ -41,6 +42,9 @@ const getters = {
   },
   accountPermissions() {
     return state.accountPermissions
+  },
+  refreshingToken() {
+    return state.refreshingToken
   }
 }
 
@@ -72,8 +76,6 @@ const actions = {
           url: response.data.url
         })
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'auth', function: 'getLoginRedirectUrl' } })
-
         if (error.response) {
           console.error('getLoginRedirectUrl', error.response)
           dispatch('showAlert', {
@@ -82,6 +84,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getLoginRedirectUrl.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'auth', function: 'getLoginRedirectUrl' } })
           console.error('getLoginRedirectUrl', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -89,6 +92,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getLoginRedirectUrl.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'auth', function: 'getLoginRedirectUrl' } })
           console.error('getLoginRedirectUrl', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -128,8 +132,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.performLogin'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'auth', function: 'performLogin' } })
-
         dispatch('stopWorking', i18n.t('store.performLogin'))
 
         if (error.response) {
@@ -140,6 +142,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.performLogin.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'auth', function: 'performLogin' } })
           console.error('performLogin', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -147,6 +150,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.performLogin.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'auth', function: 'performLogin' } })
           console.error('performLogin', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -193,6 +197,11 @@ const actions = {
     })
   },
   refreshToken({ commit, dispatch }, payload) {
+    commit({
+      type: "refreshingToken",
+      refreshing: true
+    })
+
     if (_.isNil(payload)) {
       payload = { silent: false }
     } else if (_.isNil(payload.silent)) {
@@ -230,11 +239,19 @@ const actions = {
           decodedToken: decodedToken
         })
 
+        commit({
+          type: "refreshingToken",
+          refreshing: false
+        })
+
         if (!payload.silent) {
           dispatch('stopWorking', i18n.t('store.refreshToken'))
         }
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'auth', function: 'refreshToken' } })
+        commit({
+          type: "refreshingToken",
+          refreshing: false
+        })
 
         if (!payload.silent) {
           dispatch('stopWorking', i18n.t('store.refreshToken'))
@@ -250,6 +267,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.refreshToken.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'auth', function: 'refreshToken' } })
           console.error('refreshToken', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -257,6 +275,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.refreshToken.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'auth', function: 'refreshToken' } })
           console.error('refreshToken', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -299,8 +318,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.getAccountDetails'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'auth', function: 'getAccountDetails' } })
-
         dispatch('stopWorking', i18n.t('store.getAccountDetails'))
 
         if (error.response) {
@@ -311,6 +328,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getAccountDetails.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'auth', function: 'getAccountDetails' } })
           console.error('getAccountDetails', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -318,6 +336,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getAccountDetails.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'auth', function: 'getAccountDetails' } })
           console.error('getAccountDetails', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -365,8 +384,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.editAccount'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'auth', function: 'editAccount' } })
-
         dispatch('stopWorking', i18n.t('store.editAccount'))
 
         if (error.response) {
@@ -377,6 +394,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editAccount.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'auth', function: 'editAccount' } })
           console.error('editAccount', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -384,6 +402,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editAccount.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'auth', function: 'editAccount' } })
           console.error('editAccount', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -399,11 +418,8 @@ const mutations = {
   setLoginRedirectUrl(state, payload) {
     state.loginRedirectUrl = payload.url
   },
-  startRefreshingToken(state) {
-    state.refreshingToken = true
-  },
-  finishRefreshingToken(state) {
-    state.refreshingToken = false
+  refreshingToken(state, payload) {
+    state.refreshingToken = payload.refreshing
   },
   setToken(state, payload) {
     Vue.ls.set('auth-token', payload.token)
@@ -426,7 +442,8 @@ const mutations = {
     }
   },
   logout(state) {
-    Vue.ls.clear()
+    Vue.ls.remove('auth-token')
+    Vue.ls.remove('auth-decodedToken')
 
     Vue.acl.clearPermissions()
 

@@ -143,8 +143,6 @@ const actions = {
           available: response.data.available
         })
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'setMissionSlugAvailability' } })
-
         commit({
           type: 'setMissionSlugAvailability',
           available: false
@@ -158,6 +156,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.checkMissionSlugAvailability', { slug: payload })} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'setMissionSlugAvailability' } })
           console.error('checkMissionSlugAvailability', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -165,6 +164,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.checkMissionSlugAvailability', { slug: payload })} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'setMissionSlugAvailability' } })
           console.error('checkMissionSlugAvailability', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -227,8 +227,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.createMission'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'createMission' } })
-
         dispatch('stopWorking', i18n.t('store.createMission'))
 
         if (error.response) {
@@ -239,6 +237,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMission.error', { title: payload.title })} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'createMission' } })
           console.error('createMission', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -246,6 +245,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMission.error', { title: payload.title })} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'createMission' } })
           console.error('createMission', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -285,8 +285,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.createMissionPermission'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'createMissionPermission' } })
-
         dispatch('stopWorking', i18n.t('store.createMissionPermission'))
 
         if (error.response) {
@@ -297,6 +295,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissionPermission.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'createMissionPermission' } })
           console.error('createMissionPermission', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -304,6 +303,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissionPermission.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'createMissionPermission' } })
           console.error('createMissionPermission', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -345,8 +345,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.tc('store.createMissionSlot', slotCount, { count: slotCount }))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'createMissionSlot' } })
-
         dispatch('stopWorking', i18n.tc('store.createMissionSlot', slotCount, { count: slotCount }))
 
         if (error.response) {
@@ -357,6 +355,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.tc('store.createMissionSlot.error', slotCount, { count: slotCount })} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'createMissionSlot' } })
           console.error('createMissionSlot', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -364,6 +363,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.tc('store.createMissionSlot.error', slotCount, { count: slotCount })} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'createMissionSlot' } })
           console.error('createMissionSlot', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -403,8 +403,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.createMissionSlotGroup'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'createMissionSlotGroup' } })
-
         dispatch('stopWorking', i18n.t('store.createMissionSlotGroup'))
 
         if (error.response) {
@@ -415,6 +413,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissionSlotGroup.error', { slotInfo: `#${payload.slotGroupDetails.orderNumber} ${payload.slotGroupDetails.title}` })} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'createMissionSlotGroup' } })
           console.error('createMissionSlotGroup', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -422,6 +421,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissionSlotGroup.error', { slotInfo: `#${payload.slotGroupDetails.orderNumber} ${payload.slotGroupDetails.title}` })} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'createMissionSlotGroup' } })
           console.error('createMissionSlotGroup', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -461,8 +461,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.deleteMission'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMission' } })
-
         dispatch('stopWorking', i18n.t('store.deleteMission'))
 
         if (error.response) {
@@ -473,6 +471,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMission.error', { title: payload.missionTitle })} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMission' } })
           console.error('deleteMission', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -480,6 +479,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMission.error', { title: payload.missionTitle })} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMission' } })
           console.error('deleteMission', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -526,8 +526,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.deleteMissionBannerImage'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionBannerImage' } })
-
         dispatch('stopWorking', i18n.t('store.deleteMissionBannerImage'))
 
         if (error.response) {
@@ -538,6 +536,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionBannerImage.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionBannerImage' } })
           console.error('deleteMissionBannerImage', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -545,6 +544,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionBannerImage.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionBannerImage' } })
           console.error('deleteMissionBannerImage', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -584,8 +584,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.deleteMissionPermission'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionPermission' } })
-
         dispatch('stopWorking', i18n.t('store.deleteMissionPermission'))
 
         if (error.response) {
@@ -596,6 +594,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionPermission.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionPermission' } })
           console.error('deleteMissionPermission', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -603,6 +602,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionPermission.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionPermission' } })
           console.error('deleteMissionPermission', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -642,8 +642,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.deleteMissionSlot'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionSlot' } })
-
         dispatch('stopWorking', i18n.t('store.deleteMissionSlot'))
 
         if (error.response) {
@@ -654,6 +652,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionSlot' } })
           console.error('deleteMissionSlot', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -661,6 +660,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionSlot' } })
           console.error('deleteMissionSlot', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -700,8 +700,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.deleteMissionSlotGroup'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionSlotGroup' } })
-
         dispatch('stopWorking', i18n.t('store.deleteMissionSlotGroup'))
 
         if (error.response) {
@@ -712,6 +710,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlotGroup.error', { title: payload.slotGroupTitle })} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionSlotGroup' } })
           console.error('deleteMissionSlotGroup', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -719,6 +718,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlotGroup.error', { title: payload.slotGroupTitle })} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionSlotGroup' } })
           console.error('deleteMissionSlotGroup', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -781,8 +781,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.duplicateMissionSlotGroup'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'duplicateMissionSlotGroup' } })
-
         dispatch('stopWorking', i18n.t('store.duplicateMissionSlotGroup'))
 
         if (error.response) {
@@ -793,6 +791,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.duplicateMissionSlotGroup.error', { slotGroupInfo: `#${payload.missionSlotGroup.orderNumber} ${payload.missionSlotGroup.title}` })} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'duplicateMissionSlotGroup' } })
           console.error('duplicateMissionSlotGroup', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -800,6 +799,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.duplicateMissionSlotGroup.error', { slotGroupInfo: `#${payload.missionSlotGroup.orderNumber} ${payload.missionSlotGroup.title}` })} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'duplicateMissionSlotGroup' } })
           console.error('duplicateMissionSlotGroup', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -842,8 +842,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.editMission'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'editMission' } })
-
         dispatch('stopWorking', i18n.t('store.editMission'))
 
         if (error.response) {
@@ -854,6 +852,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editMission.error', { title: payload.missionTitle })} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'editMission' } })
           console.error('editMission', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -861,6 +860,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editMission.error', { title: payload.missionTitle })} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'editMission' } })
           console.error('editMission', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -900,8 +900,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.editMissionSlot'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'editMissionSlot' } })
-
         dispatch('stopWorking', i18n.t('store.editMissionSlot'))
 
         if (error.response) {
@@ -912,6 +910,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'editMissionSlot' } })
           console.error('editMissionSlot', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -919,6 +918,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'editMissionSlot' } })
           console.error('editMissionSlot', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -958,8 +958,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.editMissionSlotGroup'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'editMissionSlotGroup' } })
-
         dispatch('stopWorking', i18n.t('store.editMissionSlotGroup'))
 
         if (error.response) {
@@ -970,6 +968,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editMissionSlotGroup.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'editMissionSlotGroup' } })
           console.error('editMissionSlotGroup', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -977,6 +976,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editMissionSlotGroup.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'editMissionSlotGroup' } })
           console.error('editMissionSlotGroup', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1032,8 +1032,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.getMissionDetails'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionDetails' } })
-
         dispatch('stopWorking', i18n.t('store.getMissionDetails'))
 
         if (error.response) {
@@ -1055,6 +1053,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionDetails.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionDetails' } })
           console.error('getMissionDetails', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1062,6 +1061,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionDetails.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionDetails' } })
           console.error('getMissionDetails', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1103,8 +1103,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.getMissionPermissions'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionPermissions' } })
-
         dispatch('stopWorking', i18n.t('store.getMissionPermissions'))
 
         if (error.response) {
@@ -1115,6 +1113,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionPermissions.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionPermissions' } })
           console.error('getMissionPermissions', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1122,6 +1121,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionPermissions.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionPermissions' } })
           console.error('getMissionPermissions', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1167,8 +1167,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.getMissions'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'getMissions' } })
-
         dispatch('stopWorking', i18n.t('store.getMissions'))
 
         if (error.response) {
@@ -1179,6 +1177,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissions.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissions' } })
           console.error('getMissions', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1186,6 +1185,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissions.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissions' } })
           console.error('getMissions', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1222,8 +1222,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.getMissionSlotlist'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionSlotlist' } })
-
         dispatch('stopWorking', i18n.t('store.getMissionSlotlist'))
 
         if (error.response) {
@@ -1240,6 +1238,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionSlotlist.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionSlotlist' } })
           console.error('getMissionSlotlist', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1247,6 +1246,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionSlotlist.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionSlotlist' } })
           console.error('getMissionSlotlist', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1288,8 +1288,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.getMissionSlotRegistrations'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionSlotRegistrations' } })
-
         dispatch('stopWorking', i18n.t('store.getMissionSlotRegistrations'))
 
         if (error.response) {
@@ -1300,6 +1298,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionSlotRegistrations.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionSlotRegistrations' } })
           console.error('getMissionSlotRegistrations', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1307,6 +1306,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionSlotRegistrations.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionSlotRegistrations' } })
           console.error('getMissionSlotRegistrations', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1352,8 +1352,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.modifyMissionSlotRegistration'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'modifyMissionSlotRegistration' } })
-
         dispatch('stopWorking', i18n.t('store.modifyMissionSlotRegistration'))
 
         if (error.response) {
@@ -1364,6 +1362,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.modifyMissionSlotRegistration.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'modifyMissionSlotRegistration' } })
           console.error('modifyMissionSlotRegistration', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1371,6 +1370,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.modifyMissionSlotRegistration.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'modifyMissionSlotRegistration' } })
           console.error('modifyMissionSlotRegistration', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1413,8 +1413,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.registerForMissionSlot'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'registerForMissionSlot' } })
-
         dispatch('stopWorking', i18n.t('store.registerForMissionSlot'))
 
         if (error.response) {
@@ -1425,6 +1423,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.registerForMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'registerForMissionSlot' } })
           console.error('registerForMissionSlot', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1432,6 +1431,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.registerForMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'registerForMissionSlot' } })
           console.error('registerForMissionSlot', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1484,8 +1484,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.unregisterFromMissionSlot'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'unregisterFromMissionSlot' } })
-
         dispatch('stopWorking', i18n.t('store.unregisterFromMissionSlot'))
 
         if (error.response) {
@@ -1496,6 +1494,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.unregisterFromMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'unregisterFromMissionSlot' } })
           console.error('unregisterFromMissionSlot', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1503,6 +1502,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.unregisterFromMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'unregisterFromMissionSlot' } })
           console.error('unregisterFromMissionSlot', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1546,8 +1546,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.uploadMissionBannerImage'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'uploadMissionBannerImage' } })
-
         dispatch('stopWorking', i18n.t('store.uploadMissionBannerImage'))
 
         if (error.response) {
@@ -1558,6 +1556,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.uploadMissionBannerImage.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'uploadMissionBannerImage' } })
           console.error('uploadMissionBannerImage', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1565,6 +1564,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.uploadMissionBannerImage.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'uploadMissionBannerImage' } })
           console.error('uploadMissionBannerImage', error.message)
           dispatch('showAlert', {
             showAlert: true,

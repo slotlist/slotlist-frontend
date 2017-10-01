@@ -48,13 +48,13 @@ const actions = {
           backendVersion: response.data.version
         })
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'util', function: 'getBackendVersion' } })
-
         if (error.response) {
           console.error('getBackendVersion', error.response)
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'util', function: 'getBackendVersion' } })
           console.error('getBackendVersion', error.request)
         } else {
+          Raven.captureException(error, { extra: { module: 'util', function: 'getBackendVersion' } })
           console.error('getBackendVersion', error.message)
         }
       })
