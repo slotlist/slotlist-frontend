@@ -128,8 +128,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.applyToCommunity'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'communities', function: 'applyToCommunity' } })
-
         dispatch('stopWorking', i18n.t('store.applyToCommunity'))
 
         if (error.response) {
@@ -140,6 +138,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.applyToCommunity.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'applyToCommunity' } })
           console.error('applyToCommunity', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -147,6 +146,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.applyToCommunity.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'applyToCommunity' } })
           console.error('applyToCommunity', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -183,8 +183,6 @@ const actions = {
           available: response.data.available
         })
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'communities', function: 'checkCommunitySlugAvailability' } })
-
         commit({
           type: 'setCommunitySlugAvailability',
           available: false
@@ -198,6 +196,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.checkCommunitySlugAvailability.error')} <strong>${payload}</strong> - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'checkCommunitySlugAvailability' } })
           console.error('checkingCommunitySlugAvalability', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -205,6 +204,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.checkCommunitySlugAvailability.error')} <strong>${payload}</strong> - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'checkCommunitySlugAvailability' } })
           console.error('checkingCommunitySlugAvalability', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -262,8 +262,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.createCommunity'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'communities', function: 'createCommunity' } })
-
         dispatch('stopWorking', i18n.t('store.createCommunity'))
 
         if (error.response) {
@@ -274,6 +272,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createCommunity.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'createCommunity' } })
           console.error('createCommunity', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -281,6 +280,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createCommunity.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'createCommunity' } })
           console.error('createCommunity', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -321,8 +321,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.createCommunityPermission'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'communities', function: 'createCommunityPermission' } })
-
         dispatch('stopWorking', i18n.t('store.createCommunityPermission'))
 
         if (error.response) {
@@ -333,6 +331,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createCommunityPermission.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'createCommunityPermission' } })
           console.error('createCommunityPermission', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -340,6 +339,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createCommunityPermission.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'createCommunityPermission' } })
           console.error('createCommunityPermission', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -379,8 +379,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.deleteCommunity'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'communities', function: 'deleteCommunity' } })
-
         dispatch('stopWorking', i18n.t('store.deleteCommunity'))
 
         if (error.response) {
@@ -391,6 +389,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteCommunity.error')} <strong>${payload.communityName}</strong> - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'deleteCommunity' } })
           console.error('deleteCommunity', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -398,6 +397,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteCommunity.error')} <strong>${payload.communityName}</strong> - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'deleteCommunity' } })
           console.error('deleteCommunity', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -438,8 +438,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.deleteCommunityPermission'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'communities', function: 'deleteCommunityPermission' } })
-
         dispatch('stopWorking', i18n.t('store.deleteCommunityPermission'))
 
         if (error.response) {
@@ -450,6 +448,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteCommunityPermission.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'deleteCommunityPermission' } })
           console.error('deleteCommunityPermission', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -457,6 +456,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteCommunityPermission.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'deleteCommunityPermission' } })
           console.error('deleteCommunityPermission', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -499,8 +499,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.editCommunity'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'communities', function: 'editCommunity' } })
-
         dispatch('stopWorking', i18n.t('store.editCommunity'))
 
         if (error.response) {
@@ -511,6 +509,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editCommunity.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'editCommunity' } })
           console.error('editCommunity', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -518,6 +517,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editCommunity.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'editCommunity' } })
           console.error('editCommunity', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -561,8 +561,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.getCommunities'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunities' } })
-
         dispatch('stopWorking', i18n.t('store.getCommunities'))
 
         if (error.response) {
@@ -573,6 +571,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunities.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunities' } })
           console.error('getCommunities', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -580,6 +579,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunities.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunities' } })
           console.error('getCommunities', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -621,8 +621,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.getCommunityApplications'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityApplications' } })
-
         dispatch('stopWorking', i18n.t('store.getCommunityApplications'))
 
         if (error.response) {
@@ -633,6 +631,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityApplications.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityApplications' } })
           console.error('getCommunityApplications', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -640,6 +639,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityApplications.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityApplications' } })
           console.error('getCommunityApplications', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -676,8 +676,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.getCommunityApplicationStatus'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityApplicationStatus' } })
-
         dispatch('stopWorking', i18n.t('store.getCommunityApplicationStatus'))
 
         // Extra check for error response if no application has been sent in
@@ -694,6 +692,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityApplicationStatus.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityApplicationStatus' } })
           console.error('getCommunityApplicationStatus', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -701,6 +700,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityApplicationStatus.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityApplicationStatus' } })
           console.error('getCommunityApplicationStatus', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -737,8 +737,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.getCommunityDetails'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityDetails' } })
-
         dispatch('stopWorking', i18n.t('store.getCommunityDetails'))
 
         if (error.response) {
@@ -760,6 +758,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityDetails.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityDetails' } })
           console.error('getCommunityDetails', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -767,6 +766,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityDetails.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityDetails' } })
           console.error('getCommunityDetails', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -808,8 +808,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.getCommunityMissions'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityMissions' } })
-
         dispatch('stopWorking', i18n.t('store.getCommunityMissions'))
 
         if (error.response) {
@@ -820,6 +818,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityMissions.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityMissions' } })
           console.error('getCommunityMissions', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -827,6 +826,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityMissions.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityMissions' } })
           console.error('getCommunityMissions', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -868,8 +868,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.getCommunityPermissions'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityPermissions' } })
-
         dispatch('stopWorking', i18n.t('store.getCommunityPermissions'))
 
         if (error.response) {
@@ -880,6 +878,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityPermissions.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityPermissions' } })
           console.error('getCommunityPermissions', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -887,6 +886,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityPermissions.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityPermissions' } })
           console.error('getCommunityPermissions', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -927,8 +927,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.processCommunityApplication'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'communities', function: 'processCommunityApplication' } })
-
         dispatch('stopWorking', i18n.t('store.processCommunityApplication'))
 
         if (error.response) {
@@ -939,6 +937,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.processCommunityApplication.error', { action: payload.accepted ? i18n.t('store.processCommunityApplication.accept') : i18n.t('store.processCommunityApplication.deny'), nickname: payload.applicationUserNickname })} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'processCommunityApplication' } })
           console.error('processCommunityApplication', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -946,6 +945,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.processCommunityApplication.error', { action: payload.accepted ? i18n.t('store.processCommunityApplication.accept') : i18n.t('store.processCommunityApplication.deny'), nickname: payload.applicationUserNickname })} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'processCommunityApplication' } })
           console.error('processCommunityApplication', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -985,8 +985,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.removeCommunityMember'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'communities', function: 'removeCommunityMember' } })
-
         dispatch('stopWorking', i18n.t('store.removeCommunityMember'))
 
         if (error.response) {
@@ -997,6 +995,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.removeCommunityMember.error', { nickname: payload.memberNickname })} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'removeCommunityMember' } })
           console.error('removeCommunityMember', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1004,6 +1003,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.removeCommunityMember.error', { nickname: payload.memberNickname })} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'removeCommunityMember' } })
           console.error('removeCommunityMember', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1050,8 +1050,6 @@ const actions = {
 
         return communities
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'communities', function: 'searchCommunities' } })
-
         commit({
           type: 'searchingCommunities',
           searching: false
@@ -1065,6 +1063,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.searchCommunities.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'searchCommunities' } })
           console.error('searchCommunities', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1072,6 +1071,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.searchCommunities.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'searchCommunities' } })
           console.error('searchCommunities', error.message)
           dispatch('showAlert', {
             showAlert: true,

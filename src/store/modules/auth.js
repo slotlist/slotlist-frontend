@@ -76,8 +76,6 @@ const actions = {
           url: response.data.url
         })
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'auth', function: 'getLoginRedirectUrl' } })
-
         if (error.response) {
           console.error('getLoginRedirectUrl', error.response)
           dispatch('showAlert', {
@@ -86,6 +84,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getLoginRedirectUrl.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'auth', function: 'getLoginRedirectUrl' } })
           console.error('getLoginRedirectUrl', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -93,6 +92,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getLoginRedirectUrl.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'auth', function: 'getLoginRedirectUrl' } })
           console.error('getLoginRedirectUrl', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -132,8 +132,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.performLogin'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'auth', function: 'performLogin' } })
-
         dispatch('stopWorking', i18n.t('store.performLogin'))
 
         if (error.response) {
@@ -144,6 +142,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.performLogin.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'auth', function: 'performLogin' } })
           console.error('performLogin', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -151,6 +150,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.performLogin.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'auth', function: 'performLogin' } })
           console.error('performLogin', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -248,8 +248,6 @@ const actions = {
           dispatch('stopWorking', i18n.t('store.refreshToken'))
         }
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'auth', function: 'refreshToken' } })
-
         commit({
           type: "refreshingToken",
           refreshing: false
@@ -269,6 +267,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.refreshToken.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'auth', function: 'refreshToken' } })
           console.error('refreshToken', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -276,6 +275,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.refreshToken.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'auth', function: 'refreshToken' } })
           console.error('refreshToken', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -318,8 +318,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.getAccountDetails'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'auth', function: 'getAccountDetails' } })
-
         dispatch('stopWorking', i18n.t('store.getAccountDetails'))
 
         if (error.response) {
@@ -330,6 +328,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getAccountDetails.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'auth', function: 'getAccountDetails' } })
           console.error('getAccountDetails', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -337,6 +336,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getAccountDetails.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'auth', function: 'getAccountDetails' } })
           console.error('getAccountDetails', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -384,8 +384,6 @@ const actions = {
 
         dispatch('stopWorking', i18n.t('store.editAccount'))
       }).catch((error) => {
-        Raven.captureException(error, { extra: { module: 'auth', function: 'editAccount' } })
-
         dispatch('stopWorking', i18n.t('store.editAccount'))
 
         if (error.response) {
@@ -396,6 +394,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editAccount.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'auth', function: 'editAccount' } })
           console.error('editAccount', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -403,6 +402,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editAccount.error')} - ${i18n.t('failed.request')}`
           })
         } else {
+          Raven.captureException(error, { extra: { module: 'auth', function: 'editAccount' } })
           console.error('editAccount', error.message)
           dispatch('showAlert', {
             showAlert: true,
