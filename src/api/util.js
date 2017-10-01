@@ -11,26 +11,32 @@ axios.defaults.headers.patch['Content-Type'] = 'application/json'
 axios.interceptors.request.use((config) => {
   if (!store.getters.refreshingToken && shouldRefreshToken()) {
     console.info('Refreshing JWT before performing request')
+
     return store.dispatch('refreshToken')
       .then(() => {
         console.info('Done refreshing JWT, performing actual request')
+
         return config
       }).catch((error) => {
         return Promise.reject(error)
       })
   }
-  console.debug('request', config)
+
+  console.debug('request', config.url, config)
   return config
 }, (error) => {
-  console.debug('request error', error)
+  const url = error && error.config ? error.config.url : 'unknown URL'
+  console.debug('request error', url, error)
+
   return Promise.reject(error)
 })
 
 axios.interceptors.response.use((response) => {
-  console.debug('response', response)
+  console.debug('response', response.config.url, response)
 
   if (!_.isNil(response.data.token)) {
     console.info('Received new JWT during request, updating local token')
+
     store.dispatch('setToken', response.data.token)
   }
 
@@ -38,14 +44,13 @@ axios.interceptors.response.use((response) => {
 }, (error) => {
   if (error.response && error.response.status === 401) {
     store.dispatch('performLogout')
-    store.dispatch('setRedirect', error.config.url)
 
     router.push({ name: 'login' })
-
-    return
   }
 
-  console.debug('response error', error)
+  const url = error && error.config ? error.config.url : 'unknown URL'
+  console.debug('response error', url, error)
+
   return Promise.reject(error)
 })
 
@@ -59,8 +64,9 @@ export function shouldRefreshToken() {
     return false
   }
 
-  const expiry = moment(decodedToken.exp * 1000)
-  const now = moment().utc().subtract('30s')
+  const expiry = moment.unix(decodedToken.exp).utc()
+  const now = moment().utc().add(1, 'm')
+
   if (expiry <= now) {
     return true
   }

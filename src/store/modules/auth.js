@@ -13,6 +13,7 @@ const state = {
   loggedIn: false,
   loginRedirectUrl: null,
   redirect: null,
+  refreshingToken: false,
   token: null,
   decodedToken: null,
   accountDetails: null,
@@ -41,6 +42,9 @@ const getters = {
   },
   accountPermissions() {
     return state.accountPermissions
+  },
+  refreshingToken() {
+    return state.refreshingToken
   }
 }
 
@@ -193,6 +197,11 @@ const actions = {
     })
   },
   refreshToken({ commit, dispatch }, payload) {
+    commit({
+      type: "refreshingToken",
+      refreshing: true
+    })
+
     if (_.isNil(payload)) {
       payload = { silent: false }
     } else if (_.isNil(payload.silent)) {
@@ -230,11 +239,21 @@ const actions = {
           decodedToken: decodedToken
         })
 
+        commit({
+          type: "refreshingToken",
+          refreshing: false
+        })
+
         if (!payload.silent) {
           dispatch('stopWorking', i18n.t('store.refreshToken'))
         }
       }).catch((error) => {
         Raven.captureException(error, { extra: { module: 'auth', function: 'refreshToken' } })
+
+        commit({
+          type: "refreshingToken",
+          refreshing: false
+        })
 
         if (!payload.silent) {
           dispatch('stopWorking', i18n.t('store.refreshToken'))
@@ -399,11 +418,8 @@ const mutations = {
   setLoginRedirectUrl(state, payload) {
     state.loginRedirectUrl = payload.url
   },
-  startRefreshingToken(state) {
-    state.refreshingToken = true
-  },
-  finishRefreshingToken(state) {
-    state.refreshingToken = false
+  refreshingToken(state, payload) {
+    state.refreshingToken = payload.refreshing
   },
   setToken(state, payload) {
     Vue.ls.set('auth-token', payload.token)
@@ -426,7 +442,8 @@ const mutations = {
     }
   },
   logout(state) {
-    Vue.ls.clear()
+    Vue.ls.remove('auth-token')
+    Vue.ls.remove('auth-decodedToken')
 
     Vue.acl.clearPermissions()
 
