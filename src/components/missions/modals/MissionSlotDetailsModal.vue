@@ -46,20 +46,21 @@
         </div>
       </div>
       <div slot="modal-footer">
-        <div class="btn-group" role="group" aria-label="Mission slot detail actions">
-          <b-btn variant="success" v-if="loggedIn && !missionSlotDetails.registrationUid" :disabled="!canRegisterForSlot" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotRegistrationModal>
-            <i class="fa fa-ticket" aria-hidden="true"></i> {{ $t('button.register') }}
-          </b-btn>
-          <b-btn variant="secondary" v-if="isMissionEditor" @click="duplicateMissionSlot">
-            <i class="fa fa-files-o" aria-hidden="true"></i> {{ $t('button.duplicate.mission.slot') }}
-          </b-btn>
-          <b-btn variant="primary" v-if="isMissionEditor" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotEditModal>
-            <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit') }}
-          </b-btn>
-          <b-btn @click="hideMissionSlotDetailsModal">
-            <i class="fa fa-close" aria-hidden="true"></i> {{ $t('button.close') }}
-          </b-btn>
-        </div>
+        <b-btn variant="success" v-if="loggedIn && !missionSlotDetails.registrationUid" :disabled="!canRegisterForSlot" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotRegistrationModal>
+          <i class="fa fa-ticket" aria-hidden="true"></i> {{ $t('button.register') }}
+        </b-btn>
+        <b-btn variant="warning" v-if="isMissionEditor" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotAssignModal>
+          <i class="fa fa-gavel" aria-hidden="true"></i> {{ $t('button.assign.mission.slot') }}
+        </b-btn>
+        <b-btn variant="secondary" v-if="isMissionEditor" @click="duplicateMissionSlot">
+          <i class="fa fa-files-o" aria-hidden="true"></i> {{ $t('button.duplicate.mission.slot') }}
+        </b-btn>
+        <b-btn variant="primary" v-if="isMissionEditor" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotEditModal>
+          <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit') }}
+        </b-btn>
+        <b-btn @click="hideMissionSlotDetailsModal">
+          <i class="fa fa-close" aria-hidden="true"></i> {{ $t('button.close') }}
+        </b-btn>
       </div>
     </b-modal>
   </div>
