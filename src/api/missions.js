@@ -2,6 +2,9 @@ import axios from 'axios'
 import * as _ from 'lodash'
 
 export const v1 = {
+  assignMissionSlot(missionSlug, slotUid, userUid, force) {
+    return axios.post(`/v1/missions/${missionSlug}/slots/${slotUid}/assign`, { userUid, force })
+  },
   checkMissionSlugAvailability(missionSlug) {
     return axios.get(`/v1/missions/slugAvailable?slug=${missionSlug}`)
   },

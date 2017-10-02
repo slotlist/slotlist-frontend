@@ -119,6 +119,7 @@
       <mission-banner-image-modal v-if="isMissionEditor"></mission-banner-image-modal>
       <mission-edit-modal v-if="isMissionEditor"></mission-edit-modal>
       <mission-permission-modal v-if="isMissionCreator"></mission-permission-modal>
+      <mission-slot-assign-modal v-if="isMissionEditor"></mission-slot-assign-modal>
       <mission-slot-create-modal v-if="isMissionEditor"></mission-slot-create-modal>
       <mission-slot-details-modal></mission-slot-details-modal>
       <mission-slot-edit-modal v-if="isMissionEditor"></mission-slot-edit-modal>
@@ -135,6 +136,7 @@ import * as _ from 'lodash'
 import MissionBannerImageModal from 'components/missions/modals/MissionBannerImageModal.vue'
 import MissionEditModal from 'components/missions/modals/MissionEditModal.vue'
 import MissionPermissionModal from 'components/missions/modals/MissionPermissionModal.vue'
+import MissionSlotAssignModal from 'components/missions/modals/MissionSlotAssignModal.vue'
 import MissionSlotCreateModal from 'components/missions/modals/MissionSlotCreateModal.vue'
 import MissionSlotDetailsModal from 'components/missions/modals/MissionSlotDetailsModal.vue'
 import MissionSlotEditModal from 'components/missions/modals/MissionSlotEditModal.vue'
@@ -149,6 +151,7 @@ export default {
     MissionBannerImageModal,
     MissionEditModal,
     MissionPermissionModal,
+    MissionSlotAssignModal,
     MissionSlotCreateModal,
     MissionSlotDetailsModal,
     MissionSlotEditModal,

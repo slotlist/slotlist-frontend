@@ -116,6 +116,64 @@ const getters = {
 }
 
 const actions = {
+  assignMissionSlot({ dispatch }, payload) {
+    dispatch('startWorking', i18n.t('store.assignMissionSlot'))
+
+    return MissionsApi.assignMissionSlot(payload.missionSlug, payload.slotUid, payload.userUid, payload.force)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Assigning mission slot failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (_.isNil(response.data.slot) || !_.isObject(response.data.slot)) {
+          console.error(response)
+          throw 'Received invalid mission slot assignment'
+        }
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.assignMissionSlot.success')}`
+        })
+
+        dispatch('getMissionSlotlist', { missionSlug: payload.missionSlug })
+
+        dispatch('stopWorking', i18n.t('store.assignMissionSlot'))
+      }).catch((error) => {
+        dispatch('stopWorking', i18n.t('store.assignMissionSlot'))
+
+        if (error.response) {
+          console.error('assignMissionSlot', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.assignMissionSlot.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'assignMissionSlot' } })
+          console.error('assignMissionSlot', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.assignMissionSlot.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'assignMissionSlot' } })
+          console.error('assignMissionSlot', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.assignMissionSlot.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
   checkMissionSlugAvailability({ commit, dispatch }, payload) {
     commit({
       type: 'startCheckingMissionSlugAvailability'
