@@ -115,17 +115,17 @@
     </div>
     <!-- End of content -->
     <!-- Begin of modals -->
-    <div v-if="loggedIn">
-      <mission-banner-image-modal v-if="isMissionEditor"></mission-banner-image-modal>
-      <mission-edit-modal v-if="isMissionEditor"></mission-edit-modal>
-      <mission-permission-modal v-if="isMissionCreator"></mission-permission-modal>
-      <mission-slot-assign-modal v-if="isMissionEditor"></mission-slot-assign-modal>
-      <mission-slot-create-modal v-if="isMissionEditor"></mission-slot-create-modal>
+    <div>
+      <mission-banner-image-modal v-if="loggedIn && isMissionEditor"></mission-banner-image-modal>
+      <mission-edit-modal v-if="loggedIn && isMissionEditor"></mission-edit-modal>
+      <mission-permission-modal v-if="loggedIn && isMissionCreator"></mission-permission-modal>
+      <mission-slot-assign-modal v-if="loggedIn && isMissionEditor"></mission-slot-assign-modal>
+      <mission-slot-create-modal v-if="loggedIn && isMissionEditor"></mission-slot-create-modal>
       <mission-slot-details-modal></mission-slot-details-modal>
-      <mission-slot-edit-modal v-if="isMissionEditor"></mission-slot-edit-modal>
-      <mission-slot-group-create-modal v-if="isMissionEditor"></mission-slot-group-create-modal>
-      <mission-slot-group-edit-modal v-if="isMissionEditor"></mission-slot-group-edit-modal>
-      <mission-slot-registration-modal></mission-slot-registration-modal>
+      <mission-slot-edit-modal v-if="loggedIn && isMissionEditor"></mission-slot-edit-modal>
+      <mission-slot-group-create-modal v-if="loggedIn && isMissionEditor"></mission-slot-group-create-modal>
+      <mission-slot-group-edit-modal v-if="loggedIn && isMissionEditor"></mission-slot-group-edit-modal>
+      <mission-slot-registration-modal v-if="loggedIn"></mission-slot-registration-modal>
     </div>
     <!-- End of modals -->
   </div>
