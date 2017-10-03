@@ -4,10 +4,10 @@
       <thead>
         <tr>
           <th style="width: 15%">{{ $t('mission.list.startTime') }}</th>
-          <th style="width: 25%">{{ $t('mission.list.title') }}</th>
-          <th style="width: 26%">{{ $t('mission.list.description') }}</th>
-          <th style="width: 19%">{{ $t('mission.list.creator') }}</th>
-          <th style="width: 5%">{{ $t('mission.list.slotStatus') }}</th>
+          <th style="width: 34%">{{ $t('mission.list.title') }}</th>
+          <th style="width: 20%">{{ $t('mission.list.creator') }}</th>
+          <th style="width: 11%" class="text-center">{{ $t('mission.list.slot.counts')}}</th>
+          <th style="width: 10%" class="text-center">{{ $t('mission.list.slot.status') }}</th>
           <th style="width: 10%" class="text-center">{{ $t('misc.actions') }}</th>
         </tr>
       </thead>
@@ -17,10 +17,10 @@
       <tfoot v-show="missions.length >= 10">
         <tr>
           <th style="width: 15%">{{ $t('mission.list.startTime') }}</th>
-          <th style="width: 25%">{{ $t('mission.list.title') }}</th>
-          <th style="width: 26%">{{ $t('mission.list.description') }}</th>
-          <th style="width: 19%">{{ $t('mission.list.creator') }}</th>
-          <th style="width: 5%">{{ $t('mission.list.slotStatus') }}</th>
+          <th style="width: 34%">{{ $t('mission.list.title') }}</th>
+          <th style="width: 20%">{{ $t('mission.list.creator') }}</th>
+          <th style="width: 11%" class="text-center">{{ $t('mission.list.slot.counts')}}</th>
+          <th style="width: 10%" class="text-center">{{ $t('mission.list.slot.status') }}</th>
           <th style="width: 10%" class="text-center">{{ $t('misc.actions') }}</th>
         </tr>
       </tfoot>
