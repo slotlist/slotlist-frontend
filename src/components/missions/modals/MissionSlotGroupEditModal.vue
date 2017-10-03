@@ -9,18 +9,18 @@
                 <b-form-input v-model="missionSlotGroupEditData.title" type="text" required></b-form-input>
               </b-form-fieldset>
             </div>
-            <div class="col">
-              <b-form-fieldset :label="$t('mission.slotGroup.orderNumber')" :state="missionSlotGroupEditOrderNumberState" :feedback="missionSlotGroupEditOrderNumberFeedback" :description="$t('mission.slotGroup.orderNumber.description')">
-                <b-input-group left="#">
-                  <b-form-input v-model="missionSlotGroupEditData.orderNumber" type="number" min="1" :formatter="missionSlotGroupEditOrderNumberFormatter" required></b-form-input>
-                </b-input-group>
-              </b-form-fieldset>
-            </div>
           </div>
           <div class="row">
             <div class="col">
               <b-form-fieldset :label="$t('mission.slotGroup.description.optional')" state="success" :description="$t('mission.slotGroup.description.description')">
                 <b-form-input v-model="missionSlotGroupEditData.description" type="text"></b-form-input>
+              </b-form-fieldset>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <b-form-fieldset :label="$t('mission.slotGroup.moveAfter')" state="success" :description="$t('mission.slotGroup.moveAfter.description')">
+                <b-form-select v-model="missionSlotGroupEditMoveAfter" :options="missionSlotGroupEditMoveAfterOptions"></b-form-select>
               </b-form-fieldset>
             </div>
           </div>
@@ -47,10 +47,10 @@ export default {
   data() {
     return {
       missionSlotGroupEditData: {
-        orderNumber: 1,
         description: null,
         title: null
-      }
+      },
+      missionSlotGroupEditMoveAfter: 0
     }
   },
   computed: {
@@ -63,20 +63,51 @@ export default {
     missionSlotGroupEditOrderNumberState() {
       return this.missionSlotGroupEditData.orderNumber < 0 ? 'danger' : 'success'
     },
+    missionSlotGroupEditMoveAfterOptions() {
+      const options = [{
+        value: this.missionSlotGroupDetails.orderNumber - 1,
+        text: this.$t('mission.slotGroup.moveAfter.keep')
+      }]
+
+      if (_.isNil(this.missionSlotGroups)) {
+        return options
+      }
+
+      if (this.missionSlotGroupEditMoveAfter !== 0) {
+        options.push({
+          value: -1,
+          text: this.$t('mission.slotGroup.insertAfter.top')
+        })
+      }
+      _.each(this.missionSlotGroups, (slotGroup) => {
+        if (this.missionSlotGroupDetails.orderNumber !== slotGroup.orderNumber && this.missionSlotGroupDetails.orderNumber - 1 !== slotGroup.orderNumber) {
+          options.push({
+            value: slotGroup.orderNumber,
+            text: slotGroup.title
+          })
+        }
+      })
+
+      return options
+    },
     missionSlotGroupEditTitleFeedback() {
       return _.isString(this.missionSlotGroupEditData.title) && !_.isEmpty(this.missionSlotGroupEditData.title) ? '' : this.$t('mission.feedback.title.slotGroup')
     },
     missionSlotGroupEditTitleState() {
       return _.isString(this.missionSlotGroupEditData.title) && !_.isEmpty(this.missionSlotGroupEditData.title) ? 'success' : 'danger'
+    },
+    missionSlotGroups() {
+      return this.$store.getters.missionSlotGroups
     }
   },
   methods: {
     setMissionSlotGroupEditData() {
       this.missionSlotGroupEditData = {
-        orderNumber: this.missionSlotGroupDetails.orderNumber,
         description: this.missionSlotGroupDetails.description,
         title: this.missionSlotGroupDetails.title
       }
+
+      this.missionSlotGroupEditMoveAfter = this.missionSlotGroupDetails.orderNumber - 1
     },
     editMissionSlotGroup() {
       if (_.isEmpty(this.missionSlotGroupEditData.title)) {
@@ -93,6 +124,10 @@ export default {
           updatedMissionSlotGroupDetails[key] = value
         }
       })
+
+      if (this.missionSlotGroupEditMoveAfter !== this.missionSlotGroupDetails.orderNumber - 1) {
+        updatedMissionSlotGroupDetails.moveAfter = _.max([this.missionSlotGroupEditMoveAfter, 0])
+      }
 
       this.hideMissionSlotGroupEditModal()
 
