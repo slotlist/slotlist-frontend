@@ -88,7 +88,7 @@ export default {
       this.missionSlotGroupCreateData = {
         description: null,
         title: null,
-        insertAfter: 0
+        insertAfter: _.isNil(this.missionSlotGroups) || _.isEmpty(this.missionSlotGroups) ? 0 : _.last(this.missionSlotGroups).orderNumber
       };
     },
     createMissionSlotGroup() {
