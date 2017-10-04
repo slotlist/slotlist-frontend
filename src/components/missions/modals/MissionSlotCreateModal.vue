@@ -17,13 +17,6 @@
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset :label="$t('mission.slot.orderNumber')" :state="missionSlotCreateOrderNumberState" :feedback="missionSlotCreateOrderNumberFeedback" :description="$t('mission.slot.orderNumber.description')">
-                <b-input-group left="#">
-                  <b-form-input v-model="missionSlotCreateData.orderNumber" type="number" min="1" :formatter="missionSlotCreateOrderNumberFormatter" required></b-form-input>
-                </b-input-group>
-              </b-form-fieldset>
-            </div>
-            <div class="col">
               <b-form-fieldset :label="$t('mission.slot.difficulty')" state="success" :description="$t('mission.slot.difficulty.description')">
                 <b-form-select v-model="missionSlotCreateData.difficulty" :options="missionSlotCreateDifficultyOptions" class="mb-3" required></b-form-select>
               </b-form-fieldset>
@@ -56,6 +49,13 @@
               </b-form-fieldset>
             </div>
           </div>
+          <div class="row">
+            <div class="col">
+              <b-form-fieldset :label="$t('mission.slot.insertAfter')" state="success" :description="$t('mission.slot.insertAfter.description')">
+                <b-form-select v-model="missionSlotCreateData.insertAfter" :options="missionSlotCreateInsertAfterOptions"></b-form-select>
+              </b-form-fieldset>
+            </div>
+          </div>
         </b-form>
       </div>
       <div slot="modal-footer">
@@ -81,7 +81,7 @@ export default {
       missionSlotCreateData: {
         detailedDescription: null,
         difficulty: 0,
-        orderNumber: 1,
+        insertAfter: 0,
         reserve: false,
         restricted: false,
         restrictedCommunityUid: null,
@@ -134,11 +134,24 @@ export default {
     }
   },
   computed: {
-    missionSlotCreateOrderNumberFeedback() {
-      return this.missionSlotCreateData.orderNumber < 0 ? this.$t('mission.feedback.orderNumber') : ''
-    },
-    missionSlotCreateOrderNumberState() {
-      return this.missionSlotCreateData.orderNumber < 0 ? 'danger' : 'success'
+    missionSlotCreateInsertAfterOptions() {
+      const options = [{
+        value: 0,
+        text: this.$t('mission.slotGroup.insertAfter.top')
+      }]
+
+      if (_.isNil(this.missionSlotGroupDetails) || _.isNil(this.missionSlotGroupDetails.slots)) {
+        return options
+      }
+
+      _.each(this.missionSlotGroupDetails.slots, (slot) => {
+        options.push({
+          value: slot.orderNumber,
+          text: `#${slot.orderNumber} ${slot.title}`
+        })
+      })
+
+      return options
     },
     missionSlotCreateRestrictedCommunityState() {
       return this.missionSlotCreateData.restricted && _.isNil(this.missionSlotCreateData.restrictedCommunityUid) ? 'danger' : 'success'
@@ -161,7 +174,7 @@ export default {
       this.missionSlotCreateData = {
         detailedDescription: null,
         difficulty: 0,
-        orderNumber: 1,
+        insertAfter: _.isNil(this.missionSlotGroupDetails) || _.isNil(this.missionSlotGroupDetails.slots) || _.isEmpty(this.missionSlotGroupDetails.slots) ? 0 : _.last(this.missionSlotGroupDetails.slots).orderNumber,
         reserve: false,
         restricted: false,
         restrictedCommunityUid: null,
@@ -191,13 +204,6 @@ export default {
       this.hideMissionSlotCreateModal()
 
       this.$store.dispatch('createMissionSlot', { missionSlug: this.$route.params.missionSlug, slotDetails: payload })
-    },
-    missionSlotCreateOrderNumberFormatter(val) {
-      if (_.isNumber(val)) {
-        return val
-      }
-
-      return parseInt(val, 10)
     },
     hideMissionSlotCreateModal() {
       this.$refs.missionSlotCreateModal.hide()

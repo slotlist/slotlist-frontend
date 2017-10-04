@@ -9,18 +9,18 @@
                 <b-form-input v-model="missionSlotGroupCreateData.title" type="text" required></b-form-input>
               </b-form-fieldset>
             </div>
-            <div class="col">
-              <b-form-fieldset :label="$t('mission.slotGroup.orderNumber')" :state="missionSlotGroupCreateOrderNumberState" :feedback="missionSlotGroupCreateOrderNumberFeedback" :description="$t('mission.slotGroup.orderNumber.description')">
-                <b-input-group left="#">
-                  <b-form-input v-model="missionSlotGroupCreateData.orderNumber" type="number" min="1" :formatter="missionSlotGroupCreateOrderNumberFormatter" required></b-form-input>
-                </b-input-group>
-              </b-form-fieldset>
-            </div>
           </div>
           <div class="row">
             <div class="col">
               <b-form-fieldset :label="$t('mission.slotGroup.description.optional')" state="success" :description="$t('mission.slotGroup.description.description')">
                 <b-form-input v-model="missionSlotGroupCreateData.description" type="text"></b-form-input>
+              </b-form-fieldset>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <b-form-fieldset :label="$t('mission.slotGroup.insertAfter')" state="success" :description="$t('mission.slotGroup.insertAfter.description')">
+                <b-form-select v-model="missionSlotGroupCreateData.insertAfter" :options="missionSlotGroupCreateInsertAfterOptions"></b-form-select>
               </b-form-fieldset>
             </div>
           </div>
@@ -48,31 +48,47 @@ export default {
     return {
       missionSlotGroupCreateData: {
         description: null,
-        orderNumber: 1,
-        title: null
+        title: null,
+        insertAfter: 0
       }
     }
   },
   computed: {
-    missionSlotGroupCreateOrderNumberFeedback() {
-      return this.missionSlotGroupCreateData.orderNumber < 0 ? this.$t('mission.feedback.orderNumber') : ''
-    },
-    missionSlotGroupCreateOrderNumberState() {
-      return this.missionSlotGroupCreateData.orderNumber < 0 ? 'danger' : 'success'
+    missionSlotGroupCreateInsertAfterOptions() {
+      const options = [{
+        value: 0,
+        text: this.$t('mission.slotGroup.insertAfter.top')
+      }]
+
+      if (_.isNil(this.missionSlotGroups)) {
+        return options
+      }
+
+      _.each(this.missionSlotGroups, (slotGroup) => {
+        options.push({
+          value: slotGroup.orderNumber,
+          text: `#${slotGroup.orderNumber} ${slotGroup.title}`
+        })
+      })
+
+      return options
     },
     missionSlotGroupCreateTitleFeedback() {
       return _.isString(this.missionSlotGroupCreateData.title) && !_.isEmpty(this.missionSlotGroupCreateData.title) ? '' : this.$t('mission.feedback.title.slotGroup')
     },
     missionSlotGroupCreateTitleState() {
       return _.isString(this.missionSlotGroupCreateData.title) && !_.isEmpty(this.missionSlotGroupCreateData.title) ? 'success' : 'danger'
+    },
+    missionSlotGroups() {
+      return this.$store.getters.missionSlotGroups
     }
   },
   methods: {
     clearMissionSlotGroupCreateData() {
       this.missionSlotGroupCreateData = {
         description: null,
-        orderNumber: 1,
-        title: ''
+        title: null,
+        insertAfter: _.isNil(this.missionSlotGroups) || _.isEmpty(this.missionSlotGroups) ? 0 : _.last(this.missionSlotGroups).orderNumber
       };
     },
     createMissionSlotGroup() {
@@ -87,13 +103,6 @@ export default {
       this.hideMissionSlotGroupCreateModal();
 
       this.$store.dispatch("createMissionSlotGroup", { missionSlug: this.$route.params.missionSlug, slotGroupDetails: this.missionSlotGroupCreateData })
-    },
-    missionSlotGroupCreateOrderNumberFormatter(val) {
-      if (_.isNumber(val)) {
-        return val
-      }
-
-      return parseInt(val, 10)
     },
     hideMissionSlotGroupCreateModal() {
       this.$refs.missionSlotGroupCreateModal.hide();

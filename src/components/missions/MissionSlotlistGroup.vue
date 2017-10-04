@@ -2,7 +2,7 @@
   <div>
     <h5>{{ missionSlotGroup.title }}</h5>
     <div v-show="missionSlotGroup.description">{{ missionSlotGroup.description }}</div>
-    <mission-slotlist-group-slots-table :missionSlots="missionSlotGroup.slots"></mission-slotlist-group-slots-table>
+    <mission-slotlist-group-slots-table :missionSlotGroup="missionSlotGroup"></mission-slotlist-group-slots-table>
     <div class="text-center" v-if="isMissionEditor">
       <b-btn variant="success" @click="setMissionSlotGroupDetails" v-b-modal.missionSlotCreateModal>
         <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.create.mission.slot') }}
@@ -41,12 +41,6 @@ export default {
   },
   methods: {
     duplicateMissionSlotGroup() {
-      const slotGroupDetails = {
-        description: this.missionSlotGroup.description,
-        orderNumber: this.missionSlotGroup.orderNumber + 1,
-        title: this.missionSlotGroup.title
-      }
-
       this.$store.dispatch("duplicateMissionSlotGroup", { missionSlug: this.$route.params.missionSlug, missionSlotGroup: this.missionSlotGroup })
     },
     deleteMissionSlotGroup() {

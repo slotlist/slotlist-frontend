@@ -17,13 +17,6 @@
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset :label="$t('mission.slot.orderNumber')" :state="missionSlotEditOrderNumberState" :feedback="missionSlotEditOrderNumberFeedback" :description="$t('mission.slot.orderNumber.description')">
-                <b-input-group left="#">
-                  <b-form-input v-model="missionSlotEditData.orderNumber" type="number" min="1" :formatter="missionSlotEditOrderNumberFormatter" required></b-form-input>
-                </b-input-group>
-              </b-form-fieldset>
-            </div>
-            <div class="col">
               <b-form-fieldset :label="$t('mission.slot.difficulty')" state="success" :description="$t('mission.slot.difficulty.description')">
                 <b-form-select v-model="missionSlotEditData.difficulty" :options="missionSlotEditDifficultyOptions" class="mb-3" required></b-form-select>
               </b-form-fieldset>
@@ -56,6 +49,13 @@
               </b-form-fieldset>
             </div>
           </div>
+          <div class="row">
+            <div class="col">
+              <b-form-fieldset :label="$t('mission.slot.moveAfter')" state="success" :description="$t('mission.slot.moveAfter.description')">
+                <b-form-select v-model="missionSlotEditMoveAfter" :options="missionSlotEditMoveAfterOptions"></b-form-select>
+              </b-form-fieldset>
+            </div>
+          </div>
         </b-form>
       </div>
       <div slot="modal-footer">
@@ -81,7 +81,6 @@ export default {
       missionSlotEditData: {
         detailedDescription: null,
         difficulty: 0,
-        orderNumber: 1,
         reserve: false,
         restricted: false,
         restrictedCommunityUid: null,
@@ -109,7 +108,15 @@ export default {
         },
         theme: 'snow'
       },
-      missionSlotEditDifficultyOptions: [
+      missionSlotEditMoveAfter: 0
+    }
+  },
+  computed: {
+    missionSlotDetails() {
+      return this.$store.getters.missionSlotDetails
+    },
+    missionSlotEditDifficultyOptions() {
+      return [
         {
           text: this.$t('mission.slot.difficulty.beginner'),
           value: 0
@@ -130,18 +137,34 @@ export default {
           text: this.$t('mission.slot.difficulty.expert'),
           value: 4
         }
-      ]
-    }
-  },
-  computed: {
-    missionSlotDetails() {
-      return this.$store.getters.missionSlotDetails
+      ];
     },
-    missionSlotEditOrderNumberFeedback() {
-      return this.missionSlotEditData.orderNumber < 0 ? this.$t('mission.feedback.orderNumber') : ''
-    },
-    missionSlotEditOrderNumberState() {
-      return this.missionSlotEditData.orderNumber < 0 ? 'danger' : 'success'
+    missionSlotEditMoveAfterOptions() {
+      const options = [{
+        value: this.missionSlotDetails.orderNumber - 1,
+        text: this.$t('mission.slot.moveAfter.keep')
+      }]
+
+      if (_.isNil(this.missionSlotGroupDetails) || _.isNil(this.missionSlotGroupDetails.slots)) {
+        return options
+      }
+
+      if (this.missionSlotGroupEditMoveAfter !== 0) {
+        options.push({
+          value: -1,
+          text: this.$t('mission.slot.insertAfter.top')
+        })
+      }
+      _.each(this.missionSlotGroupDetails.slots, (slot) => {
+        if (this.missionSlotDetails.orderNumber !== slot.orderNumber && this.missionSlotDetails.orderNumber - 1 !== slot.orderNumber) {
+          options.push({
+            value: slot.orderNumber,
+            text: `#${slot.orderNumber} ${slot.title}`
+          })
+        }
+      })
+
+      return options
     },
     missionSlotEditRestrictedCommunityState() {
       return this.missionSlotEditData.restricted && _.isNil(this.missionSlotEditData.restrictedCommunityUid) ? 'danger' : 'success'
@@ -151,6 +174,9 @@ export default {
     },
     missionSlotEditTitleState() {
       return _.isString(this.missionSlotEditData.title) && !_.isEmpty(this.missionSlotEditData.title) ? 'success' : 'danger'
+    },
+    missionSlotGroupDetails() {
+      return this.$store.getters.missionSlotGroupDetails
     },
     restrictedSlotTypeaheadInitialValue() {
       return _.isNil(this.missionSlotDetails.restrictedCommunity) ? null : this.missionSlotDetails.restrictedCommunity.name
@@ -168,6 +194,8 @@ export default {
         description: this.missionSlotDetails.description,
         title: this.missionSlotDetails.title
       }
+
+      this.missionSlotEditMoveAfter = this.missionSlotDetails.orderNumber - 1
     },
     editMissionSlot() {
       if (_.isEmpty(this.missionSlotEditData.title)) {
@@ -201,6 +229,10 @@ export default {
         }
       })
 
+      if (this.missionSlotEditMoveAfter !== this.missionSlotDetails.orderNumber - 1) {
+        updatedMissionSlotDetails.moveAfter = _.max([this.missionSlotEditMoveAfter, 0])
+      }
+
       this.hideMissionSlotEditModal()
 
       if (_.isEmpty(_.keys(updatedMissionSlotDetails))) {
@@ -214,13 +246,6 @@ export default {
         slotOrderNumber: this.missionSlotDetails.orderNumber,
         slotTitle: this.missionSlotDetails.title
       })
-    },
-    missionSlotEditOrderNumberFormatter(val) {
-      if (_.isNumber(val)) {
-        return val
-      }
-
-      return parseInt(val, 10)
     },
     hideMissionSlotEditModal() {
       this.$refs.missionSlotEditModal.hide()

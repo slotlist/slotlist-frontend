@@ -37,7 +37,7 @@
         <div class="row">
           <div class="col">
             <b-form-fieldset :label="$t('mission.slottingTime')" :state="missionCreateSlottingTimeState" :feedback="missionCreateSlottingTimeFeedback" :description="$t('mission.slottingTime.description')">
-              <b-form-input v-model="missionCreateSlottingTime" type="text" required placeholder="YYYY-MM-DD HH:mm" :formatter="missionCreateTimeFormatter" lazy-formatter></b-form-input>
+              <b-form-input v-model="missionCreateSlottingTime" type="text" required placeholder="YYYY-MM-DD HH:mm" :formatter="missionCreateTimeFormatter" @blur="missionCreateSlottingTimeBlur" lazy-formatter></b-form-input>
             </b-form-fieldset>
           </div>
           <div class="col">
@@ -386,6 +386,21 @@ export default {
         this.$store.dispatch('checkMissionSlugAvailability', this.missionCreateSlug)
       }
       return val
+    },
+    missionCreateSlottingTimeBlur() {
+      if (_.isNil(this.missionCreateSlottingTime)) {
+        return
+      }
+
+      if (_.isNil(this.missionCreateStartTime)) {
+        this.missionCreateStartTime = this.missionCreateSlottingTime
+      }
+      if (_.isNil(this.missionCreateEndTime)) {
+        this.missionCreateEndTime = this.missionCreateSlottingTime
+      }
+      if (_.isNil(this.missionCreateBriefingTime)) {
+        this.missionCreateBriefingTime = this.missionCreateSlottingTime
+      }
     },
     missionCreateSlugFormatter(val) {
       if (!_.isNil(this.missionCreateSlug) && !_.isEmpty(this.missionCreateSlug)) {
