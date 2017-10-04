@@ -791,8 +791,8 @@ const actions = {
 
     const slotGroupDetails = {
       description: payload.missionSlotGroup.description,
-      orderNumber: payload.missionSlotGroup.orderNumber + 1,
-      title: payload.missionSlotGroup.title
+      title: payload.missionSlotGroup.title,
+      insertAfter: payload.missionSlotGroup.orderNumber
     }
 
     return MissionsApi.createMissionSlotGroup(payload.missionSlug, slotGroupDetails)
@@ -818,11 +818,11 @@ const actions = {
           return {
             detailedDescription: slot.detailedDescription,
             difficulty: slot.difficulty,
-            orderNumber: slot.orderNumber,
             reserve: slot.reserve,
             restrictedCommunityUid: _.isNil(slot.restrictedCommunity) ? null : slot.restrictedCommunity.uid,
             description: slot.description,
             title: slot.title,
+            insertAfter: _.max([slot.orderNumber - 1, 0]),
             slotGroupUid
           }
         })

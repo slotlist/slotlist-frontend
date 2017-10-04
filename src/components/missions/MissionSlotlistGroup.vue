@@ -41,12 +41,6 @@ export default {
   },
   methods: {
     duplicateMissionSlotGroup() {
-      const slotGroupDetails = {
-        description: this.missionSlotGroup.description,
-        orderNumber: this.missionSlotGroup.orderNumber + 1,
-        title: this.missionSlotGroup.title
-      }
-
       this.$store.dispatch("duplicateMissionSlotGroup", { missionSlug: this.$route.params.missionSlug, missionSlotGroup: this.missionSlotGroup })
     },
     deleteMissionSlotGroup() {

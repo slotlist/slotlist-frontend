@@ -67,7 +67,7 @@ export default {
       _.each(this.missionSlotGroups, (slotGroup) => {
         options.push({
           value: slotGroup.orderNumber,
-          text: slotGroup.title
+          text: `#${slotGroup.orderNumber} ${slotGroup.title}`
         })
       })
 

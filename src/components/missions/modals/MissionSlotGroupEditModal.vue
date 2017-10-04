@@ -83,7 +83,7 @@ export default {
         if (this.missionSlotGroupDetails.orderNumber !== slotGroup.orderNumber && this.missionSlotGroupDetails.orderNumber - 1 !== slotGroup.orderNumber) {
           options.push({
             value: slotGroup.orderNumber,
-            text: slotGroup.title
+            text: `#${slotGroup.orderNumber} ${slotGroup.title}`
           })
         }
       })

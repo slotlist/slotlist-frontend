@@ -180,12 +180,12 @@ export default {
     duplicateMissionSlot() {
       const slotDetails = {
         title: this.missionSlotDetails.title,
-        orderNumber: this.missionSlotDetails.orderNumber + 1,
         difficulty: this.missionSlotDetails.difficulty,
         description: this.missionSlotDetails.description,
         detailedDescription: this.missionSlotDetails.detailedDescription,
         restrictedCommunityUid: _.isNil(this.missionSlotDetails.restrictedCommunity) ? null : this.missionSlotDetails.restrictedCommunity.uid,
         reserve: this.missionSlotDetails.reserve,
+        insertAfter: this.missionSlotDetails.orderNumber,
         slotGroupUid: this.missionSlotDetails.slotGroupUid
       }
 
