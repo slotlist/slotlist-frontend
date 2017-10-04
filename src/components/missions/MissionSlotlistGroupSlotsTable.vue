@@ -11,9 +11,9 @@
         </tr>
       </thead>
       <tbody>
-        <mission-slotlist-group-slots-row v-for="missionSlot in missionSlots" :missionSlotDetails="missionSlot" :key="missionSlot.uid" :hasAnyMissionSlotDescription="hasAnyMissionSlotDescription"></mission-slotlist-group-slots-row>
+        <mission-slotlist-group-slots-row v-for="missionSlot in missionSlotGroup.slots" :missionSlotDetails="missionSlot" :missionSlotGroup="missionSlotGroup" :hasAnyMissionSlotDescription="hasAnyMissionSlotDescription" :key="missionSlot.uid"></mission-slotlist-group-slots-row>
       </tbody>
-      <tfoot v-show="missionSlots.length >= 10">
+      <tfoot v-show="missionSlotGroup.slots.length >= 10">
         <tr>
           <th style="width: 6%">#</th>
           <th :style="missionSlotRoleStyle">{{ $t('mission.slot.role') }}</th>
@@ -36,11 +36,11 @@ export default {
     MissionSlotlistGroupSlotsRow
   },
   props: [
-    'missionSlots'
+    'missionSlotGroup'
   ],
   computed: {
     hasAnyMissionSlotDescription() {
-      return _.some(this.missionSlots, (slot) => {
+      return _.some(this.missionSlotGroup.slots, (slot) => {
         return !_.isNil(slot.description)
       });
     },

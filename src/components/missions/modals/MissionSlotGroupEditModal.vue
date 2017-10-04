@@ -57,12 +57,6 @@ export default {
     missionSlotGroupDetails() {
       return this.$store.getters.missionSlotGroupDetails
     },
-    missionSlotGroupEditOrderNumberFeedback() {
-      return this.missionSlotGroupEditData.orderNumber < 0 ? this.$t('mission.feedback.orderNumber') : ''
-    },
-    missionSlotGroupEditOrderNumberState() {
-      return this.missionSlotGroupEditData.orderNumber < 0 ? 'danger' : 'success'
-    },
     missionSlotGroupEditMoveAfterOptions() {
       const options = [{
         value: this.missionSlotGroupDetails.orderNumber - 1,
@@ -140,13 +134,6 @@ export default {
         slotGroupUid: this.missionSlotGroupDetails.uid,
         updatedSlotGroupDetails: updatedMissionSlotGroupDetails
       })
-    },
-    missionSlotGroupEditOrderNumberFormatter(val) {
-      if (_.isNumber(val)) {
-        return val
-      }
-
-      return parseInt(val, 10)
     },
     hideMissionSlotGroupEditModal() {
       this.$refs.missionSlotGroupEditModal.hide()

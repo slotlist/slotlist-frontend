@@ -40,7 +40,8 @@ import * as _ from 'lodash'
 export default {
   props: [
     'hasAnyMissionSlotDescription',
-    'missionSlotDetails'
+    'missionSlotDetails',
+    'missionSlotGroup'
   ],
   computed: {
     canRegisterForSlot() {
@@ -141,10 +142,14 @@ export default {
         slotTitle: this.missionSlotDetails.title
       })
 
-      this.setMissionSlotDetails();
+      this.setMissionSlotDetails()
+      this.setMissionSlotGroupDetails()
     },
     setMissionSlotDetails() {
       this.$store.dispatch('setMissionSlotDetails', this.missionSlotDetails)
+    },
+    setMissionSlotGroupDetails() {
+      this.$store.dispatch('setMissionSlotGroupDetails', this.missionSlotGroup)
     }
   }
 }
