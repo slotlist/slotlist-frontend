@@ -48,6 +48,10 @@
         <dd class="col-sm-9">
           <a href="https://discord.gg/QZ5HpwT">Discord</a>
         </dd>
+        <dt class="col-sm-3">add the developer on Steam</dt>
+        <dd class="col-sm-9">
+          <a href="https://steamcommunity.com/id/morpheusxaut">MorpheusXAUT</a>
+        </dd>
       </dl>
       Contact details for legal inquiries can be found on the
       <router-link :to="{name: 'imprint'}">imprint</router-link>.

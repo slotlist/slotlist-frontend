@@ -48,6 +48,10 @@
         <dd class="col-sm-9">
           <a href="https://discord.gg/QZ5HpwT">Discord</a>
         </dd>
+        <dt class="col-sm-3">füge den Entwickler als Steam-Freund hinzu</dt>
+        <dd class="col-sm-9">
+          <a href="https://steamcommunity.com/id/morpheusxaut">MorpheusXAUT</a>
+        </dd>
       </dl>
       Kontakt-Details für rechtliche Anfrangen können im
       <router-link :to="{name: 'imprint'}">Impressum</router-link> gefunden werden.
