@@ -34,7 +34,7 @@
           <a href="https://steamcommunity.com/dev">here</a>.<br>When you click the
           <em>Sign in through Steam</em> button, you will be redirected to a Steam community page where you will be asked to log in to your Steam account. Please note that we have no access at all to this page and do not receive your Steam credentials. The whole login process is handled securely by Steam on the
           <code>steamcommunity.com</code> domain.
-          <strong>You will never have to enter your Steam credentials on our website or any other non-Steam service.</strong><br> Once you have successfully completed your login, Steam will redirect you back to our website and provide us with information required to identify you as a user of our service.<br>The data provided by Steam's login service is limited to your SteamID as well as your nickname, both of which are also publicly visible to everyone on Steam.
+          <strong>You will never have to enter your Steam credentials on our website or any other non-Steam service.</strong><br>Once you have successfully completed your login, Steam will redirect you back to our website and provide us with information required to identify you as a user of our service.<br>The data provided by Steam's login service is limited to your SteamID as well as your nickname, both of which are also publicly visible to everyone on Steam.
         </p>
         <h5>I am still sceptical or confused...</h5>
         <p>
@@ -45,7 +45,7 @@
       <div class="col-6">
         <h5>Can you access my Steam account after I log in to your website?</h5>
         <p>
-          No. As previously mentioned, we do not handle any login at all, but use a service provided by Steam to all developers. All authentication is handled by Steam itself - we only receive an "assurance" you actually are who you claim to be.
+          <strong>No, absolutely not.</strong> As previously mentioned, we do not handle any login at all, but use a service provided by Steam to all developers. All authentication is handled by Steam itself - we only receive an "assurance" you actually are who you claim to be.
           <strong>The information we receive does not grant us any access to your Steam account, Steam library or any credentials associated.</strong>
         </p>
         <h5>What information do you store about me?</h5>

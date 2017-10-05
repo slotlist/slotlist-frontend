@@ -46,7 +46,7 @@
         <h5>Do I have to sign in to see missions or slotlists?</h5>
         <p>
           No. You can browse all publicly visible
-          <router-link :to="{name: 'missionList'}">missions</router-link> and check their details and slotlists without having to sign in. Please be aware that mission creators can limit access to only allow community members or selected users to view and participate in their missions - you thus might not see all missions available to you unless you log in.
+          <router-link :to="{name: 'missionList'}">missions</router-link> and check their details and slotlist without having to sign in. Please be aware that mission creators can limit access to only allow community members or selected users to view and participate in their missions - you thus might not see all missions available to you unless you log in.
         </p>
         <h5>Do I have to register for a slot on
           <router-link :to="{name: 'home'}">slotlist.info</router-link> in order to participate in a mission?
@@ -87,7 +87,7 @@
           <a href="https://steamcommunity.com/dev">here</a>.<br>When you click the
           <em>Sign in through Steam</em> button, you will be redirected to a Steam community page where you will be asked to log in to your Steam account. Please note that we have no access at all to this page and do not receive your Steam credentials. The whole login process is handled securely by Steam on the
           <code>steamcommunity.com</code> domain.
-          <strong>You will never have to enter your Steam credentials on our website or any other non-Steam service.</strong><br> Once you have successfully completed your login, Steam will redirect you back to our website and provide us with information required to identify you as a user of our service.<br>The data provided by Steam's login service is limited to your SteamID as well as your nickname, both of which are also publicly visible to everyone on Steam.
+          <strong>You will never have to enter your Steam credentials on our website or any other non-Steam service.</strong><br>Once you have successfully completed your login, Steam will redirect you back to our website and provide us with information required to identify you as a user of our service.<br>The data provided by Steam's login service is limited to your SteamID as well as your nickname, both of which are also publicly visible to everyone on Steam.
         </p>
         <h5>Can you access my Steam account after I log in to your website?</h5>
         <p>
