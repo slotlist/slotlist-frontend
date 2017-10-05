@@ -61,7 +61,7 @@
           <router-link :to="{name: 'home'}">slotlist.info</router-link> ein und meldet sich für seinen gewünschten Slot über die Slotliste deiner Mission an. Da wir uns aber bewusst sind, dass manche Leute nicht gerne eine externe Seite benutzen, um sich einen Slot für eine Mission auszusuchen, haben wir Missionserstellern auch die Möglichkeit gegeben, einen Slot zu "blockieren", wodurch andere
           <router-link :to="{name: 'home'}">slotlist.info</router-link>-Benutzer sich nicht mehr auf diesen anmelden können - händische Slotzuweisungen von "externen" Spielern können dann als Slotbeschreibung hinzugefügt werden.<br>Während diese Art der Anmeldung nicht die selbe Funktionalität wie eine "normale" Anmeldung bietet, hoffen wir, dass dies eine akzeptable Alternative für unsere skeptischeren Spieler bietet.
         </p>
-        <h5>Wie kann ich Slot für Community
+        <h5>Wie kann ich Slots für Community
           <em>XYZ</em> reservieren?</h5>
         <p>
           Sollte sich die Leitung der Community
