@@ -2,10 +2,10 @@
   <tr>
     <td>{{ missionSlotDetails.orderNumber }}</td>
     <td>
-      <div v-if="!missionSlotDetails.restrictedCommunity && !missionSlotDetails.reserve">
+      <div v-if="!missionSlotDetails.restrictedCommunity && !missionSlotDetails.reserve && !missionSlotDetails.blocked">
         <i :class="difficultyIcon" aria-hidden="true"></i> {{ missionSlotDetails.title }}
       </div>
-      <b-popover v-if="missionSlotDetails.restrictedCommunity || missionSlotDetails.reserve" :content="titlePopoverContent" :triggers="['hover']">
+      <b-popover v-if="missionSlotDetails.restrictedCommunity || missionSlotDetails.reserve || missionSlotDetails.blocked" :content="titlePopoverContent" :triggers="['hover']">
         <span :class="titleColor" v-html="formattedTitle"></span>
       </b-popover>
     </td>
@@ -16,7 +16,7 @@
         <b-btn variant="primary" @click="prepareMissionSlotDetails" v-b-modal.missionSlotDetailsModal>
           <i class="fa fa-info" aria-hidden="true"></i> {{ $t('misc.details') }}
         </b-btn>
-        <b-btn variant="success" v-if="loggedIn && !missionSlotDetails.registrationUid" :disabled="!canRegisterForSlot" @click="setMissionSlotDetails" v-b-modal.missionSlotRegistrationModal>
+        <b-btn variant="success" v-if="loggedIn && !missionSlotDetails.registrationUid" :disabled="missionSlotDetails.blocked || !canRegisterForSlot" @click="setMissionSlotDetails" v-b-modal.missionSlotRegistrationModal>
           <i class="fa fa-ticket" aria-hidden="true"></i> {{ $t('button.register') }}
         </b-btn>
         <click-confirm v-if="loggedIn && missionSlotDetails.registrationUid" yes-icon="fa fa-eraser" yes-class="btn btn-warning" button-size="sm" :messages="{title: $t('mission.slot.confirm.unregister'), yes: $t('button.confirm'), no: $t('button.cancel')}">
@@ -78,6 +78,10 @@ export default {
       return `${this.difficultyColor} fa fa-thermometer-${this.missionSlotDetails.difficulty} fa-lg`
     },
     formattedAssignee() {
+      if (this.missionSlotDetails.blocked) {
+        return `<span class="text-muted font-italic">${this.$t('mission.slot.blocked')}</span>`
+      }
+
       if (!_.isNil(this.missionSlotDetails.assignee)) {
         return `<span class="text-success font-weight-bold">${this.formatUserWithTag(this.missionSlotDetails.assignee)}</span>`
       }
@@ -102,14 +106,16 @@ export default {
       return this.$store.getters.loggedIn
     },
     titleColor() {
-      if (!_.isNil(this.missionSlotDetails.restrictedCommunity)) {
+      if (this.missionSlotDetails.blocked || !_.isNil(this.missionSlotDetails.restrictedCommunity)) {
         return 'text-primary'
       } else if (this.missionSlotDetails.reserve) {
         return 'text-muted font-italic'
       }
     },
     titlePopoverContent() {
-      if (!_.isNil(this.missionSlotDetails.restrictedCommunity)) {
+      if (this.missionSlotDetails.blocked) {
+        return this.$t('mission.slot.blocked.popover')
+      } else if (!_.isNil(this.missionSlotDetails.restrictedCommunity)) {
         return this.$t('mission.slot.restricted.popover', { communityInfo: `[${this.missionSlotDetails.restrictedCommunity.tag}] ${this.missionSlotDetails.restrictedCommunity.name}` })
       } else if (this.missionSlotDetails.reserve) {
         return this.$t('mission.slot.reserve.popover')

@@ -103,6 +103,9 @@
                 <b-form-checkbox v-model="missionSlotlistFilter" name="restricted" value="restricted">
                   {{ $t('mission.slotlist.filter.restricted') }}
                 </b-form-checkbox>
+                <b-form-checkbox v-model="missionSlotlistFilter" name="blocked" value="blocked">
+                  {{ $t('mission.slotlist.filter.blocked') }}
+                </b-form-checkbox>
                 <b-form-checkbox v-model="missionSlotlistFilter" name="open" value="open">
                   {{ $t('mission.slotlist.filter.open') }}
                 </b-form-checkbox>

@@ -32,15 +32,15 @@
       </div>
       <div class="card">
         <div class="card-block text-nowrap">
-          <h4 class="card-title">{{ $t('community.members') }}</h4>
-          <community-members></community-members>
+          <h4 class="card-title">{{ $t('nav.missions') }}</h4>
+          <community-missions></community-missions>
         </div>
       </div>
       <br>
       <div class="card">
         <div class="card-block text-nowrap">
-          <h4 class="card-title">{{ $t('nav.missions') }}</h4>
-          <community-missions></community-missions>
+          <h4 class="card-title">{{ $t('community.members') }}</h4>
+          <community-members></community-members>
         </div>
       </div>
       <br>

@@ -48,6 +48,10 @@
         <dd class="col-sm-9">
           <a href="https://discord.gg/QZ5HpwT">Discord</a>
         </dd>
+        <dt class="col-sm-3">add the developer on Steam</dt>
+        <dd class="col-sm-9">
+          <a href="https://steamcommunity.com/id/morpheusxaut">MorpheusXAUT</a>
+        </dd>
       </dl>
       Contact details for legal inquiries can be found on the
       <router-link :to="{name: 'imprint'}">imprint</router-link>.
@@ -72,6 +76,14 @@
           <a href="http://spezialeinheit-luchs.de">[SeL] Sinus</a>
         </dt>
         <dd class="col-sm-10">for feedback regarding the structure and design of the site, general testing and filling my database with trash data</dd>
+        <dt class="col-sm-2">
+          <a href="http://spezialeinheit-luchs.de">[SeL] buur</a>
+        </dt>
+        <dd class="col-sm-10">for constant feedback and suggestions as well as testing all different kinds of functionality</dd>
+        <dt class="col-sm-2">
+          <a href="https://task-force-wolf.de/">[TFW] Isaac</a>
+        </dt>
+        <dd class="col-sm-10">for feedback, suggestions and bug reports</dd>
       </dl>
     </p>
   </b-jumbotron>

@@ -81,7 +81,9 @@ const getters = {
           filteredSlots.push(slot)
         } else if (_.has(state.missionSlotlistFilter, 'hasRegistrations') && _.isNil(slot.assignee) && slot.registrationCount > 0) {
           filteredSlots.push(slot)
-        } else if (_.has(state.missionSlotlistFilter, 'open') && _.isNil(slot.assignee) && slot.registrationCount <= 0) {
+        } else if (_.has(state.missionSlotlistFilter, 'open') && _.isNil(slot.assignee) && slot.registrationCount <= 0 && !slot.blocked) {
+          filteredSlots.push(slot)
+        } else if (_.has(state.missionSlotlistFilter, 'blocked') && slot.blocked) {
           filteredSlots.push(slot)
         } else if (_.has(state.missionSlotlistFilter, 'restricted') && !_.isNil(slot.restrictedCommunity)) {
           filteredSlots.push(slot)
@@ -819,6 +821,7 @@ const actions = {
             detailedDescription: slot.detailedDescription,
             difficulty: slot.difficulty,
             reserve: slot.reserve,
+            blocked: slot.blocked,
             restrictedCommunityUid: _.isNil(slot.restrictedCommunity) ? null : slot.restrictedCommunity.uid,
             description: slot.description,
             title: slot.title,
