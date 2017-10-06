@@ -46,10 +46,10 @@
         </div>
       </div>
       <div slot="modal-footer">
-        <b-btn variant="success" v-if="loggedIn && !missionSlotDetails.registrationUid" :disabled="!canRegisterForSlot" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotRegistrationModal>
+        <b-btn variant="success" v-if="loggedIn && !missionSlotDetails.registrationUid" :disabled="missionSlotDetails.blocked || !canRegisterForSlot" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotRegistrationModal>
           <i class="fa fa-ticket" aria-hidden="true"></i> {{ $t('button.register') }}
         </b-btn>
-        <b-btn variant="warning" v-if="isMissionEditor" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotAssignModal>
+        <b-btn variant="warning" v-if="isMissionEditor" :disabled="missionSlotDetails.blocked" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotAssignModal>
           <i class="fa fa-gavel" aria-hidden="true"></i> {{ $t('button.assign.mission.slot') }}
         </b-btn>
         <b-btn variant="secondary" v-if="isMissionEditor" @click="duplicateMissionSlot">
@@ -156,6 +156,10 @@ export default {
       return `<span>${this.$t('mission.slot.restricted.unrestricted')}</span>`
     },
     slotStatus() {
+      if (this.missionSlotDetails.blocked) {
+        return `<span class="text-primary">${this.$t('mission.slot.blocked')}</span>`
+      }
+
       return `${this.slotRestricted} - ${this.slotReserve}`
     },
   },
@@ -185,6 +189,7 @@ export default {
         detailedDescription: this.missionSlotDetails.detailedDescription,
         restrictedCommunityUid: _.isNil(this.missionSlotDetails.restrictedCommunity) ? null : this.missionSlotDetails.restrictedCommunity.uid,
         reserve: this.missionSlotDetails.reserve,
+        blocked: this.missionSlotDetails.blocked,
         insertAfter: this.missionSlotDetails.orderNumber,
         slotGroupUid: this.missionSlotDetails.slotGroupUid
       }

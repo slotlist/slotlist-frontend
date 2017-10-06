@@ -33,6 +33,11 @@
                 <b-form-checkbox v-model="missionSlotEditData.reserve"></b-form-checkbox>
               </b-form-fieldset>
             </div>
+            <div class="col">
+              <b-form-fieldset :label="$t('mission.slot.blocked.slot')" state="success" :description="$t('mission.slot.blocked.description')">
+                <b-form-checkbox v-model="missionSlotEditData.blocked"></b-form-checkbox>
+              </b-form-fieldset>
+            </div>
           </div>
           <div class="row" v-if="missionSlotEditData.restricted">
             <div class="col">
@@ -82,6 +87,7 @@ export default {
         detailedDescription: null,
         difficulty: 0,
         reserve: false,
+        blocked: false,
         restricted: false,
         restrictedCommunityUid: null,
         description: null,
@@ -189,6 +195,7 @@ export default {
         difficulty: this.missionSlotDetails.difficulty,
         orderNumber: this.missionSlotDetails.orderNumber,
         reserve: this.missionSlotDetails.reserve,
+        blocked: this.missionSlotDetails.blocked,
         restricted: !_.isNil(this.missionSlotDetails.restrictedCommunity),
         restrictedCommunityUid: _.isNil(this.missionSlotDetails.restrictedCommunity) ? null : this.missionSlotDetails.restrictedCommunity.uid,
         description: this.missionSlotDetails.description,
