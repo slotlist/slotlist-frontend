@@ -4,9 +4,8 @@
       <thead>
         <tr>
           <th style="width: 15%">{{ $t('mission.startTime') }}</th>
-          <th style="width: 25%">{{ $t('mission.title') }}</th>
-          <th style="width: 30%">{{ $t('mission.description') }}</th>
-          <th style="width: 20%">{{ $t('mission.creator') }}</th>
+          <th style="width: 45%">{{ $t('mission.title') }}</th>
+          <th style="width: 30%">{{ $t('mission.creator') }}</th>
           <th style="width: 10%" class="text-center">{{ $t('misc.actions') }}</th>
         </tr>
       </thead>
@@ -16,9 +15,8 @@
       <tfoot v-show="communityMissions.length >= 10">
         <tr>
           <th style="width: 15%">{{ $t('mission.startTime') }}</th>
-          <th style="width: 25%">{{ $t('mission.title') }}</th>
-          <th style="width: 30%">{{ $t('mission.description') }}</th>
-          <th style="width: 20%">{{ $t('mission.creator') }}</th>
+          <th style="width: 45%">{{ $t('mission.title') }}</th>
+          <th style="width: 30%">{{ $t('mission.creator') }}</th>
           <th style="width: 10%" class="text-center">{{ $t('misc.actions') }}</th>
         </tr>
       </tfoot>

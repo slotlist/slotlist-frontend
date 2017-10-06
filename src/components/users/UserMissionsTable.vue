@@ -4,8 +4,7 @@
       <thead>
         <tr>
           <th style="width: 15%">{{ $t('mission.startTime') }}</th>
-          <th style="width: 35%">{{ $t('mission.title') }}</th>
-          <th style="width: 40%">{{ $t('mission.description') }}</th>
+          <th style="width: 75%">{{ $t('mission.title') }}</th>
           <th style="width: 10%" class="text-center">{{ $t('misc.actions') }}</th>
         </tr>
       </thead>
@@ -15,8 +14,7 @@
       <tfoot v-show="userMissions.length >= 10">
         <tr>
           <th style="width: 15%">{{ $t('mission.startTime') }}</th>
-          <th style="width: 35%">{{ $t('mission.title') }}</th>
-          <th style="width: 40%">{{ $t('mission.description') }}</th>
+          <th style="width: 75%">{{ $t('mission.title') }}</th>
           <th style="width: 10%" class="text-center">{{ $t('misc.actions') }}</th>
         </tr>
       </tfoot>
