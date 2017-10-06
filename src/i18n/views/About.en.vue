@@ -76,6 +76,14 @@
           <a href="http://spezialeinheit-luchs.de">[SeL] Sinus</a>
         </dt>
         <dd class="col-sm-10">for feedback regarding the structure and design of the site, general testing and filling my database with trash data</dd>
+        <dt class="col-sm-2">
+          <a href="http://spezialeinheit-luchs.de">[SeL] buur</a>
+        </dt>
+        <dd class="col-sm-10">for constant feedback and suggestions as well as testing all different kinds of functionality</dd>
+        <dt class="col-sm-2">
+          <a href="https://task-force-wolf.de/">[TFW] Isaac</a>
+        </dt>
+        <dd class="col-sm-10">for feedback, suggestions and bug reports</dd>
       </dl>
     </p>
   </b-jumbotron>
