@@ -105,7 +105,7 @@
         <h5>I want you to delete all data stored about me!</h5>
         <p>This is not a question, but sure!<br>Just head to the
           <router-link :to="{name: 'account'}">Account</router-link> page while logged in and press the "Delete account" button. After confirming the deletion, all information associated with your user will be deleted from our backend and you will be logged out.<br>Please be aware that this will also delete
-          <strong>every</strong> mission created by you, every slot registration you submitted as well as your community, should you be the original founder.
+          <strong>every</strong> mission created by you, every slot registration you submitted as well as all permissions granted to you. This also removes you as a community founder, thus removing your ability to delete your community - should you have created one. Please make sure to delete your community beforehand if you want to have its data removed as well.
           <strong>These changes are irreversible - we have no way of restoring the data once it has been deleted.</strong>
         </p>
         <h5>Are you evil?</h5>

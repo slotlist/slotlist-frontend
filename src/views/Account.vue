@@ -22,16 +22,17 @@
         </div>
         <hr class="my-4">
         <div class="row justify-content-center">
-          <div class="btn-group" role="group" aria-label="Account actions">
-            <b-btn variant="primary" v-b-modal.accountEditModal>
-              <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit') }}
+          <b-btn variant="primary" v-b-modal.accountEditModal>
+            <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit') }}
+          </b-btn>&nbsp;
+          <b-popover :content="$t('button.refresh.authentication.explanation')" :triggers="['hover']">
+            <b-btn variant="secondary" @click="refreshAuthentication">
+              <i class="fa fa-key" aria-hidden="true"></i> {{ $t('button.refresh.authentication') }}
             </b-btn>
-            <b-popover :content="$t('button.refresh.authentication.explanation')" :triggers="['hover']">
-              <b-btn variant="secondary" @click="refreshAuthentication">
-                <i class="fa fa-key" aria-hidden="true"></i> {{ $t('button.refresh.authentication') }}
-              </b-btn>
-            </b-popover>
-          </div>
+          </b-popover>&nbsp;
+          <b-btn variant="danger" v-b-modal.accountDeleteModal>
+            <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete.account') }}
+          </b-btn>
         </div>
       </div>
       <div class="card">
@@ -51,6 +52,7 @@
     <!-- End of content -->
     <!-- Begin of modals -->
     <div>
+      <account-delete-modal></account-delete-modal>
       <account-edit-modal></account-edit-modal>
     </div>
     <!-- End of modals -->
@@ -61,6 +63,7 @@
 import * as _ from 'lodash'
 import moment from 'moment-timezone'
 
+import AccountDeleteModal from '../components/account/modals/AccountDeleteModal.vue'
 import AccountEditModal from '../components/account/modals/AccountEditModal.vue'
 import AccountMissions from '../components/account/AccountMissions.vue'
 import AccountPermissions from '../components/account/AccountPermissions.vue'
@@ -69,6 +72,7 @@ import utils from '../utils'
 
 export default {
   components: {
+    AccountDeleteModal,
     AccountEditModal,
     AccountMissions,
     AccountPermissions
