@@ -105,7 +105,7 @@
         <h5>Ich möchte, dass ihr alle Daten über mich löscht!</h5>
         <p>Das ist zwar keine Frage, aber klar!<br>Gehe dazu einfach auf deine
           <router-link :to="{name: 'account'}">Account-Seite</router-link> während du eingeloggt bist und drücken den "Account löschen" Knopf. Nach Bestätigung der Löschung werden alle Informationen, die mit deinem Benutzer verbunden sind, aus unserem Backend gelöscht und du wirst ausgeloggt.<br>Wir weisen darauf hin, dass dies auch
-          <strong>jede</strong> von dir erstelle Mission, jede von dir abgeschickte Slotanmeldung sowie deine Community löschen wird, falls du deren Gründer bist.
+          <strong>jede</strong> von dir erstelle Mission, jede von dir abgeschickte Slotanmeldung sowie jede Berechtigung, die an dich vergeben wurden, löschen wird. Dies entfernt dich auch als Community-Gründer und nimmt dir dadurch die Möglichkeit, deine Community zu löschen - falls du eine erstellt hast. Lösche daher bitte deine Community vor deinem Account, falls du deren Daten auch entfernt haben möchtest.
           <strong>Diese Änderungen sind irreversibel - wir haben keine Möglichkeit, diese Daten wiederherzustellen, sobald sie gelöscht wurden.</strong>
         </p>
         <h5>Seid ihr böse?</h5>

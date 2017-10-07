@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-modal ref="accountEditModal" id="accountEditModal" title="Edit account details" @show="setAccountEditData" no-close-on-backdrop>
+    <b-modal ref="accountEditModal" id="accountEditModal" :title="$t('account.modal.edit')" @show="setAccountEditData" no-close-on-backdrop>
       <div class="container-fluid">
         <b-form @submit.stop.prevent="editAccount">
           <div class="row">

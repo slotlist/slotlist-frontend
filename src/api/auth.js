@@ -1,6 +1,9 @@
 import axios from 'axios'
 
 export const v1 = {
+  deleteAccount(nickname) {
+    return axios.post('/v1/auth/account/delete', { nickname })
+  },
   getLoginRedirectUrl() {
     return axios.get('/v1/auth/steam')
   },
@@ -10,10 +13,10 @@ export const v1 = {
   refreshToken() {
     return axios.post('/v1/auth/refresh')
   },
-  getAccountDetails(){
+  getAccountDetails() {
     return axios.get('/v1/auth/account')
   },
-  editAccount(payload){
+  editAccount(payload) {
     return axios.patch('/v1/auth/account', payload)
   }
 }
