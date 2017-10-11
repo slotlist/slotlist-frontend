@@ -69,7 +69,7 @@
           <b-btn variant="secondary" size="sm" :href="googleCalendarLink" target="_blank">
             <i class="fa fa-calendar-plus-o" aria-hidden="true"></i> {{ $t('button.export.calendar.google') }}
           </b-btn>&nbsp;
-          <b-btn variant="secondary" size="sm">
+          <b-btn variant="secondary" size="sm" @click="downloadICalFile">
             <i class="fa fa-calendar" aria-hidden="true"></i> {{ $t('button.export.calendar.ical') }}
           </b-btn>
         </div>
@@ -205,9 +205,9 @@ export default {
     },
     googleCalendarLink() {
       let link = 'https://www.google.com/calendar/event?action=TEMPLATE'
-      link += `&text=ArmA 3 - ${this.missionDetails.title}`
+      link += `&text=${this.missionDetails.title}`
       link += `&dates=${moment(this.missionDetails.startTime).format('YMMDD[T]HHmmss')}/${moment(this.missionDetails.endTime).format('YMMDD[T]HHmmss')}`
-      link += `&details=${this.$t('mission.details')}: ${process.env.BASE_URL}/missions/${this.missionDetails.slug}\n \n${this.missionDetails.description}`
+      link += `&details=${this.$t('mission.details')}: ${process.env.BASE_URL}/missions/${this.missionDetails.slug} \n \n${this.missionDetails.description}`
       link += `&location&trp=false&ctx=${this.$store.getters.timezone}`
 
       return encodeURI(link)
@@ -240,6 +240,26 @@ export default {
         missionSlug: this.$route.params.missionSlug,
         missionTitle: this.missionDetails.title
       })
+    },
+    downloadICalFile() {
+      let data = `BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//slotlist.info//slotlist-frontend v${process.env.FRONTEND_VERSION}//EN\r\n`
+      data += `CALSCALE:GREGORIAN\r\nMETHOD:PUBLIC\r\nX-WR-CALNAME:slotlist.info\r\nX-ORIGINAL-URL:${process.env.BASE_URL}\r\n`
+      data += `X-WR-CALDESC:${this.$t('title.browser')}\r\nBEGIN:VEVENT\r\n`
+      data += `UID:${this.missionDetails.uid}@${process.env.BASE_URL}\r\n`
+      data += `DTSTART;TZID=${this.$store.getters.timezone}:${moment(this.missionDetails.startTime).format('YMMDD[T]HHmmss')}\r\n`
+      data += `DTEND;TZID=${this.$store.getters.timezone}:${moment(this.missionDetails.endTime).format('YMMDD[T]HHmmss')}\r\n`
+      data += `DTSTAMP:${moment().format('YMMDD[T]HHmmss')}\r\n`
+      data += `SUMMARY:${this.missionDetails.title}\r\n`
+      data += `DESCRIPTION:${this.$t('mission.details')}: ${process.env.BASE_URL}/missions/${this.missionDetails.slug} \\n \\n${this.missionDetails.description}\r\n`
+      data += `URL:${process.env.BASE_URL}/missions/${this.missionDetails.slug}\r\n`
+      data += `END:VEVENT\r\nEND:VCALENDAR`
+
+      const blob = new Blob([data], { type: 'text/calendar' })
+
+      const link = document.createElement('a')
+      link.href = window.URL.createObjectURL(blob)
+      link.download = `${this.missionDetails.title}.ics`
+      link.click()
     }
   },
   watch: {
