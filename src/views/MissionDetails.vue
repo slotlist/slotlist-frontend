@@ -64,7 +64,16 @@
             <p class="html ql-editor text-center" v-html="optionalRules"></p>
           </div>
         </div>
-        <hr class="my-4" v-if="isMissionEditor">
+        <hr class="my-4">
+        <div class="row justify-content-center">
+          <b-btn variant="secondary" size="sm" :href="googleCalendarLink" target="_blank">
+            <i class="fa fa-calendar-plus-o" aria-hidden="true"></i> {{ $t('button.export.calendar.google') }}
+          </b-btn>&nbsp;
+          <b-btn variant="secondary" size="sm">
+            <i class="fa fa-calendar" aria-hidden="true"></i> {{ $t('button.export.calendar.ical') }}
+          </b-btn>
+        </div>
+        <br v-if="isMissionEditor">
         <div class="row justify-content-center" v-if="isMissionEditor">
           <b-btn variant="primary" v-b-modal.missionEditModal>
             <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit') }}
@@ -136,6 +145,7 @@
 
 <script>
 import * as _ from 'lodash'
+import moment from 'moment-timezone'
 import MissionBannerImageModal from 'components/missions/modals/MissionBannerImageModal.vue'
 import MissionEditModal from 'components/missions/modals/MissionEditModal.vue'
 import MissionPermissionModal from 'components/missions/modals/MissionPermissionModal.vue'
@@ -179,27 +189,6 @@ export default {
     }
   },
   computed: {
-    loggedIn() {
-      return this.$store.getters.loggedIn
-    },
-    isMissionEditor() {
-      return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`, `mission.${this.$route.params.missionSlug}.editor`])
-    },
-    isMissionCreator() {
-      return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`])
-    },
-    missionDetails() {
-      return this.$store.getters.missionDetails
-    },
-    optionalRepositoryUrl() {
-      return this.missionDetails.repositoryUrl || `<div class='text-muted font-italic'>${this.$t('misc.notProvided')}</div>`
-    },
-    optionalTechSupport() {
-      return this.missionDetails.techSupport || `<div class='text-muted font-italic'>${this.$t('misc.notProvided')}</div>`
-    },
-    optionalRules() {
-      return this.missionDetails.rules || `<div class='text-muted font-italic'>${this.$t('misc.notSpecified')}</div>`
-    },
     formattedMissionVisibility() {
       switch (this.missionDetails.visibility) {
         case 'community':
@@ -213,6 +202,36 @@ export default {
         default:
           return `<span class="text-muted font-italic"><i class="fa fa-question-circle" aria-hidden="true"></i> ${this.$t('mission.visibility.default')}</span>`
       }
+    },
+    googleCalendarLink() {
+      let link = 'https://www.google.com/calendar/event?action=TEMPLATE'
+      link += `&text=ArmA 3 - ${this.missionDetails.title}`
+      link += `&dates=${moment(this.missionDetails.startTime).format('YMMDD[T]HHmmss')}/${moment(this.missionDetails.endTime).format('YMMDD[T]HHmmss')}`
+      link += `&details=${this.$t('mission.details')}: ${process.env.BASE_URL}/missions/${this.missionDetails.slug}\n \n${this.missionDetails.description}`
+      link += `&location&trp=false&ctx=${this.$store.getters.timezone}`
+
+      return encodeURI(link)
+    },
+    isMissionCreator() {
+      return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`])
+    },
+    isMissionEditor() {
+      return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`, `mission.${this.$route.params.missionSlug}.editor`])
+    },
+    loggedIn() {
+      return this.$store.getters.loggedIn
+    },
+    missionDetails() {
+      return this.$store.getters.missionDetails
+    },
+    optionalRepositoryUrl() {
+      return this.missionDetails.repositoryUrl || `<div class='text-muted font-italic'>${this.$t('misc.notProvided')}</div>`
+    },
+    optionalRules() {
+      return this.missionDetails.rules || `<div class='text-muted font-italic'>${this.$t('misc.notSpecified')}</div>`
+    },
+    optionalTechSupport() {
+      return this.missionDetails.techSupport || `<div class='text-muted font-italic'>${this.$t('misc.notProvided')}</div>`
     }
   },
   methods: {
