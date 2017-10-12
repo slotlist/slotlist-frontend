@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import * as _ from 'lodash'
 import MissionListTable from '../components/missions/MissionListTable.vue'
 import utils from '../utils'
 
@@ -39,15 +40,14 @@ export default {
     MissionListTable
   },
   beforeCreate: function() {
-    this.$store.dispatch('getMissions')
+    if (_.isNil(this.$store.getters.missions) || _.isEmpty(this.$store.getters.missions)) {
+      this.$store.dispatch('getMissions')
+    }
   },
   created: function() {
     this.missionListFilter = this.$store.getters.missionListFilter
 
     utils.setTitle(this.$t('nav.missions'))
-  },
-  beforeDestroy: function() {
-    this.$store.dispatch('clearMissions')
   },
   data() {
     return {
@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     missionsPaginate(page) {
-      this.$store.dispatch('getMissions', { page })
+      this.$store.dispatch('getMissions', { page, autoRefresh: true })
     }
   },
   watch: {

@@ -12,12 +12,17 @@ const limits = {
   missionSlotRegistrations: 10
 }
 
+const intervals = {
+  missionsRefresh: 300000
+}
+
 const state = {
   checkingMissionSlugAvailability: false,
   missionDetails: null,
   missionListFilter: {},
   missionPermissions: null,
   missions: null,
+  missionsRefreshSetInterval: null,
   missionSlotDetails: null,
   missionSlotGroupDetails: null,
   missionSlotGroups: null,
@@ -1193,12 +1198,21 @@ const actions = {
       })
   },
   getMissions({ commit, dispatch, state }, payload) {
-    dispatch('startWorking', i18n.t('store.getMissions'))
-
     if (_.isNil(payload)) {
-      payload = { page: 1 }
-    } else if (_.isNil(payload.page)) {
+      payload = { page: 1, silent: false, autoRefresh: false }
+    }
+    if (_.isNil(payload.page)) {
       payload.page = 1
+    }
+    if (_.isNil(payload.silent)) {
+      payload.silent = false
+    }
+    if (_.isNil(payload.autoRefresh)) {
+      payload.autoRefresh = false
+    }
+
+    if (!payload.silent) {
+      dispatch('startWorking', i18n.t('store.getMissions'))
     }
 
     let includeEnded = _.has(state.missionListFilter, 'ended')
@@ -1226,9 +1240,23 @@ const actions = {
           total: response.data.total
         })
 
-        dispatch('stopWorking', i18n.t('store.getMissions'))
+        if (!payload.silent) {
+          dispatch('stopWorking', i18n.t('store.getMissions'))
+        }
+
+        if (payload.autoRefresh) {
+          if (!_.isNil(state.missionsRefreshSetInterval)) {
+            clearInterval(state.missionsRefreshSetInterval)
+          }
+
+          state.missionsRefreshSetInterval = setInterval(() => {
+            dispatch('getMissions', { silent: true })
+          }, intervals.missionsRefresh)
+        }
       }).catch((error) => {
-        dispatch('stopWorking', i18n.t('store.getMissions'))
+        if (!payload.silent) {
+          dispatch('stopWorking', i18n.t('store.getMissions'))
+        }
 
         if (error.response) {
           console.error('getMissions', error.response)
@@ -1641,6 +1669,11 @@ const mutations = {
   clearMissions(state) {
     state.missions = null
     state.totalMissions = 0
+
+    if (!_.isNil(state.missionsRefreshSetInterval)) {
+      clearInterval(state.missionsRefreshSetInterval)
+    }
+    state.missionsRefreshSetInterval = null
   },
   clearMissionDetails(state) {
     state.missionDetails = null

@@ -83,6 +83,7 @@ export default {
   created: function() {
     utils.setTitle(this.$t('nav.account'))
 
+    this.currentTime = moment().format('Y-MM-DD HH:mm:ss')
     this.currentTimeSetInterval = setInterval(() => {
       this.currentTime = moment().format('Y-MM-DD HH:mm:ss')
     }, 1000)
