@@ -41,7 +41,7 @@ export default {
   },
   beforeCreate: function() {
     if (_.isNil(this.$store.getters.missions) || _.isEmpty(this.$store.getters.missions)) {
-      this.$store.dispatch('getMissions')
+      this.$store.dispatch('getMissions', { autoRefresh: true })
     }
   },
   created: function() {
