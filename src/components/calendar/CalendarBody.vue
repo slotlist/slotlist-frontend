@@ -18,10 +18,10 @@ export default {
   components: {
     CalendarWeek
   },
-  props: [
-    'currentMonth'
-  ],
   computed: {
+    currentMonth() {
+      return this.$store.getters.missionCalendarCurrentMonth
+    },
     firstDayOfWeek() {
       return moment().locale(this.locale).localeData().firstDayOfWeek()
     },
@@ -29,7 +29,7 @@ export default {
       return this.$i18n.locale
     },
     missions() {
-      return this.$store.getters.missions
+      return this.$store.getters.missionsForCalendar
     },
     weeks() {
       const momentIterator = moment(this.currentMonth).locale(this.locale)

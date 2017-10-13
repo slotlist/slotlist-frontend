@@ -3,6 +3,7 @@ import * as _ from 'lodash'
 import utils from '../../utils'
 import router from '../../router'
 import Raven from 'raven-js'
+import moment from 'moment-timezone'
 
 import MissionsApi from '../../api/missions'
 
@@ -13,16 +14,19 @@ const limits = {
 }
 
 const intervals = {
-  missionsRefresh: 300000
+  missionsRefresh: 300000,
+  missionsForCalendarRefresh: 300000
 }
 
 const state = {
   checkingMissionSlugAvailability: false,
+  missionCalendarCurrentMonth: null,
   missionDetails: null,
   missionListFilter: {},
   missionPermissions: null,
   missions: null,
-  missionsRefreshSetInterval: null,
+  missionsForCalendar: null,
+  missionsForCalendarRefreshSetInterval: null,
   missionSlotDetails: null,
   missionSlotGroupDetails: null,
   missionSlotGroups: null,
@@ -30,6 +34,9 @@ const state = {
   missionSlotRegistrationDetails: null,
   missionSlotRegistrations: null,
   missionSlugAvailable: false,
+  missionsRefreshSetInterval: null,
+  refreshingMissions: false,
+  refreshingMissionsForCalendar: false,
   totalMissionPermissions: 0,
   totalMissions: 0,
   totalMissionSlotRegistrations: 0
@@ -38,6 +45,9 @@ const state = {
 const getters = {
   checkingMissionSlugAvailability() {
     return state.checkingMissionSlugAvailability
+  },
+  missionCalendarCurrentMonth() {
+    return state.missionCalendarCurrentMonth
   },
   missionDetails() {
     return state.missionDetails
@@ -66,6 +76,9 @@ const getters = {
     })
 
     return filteredMissions
+  },
+  missionsForCalendar() {
+    return state.missionsForCalendar
   },
   missionSlotDetails() {
     return state.missionSlotDetails
@@ -119,6 +132,12 @@ const getters = {
   },
   missionsPageCount() {
     return Math.ceil(state.totalMissions / limits.missions)
+  },
+  refreshingMissions() {
+    return state.refreshingMissions
+  },
+  refreshingMissionsForCalendar() {
+    return state.refreshingMissionsForCalendar
   }
 }
 
@@ -180,6 +199,19 @@ const actions = {
           })
         }
       })
+  },
+  changeMissionCalendarCurrentMonth({ commit, dispatch }, payload) {
+    commit({
+      type: 'setMissionCalendarCurrentMonth',
+      currentMonth: payload
+    })
+
+    dispatch('getMissionsForCalendar', {
+      silent: true,
+      autoRefresh: true,
+      startDate: moment(payload).startOf('month'),
+      endDate: moment(payload).endOf('month')
+    })
   },
   checkMissionSlugAvailability({ commit, dispatch }, payload) {
     commit({
@@ -1198,6 +1230,11 @@ const actions = {
       })
   },
   getMissions({ commit, dispatch, state }, payload) {
+    commit({
+      type: 'refreshingMissions',
+      refreshing: true
+    })
+
     if (_.isNil(payload)) {
       payload = { page: 1, silent: false, autoRefresh: false }
     }
@@ -1244,6 +1281,11 @@ const actions = {
           dispatch('stopWorking', i18n.t('store.getMissions'))
         }
 
+        commit({
+          type: 'refreshingMissions',
+          refreshing: false
+        })
+
         if (payload.autoRefresh) {
           if (!_.isNil(state.missionsRefreshSetInterval)) {
             clearInterval(state.missionsRefreshSetInterval)
@@ -1254,6 +1296,11 @@ const actions = {
           }, intervals.missionsRefresh)
         }
       }).catch((error) => {
+        commit({
+          type: 'refreshingMissions',
+          refreshing: false
+        })
+
         if (!payload.silent) {
           dispatch('stopWorking', i18n.t('store.getMissions'))
         }
@@ -1280,6 +1327,108 @@ const actions = {
             showAlert: true,
             alertVariant: 'danger',
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissions.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
+  getMissionsForCalendar({ commit, dispatch, state }, payload) {
+    commit({
+      type: 'refreshingMissionsForCalendar',
+      refreshing: true
+    })
+
+    if (_.isNil(payload)) {
+      payload = { silent: false, autoRefresh: false, startDate: moment().startOf('month'), endDate: moment().endOf('month') }
+    }
+    if (_.isNil(payload.silent)) {
+      payload.silent = false
+    }
+    if (_.isNil(payload.autoRefresh)) {
+      payload.autoRefresh = false
+    }
+    if (_.isNil(payload.startDate)) {
+      payload.startDate = moment().startOf('month')
+    }
+    if (_.isNil(payload.endDate)) {
+      payload.endDate = moment().endOf('month')
+    }
+
+    if (!payload.silent) {
+      dispatch('startWorking', i18n.t('store.getMissionsForCalendar'))
+    }
+
+    return MissionsApi.getMissionsForCalendar(payload.startDate.valueOf(), payload.endDate.valueOf())
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Retrieving missions for calendar failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (_.isNil(response.data.missions) || !_.isArray(response.data.missions)) {
+          console.error(response)
+          throw 'Received invalid missions'
+        }
+
+        commit({
+          type: 'setMissionsForCalendar',
+          missions: response.data.missions
+        })
+
+        if (!payload.silent) {
+          dispatch('stopWorking', i18n.t('store.getMissionsForCalendar'))
+        }
+
+        commit({
+          type: 'refreshingMissionsForCalendar',
+          refreshing: false
+        })
+
+        if (payload.autoRefresh) {
+          if (!_.isNil(state.missionsForCalendarRefreshSetInterval)) {
+            clearInterval(state.missionsForCalendarRefreshSetInterval)
+          }
+
+          state.missionsForCalendarRefreshSetInterval = setInterval(() => {
+            dispatch('getMissionsForCalendar', { silent: true, startDate: payload.startDate, endDate: payload.endDate })
+          }, intervals.missionsForCalendarRefresh)
+        }
+      }).catch((error) => {
+        commit({
+          type: 'refreshingMissionsForCalendar',
+          refreshing: false
+        })
+
+        if (!payload.silent) {
+          dispatch('stopWorking', i18n.t('store.getMissionsForCalendar'))
+        }
+
+        if (error.response) {
+          console.error('getMissionsForCalendar', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionsForCalendar.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionsForCalendar' } })
+          console.error('getMissionsForCalendar', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionsForCalendar.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionsForCalendar' } })
+          console.error('getMissionsForCalendar', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionsForCalendar.error')} - ${i18n.t('failed.something')}`
           })
         }
       })
@@ -1669,11 +1818,13 @@ const mutations = {
   clearMissions(state) {
     state.missions = null
     state.totalMissions = 0
+    state.refreshingMissions = false
 
     if (!_.isNil(state.missionsRefreshSetInterval)) {
       clearInterval(state.missionsRefreshSetInterval)
     }
     state.missionsRefreshSetInterval = null
+
   },
   clearMissionDetails(state) {
     state.missionDetails = null
@@ -1691,6 +1842,12 @@ const mutations = {
   clearMissionSlotGroupDetails(state) {
     state.missionSlotGroupDetails = null
   },
+  refreshingMissions(state, payload) {
+    state.refreshingMissions = payload.refreshing
+  },
+  refreshingMissionsForCalendar(state, payload) {
+    state.refreshingMissionsForCalendar = payload.refreshing
+  },
   setMissionBannerImageUrl(state, payload) {
     if (_.isNil(state.missionDetails)) {
       console.warn('setMissionBannerImageUrl', 'Somehow lost mission details while uploading banner image... Oh well')
@@ -1698,6 +1855,9 @@ const mutations = {
     }
 
     state.missionDetails.bannerImageUrl = payload.bannerImageUrl
+  },
+  setMissionCalendarCurrentMonth(state, payload) {
+    state.missionCalendarCurrentMonth = payload.currentMonth
   },
   setMissionDetails(state, payload) {
     state.missionDetails = payload.mission
@@ -1710,6 +1870,9 @@ const mutations = {
   setMissions(state, payload) {
     state.missions = payload.missions
     state.totalMissions = payload.total
+  },
+  setMissionsForCalendar(state, payload) {
+    state.missionsForCalendar = payload.missions
   },
   setMissionSlugAvailability(state, payload) {
     state.checkingMissionSlugAvailability = false

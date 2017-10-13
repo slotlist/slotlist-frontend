@@ -6,8 +6,8 @@
           <h3>{{ $t('calendar.title') }}</h3>
         </div>
         <div class="card-block">
-          <calendar-header :currentMonth="currentMonth"></calendar-header>
-          <calendar-body :currentMonth="currentMonth"></calendar-body>
+          <calendar-header></calendar-header>
+          <calendar-body></calendar-body>
         </div>
       </div>
     </div>
@@ -24,27 +24,14 @@ export default {
     CalendarBody,
     CalendarHeader
   },
-  created: function() {
-    this.missionListFilter = this.$store.getters.missionListFilter
-
-    this.$root.$on('calendarMonthChanged', (payload) => {
-      this.currentMonth = payload
-    })
-  },
-  data() {
-    return {
-      currentMonth: moment().startOf('month'),
-      missionListFilter: []
+  beforeCreate: function() {
+    if (_.isNil(this.$store.getters.missionsForCalendar)) {
+      this.$store.dispatch('changeMissionCalendarCurrentMonth', moment().startOf('month'))
     }
   },
   computed: {
     loggedIn() {
       return this.$store.getters.loggedIn
-    }
-  },
-  watch: {
-    missionListFilter(val) {
-      this.$store.dispatch('filterMissionList', val)
     }
   }
 }

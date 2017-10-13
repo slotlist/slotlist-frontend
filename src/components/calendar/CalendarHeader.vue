@@ -1,8 +1,8 @@
 <template>
   <div class="row">
     <div class="col-sm-4 text-center">
-      <b-btn @click="refreshCalendarMissions()">
-        <i class="fa fa-refresh" aria-hidden="true"></i> {{ $t('button.refresh') }}
+      <b-btn :disabled="refreshingMissionsForCalendar" @click="refreshCalendarMissions()">
+        <i class="fa fa-refresh" :class="{'fa-spin': refreshingMissionsForCalendar}" aria-hidden="true"></i> {{ $t('button.refresh') }}
       </b-btn>
     </div>
     <div class="col-sm-4">
@@ -29,12 +29,15 @@
 import moment from 'moment-timezone'
 
 export default {
-  props: [
-    'currentMonth'
-  ],
   computed: {
+    currentMonth() {
+      return this.$store.getters.missionCalendarCurrentMonth
+    },
     locale() {
       return this.$i18n.locale
+    },
+    refreshingMissionsForCalendar() {
+      return this.$store.getters.refreshingMissionsForCalendar
     }
   },
   methods: {
@@ -49,10 +52,15 @@ export default {
         payload = moment(this.currentMonth).add(1, 'month').startOf('month')
       }
 
-      this.$root.$emit('calendarMonthChanged', payload)
+      this.$store.dispatch('changeMissionCalendarCurrentMonth', payload)
     },
     refreshCalendarMissions() {
-      this.$store.dispatch('getCalendarMissions')
+      this.$store.dispatch('getMissionsForCalendar', {
+        silent: true,
+        autoRefresh: true,
+        startDate: moment(this.currentMonth).startOf('month'),
+        endDate: moment(this.currentMonth).endOf('month')
+      })
     }
   }
 }
