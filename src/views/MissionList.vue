@@ -23,14 +23,15 @@
       <router-link tag="button" v-show="loggedIn" type="button" class="btn btn-success" :to="{name: 'missionCreator'}">
         <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.create.mission') }}
       </router-link>
-      <b-btn @click="missionsPaginate(1)">
-        <i class="fa fa-refresh" aria-hidden="true"></i> {{ $t('button.refresh') }}
+      <b-btn :disabled="refreshingMissions" @click="missionsPaginate(1)">
+        <i class="fa fa-refresh" :class="{'fa-spin': refreshingMissions}" aria-hidden="true"></i> {{ $t('button.refresh') }}
       </b-btn>
     </div>
   </div>
 </template>
 
 <script>
+import * as _ from 'lodash'
 import MissionListTable from '../components/missions/MissionListTable.vue'
 import utils from '../utils'
 
@@ -39,15 +40,14 @@ export default {
     MissionListTable
   },
   beforeCreate: function() {
-    this.$store.dispatch('getMissions')
+    if (_.isNil(this.$store.getters.missions) || _.isEmpty(this.$store.getters.missions)) {
+      this.$store.dispatch('getMissions', { autoRefresh: true })
+    }
   },
   created: function() {
     this.missionListFilter = this.$store.getters.missionListFilter
 
     utils.setTitle(this.$t('nav.missions'))
-  },
-  beforeDestroy: function() {
-    this.$store.dispatch('clearMissions')
   },
   data() {
     return {
@@ -63,11 +63,14 @@ export default {
     },
     missionsPageCount() {
       return this.$store.getters.missionsPageCount
+    },
+    refreshingMissions() {
+      return this.$store.getters.refreshingMissions
     }
   },
   methods: {
     missionsPaginate(page) {
-      this.$store.dispatch('getMissions', { page })
+      this.$store.dispatch('getMissions', { page, autoRefresh: true })
     }
   },
   watch: {

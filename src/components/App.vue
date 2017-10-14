@@ -140,15 +140,22 @@ export default {
     if (!_.isNil(token)) {
       this.$store.dispatch('setTokenFromLocalStorage', token)
         .then(() => {
-          const lastRefreshedAt = this.$ls.get('auth-token-last-refreshed')
-          if (_.isNil(lastRefreshedAt) || moment(lastRefreshedAt) <= moment().subtract(1, 'hour')) {
-            this.$store.dispatch('refreshToken', { silent: true })
+          // need to check for token again since an expired token is cleared during the `setTokenFromLocalStorage` action,
+          // leading to an instant authentication error if the users loads the app after the token expired
+          if (!_.isNil(this.$ls.get('auth-token'))) {
+            const lastRefreshedAt = this.$ls.get('auth-token-last-refreshed')
+            if (_.isNil(lastRefreshedAt) || moment(lastRefreshedAt) <= moment().subtract(1, 'hour')) {
+              this.$store.dispatch('refreshToken', { silent: true })
+            }
           }
         })
     }
   },
   created: function() {
     utils.clearTitle()
+  },
+  beforeDestroy: function() {
+    this.dispatch('clearMissions')
   },
   computed: {
     alertDismissible() {
