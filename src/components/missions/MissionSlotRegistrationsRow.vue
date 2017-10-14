@@ -6,10 +6,13 @@
     <td class="text-center" v-html="formattedConfirmation"></td>
     <td class="text-center" v-if="isMissionEditor">
       <b-btn v-if="!registration.confirmed" variant="success" size="sm" @click="modifyMissionSlotRegistration(true)">
-        <i class="fa fa-check" aria-hidden="true"></i> {{ $t('button.assign') }}
+        <i class="fa fa-check" aria-hidden="true"></i>
       </b-btn>
-      <b-btn v-if="registration.confirmed" variant="danger" size="sm" @click="modifyMissionSlotRegistration(false)">
-        <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.unassign') }}
+      <b-btn v-if="registration.confirmed" variant="warning" size="sm" @click="modifyMissionSlotRegistration(false)">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </b-btn>
+      <b-btn variant="danger" size="sm" @click="deleteMissionSlotRegistration">
+        <i class="fa fa-trash" aria-hidden="true"></i>
       </b-btn>
     </td>
   </tr>
@@ -36,6 +39,15 @@ export default {
     }
   },
   methods: {
+    deleteMissionSlotRegistration() {
+      this.$store.dispatch('deleteMissionSlotRegistration', {
+        missionSlug: this.$route.params.missionSlug,
+        slotUid: this.registration.slotUid,
+        registrationUid: this.registration.uid,
+        slotOrderNumber: this.$store.getters.missionSlotDetails.orderNumber,
+        slotTitle: this.$store.getters.missionSlotDetails.title,
+      })
+    },
     modifyMissionSlotRegistration(confirm) {
       this.$store.dispatch('modifyMissionSlotRegistration', {
         missionSlug: this.$route.params.missionSlug,

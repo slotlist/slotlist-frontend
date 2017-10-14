@@ -907,6 +907,71 @@ const actions = {
         }
       })
   },
+  deleteMissionSlotRegistration({ dispatch }, payload) {
+    dispatch('startWorking', i18n.t('store.deleteMissionSlotRegistration'))
+
+    return MissionsApi.unregisterFromMissionSlot(payload.missionSlug, payload.slotUid, payload.registrationUid)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Deleting mission slot registration failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (response.data.success !== true) {
+          console.error(response)
+          throw 'Received invalid mission slot registration deletion'
+        }
+
+        dispatch('getMissionSlotRegistrations', {
+          missionSlug: payload.missionSlug,
+          slotUid: payload.slotUid,
+          slotOrderNumber: payload.slotOrderNumber,
+          slotTitle: payload.slotTitle
+        })
+
+        dispatch('getMissionSlotlist', { missionSlug: payload.missionSlug })
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlotRegistration.success')}`
+        })
+
+        dispatch('stopWorking', i18n.t('store.deleteMissionSlotRegistration'))
+      }).catch((error) => {
+        dispatch('stopWorking', i18n.t('store.deleteMissionSlotRegistration'))
+
+        if (error.response) {
+          console.error('deleteMissionSlotRegistration', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlotRegistration.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionSlotRegistration' } })
+          console.error('deleteMissionSlotRegistration', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlotRegistration.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionSlotRegistration' } })
+          console.error('deleteMissionSlotRegistration', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlotRegistration.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
   editMission({ commit, dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.editMission'))
 
