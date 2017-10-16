@@ -40,3 +40,9 @@ body {
 .click-confirm {
   display: inline;
 }
+
+.word-wrap {
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: normal;
+}

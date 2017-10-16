@@ -1,7 +1,7 @@
 <template>
   <div>
     <h5>{{ missionSlotGroup.title }}</h5>
-    <div v-show="missionSlotGroup.description">{{ missionSlotGroup.description }}</div>
+    <div class="word-wrap" v-show="missionSlotGroup.description">{{ missionSlotGroup.description }}</div>
     <mission-slotlist-group-slots-table :missionSlotGroup="missionSlotGroup"></mission-slotlist-group-slots-table>
     <div class="text-center" v-if="isMissionEditor">
       <b-btn variant="success" @click="setMissionSlotGroupDetails" v-b-modal.missionSlotCreateModal>
