@@ -265,7 +265,6 @@ const actions = {
     })
 
     dispatch('getMissionsForCalendar', {
-      silent: true,
       autoRefresh: true,
       startDate: moment(payload).startOf('month'),
       endDate: moment(payload).endOf('month')
@@ -1403,10 +1402,7 @@ const actions = {
     })
 
     if (_.isNil(payload)) {
-      payload = { silent: false, autoRefresh: false, startDate: moment().startOf('month'), endDate: moment().endOf('month') }
-    }
-    if (_.isNil(payload.silent)) {
-      payload.silent = false
+      payload = { autoRefresh: false, startDate: moment().startOf('month'), endDate: moment().endOf('month') }
     }
     if (_.isNil(payload.autoRefresh)) {
       payload.autoRefresh = false
@@ -1416,10 +1412,6 @@ const actions = {
     }
     if (_.isNil(payload.endDate)) {
       payload.endDate = moment().endOf('month')
-    }
-
-    if (!payload.silent) {
-      dispatch('startWorking', i18n.t('store.getMissionsForCalendar'))
     }
 
     return MissionsApi.getMissionsForCalendar(payload.startDate.valueOf(), payload.endDate.valueOf())
@@ -1444,10 +1436,6 @@ const actions = {
           missions: response.data.missions
         })
 
-        if (!payload.silent) {
-          dispatch('stopWorking', i18n.t('store.getMissionsForCalendar'))
-        }
-
         commit({
           type: 'refreshingMissionsForCalendar',
           refreshing: false
@@ -1459,7 +1447,7 @@ const actions = {
           }
 
           state.missionsForCalendarRefreshSetInterval = setInterval(() => {
-            dispatch('getMissionsForCalendar', { silent: true, startDate: payload.startDate, endDate: payload.endDate })
+            dispatch('getMissionsForCalendar', { startDate: payload.startDate, endDate: payload.endDate })
           }, intervals.missionsForCalendarRefresh)
         }
       }).catch((error) => {
@@ -1467,10 +1455,6 @@ const actions = {
           type: 'refreshingMissionsForCalendar',
           refreshing: false
         })
-
-        if (!payload.silent) {
-          dispatch('stopWorking', i18n.t('store.getMissionsForCalendar'))
-        }
 
         if (error.response) {
           console.error('getMissionsForCalendar', error.response)

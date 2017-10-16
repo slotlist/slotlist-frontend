@@ -386,6 +386,7 @@
   "store.getMissionDetails.error.notFound": "Eine Mission mit dem Slug <strong>{slug}</strong> wurde nicht gefunden oder ist nicht sichtbar",
   "store.getMissionPermissions": "Missionsberechtigungen werden geladen...",
   "store.getMissionPermissions.error": "Laden der Missionsberechtigungen ist fehlgeschlagen",
+  "store.getMissionsForCalendar.error": "Laden der Missionen für den Kalender ist fehlgeschlagen",
   "store.getMissionSlotRegistrations": "Slot-Anmeldungen werden geladen...",
   "store.getMissionSlotRegistrations.error": "Laden der Anmeldungen für Slot <strong>{slotInfo}</strong> ist fehlgeschlagen",
   "store.getMissionSlotlist": "Missions-Slotliste wird geladen...",

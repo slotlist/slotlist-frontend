@@ -386,6 +386,7 @@
   "store.getMissionDetails.error.notFound": "A mission with the slug <strong>{slug}</strong> was not found or is not visible",
   "store.getMissionPermissions": "Loading mission permissions...",
   "store.getMissionPermissions.error": "Failed to load mission permissions",
+  "store.getMissionsForCalendar.error": "Failed to load missions for calendar",
   "store.getMissionSlotRegistrations": "Loading slot registrations...",
   "store.getMissionSlotRegistrations.error": "Failed to load slot registrations for slot <strong>{slotInfo}</strong>",
   "store.getMissionSlotlist": "Loading mission slotlist...",

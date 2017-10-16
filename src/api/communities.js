@@ -34,8 +34,8 @@ export const v1 = {
   getCommunityDetails(communitySlug) {
     return axios.get(`/v1/communities/${communitySlug}`)
   },
-  getCommunityMissions(communitySlug, limit = 10, offset = 0) {
-    return axios.get(`/v1/communities/${communitySlug}/missions?limit=${limit}&offset=${offset}`)
+  getCommunityMissions(communitySlug, limit = 10, offset = 0, includeEnded = false) {
+    return axios.get(`/v1/communities/${communitySlug}/missions?limit=${limit}&offset=${offset}&includeEnded=${includeEnded}`)
   },
   getCommunityPermissions(communitySlug, limit = 10, offset = 0) {
     return axios.get(`/v1/communities/${communitySlug}/permissions?limit=${limit}&offset=${offset}`)

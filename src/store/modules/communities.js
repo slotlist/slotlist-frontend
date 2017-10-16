@@ -783,7 +783,10 @@ const actions = {
       payload.page = 1
     }
 
-    return CommunitiesApi.getCommunityMissions(payload.communitySlug, limits.communityMissions, (payload.page - 1) * limits.communityMissions)
+    // TODO remove default value once filter has been implemented
+    const includeEnded = false
+
+    return CommunitiesApi.getCommunityMissions(payload.communitySlug, limits.communityMissions, (payload.page - 1) * limits.communityMissions, includeEnded)
       .then(function (response) {
         if (response.status !== 200) {
           console.error(response)

@@ -5,8 +5,13 @@ import Raven from 'raven-js'
 
 import UsersApi from '../../api/users'
 
+const limits = {
+  userMissions: 10
+}
+
 const state = {
   searchingUsers: false,
+  totalUserMissions: 0,
   userDetails: null,
   userMissions: null
 }
@@ -20,7 +25,10 @@ const getters = {
   },
   userMissions() {
     return state.userMissions
-  }
+  },
+  userMissionsPageCount() {
+    return Math.ceil(state.totalUserMissions / limits.userMissions)
+  },
 }
 
 const actions = {
@@ -87,7 +95,14 @@ const actions = {
   getUserMissions({ commit, dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.getUserMissions'))
 
-    return UsersApi.getUserMissions(payload)
+    if (_.isNil(payload.page)) {
+      payload.page = 1
+    }
+
+    // TODO remove default value once filter has been implemented
+    const includeEnded = false
+
+    return UsersApi.getUserMissions(payload.userUid, limits.userMissions, (payload.page - 1) * limits.userMissions, includeEnded)
       .then(function (response) {
         if (response.status !== 200) {
           console.error(response)
@@ -106,7 +121,8 @@ const actions = {
 
         commit({
           type: 'setUserMissions',
-          userMissions: response.data.missions
+          userMissions: response.data.missions,
+          total: response.data.total
         })
 
         dispatch('stopWorking', i18n.t('store.getUserMissions'))
@@ -211,6 +227,7 @@ const actions = {
 
 const mutations = {
   clearUserDetails(state) {
+    state.totalUserMissions = 0
     state.userDetails = null
     state.userMissions = null
   },
@@ -219,12 +236,12 @@ const mutations = {
   },
   setUserDetails(state, payload) {
     state.userDetails = payload.userDetails
-    state.userMissions = payload.userDetails.missions
 
     utils.setTitle(`${i18n.t('user')} ${state.userDetails.nickname}`)
   },
   setUserMissions(state, payload) {
     state.userMissions = payload.userMissions
+    state.totalUserMissions = payload.total
   }
 }
 
