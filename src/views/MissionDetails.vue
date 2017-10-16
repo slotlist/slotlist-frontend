@@ -146,6 +146,7 @@
 <script>
 import * as _ from 'lodash'
 import moment from 'moment-timezone'
+import FileSaver from 'file-saver'
 import MissionBannerImageModal from 'components/missions/modals/MissionBannerImageModal.vue'
 import MissionEditModal from 'components/missions/modals/MissionEditModal.vue'
 import MissionPermissionModal from 'components/missions/modals/MissionPermissionModal.vue'
@@ -263,10 +264,7 @@ export default {
 
       const blob = new Blob([data], { type: 'text/calendar' })
 
-      const link = document.createElement('a')
-      link.href = window.URL.createObjectURL(blob)
-      link.download = `${this.missionDetails.title}.ics`
-      link.click()
+      FileSaver.saveAs(blob, `${this.missionDetails.title}.ics`)
     }
   },
   watch: {
