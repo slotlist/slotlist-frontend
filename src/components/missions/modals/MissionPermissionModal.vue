@@ -13,28 +13,28 @@
         </div>
         <hr class="my-4">
         <div class="row font-weight-bold">
-          <div class="col col-12">{{ $t('mission.permission.create') }}</div>
+          <div class="col col-12">{{ $t('mission.permission.add') }}</div>
         </div>
         <br>
         <div class="row">
           <div class="col">
-            <b-form @submit.stop.prevent="createMissionPermission">
+            <b-form @submit.stop.prevent="addMissionPermission">
               <div class="row">
                 <div class="col">
-                  <b-form-fieldset :label="$t('mission.permission.user.selection')" :state="missionPermissionCreateUserState" :description="$t('mission.permission.user.selection.description')">
-                    <typeahead ref="missionPermissionCreateUserTypeahead" action="searchUsers" actionIndicator="searchingUsers" :onHit="permissionUserSelected"></typeahead>
+                  <b-form-fieldset :label="$t('mission.permission.user.selection')" :state="missionPermissionAddUserState" :description="$t('mission.permission.user.selection.description')">
+                    <typeahead ref="missionPermissionAddUserTypeahead" action="searchUsers" actionIndicator="searchingUsers" :onHit="permissionUserSelected"></typeahead>
                   </b-form-fieldset>
                 </div>
                 <div class="col">
-                  <b-form-fieldset :label="$t('mission.permission.permission')" :state="missionPermissionCreatePermissionState" :description="$t('mission.permission.permission.description')">
-                    <b-form-select v-model="missionPermissionCreate.permission" :options="missionPermissionCreatePermissionOptions"></b-form-select>
+                  <b-form-fieldset :label="$t('mission.permission.permission')" :state="missionPermissionAddPermissionState" :description="$t('mission.permission.permission.description')">
+                    <b-form-select v-model="missionPermissionAdd.permission" :options="missionPermissionAddPermissionOptions"></b-form-select>
                   </b-form-fieldset>
                 </div>
               </div>
               <div class="row">
                 <div class="col text-center">
-                  <b-btn variant="success" @click="createMissionPermission">
-                    <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.create.mission.permission') }}
+                  <b-btn variant="success" @click="addMissionPermission">
+                    <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.add.mission.permission') }}
                   </b-btn>
                 </div>
               </div>
@@ -63,48 +63,48 @@ export default {
   },
   data() {
     return {
-      missionPermissionCreate: {
+      missionPermissionAdd: {
         userUid: null,
         permission: null
       }
     }
   },
   computed: {
-    missionPermissionCreatePermissionOptions() {
+    missionPermissionAddPermissionOptions() {
       return [
         { value: 'editor', text: this.$t('mission.permission.editor') }
       ]
     },
-    missionPermissionCreatePermissionState() {
-      return _.isNil(this.missionPermissionCreate.permission) ? 'danger' : 'success'
+    missionPermissionAddPermissionState() {
+      return _.isNil(this.missionPermissionAdd.permission) ? 'danger' : 'success'
     },
-    missionPermissionCreateUserState() {
-      return _.isNil(this.missionPermissionCreate.userUid) ? 'danger' : 'success'
+    missionPermissionAddUserState() {
+      return _.isNil(this.missionPermissionAdd.userUid) ? 'danger' : 'success'
     },
     missionPermissions() {
       return this.$store.getters.missionPermissions
     },
   },
   methods: {
-    createMissionPermission() {
-      if (_.isNil(this.missionPermissionCreate.userUid) || _.isNil(this.missionPermissionCreate.permission)) {
+    addMissionPermission() {
+      if (_.isNil(this.missionPermissionAdd.userUid) || _.isNil(this.missionPermissionAdd.permission)) {
         return
       }
 
-      const permission = `mission.${this.$route.params.missionSlug}.${this.missionPermissionCreate.permission}`
+      const permission = `mission.${this.$route.params.missionSlug}.${this.missionPermissionAdd.permission}`
       const permissionDetails = {
-        userUid: this.missionPermissionCreate.userUid,
+        userUid: this.missionPermissionAdd.userUid,
         permission
       }
 
-      this.missionPermissionCreate = {
+      this.missionPermissionAdd = {
         userUid: null,
         permission: null
       }
 
-      this.$refs.missionPermissionCreateUserTypeahead.reset()
+      this.$refs.missionPermissionAddUserTypeahead.reset()
 
-      this.$store.dispatch('createMissionPermission', {
+      this.$store.dispatch('addMissionPermission', {
         missionSlug: this.$route.params.missionSlug,
         permissionDetails
       })
@@ -113,17 +113,17 @@ export default {
       this.$refs.missionPermissionModal.hide()
     },
     permissionUserSelected(item) {
-      this.missionPermissionCreate.userUid = item.value.uid
+      this.missionPermissionAdd.userUid = item.value.uid
     },
     setMissionPermissions() {
       this.$store.dispatch('getMissionPermissions', { missionSlug: this.$route.params.missionSlug })
 
-      this.missionPermissionCreate = {
+      this.missionPermissionAdd = {
         userUid: null,
         permission: null
       }
 
-      this.$refs.missionPermissionCreateUserTypeahead.reset()
+      this.$refs.missionPermissionAddUserTypeahead.reset()
     }
   }
 }

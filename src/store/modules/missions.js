@@ -142,6 +142,64 @@ const getters = {
 }
 
 const actions = {
+  addMissionPermission({ dispatch }, payload) {
+    dispatch('startWorking', i18n.t('store.addMissionPermission'))
+
+    return MissionsApi.addMissionPermission(payload.missionSlug, payload.permissionDetails)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Creating mission permission failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (_.isNil(response.data.permission) || !_.isObject(response.data.permission)) {
+          console.error(response)
+          throw 'Received invalid mission permission'
+        }
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.addMissionPermission.success')}`
+        })
+
+        dispatch('getMissionPermissions', { missionSlug: payload.missionSlug })
+
+        dispatch('stopWorking', i18n.t('store.addMissionPermission'))
+      }).catch((error) => {
+        dispatch('stopWorking', i18n.t('store.addMissionPermission'))
+
+        if (error.response) {
+          console.error('addMissionPermission', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.addMissionPermission.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'addMissionPermission' } })
+          console.error('addMissionPermission', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.addMissionPermission.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'addMissionPermission' } })
+          console.error('addMissionPermission', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.addMissionPermission.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
   assignMissionSlot({ dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.assignMissionSlot'))
 
@@ -348,64 +406,6 @@ const actions = {
             showAlert: true,
             alertVariant: 'danger',
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMission.error', { title: payload.title })} - ${i18n.t('failed.something')}`
-          })
-        }
-      })
-  },
-  createMissionPermission({ dispatch }, payload) {
-    dispatch('startWorking', i18n.t('store.createMissionPermission'))
-
-    return MissionsApi.createMissionPermission(payload.missionSlug, payload.permissionDetails)
-      .then((response) => {
-        if (response.status !== 200) {
-          console.error(response)
-          throw 'Creating mission permission failed'
-        }
-
-        if (_.isEmpty(response.data)) {
-          console.error(response)
-          throw 'Received empty response'
-        }
-
-        if (_.isNil(response.data.permission) || !_.isObject(response.data.permission)) {
-          console.error(response)
-          throw 'Received invalid mission permission'
-        }
-
-        dispatch('showAlert', {
-          showAlert: true,
-          alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.createMissionPermission.success')}`
-        })
-
-        dispatch('getMissionPermissions', { missionSlug: payload.missionSlug })
-
-        dispatch('stopWorking', i18n.t('store.createMissionPermission'))
-      }).catch((error) => {
-        dispatch('stopWorking', i18n.t('store.createMissionPermission'))
-
-        if (error.response) {
-          console.error('createMissionPermission', error.response)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissionPermission.error')} - ${error.response.data.message}`
-          })
-        } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'createMissionPermission' } })
-          console.error('createMissionPermission', error.request)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissionPermission.error')} - ${i18n.t('failed.request')}`
-          })
-        } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'createMissionPermission' } })
-          console.error('createMissionPermission', error.message)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissionPermission.error')} - ${i18n.t('failed.something')}`
           })
         }
       })
