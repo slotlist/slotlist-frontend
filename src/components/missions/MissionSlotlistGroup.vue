@@ -3,7 +3,7 @@
     <h5>{{ missionSlotGroup.title }}</h5>
     <div class="word-wrap" v-show="missionSlotGroup.description">{{ missionSlotGroup.description }}</div>
     <mission-slotlist-group-slots-table :missionSlotGroup="missionSlotGroup"></mission-slotlist-group-slots-table>
-    <div class="text-center" v-if="isMissionEditor">
+    <div class="text-center" v-if="isMissionEditor && !hasMissionEnded">
       <b-btn variant="success" @click="setMissionSlotGroupDetails" v-b-modal.missionSlotCreateModal>
         <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.create.mission.slot') }}
       </b-btn>
@@ -24,6 +24,7 @@
 
 <script>
 import * as _ from 'lodash'
+import moment from 'moment-timezone'
 
 import MissionSlotlistGroupSlotsTable from './MissionSlotlistGroupSlotsTable.vue'
 
@@ -35,9 +36,19 @@ export default {
     'missionSlotGroup'
   ],
   computed: {
+    hasMissionEnded() {
+      if (_.isNil(this.missionDetails)) {
+        return false
+      }
+
+      return moment().isAfter(moment(this.missionDetails.endTime))
+    },
     isMissionEditor() {
       return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`, `mission.${this.$route.params.missionSlug}.editor`])
-    }
+    },
+    missionDetails() {
+      return this.$store.getters.missionDetails
+    },
   },
   methods: {
     duplicateMissionSlotGroup() {

@@ -16,15 +16,15 @@
         <b-btn variant="primary" @click="prepareMissionSlotDetails" v-b-modal.missionSlotDetailsModal>
           <i class="fa fa-info" aria-hidden="true"></i> {{ $t('misc.details') }}
         </b-btn>
-        <b-btn variant="success" v-if="loggedIn && !missionSlotDetails.registrationUid" :disabled="missionSlotDetails.blocked || !canRegisterForSlot" @click="setMissionSlotDetails" v-b-modal.missionSlotRegistrationModal>
+        <b-btn variant="success" v-if="loggedIn && !missionSlotDetails.registrationUid && !hasMissionEnded" :disabled="missionSlotDetails.blocked || !canRegisterForSlot" @click="setMissionSlotDetails" v-b-modal.missionSlotRegistrationModal>
           <i class="fa fa-ticket" aria-hidden="true"></i> {{ $t('button.register') }}
         </b-btn>
-        <click-confirm v-if="loggedIn && missionSlotDetails.registrationUid" yes-icon="fa fa-eraser" yes-class="btn btn-warning" button-size="sm" :messages="{title: $t('mission.slot.confirm.unregister'), yes: $t('button.confirm'), no: $t('button.cancel')}">
+        <click-confirm v-if="loggedIn && missionSlotDetails.registrationUid && !hasMissionEnded" yes-icon="fa fa-eraser" yes-class="btn btn-warning" button-size="sm" :messages="{title: $t('mission.slot.confirm.unregister'), yes: $t('button.confirm'), no: $t('button.cancel')}">
           <b-btn variant="warning" size="sm" @click="deleteMissionSlotRegistration">
             <i class="fa fa-eraser" aria-hidden="true"></i> {{ $t('button.unregister') }}
           </b-btn>
         </click-confirm>
-        <click-confirm v-if="isMissionEditor" yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('mission.slot.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
+        <click-confirm v-if="isMissionEditor && !hasMissionEnded" yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('mission.slot.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
           <b-btn variant="danger" size="sm" @click="deleteMissionSlot">
             <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete') }}
           </b-btn>
@@ -36,6 +36,7 @@
 
 <script>
 import * as _ from 'lodash'
+import moment from 'moment-timezone'
 
 export default {
   props: [
@@ -99,11 +100,21 @@ export default {
 
       return `<i class="${this.difficultyIcon}" aria-hidden="true"></i> ${this.missionSlotDetails.title} - [${this.missionSlotDetails.restrictedCommunity.tag}]`
     },
+    hasMissionEnded() {
+      if (_.isNil(this.missionDetails)) {
+        return false
+      }
+
+      return moment().isAfter(moment(this.missionDetails.endTime))
+    },
     isMissionEditor() {
       return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`, `mission.${this.$route.params.missionSlug}.editor`])
     },
     loggedIn() {
       return this.$store.getters.loggedIn
+    },
+    missionDetails() {
+      return this.$store.getters.missionDetails
     },
     titleColor() {
       if (this.missionSlotDetails.blocked || !_.isNil(this.missionSlotDetails.restrictedCommunity)) {

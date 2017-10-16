@@ -131,13 +131,13 @@
       <mission-banner-image-modal v-if="loggedIn && isMissionEditor"></mission-banner-image-modal>
       <mission-edit-modal v-if="loggedIn && isMissionEditor"></mission-edit-modal>
       <mission-permission-modal v-if="loggedIn && isMissionCreator"></mission-permission-modal>
-      <mission-slot-assign-modal v-if="loggedIn && isMissionEditor"></mission-slot-assign-modal>
-      <mission-slot-create-modal v-if="loggedIn && isMissionEditor"></mission-slot-create-modal>
+      <mission-slot-assign-modal v-if="loggedIn && isMissionEditor && !hasMissionEnded"></mission-slot-assign-modal>
+      <mission-slot-create-modal v-if="loggedIn && isMissionEditor && !hasMissionEnded"></mission-slot-create-modal>
       <mission-slot-details-modal></mission-slot-details-modal>
-      <mission-slot-edit-modal v-if="loggedIn && isMissionEditor"></mission-slot-edit-modal>
-      <mission-slot-group-create-modal v-if="loggedIn && isMissionEditor"></mission-slot-group-create-modal>
-      <mission-slot-group-edit-modal v-if="loggedIn && isMissionEditor"></mission-slot-group-edit-modal>
-      <mission-slot-registration-modal v-if="loggedIn"></mission-slot-registration-modal>
+      <mission-slot-edit-modal v-if="loggedIn && isMissionEditor && !hasMissionEnded"></mission-slot-edit-modal>
+      <mission-slot-group-create-modal v-if="loggedIn && isMissionEditor && !hasMissionEnded"></mission-slot-group-create-modal>
+      <mission-slot-group-edit-modal v-if="loggedIn && isMissionEditor && !hasMissionEnded"></mission-slot-group-edit-modal>
+      <mission-slot-registration-modal v-if="loggedIn && !hasMissionEnded"></mission-slot-registration-modal>
     </div>
     <!-- End of modals -->
   </div>
@@ -211,6 +211,13 @@ export default {
       link += `&location&trp=false&ctx=${this.$store.getters.timezone}`
 
       return encodeURI(link)
+    },
+    hasMissionEnded() {
+      if (_.isNil(this.missionDetails)) {
+        return false
+      }
+
+      return moment().isAfter(moment(this.missionDetails.endTime))
     },
     isMissionCreator() {
       return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`])
