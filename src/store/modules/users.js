@@ -1,6 +1,7 @@
 import { i18n } from '../../app'
 import * as _ from 'lodash'
 import utils from '../../utils'
+import router from '../../router'
 import Raven from 'raven-js'
 
 import UsersApi from '../../api/users'
@@ -36,6 +37,64 @@ const actions = {
     commit({
       type: 'clearUserDetails'
     })
+  },
+  deleteUser({ dispatch }, payload) {
+    dispatch('startWorking', i18n.t('store.deleteUser'))
+
+    return UsersApi.deleteUser(payload.userUid)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Deleting user failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (response.data.success !== true) {
+          console.error(response)
+          throw 'Received invalid user deletion'
+        }
+
+        router.push({ name: 'home' })
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteUser.success')}`
+        })
+
+        dispatch('stopWorking', i18n.t('store.deleteUser'))
+      }).catch((error) => {
+        dispatch('stopWorking', i18n.t('store.deleteUser'))
+
+        if (error.response) {
+          console.error('deleteUser', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteUser.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'users', function: 'deleteUser' } })
+          console.error('deleteUser', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteUser.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          Raven.captureException(error, { extra: { module: 'users', function: 'deleteUser' } })
+          console.error('deleteUser', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteUser.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
   },
   editUser({ commit, dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.editUser'))

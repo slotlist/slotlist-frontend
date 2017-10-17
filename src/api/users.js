@@ -1,6 +1,9 @@
 import axios from 'axios'
 
 export const v1 = {
+  deleteUser(userUid) {
+    return axios.delete(`/v1/users/${userUid}`)
+  },
   editUser(userUid, payload) {
     return axios.patch(`/v1/users/${userUid}`, payload)
   },

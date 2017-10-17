@@ -36,14 +36,19 @@
           <b-btn variant="primary" v-b-modal.userEditModal>
             <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit') }}
           </b-btn>&nbsp;
-          <click-confirm v-if="userDetails.active" yes-icon="fa fa-user-times" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('user.confirm.deactivate'), yes: $t('button.confirm'), no: $t('button.cancel')}">
-            <b-btn variant="danger" @click="modifyUserStatus(false)">
+          <click-confirm v-if="userDetails.active" yes-icon="fa fa-user-times" yes-class="btn btn-warning" button-size="sm" :messages="{title: $t('user.confirm.deactivate'), yes: $t('button.confirm'), no: $t('button.cancel')}">
+            <b-btn variant="warning" @click="modifyUserStatus(false)">
               <i class="fa fa-user-times" aria-hidden="true"></i> {{ $t('button.deactivate.user') }}
             </b-btn>
           </click-confirm>
           <click-confirm v-if="!userDetails.active" yes-icon="fa fa-user-plus" yes-class="btn btn-success" button-size="sm" :messages="{title: $t('user.confirm.activate'), yes: $t('button.confirm'), no: $t('button.cancel')}">
             <b-btn variant="success" @click="modifyUserStatus(true)">
               <i class="fa fa-user-plus" aria-hidden="true"></i> {{ $t('button.activate.user') }}
+            </b-btn>
+          </click-confirm>&nbsp;
+          <click-confirm yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('user.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
+            <b-btn variant="danger" @click="deleteUser">
+              <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete.user') }}
             </b-btn>
           </click-confirm>
         </div>
@@ -90,6 +95,9 @@ export default {
     }
   },
   methods: {
+    deleteUser() {
+      this.$store.dispatch('deleteUser', { userUid: this.$route.params.userUid })
+    },
     modifyUserStatus(active) {
       this.$store.dispatch('editUser', {
         userUid: this.$route.params.userUid,
