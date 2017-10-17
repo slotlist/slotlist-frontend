@@ -4,10 +4,10 @@
       <thead>
         <tr>
           <th :style="playerColumnWidth">{{ $t('mission.slot.player') }}</th>
-          <th style="width: 35%" v-if="isMissionEditor">{{ $t('mission.registration.comment') }}</th>
-          <th style="width: 24%">{{ $t('mission.registration.registered') }}</th>
+          <th style="width: 30%" v-if="isMissionEditor">{{ $t('mission.registration.comment') }}</th>
+          <th style="width: 25%">{{ $t('mission.registration.registered') }}</th>
           <th style="width: 1%">{{ $t('mission.registration.confirmed') }}</th>
-          <th style="width: 10%" class="text-center" v-if="isMissionEditor && !hasMissionEnded">{{ $t('misc.actions') }}</th>
+          <th style="width: 13%" class="text-center" v-if="isMissionEditor && !hasMissionEnded">{{ $t('misc.actions') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -16,10 +16,10 @@
       <tfoot v-show="missionSlotRegistrations.length >= 10">
         <tr>
           <th :style="playerColumnWidth">{{ $t('mission.slot.player') }}</th>
-          <th style="width: 35%" v-if="isMissionEditor">{{ $t('mission.registration.comment') }}</th>
-          <th style="width: 24%">{{ $t('mission.registration.registered') }}</th>
+          <th style="width: 30%" v-if="isMissionEditor">{{ $t('mission.registration.comment') }}</th>
+          <th style="width: 25%">{{ $t('mission.registration.registered') }}</th>
           <th style="width: 1%">{{ $t('mission.registration.confirmed') }}</th>
-          <th style="width: 10%" class="text-center" v-if="isMissionEditor && !hasMissionEnded">{{ $t('misc.actions') }}</th>
+          <th style="width: 13%" class="text-center" v-if="isMissionEditor && !hasMissionEnded">{{ $t('misc.actions') }}</th>
         </tr>
       </tfoot>
     </table>
@@ -53,7 +53,7 @@ export default {
       return this.$store.getters.missionSlotRegistrations
     },
     playerColumnWidth() {
-      return this.isMissionEditor ? 'width: 30%' : 'width: 75%'
+      return this.isMissionEditor ? 'width: 31%' : 'width: 61%'
     },
   }
 }

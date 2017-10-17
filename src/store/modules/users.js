@@ -37,6 +37,67 @@ const actions = {
       type: 'clearUserDetails'
     })
   },
+  editUser({ commit, dispatch }, payload) {
+    dispatch('startWorking', i18n.t('store.editUser'))
+
+    return UsersApi.editUser(payload.userUid, payload.updatedUserDetails)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Updating user details failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (_.isNil(response.data.user) || !_.isObject(response.data.user)) {
+          console.error(response)
+          throw "Received invalid user"
+        }
+
+        commit({
+          type: 'setUserDetails',
+          userDetails: response.data.user
+        })
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.editUser.success')}`
+        })
+
+        dispatch('stopWorking', i18n.t('store.editUser'))
+      }).catch((error) => {
+        dispatch('stopWorking', i18n.t('store.editUser'))
+
+        if (error.response) {
+          console.error('editUser', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editUser.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'users', function: 'editUser' } })
+          console.error('editUser', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editUser.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          Raven.captureException(error, { extra: { module: 'users', function: 'editUser' } })
+          console.error('editUser', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editUser.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
   getUserDetails({ commit, dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.getUserDetails'))
 

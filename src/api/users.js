@@ -1,6 +1,9 @@
 import axios from 'axios'
 
 export const v1 = {
+  editUser(userUid, payload) {
+    return axios.patch(`/v1/users/${userUid}`, payload)
+  },
   getUserDetails(userUid) {
     return axios.get(`/v1/users/${userUid}`)
   },
