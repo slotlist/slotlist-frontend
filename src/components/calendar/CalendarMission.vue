@@ -15,7 +15,7 @@ export default {
   ],
   computed: {
     missionPopoverContent() {
-      let content = `<span><strong>${this.mission.title}</strong><br>${this.$t('mission.startTime')} ${moment(this.mission.startTime).format('HH:mm')}<br>${this.$t('mission.endTime')} ${moment(this.mission.endTime).format('HH:mm')}`
+      let content = `<span><strong>${this.mission.title}</strong><br>${this.$t('mission.startTime')} ${moment(this.mission.startTime).format('LT')}<br>${this.$t('mission.endTime')} ${moment(this.mission.endTime).format('LT')}`
       if (!this.mission.isAssignedToAnySlot && this.mission.isRegisteredForAnySlot) {
         content += `<br>${this.$t('mission.list.slot.status.registered')}</span>`
       } else if (this.mission.isAssignedToAnySlot) {

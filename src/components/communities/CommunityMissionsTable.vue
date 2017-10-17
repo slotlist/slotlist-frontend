@@ -3,8 +3,8 @@
     <table class="table table-striped" v-if="communityMissions">
       <thead>
         <tr>
-          <th style="width: 15%">{{ $t('mission.startTime') }}</th>
-          <th style="width: 45%">{{ $t('mission.title') }}</th>
+          <th style="width: 16%">{{ $t('mission.startTime') }}</th>
+          <th style="width: 44%">{{ $t('mission.title') }}</th>
           <th style="width: 30%">{{ $t('mission.creator') }}</th>
           <th style="width: 10%" class="text-center">{{ $t('misc.actions') }}</th>
         </tr>
@@ -14,8 +14,8 @@
       </tbody>
       <tfoot v-show="communityMissions.length >= 10">
         <tr>
-          <th style="width: 15%">{{ $t('mission.startTime') }}</th>
-          <th style="width: 45%">{{ $t('mission.title') }}</th>
+          <th style="width: 16%">{{ $t('mission.startTime') }}</th>
+          <th style="width: 44%">{{ $t('mission.title') }}</th>
           <th style="width: 30%">{{ $t('mission.creator') }}</th>
           <th style="width: 10%" class="text-center">{{ $t('misc.actions') }}</th>
         </tr>

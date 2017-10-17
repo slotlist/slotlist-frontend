@@ -82,7 +82,7 @@ const i18n = new VueI18n({
 
 Vue.mixin({
   methods: {
-    formatDateTime: (dateTime) => moment(dateTime).format('Y-MM-DD HH:mm'),
+    formatDateTime: (dateTime) => moment(dateTime).format('L LT'),
     formatUserWithTag: (user) => _.isNil(user.community) ? user.nickname : `[${user.community.tag}] ${user.nickname}`
   }
 })

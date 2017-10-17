@@ -93,6 +93,7 @@ const mutations = {
     Vue.ls.set('locale', payload.locale)
 
     i18n.locale = payload.locale
+    moment.locale(payload.locale)
   },
   setTimezone(state, payload) {
     Vue.ls.set('timezone', payload.timezone)
