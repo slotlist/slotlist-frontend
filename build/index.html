@@ -13,24 +13,6 @@
     <!-- The bundled bootstrap.js file apparently does not contain all code needed for the navbar collapse to work... This is actually pretty nasty, loading it twice, but oh well. Maybe the beta will fix it -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha256-+kIbbrvS+0dNOjhmQJzmwe/RILR/8lb/+4+PUNVW09k=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.4/cookieconsent.min.js" integrity="sha256-r0xmg4FKpSfK9TvePQIeaq/gCDO0Xy3q0EPIfteGRnQ=" crossorigin="anonymous"></script>
-    <script>
-      window.addEventListener("load", function(){
-      window.cookieconsent.initialise({
-        "palette": {
-          "popup": {
-            "background": "#edeff5",
-            "text": "#838391"
-          },
-          "button": {
-            "background": "transparent",
-            "text": "#4b81e8",
-            "border": "#4b81e8"
-          }
-        },
-        "content": {
-          "href": "https://slotlist.info/#/privacy"
-        }
-      })});
-    </script>
+    <script src="/cookieconsent.js" integrity="sha256-y1cB1+ObhAQXzDmRBk8OI7UFz6+zPAvF3JpzbyMPYyo=" crossorigin="anonymous"></script>
   </body>
 </html>
