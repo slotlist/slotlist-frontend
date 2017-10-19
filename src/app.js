@@ -57,6 +57,8 @@ import Quill from 'quill'
 import ImageResize from 'quill-image-resize-module'
 
 Quill.register('modules/imageResize', ImageResize)
+const Link = Quill.import('formats/link')
+Link.PROTOCOL_WHITELIST = _.concat(Link.PROTOCOL_WHITELIST, 'ts3server', 'ftp')
 
 import VueQuillEditor from 'vue-quill-editor'
 
@@ -82,7 +84,7 @@ const i18n = new VueI18n({
 
 Vue.mixin({
   methods: {
-    formatDateTime: (dateTime) => moment(dateTime).format('Y-MM-DD HH:mm'),
+    formatDateTime: (dateTime) => moment(dateTime).format('L LT'),
     formatUserWithTag: (user) => _.isNil(user.community) ? user.nickname : `[${user.community.tag}] ${user.nickname}`
   }
 })

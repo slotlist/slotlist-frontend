@@ -46,16 +46,16 @@
         </div>
       </div>
       <div slot="modal-footer">
-        <b-btn variant="success" v-if="loggedIn && !missionSlotDetails.registrationUid" :disabled="missionSlotDetails.blocked || !canRegisterForSlot" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotRegistrationModal>
+        <b-btn variant="success" v-if="loggedIn && !missionSlotDetails.registrationUid && !hasMissionEnded" :disabled="missionSlotDetails.blocked || !canRegisterForSlot" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotRegistrationModal>
           <i class="fa fa-ticket" aria-hidden="true"></i> {{ $t('button.register') }}
         </b-btn>
-        <b-btn variant="warning" v-if="isMissionEditor" :disabled="missionSlotDetails.blocked" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotAssignModal>
+        <b-btn variant="warning" v-if="isMissionEditor && !hasMissionEnded" :disabled="missionSlotDetails.blocked" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotAssignModal>
           <i class="fa fa-gavel" aria-hidden="true"></i> {{ $t('button.assign.mission.slot') }}
         </b-btn>
-        <b-btn variant="secondary" v-if="isMissionEditor" @click="duplicateMissionSlot">
+        <b-btn variant="secondary" v-if="isMissionEditor && !hasMissionEnded" @click="duplicateMissionSlot">
           <i class="fa fa-files-o" aria-hidden="true"></i> {{ $t('button.duplicate.mission.slot') }}
         </b-btn>
-        <b-btn variant="primary" v-if="isMissionEditor" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotEditModal>
+        <b-btn variant="primary" v-if="isMissionEditor && !hasMissionEnded" @click="hideMissionSlotDetailsModal" v-b-modal.missionSlotEditModal>
           <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit') }}
         </b-btn>
         <b-btn @click="hideMissionSlotDetailsModal">
@@ -68,6 +68,7 @@
 
 <script>
 import * as _ from 'lodash'
+import moment from 'moment-timezone'
 import MissionSlotRegistrations from '../MissionSlotRegistrations.vue'
 
 export default {
@@ -129,11 +130,21 @@ export default {
 
       return `<span class="text-muted font-italic">${this.$t('mission.slot.assignee.notAssigned')} - ${this.missionSlotDetails.registrationCount} ${this.$tc('mission.slot.assignee.registration', this.missionSlotDetails.registrationCount > 1 ? 2 : 1)}</span>`
     },
+    hasMissionEnded() {
+      if (_.isNil(this.missionDetails)) {
+        return false
+      }
+
+      return moment().isAfter(moment(this.missionDetails.endTime))
+    },
     isMissionEditor() {
       return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`, `mission.${this.$route.params.missionSlug}.editor`])
     },
     loggedIn() {
       return this.$store.getters.loggedIn
+    },
+    missionDetails() {
+      return this.$store.getters.missionDetails
     },
     missionSlotDetails() {
       return this.$store.getters.missionSlotDetails

@@ -83,9 +83,9 @@ export default {
   created: function() {
     utils.setTitle(this.$t('nav.account'))
 
-    this.currentTime = moment().format('Y-MM-DD HH:mm:ss')
+    this.currentTime = moment().format('L LTS')
     this.currentTimeSetInterval = setInterval(() => {
-      this.currentTime = moment().format('Y-MM-DD HH:mm:ss')
+      this.currentTime = moment().format('L LTS')
     }, 1000)
   },
   beforeDestroy: function() {

@@ -56,7 +56,6 @@ export default {
     },
     refreshCalendarMissions() {
       this.$store.dispatch('getMissionsForCalendar', {
-        silent: true,
         autoRefresh: true,
         startDate: moment(this.currentMonth).startOf('month'),
         endDate: moment(this.currentMonth).endOf('month')

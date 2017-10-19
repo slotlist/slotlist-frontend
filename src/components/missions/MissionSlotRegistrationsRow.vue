@@ -4,7 +4,7 @@
     <td v-html="formattedComment" v-if="isMissionEditor"></td>
     <td>{{ formatDateTime(registration.createdAt) }}</td>
     <td class="text-center" v-html="formattedConfirmation"></td>
-    <td class="text-center" v-if="isMissionEditor">
+    <td class="text-center" v-if="isMissionEditor && !hasMissionEnded">
       <b-btn v-if="!registration.confirmed" variant="success" size="sm" @click="modifyMissionSlotRegistration(true)">
         <i class="fa fa-check" aria-hidden="true"></i>
       </b-btn>
@@ -20,6 +20,7 @@
 
 <script>
 import * as _ from 'lodash'
+import moment from 'moment-timezone'
 
 export default {
   props: [
@@ -34,8 +35,18 @@ export default {
     formattedConfirmation() {
       return this.registration.confirmed ? '<i class="fa fa-check fa-lg text-success" aria-hidden="true"></i>' : '<i class="fa fa-close fa-lg text-danger" aria-hidden="true"></i>'
     },
+    hasMissionEnded() {
+      if (_.isNil(this.missionDetails)) {
+        return false
+      }
+
+      return moment().isAfter(moment(this.missionDetails.endTime))
+    },
     isMissionEditor() {
       return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`, `mission.${this.$route.params.missionSlug}.editor`])
+    },
+    missionDetails() {
+      return this.$store.getters.missionDetails
     }
   },
   methods: {

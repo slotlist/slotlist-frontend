@@ -131,13 +131,13 @@
       <mission-banner-image-modal v-if="loggedIn && isMissionEditor"></mission-banner-image-modal>
       <mission-edit-modal v-if="loggedIn && isMissionEditor"></mission-edit-modal>
       <mission-permission-modal v-if="loggedIn && isMissionCreator"></mission-permission-modal>
-      <mission-slot-assign-modal v-if="loggedIn && isMissionEditor"></mission-slot-assign-modal>
-      <mission-slot-create-modal v-if="loggedIn && isMissionEditor"></mission-slot-create-modal>
+      <mission-slot-assign-modal v-if="loggedIn && isMissionEditor && !hasMissionEnded"></mission-slot-assign-modal>
+      <mission-slot-create-modal v-if="loggedIn && isMissionEditor && !hasMissionEnded"></mission-slot-create-modal>
       <mission-slot-details-modal></mission-slot-details-modal>
-      <mission-slot-edit-modal v-if="loggedIn && isMissionEditor"></mission-slot-edit-modal>
-      <mission-slot-group-create-modal v-if="loggedIn && isMissionEditor"></mission-slot-group-create-modal>
-      <mission-slot-group-edit-modal v-if="loggedIn && isMissionEditor"></mission-slot-group-edit-modal>
-      <mission-slot-registration-modal v-if="loggedIn"></mission-slot-registration-modal>
+      <mission-slot-edit-modal v-if="loggedIn && isMissionEditor && !hasMissionEnded"></mission-slot-edit-modal>
+      <mission-slot-group-create-modal v-if="loggedIn && isMissionEditor && !hasMissionEnded"></mission-slot-group-create-modal>
+      <mission-slot-group-edit-modal v-if="loggedIn && isMissionEditor && !hasMissionEnded"></mission-slot-group-edit-modal>
+      <mission-slot-registration-modal v-if="loggedIn && !hasMissionEnded"></mission-slot-registration-modal>
     </div>
     <!-- End of modals -->
   </div>
@@ -146,6 +146,7 @@
 <script>
 import * as _ from 'lodash'
 import moment from 'moment-timezone'
+import FileSaver from 'file-saver'
 import MissionBannerImageModal from 'components/missions/modals/MissionBannerImageModal.vue'
 import MissionEditModal from 'components/missions/modals/MissionEditModal.vue'
 import MissionPermissionModal from 'components/missions/modals/MissionPermissionModal.vue'
@@ -212,6 +213,13 @@ export default {
 
       return encodeURI(link)
     },
+    hasMissionEnded() {
+      if (_.isNil(this.missionDetails)) {
+        return false
+      }
+
+      return moment().isAfter(moment(this.missionDetails.endTime))
+    },
     isMissionCreator() {
       return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`])
     },
@@ -256,10 +264,7 @@ export default {
 
       const blob = new Blob([data], { type: 'text/calendar' })
 
-      const link = document.createElement('a')
-      link.href = window.URL.createObjectURL(blob)
-      link.download = `${this.missionDetails.title}.ics`
-      link.click()
+      FileSaver.saveAs(blob, `${this.missionDetails.title}.ics`)
     }
   },
   watch: {

@@ -142,6 +142,64 @@ const getters = {
 }
 
 const actions = {
+  addMissionPermission({ dispatch }, payload) {
+    dispatch('startWorking', i18n.t('store.addMissionPermission'))
+
+    return MissionsApi.addMissionPermission(payload.missionSlug, payload.permissionDetails)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Creating mission permission failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (_.isNil(response.data.permission) || !_.isObject(response.data.permission)) {
+          console.error(response)
+          throw 'Received invalid mission permission'
+        }
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.addMissionPermission.success')}`
+        })
+
+        dispatch('getMissionPermissions', { missionSlug: payload.missionSlug })
+
+        dispatch('stopWorking', i18n.t('store.addMissionPermission'))
+      }).catch((error) => {
+        dispatch('stopWorking', i18n.t('store.addMissionPermission'))
+
+        if (error.response) {
+          console.error('addMissionPermission', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.addMissionPermission.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'addMissionPermission' } })
+          console.error('addMissionPermission', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.addMissionPermission.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'addMissionPermission' } })
+          console.error('addMissionPermission', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.addMissionPermission.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
   assignMissionSlot({ dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.assignMissionSlot'))
 
@@ -207,7 +265,6 @@ const actions = {
     })
 
     dispatch('getMissionsForCalendar', {
-      silent: true,
       autoRefresh: true,
       startDate: moment(payload).startOf('month'),
       endDate: moment(payload).endOf('month')
@@ -348,64 +405,6 @@ const actions = {
             showAlert: true,
             alertVariant: 'danger',
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMission.error', { title: payload.title })} - ${i18n.t('failed.something')}`
-          })
-        }
-      })
-  },
-  createMissionPermission({ dispatch }, payload) {
-    dispatch('startWorking', i18n.t('store.createMissionPermission'))
-
-    return MissionsApi.createMissionPermission(payload.missionSlug, payload.permissionDetails)
-      .then((response) => {
-        if (response.status !== 200) {
-          console.error(response)
-          throw 'Creating mission permission failed'
-        }
-
-        if (_.isEmpty(response.data)) {
-          console.error(response)
-          throw 'Received empty response'
-        }
-
-        if (_.isNil(response.data.permission) || !_.isObject(response.data.permission)) {
-          console.error(response)
-          throw 'Received invalid mission permission'
-        }
-
-        dispatch('showAlert', {
-          showAlert: true,
-          alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.createMissionPermission.success')}`
-        })
-
-        dispatch('getMissionPermissions', { missionSlug: payload.missionSlug })
-
-        dispatch('stopWorking', i18n.t('store.createMissionPermission'))
-      }).catch((error) => {
-        dispatch('stopWorking', i18n.t('store.createMissionPermission'))
-
-        if (error.response) {
-          console.error('createMissionPermission', error.response)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissionPermission.error')} - ${error.response.data.message}`
-          })
-        } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'createMissionPermission' } })
-          console.error('createMissionPermission', error.request)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissionPermission.error')} - ${i18n.t('failed.request')}`
-          })
-        } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'createMissionPermission' } })
-          console.error('createMissionPermission', error.message)
-          dispatch('showAlert', {
-            showAlert: true,
-            alertVariant: 'danger',
-            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissionPermission.error')} - ${i18n.t('failed.something')}`
           })
         }
       })
@@ -1403,10 +1402,7 @@ const actions = {
     })
 
     if (_.isNil(payload)) {
-      payload = { silent: false, autoRefresh: false, startDate: moment().startOf('month'), endDate: moment().endOf('month') }
-    }
-    if (_.isNil(payload.silent)) {
-      payload.silent = false
+      payload = { autoRefresh: false, startDate: moment().startOf('month'), endDate: moment().endOf('month') }
     }
     if (_.isNil(payload.autoRefresh)) {
       payload.autoRefresh = false
@@ -1416,10 +1412,6 @@ const actions = {
     }
     if (_.isNil(payload.endDate)) {
       payload.endDate = moment().endOf('month')
-    }
-
-    if (!payload.silent) {
-      dispatch('startWorking', i18n.t('store.getMissionsForCalendar'))
     }
 
     return MissionsApi.getMissionsForCalendar(payload.startDate.valueOf(), payload.endDate.valueOf())
@@ -1444,10 +1436,6 @@ const actions = {
           missions: response.data.missions
         })
 
-        if (!payload.silent) {
-          dispatch('stopWorking', i18n.t('store.getMissionsForCalendar'))
-        }
-
         commit({
           type: 'refreshingMissionsForCalendar',
           refreshing: false
@@ -1459,7 +1447,7 @@ const actions = {
           }
 
           state.missionsForCalendarRefreshSetInterval = setInterval(() => {
-            dispatch('getMissionsForCalendar', { silent: true, startDate: payload.startDate, endDate: payload.endDate })
+            dispatch('getMissionsForCalendar', { startDate: payload.startDate, endDate: payload.endDate })
           }, intervals.missionsForCalendarRefresh)
         }
       }).catch((error) => {
@@ -1467,10 +1455,6 @@ const actions = {
           type: 'refreshingMissionsForCalendar',
           refreshing: false
         })
-
-        if (!payload.silent) {
-          dispatch('stopWorking', i18n.t('store.getMissionsForCalendar'))
-        }
 
         if (error.response) {
           console.error('getMissionsForCalendar', error.response)

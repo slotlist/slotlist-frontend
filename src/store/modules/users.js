@@ -1,12 +1,18 @@
 import { i18n } from '../../app'
 import * as _ from 'lodash'
 import utils from '../../utils'
+import router from '../../router'
 import Raven from 'raven-js'
 
 import UsersApi from '../../api/users'
 
+const limits = {
+  userMissions: 10
+}
+
 const state = {
   searchingUsers: false,
+  totalUserMissions: 0,
   userDetails: null,
   userMissions: null
 }
@@ -20,7 +26,10 @@ const getters = {
   },
   userMissions() {
     return state.userMissions
-  }
+  },
+  userMissionsPageCount() {
+    return Math.ceil(state.totalUserMissions / limits.userMissions)
+  },
 }
 
 const actions = {
@@ -28,6 +37,125 @@ const actions = {
     commit({
       type: 'clearUserDetails'
     })
+  },
+  deleteUser({ dispatch }, payload) {
+    dispatch('startWorking', i18n.t('store.deleteUser'))
+
+    return UsersApi.deleteUser(payload.userUid)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Deleting user failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (response.data.success !== true) {
+          console.error(response)
+          throw 'Received invalid user deletion'
+        }
+
+        router.push({ name: 'home' })
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteUser.success')}`
+        })
+
+        dispatch('stopWorking', i18n.t('store.deleteUser'))
+      }).catch((error) => {
+        dispatch('stopWorking', i18n.t('store.deleteUser'))
+
+        if (error.response) {
+          console.error('deleteUser', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteUser.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'users', function: 'deleteUser' } })
+          console.error('deleteUser', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteUser.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          Raven.captureException(error, { extra: { module: 'users', function: 'deleteUser' } })
+          console.error('deleteUser', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteUser.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
+  editUser({ commit, dispatch }, payload) {
+    dispatch('startWorking', i18n.t('store.editUser'))
+
+    return UsersApi.editUser(payload.userUid, payload.updatedUserDetails)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Updating user details failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (_.isNil(response.data.user) || !_.isObject(response.data.user)) {
+          console.error(response)
+          throw "Received invalid user"
+        }
+
+        commit({
+          type: 'setUserDetails',
+          userDetails: response.data.user
+        })
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.editUser.success')}`
+        })
+
+        dispatch('stopWorking', i18n.t('store.editUser'))
+      }).catch((error) => {
+        dispatch('stopWorking', i18n.t('store.editUser'))
+
+        if (error.response) {
+          console.error('editUser', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editUser.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'users', function: 'editUser' } })
+          console.error('editUser', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editUser.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          Raven.captureException(error, { extra: { module: 'users', function: 'editUser' } })
+          console.error('editUser', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editUser.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
   },
   getUserDetails({ commit, dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.getUserDetails'))
@@ -87,7 +215,14 @@ const actions = {
   getUserMissions({ commit, dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.getUserMissions'))
 
-    return UsersApi.getUserMissions(payload)
+    if (_.isNil(payload.page)) {
+      payload.page = 1
+    }
+
+    // TODO remove default value once filter has been implemented
+    const includeEnded = false
+
+    return UsersApi.getUserMissions(payload.userUid, limits.userMissions, (payload.page - 1) * limits.userMissions, includeEnded)
       .then(function (response) {
         if (response.status !== 200) {
           console.error(response)
@@ -106,7 +241,8 @@ const actions = {
 
         commit({
           type: 'setUserMissions',
-          userMissions: response.data.missions
+          userMissions: response.data.missions,
+          total: response.data.total
         })
 
         dispatch('stopWorking', i18n.t('store.getUserMissions'))
@@ -211,6 +347,7 @@ const actions = {
 
 const mutations = {
   clearUserDetails(state) {
+    state.totalUserMissions = 0
     state.userDetails = null
     state.userMissions = null
   },
@@ -219,12 +356,12 @@ const mutations = {
   },
   setUserDetails(state, payload) {
     state.userDetails = payload.userDetails
-    state.userMissions = payload.userDetails.missions
 
     utils.setTitle(`${i18n.t('user')} ${state.userDetails.nickname}`)
   },
   setUserMissions(state, payload) {
     state.userMissions = payload.userMissions
+    state.totalUserMissions = payload.total
   }
 }
 
