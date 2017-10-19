@@ -57,6 +57,8 @@ import Quill from 'quill'
 import ImageResize from 'quill-image-resize-module'
 
 Quill.register('modules/imageResize', ImageResize)
+const Link = Quill.import('formats/link')
+Link.PROTOCOL_WHITELIST = _.concat(Link.PROTOCOL_WHITELIST, 'ts3server', 'ftp')
 
 import VueQuillEditor from 'vue-quill-editor'
 
