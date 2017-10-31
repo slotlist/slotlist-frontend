@@ -258,16 +258,10 @@ const actions = {
         }
       })
   },
-  changeMissionCalendarCurrentMonth({ commit, dispatch }, payload) {
+  changeMissionCalendarCurrentMonth({ commit }, payload) {
     commit({
       type: 'setMissionCalendarCurrentMonth',
       currentMonth: payload
-    })
-
-    dispatch('getMissionsForCalendar', {
-      autoRefresh: true,
-      startDate: moment(payload).startOf('month'),
-      endDate: moment(payload).endOf('month')
     })
   },
   checkMissionSlugAvailability({ commit, dispatch }, payload) {

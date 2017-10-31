@@ -6,13 +6,14 @@
       </div>
     </div>
     <div>
-      <calendar-mission v-for="mission in day.missions" :key="mission.uid" :mission="mission"></calendar-mission>
+      <calendar-mission v-for="mission in missionsForDay" :key="mission.uid" :mission="mission"></calendar-mission>
     </div>
   </div>
 </template>
 
 <script>
 import CalendarMission from './CalendarMission.vue'
+import moment from 'moment-timezone'
 
 export default {
   components: {
@@ -24,6 +25,18 @@ export default {
   computed: {
     isDaySelected() {
       return false
+    },
+    missions() {
+      return this.$store.getters.missionsForCalendar
+    },
+    missionsForDay() {
+      if (_.isNil(this.missions) || _.isEmpty(this.missions)) {
+        return []
+      }
+
+      return _.filter(this.missions, (mission) => {
+        return this.day.date.isSame(moment(mission.startTime), 'day')
+      })
     }
   }
 }
