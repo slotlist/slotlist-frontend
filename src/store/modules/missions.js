@@ -818,6 +818,73 @@ const actions = {
         }
       })
   },
+  duplicateMission({ dispatch, commit }, payload) {
+    dispatch('startWorking', i18n.t('store.duplicateMission'))
+
+    return MissionsApi.duplicateMission(payload.missionSlug, payload.missionDuplicatePayload)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Duplicating mission failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (_.isNil(response.data.mission) || !_.isObject(response.data.mission)) {
+          console.error(response)
+          throw 'Received invalid mission'
+        }
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.duplicateMission.success')}`,
+          scrollToTop: true
+        })
+
+        router.push({
+          name: 'missionDetails',
+          params: { missionSlug: response.data.mission.slug }
+        })
+
+        commit({
+          type: 'setMissionDetails',
+          mission: response.data.mission
+        })
+
+        dispatch('stopWorking', i18n.t('store.duplicateMission'))
+      }).catch((error) => {
+        dispatch('stopWorking', i18n.t('store.duplicateMission'))
+
+        if (error.response) {
+          console.error('duplicateMission', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.duplicateMission.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'duplicateMission' } })
+          console.error('duplicateMission', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.duplicateMission.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'duplicateMission' } })
+          console.error('duplicateMission', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.duplicateMission.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
   duplicateMissionSlotGroup({ dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.duplicateMissionSlotGroup'))
 
