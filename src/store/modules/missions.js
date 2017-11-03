@@ -4,7 +4,6 @@ import utils from '../../utils'
 import router from '../../router'
 import Raven from 'raven-js'
 import moment from 'moment-timezone'
-import Promise from 'bluebird'
 
 import MissionsApi from '../../api/missions'
 
