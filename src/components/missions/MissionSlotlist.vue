@@ -23,6 +23,9 @@
             <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete.mission.slot.selection') }}
           </b-btn>
         </click-confirm>
+        <b-btn variant="secondary" @click="clearMissionSlotSelection">
+          <i class="fa fa-times-circle" aria-hidden="true"></i> {{ $t('button.clear.selection') }}
+        </b-btn>
       </div>
     </div>
   </div>
@@ -65,6 +68,9 @@ export default {
     }
   },
   methods: {
+    clearMissionSlotSelection() {
+      this.$store.dispatch('clearMissionSlotSelection')
+    },
     deleteSelectedMissionSlots() {
       this.$store.dispatch('deleteSelectedMissionSlots', { missionSlug: this.$route.params.missionSlug })
     },

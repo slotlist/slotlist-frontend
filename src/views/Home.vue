@@ -1,10 +1,10 @@
 <template>
   <div>
-    <home-de v-if="$i18n.locale === 'de'"></home-de>
+    <home-de v-if="$i18n.locale === 'de' || $i18n.locale === 'de-at'"></home-de>
     <home-en v-else></home-en>
     <calendar></calendar>
     <br>
-    <faq-de v-if="$i18n.locale === 'de'"></faq-de>
+    <faq-de v-if="$i18n.locale === 'de' || $i18n.locale === 'de-at'"></faq-de>
     <faq-en v-else></faq-en>
   </div>
 </template>

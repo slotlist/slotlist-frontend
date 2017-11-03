@@ -142,6 +142,19 @@ const getters = {
   },
   refreshingMissionsForCalendar() {
     return state.refreshingMissionsForCalendar
+  },
+  selectedMissionSlots() {
+    const slots = []
+
+    _.each(state.missionSlotGroups, (slotGroup) => {
+      const matchedSlots = _.filter(slotGroup.slots, (slot) => _.indexOf(state.missionSlotSelection, slot.uid) >= 0)
+
+      if (!_.isEmpty(matchedSlots)) {
+        slots.push(...matchedSlots)
+      }
+    })
+
+    return slots
   }
 }
 
@@ -884,7 +897,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'danger',
-          alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlot.error')} - ${i18n.t('failed.something')}`
+          alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteSelectedMissionSlots.error')} - ${i18n.t('failed.something')}`
         })
       }
     })
@@ -1279,6 +1292,66 @@ const actions = {
           })
         }
       })
+  },
+  editSelectedMissionSlots({ dispatch, state }, payload) {
+    const selectedSlotCount = state.missionSlotSelection.length
+
+    dispatch('startWorking', i18n.tc('store.editSelectedMissionSlots', selectedSlotCount, { count: selectedSlotCount }))
+
+    return Promise.each(state.missionSlotSelection, (slotUid) => {
+      return MissionsApi.editMissionSlot(payload.missionSlug, slotUid, payload.updatedMissionSlotDetails)
+        .then((response) => {
+          if (response.status !== 200) {
+            console.error(response)
+            throw 'Editing mission slot failed'
+          }
+
+          if (_.isEmpty(response.data)) {
+            console.error(response)
+            throw 'Received empty response'
+          }
+
+          if (_.isNil(response.data.slot) || !_.isObject(response.data.slot)) {
+            console.error(response)
+            throw 'Received invalid mission slot'
+          }
+      })
+    }).then(() => {
+      dispatch('getMissionSlotlist', { missionSlug: payload.missionSlug })
+
+      dispatch('showAlert', {
+        showAlert: true,
+        alertVariant: 'success',
+        alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.tc('store.editSelectedMissionSlots.success', selectedSlotCount, { count: selectedSlotCount })}`
+      })
+
+      dispatch('stopWorking', i18n.tc('store.editSelectedMissionSlots', selectedSlotCount, { count: selectedSlotCount }))
+    }).catch((error) => {
+      if (error.response) {
+        console.error('editSelectedMissionSlots', error.response)
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'danger',
+          alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editSelectedMissionSlots.error')} - ${error.response.data.message}`
+        })
+      } else if (error.request) {
+        Raven.captureException(error, { extra: { module: 'missions', function: 'editSelectedMissionSlots' } })
+        console.error('editSelectedMissionSlots', error.request)
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'danger',
+          alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editSelectedMissionSlots.error')} - ${i18n.t('failed.request')}`
+        })
+      } else {
+        Raven.captureException(error, { extra: { module: 'missions', function: 'editSelectedMissionSlots' } })
+        console.error('editSelectedMissionSlots', error.message)
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'danger',
+          alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editSelectedMissionSlots.error')} - ${i18n.t('failed.something')}`
+        })
+      }
+    })
   },
   filterMissionList({ commit, dispatch, state }, payload) {
     const hadEndedFilter = _.has(state.missionListFilter, 'ended')

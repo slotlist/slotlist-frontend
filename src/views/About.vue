@@ -1,6 +1,6 @@
 <template>
   <div>
-    <about-de v-if="$i18n.locale === 'de'"></about-de>
+    <about-de v-if="$i18n.locale === 'de' || $i18n.locale === 'de-at'"></about-de>
     <about-en v-else></about-en>
   </div>
 </template>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <privacy-de v-if="$i18n.locale === 'de'"></privacy-de>
+    <privacy-de v-if="$i18n.locale === 'de' || $i18n.locale === 'de-at'"></privacy-de>
     <privacy-en v-else></privacy-en>
   </div>
 </template>

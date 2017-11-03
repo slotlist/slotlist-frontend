@@ -142,6 +142,7 @@
       <mission-slot-group-create-modal v-if="loggedIn && isMissionEditor && !hasMissionEnded"></mission-slot-group-create-modal>
       <mission-slot-group-edit-modal v-if="loggedIn && isMissionEditor && !hasMissionEnded"></mission-slot-group-edit-modal>
       <mission-slot-registration-modal v-if="loggedIn && !hasMissionEnded"></mission-slot-registration-modal>
+      <mission-slot-selection-edit-modal v-if="loggedIn && isMissionEditor && !hasMissionEnded"></mission-slot-selection-edit-modal>
     </div>
     <!-- End of modals -->
   </div>
@@ -163,6 +164,7 @@ import MissionSlotGroupCreateModal from 'components/missions/modals/MissionSlotG
 import MissionSlotGroupEditModal from 'components/missions/modals/MissionSlotGroupEditModal.vue'
 import MissionSlotlist from 'components/missions/MissionSlotlist.vue'
 import MissionSlotRegistrationModal from 'components/missions/modals/MissionSlotRegistrationModal.vue'
+import MissionSlotSelectionEditModal from 'components/missions/modals/MissionSlotSelectionEditModal.vue'
 import utils from '../utils'
 
 export default {
@@ -178,7 +180,8 @@ export default {
     MissionSlotGroupCreateModal,
     MissionSlotGroupEditModal,
     MissionSlotlist,
-    MissionSlotRegistrationModal
+    MissionSlotRegistrationModal,
+    MissionSlotSelectionEditModal
   },
   beforeCreate: function() {
     this.$store.dispatch('getMissionDetails', { missionSlug: this.$route.params.missionSlug })
