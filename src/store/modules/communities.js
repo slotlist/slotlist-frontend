@@ -17,6 +17,7 @@ const state = {
   checkingCommunitySlugAvalability: false,
   communities: null,
   communityApplications: null,
+  communityApplicationsFilter: {},
   communityApplicationStatus: null,
   communityDetails: null,
   communityMembers: null,
@@ -38,7 +39,20 @@ const getters = {
     return state.communities
   },
   communityApplications() {
-    return state.communityApplications
+    if (_.isEmpty(_.keys(state.communityApplicationsFilter)) || (_.keys(state.communityApplicationsFilter).length === 1 && _.has(state.communityApplicationsFilter, 'processed'))) {
+      return state.communityApplications
+    }
+
+    const filteredApplications = []
+    _.each(state.communityApplications, (application) => {
+      if (_.has(state.communityApplicationsFilter, 'accepted') && application.status === 'accepted') {
+        filteredApplications.push(application)
+      } else if (_.has(state.communityApplicationsFilter, 'denied') && application.status === 'denied') {
+        filteredApplications.push(application)
+      }
+    })
+
+    return filteredApplications
   },
   communityApplicationsPageCount() {
     return Math.ceil(state.totalCommunityApplications / limits.communityApplications)
@@ -527,6 +541,23 @@ const actions = {
         }
       })
   },
+  filterCommunityApplications({ commit, dispatch, state }, payload) {
+    const hadProcessFilter = _.has(state.communityApplicationsFilter, 'processed')
+
+    if (!hadProcessFilter && (_.indexOf(payload.filter, 'accepted') >= 0 || _.indexOf(payload.filter, 'denied') >= 0)) {
+      payload.filter.push('processed')
+    }
+
+    commit({
+      type: 'setCommunityApplicationsFilter',
+      communityApplicationsFilter: payload.filter
+    })
+
+    const hasProcessFilter = _.has(state.communityApplicationsFilter, 'processed')
+    if ((hadProcessFilter && !hasProcessFilter) || (!hadProcessFilter && hasProcessFilter)) {
+      dispatch('getCommunityApplications', { communitySlug: payload.communitySlug })
+    }
+  },
   getCommunities({ commit, dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.getCommunities'))
 
@@ -596,7 +627,9 @@ const actions = {
       payload.page = 1
     }
 
-    return CommunitiesApi.getCommunityApplications(payload.communitySlug, limits.communityApplications, (payload.page - 1) * limits.communityApplications)
+    let includeProcessed = _.has(state.communityApplicationsFilter, 'processed')
+
+    return CommunitiesApi.getCommunityApplications(payload.communitySlug, limits.communityApplications, (payload.page - 1) * limits.communityApplications, includeProcessed)
       .then(function (response) {
         if (response.status !== 200) {
           console.error(response)
@@ -1115,6 +1148,14 @@ const mutations = {
   setCommunityApplications(state, payload) {
     state.communityApplications = payload.communityApplications
     state.totalCommunityApplications = payload.total
+  },
+  setCommunityApplicationsFilter(state, payload) {
+    const filter = {}
+    _.each(payload.communityApplicationsFilter, (f) => {
+      filter[f] = true
+    })
+
+    state.communityApplicationsFilter = filter
   },
   setCommunityApplicationStatus(state, payload) {
     state.communityApplicationStatus = payload.application

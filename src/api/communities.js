@@ -25,8 +25,8 @@ export const v1 = {
   getCommunities(limit = 10, offset = 0) {
     return axios.get(`/v1/communities?limit=${limit}&offset=${offset}`)
   },
-  getCommunityApplications(communitySlug, limit = 10, offset = 0) {
-    return axios.get(`/v1/communities/${communitySlug}/applications?limit=${limit}&offset=${offset}`)
+  getCommunityApplications(communitySlug, limit = 10, offset = 0, includeProcessed = false) {
+    return axios.get(`/v1/communities/${communitySlug}/applications?limit=${limit}&offset=${offset}&includeProcessed=${includeProcessed}`)
   },
   getCommunityApplicationStatus(communitySlug) {
     return axios.get(`/v1/communities/${communitySlug}/applications/status`)

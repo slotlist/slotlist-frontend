@@ -47,6 +47,21 @@
       <div class="card" v-if="canEditCommunityMembers">
         <div class="card-block text-nowrap">
           <h4 class="card-title">{{ $t('community.applications') }}</h4>
+          <div class="small">
+            <b-form-group :label="$t('community.applications.filter')" label-for="communityApplicationsFilter">
+              <div role="group" id="communityApplicationsFilter">
+                <b-form-checkbox v-model="communityApplicationsFilter" name="processed" value="processed">
+                  {{ $t('community.applications.filter.processed') }}
+                </b-form-checkbox>
+                <b-form-checkbox v-model="communityApplicationsFilter" name="accepted" value="accepted">
+                  {{ $t('community.applications.filter.accepted') }}
+                </b-form-checkbox>
+                <b-form-checkbox v-model="communityApplicationsFilter" name="denied" value="denied">
+                  {{ $t('community.applications.filter.denied') }}
+                </b-form-checkbox>
+              </div>
+            </b-form-group>
+          </div>
           <community-applications></community-applications>
         </div>
       </div>
@@ -93,6 +108,7 @@ export default {
   },
   data() {
     return {
+      communityApplicationsFilter: [],
       communityEdit: {
         name: null,
         tag: null,
@@ -136,6 +152,11 @@ export default {
   methods: {
     deleteCommunity() {
       this.$store.dispatch('deleteCommunity', { communitySlug: this.$route.params.communitySlug, communityName: this.communityDetails.name })
+    }
+  },
+  watch: {
+    communityApplicationsFilter(val) {
+      this.$store.dispatch('filterCommunityApplications', { filter: val, communitySlug: this.$route.params.communitySlug })
     }
   }
 }
