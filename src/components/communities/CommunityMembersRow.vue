@@ -8,7 +8,7 @@
     <td class="text-center">
       <div class="btn-group btn-group-sm" role="group" aria-label="Community member actions">
         <router-link tag="button" class="btn btn-primary" :to="{name: 'userDetails', params: {userUid: communityMember.uid}}">
-          <i class="fa fa-info" aria-hidden="true"></i> {{ $t('misc.details') }}
+          <i class="fa fa-info" aria-hidden="true"></i> {{ $t('button.details') }}
         </router-link>
         <click-confirm v-if="canEditCommunityMembers" yes-icon="fa fa-ban" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('community.member.confirm.remove'), yes: $t('button.confirm'), no: $t('button.cancel')}">
           <b-btn variant="danger" size="sm" @click="removeCommunityMember">

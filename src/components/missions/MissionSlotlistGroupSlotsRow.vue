@@ -14,7 +14,7 @@
     <td class="text-center">
       <div class="btn-group btn-group-sm" role="group" aria-label="Mission slot actions">
         <b-btn variant="primary" @click="prepareMissionSlotDetails" v-b-modal.missionSlotDetailsModal>
-          <i class="fa fa-info" aria-hidden="true"></i> {{ $t('misc.details') }}
+          <i class="fa fa-info" aria-hidden="true"></i> {{ $t('button.details') }}
         </b-btn>
         <b-btn variant="success" v-if="loggedIn && !missionSlotDetails.registrationUid && !hasMissionEnded" :disabled="missionSlotDetails.blocked || !canRegisterForSlot" @click="setMissionSlotDetails" v-b-modal.missionSlotRegistrationModal>
           <i class="fa fa-ticket" aria-hidden="true"></i> {{ $t('button.register') }}

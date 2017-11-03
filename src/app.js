@@ -78,6 +78,7 @@ const i18n = new VueI18n({
   locale: 'en',
   messages: {
     de: require('./i18n/de.json'),
+    'de-at': require('./i18n/de-at.json'),
     en: require('./i18n/en.json')
   }
 })

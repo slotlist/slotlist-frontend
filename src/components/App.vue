@@ -49,6 +49,7 @@
             <div class="dropdown-menu" aria-labelledby="navbarLanguageDropdown">
               <a class="dropdown-item text-muted" href="#" @click.prevent="setLocale('en')"><img src="/flags/gb.png"> English</a>
               <a class="dropdown-item text-muted" href="#" @click.prevent="setLocale('de')"><img src="/flags/de.png"> Deutsch</a>
+              <a class="dropdown-item text-muted" href="#" @click.prevent="setLocale('de-at')"><img src="/flags/at.png"> Österreichisch</a>
             </div>
           </li>
         </ul>
@@ -176,6 +177,7 @@ export default {
       switch (locale) {
         case 'en': return '<img src="/flags/gb.png"> English'
         case 'de': return '<img src="/flags/de.png"> Deutsch'
+        case 'de-at': return '<img src="/flags/at.png"> Österreichisch'
         default: return '<i class="fa fa-language" aria-hidden="true"> Language'
       }
     },
