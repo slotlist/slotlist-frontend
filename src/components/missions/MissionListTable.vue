@@ -3,8 +3,8 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th style="width: 16%">{{ $t('mission.list.startTime') }}</th>
-          <th style="width: 33%">{{ $t('mission.list.title') }}</th>
+          <th style="width: 17%">{{ $t('mission.list.startTime') }}</th>
+          <th style="width: 32%">{{ $t('mission.list.title') }}</th>
           <th style="width: 20%">{{ $t('mission.list.creator') }}</th>
           <th style="width: 11%" class="text-center">{{ $t('mission.list.slot.counts')}}</th>
           <th style="width: 10%" class="text-center">{{ $t('mission.list.slot.status') }}</th>
@@ -16,8 +16,8 @@
       </tbody>
       <tfoot v-show="missions.length >= 10">
         <tr>
-          <th style="width: 16%">{{ $t('mission.list.startTime') }}</th>
-          <th style="width: 33%">{{ $t('mission.list.title') }}</th>
+          <th style="width: 17%">{{ $t('mission.list.startTime') }}</th>
+          <th style="width: 32%">{{ $t('mission.list.title') }}</th>
           <th style="width: 20%">{{ $t('mission.list.creator') }}</th>
           <th style="width: 11%" class="text-center">{{ $t('mission.list.slot.counts')}}</th>
           <th style="width: 10%" class="text-center">{{ $t('mission.list.slot.status') }}</th>

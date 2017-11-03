@@ -20,7 +20,7 @@
     </td>
     <td class="text-center">
       <b-btn variant="primary" size="sm" :to="{name: 'missionDetails', params: {missionSlug: mission.slug}}">
-        <i class="fa fa-info" aria-hidden="true"></i> {{ $t('misc.details') }}
+        <i class="fa fa-info" aria-hidden="true"></i> {{ $t('button.details') }}
       </b-btn>
     </td>
   </tr>

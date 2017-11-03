@@ -5,7 +5,7 @@
     <td class="text-center">
       <div class="btn-group btn-group-sm" role="group" aria-label="Community application actions">
         <router-link tag="button" class="btn btn-primary" :to="{name: 'userDetails', params: {userUid: communityApplication.user.uid}}">
-          <i class="fa fa-info" aria-hidden="true"></i> {{ $t('misc.details') }}
+          <i class="fa fa-info" aria-hidden="true"></i> {{ $t('button.details') }}
         </router-link>
         <click-confirm yes-icon="fa fa-user-plus" yes-class="btn btn-success" button-size="sm" :messages="{title: $t('community.application.confirm.accept'), yes: $t('button.confirm'), no: $t('button.cancel')}">
           <b-btn variant="success" size="sm" :disabled="isCommunityApplicationProcessed" @click="processCommunityApplication(true)">

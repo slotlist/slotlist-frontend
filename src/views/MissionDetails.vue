@@ -84,6 +84,9 @@
           <b-btn variant="primary" v-if="isMissionCreator" v-b-modal.missionPermissionModal>
             <i class="fa fa-key" aria-hidden="true"></i> {{ $t('button.edit.mission.permissions') }}
           </b-btn>&nbsp;
+          <b-btn variant="secondary" v-b-modal.missionDuplicateModal>
+            <i class="fa fa-files-o" aria-hidden="true"></i> {{ $t('button.duplicate.mission') }}
+          </b-btn>&nbsp;
           <click-confirm v-if="isMissionCreator" yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('mission.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
             <b-btn variant="danger" @click="deleteMission">
               <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete') }}
@@ -129,6 +132,7 @@
     <!-- Begin of modals -->
     <div>
       <mission-banner-image-modal v-if="loggedIn && isMissionEditor"></mission-banner-image-modal>
+      <mission-duplicate-modal v-if="loggedIn && isMissionEditor"></mission-duplicate-modal>
       <mission-edit-modal v-if="loggedIn && isMissionEditor"></mission-edit-modal>
       <mission-permission-modal v-if="loggedIn && isMissionCreator"></mission-permission-modal>
       <mission-slot-assign-modal v-if="loggedIn && isMissionEditor && !hasMissionEnded"></mission-slot-assign-modal>
@@ -138,6 +142,7 @@
       <mission-slot-group-create-modal v-if="loggedIn && isMissionEditor && !hasMissionEnded"></mission-slot-group-create-modal>
       <mission-slot-group-edit-modal v-if="loggedIn && isMissionEditor && !hasMissionEnded"></mission-slot-group-edit-modal>
       <mission-slot-registration-modal v-if="loggedIn && !hasMissionEnded"></mission-slot-registration-modal>
+      <mission-slot-selection-edit-modal v-if="loggedIn && isMissionEditor && !hasMissionEnded"></mission-slot-selection-edit-modal>
     </div>
     <!-- End of modals -->
   </div>
@@ -148,6 +153,7 @@ import * as _ from 'lodash'
 import moment from 'moment-timezone'
 import FileSaver from 'file-saver'
 import MissionBannerImageModal from 'components/missions/modals/MissionBannerImageModal.vue'
+import MissionDuplicateModal from 'components/missions/modals/MissionDuplicateModal.vue'
 import MissionEditModal from 'components/missions/modals/MissionEditModal.vue'
 import MissionPermissionModal from 'components/missions/modals/MissionPermissionModal.vue'
 import MissionSlotAssignModal from 'components/missions/modals/MissionSlotAssignModal.vue'
@@ -158,11 +164,13 @@ import MissionSlotGroupCreateModal from 'components/missions/modals/MissionSlotG
 import MissionSlotGroupEditModal from 'components/missions/modals/MissionSlotGroupEditModal.vue'
 import MissionSlotlist from 'components/missions/MissionSlotlist.vue'
 import MissionSlotRegistrationModal from 'components/missions/modals/MissionSlotRegistrationModal.vue'
+import MissionSlotSelectionEditModal from 'components/missions/modals/MissionSlotSelectionEditModal.vue'
 import utils from '../utils'
 
 export default {
   components: {
     MissionBannerImageModal,
+    MissionDuplicateModal,
     MissionEditModal,
     MissionPermissionModal,
     MissionSlotAssignModal,
@@ -172,7 +180,8 @@ export default {
     MissionSlotGroupCreateModal,
     MissionSlotGroupEditModal,
     MissionSlotlist,
-    MissionSlotRegistrationModal
+    MissionSlotRegistrationModal,
+    MissionSlotSelectionEditModal
   },
   beforeCreate: function() {
     this.$store.dispatch('getMissionDetails', { missionSlug: this.$route.params.missionSlug })

@@ -3,6 +3,7 @@
     <table class="table table-striped">
       <thead>
         <tr>
+          <th style="width: 1%" v-if="anyMissionSlotSelected"></th>
           <th style="width: 6%">#</th>
           <th :style="missionSlotRoleStyle">{{ $t('mission.slot.role') }}</th>
           <th :style="missionSlotPlayerStyle">{{ $t('mission.slot.player') }}</th>
@@ -15,6 +16,7 @@
       </tbody>
       <tfoot v-show="missionSlotGroup.slots.length >= 10">
         <tr>
+          <th style="width: 1%" v-if="anyMissionSlotSelected"></th>
           <th style="width: 6%">#</th>
           <th :style="missionSlotRoleStyle">{{ $t('mission.slot.role') }}</th>
           <th :style="missionSlotPlayerStyle">{{ $t('mission.slot.player') }}</th>
@@ -39,6 +41,9 @@ export default {
     'missionSlotGroup'
   ],
   computed: {
+    anyMissionSlotSelected() {
+      return !_.isEmpty(this.$store.getters.missionSlotSelection)
+    },
     hasAnyMissionSlotDescription() {
       return _.some(this.missionSlotGroup.slots, (slot) => {
         return !_.isNil(slot.description)
@@ -46,9 +51,9 @@ export default {
     },
     missionSlotPlayerStyle() {
       if (this.hasAnyMissionSlotDescription) {
-        return 'width: 28%'
+        return 'width: 27%'
       } else {
-        return 'width: 45%'
+        return 'width: 44%'
       }
     },
     missionSlotRoleStyle() {

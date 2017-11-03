@@ -1,6 +1,6 @@
 <template>
   <div>
-    <login-de v-if="$i18n.locale === 'de'"></login-de>
+    <login-de v-if="$i18n.locale === 'de' || $i18n.locale === 'de-at'"></login-de>
     <login-en v-else></login-en>
   </div>
 </template>

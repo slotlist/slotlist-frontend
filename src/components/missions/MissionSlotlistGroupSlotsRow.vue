@@ -1,5 +1,6 @@
 <template>
-  <tr>
+  <tr @click.ctrl="toggleMissionSlotSelection" :class="{'table-active': missionSlotSelected}">
+    <td v-if="anyMissionSlotSelected"><i class="fa fa-check-square text-muted" aria-hidden="true" v-if="missionSlotSelected"></i></td>
     <td>{{ missionSlotDetails.orderNumber }}</td>
     <td>
       <div v-if="!missionSlotDetails.restrictedCommunity && !missionSlotDetails.reserve && !missionSlotDetails.blocked">
@@ -14,7 +15,7 @@
     <td class="text-center">
       <div class="btn-group btn-group-sm" role="group" aria-label="Mission slot actions">
         <b-btn variant="primary" @click="prepareMissionSlotDetails" v-b-modal.missionSlotDetailsModal>
-          <i class="fa fa-info" aria-hidden="true"></i> {{ $t('misc.details') }}
+          <i class="fa fa-info" aria-hidden="true"></i> {{ $t('button.details') }}
         </b-btn>
         <b-btn variant="success" v-if="loggedIn && !missionSlotDetails.registrationUid && !hasMissionEnded" :disabled="missionSlotDetails.blocked || !canRegisterForSlot" @click="setMissionSlotDetails" v-b-modal.missionSlotRegistrationModal>
           <i class="fa fa-ticket" aria-hidden="true"></i> {{ $t('button.register') }}
@@ -45,6 +46,9 @@ export default {
     'missionSlotGroup'
   ],
   computed: {
+    anyMissionSlotSelected() {
+      return !_.isEmpty(this.$store.getters.missionSlotSelection)
+    },
     canRegisterForSlot() {
       const user = this.$store.getters.user
       let userCommunityUid = null;
@@ -116,6 +120,12 @@ export default {
     missionDetails() {
       return this.$store.getters.missionDetails
     },
+    missionSlotSelected() {
+      return _.indexOf(this.missionSlotSelection, this.missionSlotDetails.uid) >= 0
+    },
+    missionSlotSelection() {
+      return this.$store.getters.missionSlotSelection
+    },
     titleColor() {
       if (this.missionSlotDetails.blocked || !_.isNil(this.missionSlotDetails.restrictedCommunity)) {
         return 'text-primary'
@@ -167,6 +177,13 @@ export default {
     },
     setMissionSlotGroupDetails() {
       this.$store.dispatch('setMissionSlotGroupDetails', this.missionSlotGroup)
+    },
+    toggleMissionSlotSelection() {
+      if (!this.loggedIn || !this.isMissionEditor) {
+        return
+      }
+
+      this.$store.dispatch('toggleMissionSlotSelection', { missionSlotUid: this.missionSlotDetails.uid })
     }
   }
 }

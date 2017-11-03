@@ -1,6 +1,6 @@
 <template>
   <div>
-    <imprint-de v-if="$i18n.locale === 'de'"></imprint-de>
+    <imprint-de v-if="$i18n.locale === 'de' || $i18n.locale === 'de-at'"></imprint-de>
     <imprint-en v-else></imprint-en>
   </div>
 </template>

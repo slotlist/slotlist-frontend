@@ -35,6 +35,9 @@ export const v1 = {
   deleteMissionSlotGroup(missionSlug, slotGroupUid) {
     return axios.delete(`/v1/missions/${missionSlug}/slotGroups/${slotGroupUid}`)
   },
+  duplicateMission(missionSlug, payload) {
+    return axios.post(`/v1/missions/${missionSlug}/duplicate`, payload)
+  },
   editMission(missionSlug, payload) {
     return axios.patch(`/v1/missions/${missionSlug}`, payload)
   },

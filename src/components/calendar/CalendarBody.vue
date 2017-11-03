@@ -43,6 +43,9 @@ export default {
 
       momentIterator.add(this.firstDayOfWeek, 'days')
 
+      const startDate = moment(momentIterator)
+      const daysInMonth = momentIterator.daysInMonth()
+
       const weeks = []
       _.times(5, () => {
         const week = []
@@ -51,8 +54,7 @@ export default {
             isToday: momentIterator.isSame(moment(), 'day'),
             isCurrentMonth: momentIterator.isSame(this.currentMonth, 'month'),
             isWeekend: moment(momentIterator).isoWeekday() >= 6,
-            date: moment(momentIterator),
-            missions: this.getMissionsForDay(momentIterator)
+            date: moment(momentIterator)
           }
 
           week.push(day)
@@ -60,6 +62,33 @@ export default {
         })
 
         weeks.push(week)
+      })
+
+      const diff = daysInMonth - weeks[4][6].date.format('D')
+
+      if (diff > 0 && diff < 3) {
+        const week = []
+        _.times(7, (dayIndex) => {
+          const day = {
+            isToday: momentIterator.isSame(moment(), 'day'),
+            isCurrentMonth: momentIterator.isSame(this.currentMonth, 'month'),
+            isWeekend: moment(momentIterator).isoWeekday() >= 6,
+            date: moment(momentIterator)
+          }
+
+          week.push(day)
+          momentIterator.add(1, 'day')
+        })
+
+        weeks.push(week)
+      }
+
+      const endDate = moment(momentIterator.subtract(1, 'day').endOf('day'))
+
+      this.$store.dispatch('getMissionsForCalendar', {
+        autoRefresh: true,
+        startDate,
+        endDate
       })
 
       return weeks
