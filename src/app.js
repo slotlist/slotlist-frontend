@@ -1,5 +1,6 @@
 import * as _ from 'lodash'
 import moment from 'moment-timezone'
+import Promise from 'bluebird'
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -23,6 +24,13 @@ import VueI18n from 'vue-i18n'
 import Typeahead from './components/Typeahead.vue'
 import LoadingOverlay from './components/LoadingOverlay.vue'
 import EditorExplanation from './components/EditorExplanation.vue'
+
+// Patch Promise globally to use more feature-rich bluebird Promises
+Promise.config({
+  warnings: false
+})
+
+window.Promise = Promise
 
 // Black-require API/axios utils
 require('./api/util')

@@ -10,6 +10,21 @@
         <i class="fa fa-refresh" aria-hidden="true"></i> {{ $t('button.refresh') }}
       </b-btn>
     </div>
+    <div v-if="isMissionEditor">
+      <br>
+      <div class="small text-muted text-center" v-html="anyMissionSlotSelected ? $tc('mission.slot.selection.actions', missionSlotSelectionCount, { count: missionSlotSelectionCount }) : $t('mission.slot.selection.hint')"></div>
+      <br v-if="anyMissionSlotSelected">
+      <div class="text-center" v-if="anyMissionSlotSelected">
+        <b-btn variant="primary" v-b-modal.missionSlotSelectionEditModal>
+          <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit.mission.slot.selection') }}
+        </b-btn>
+        <click-confirm yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('mission.slot.confirm.delete.selection'), yes: $t('button.confirm'), no: $t('button.cancel')}">
+          <b-btn variant="danger" @click="deleteSelectedMissionSlots">
+            <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete.mission.slot.selection') }}
+          </b-btn>
+        </click-confirm>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -23,8 +38,8 @@ export default {
     MissionSlotlistGroup
   },
   computed: {
-    loggedIn() {
-      return this.$store.getters.loggedIn
+    anyMissionSlotSelected() {
+      return !_.isEmpty(this.$store.getters.missionSlotSelection)
     },
     hasMissionEnded() {
       if (_.isNil(this.missionDetails)) {
@@ -36,14 +51,23 @@ export default {
     isMissionEditor() {
       return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`, `mission.${this.$route.params.missionSlug}.editor`])
     },
+    loggedIn() {
+      return this.$store.getters.loggedIn
+    },
     missionDetails() {
       return this.$store.getters.missionDetails
     },
     missionSlotGroups() {
       return this.$store.getters.missionSlotGroups
+    },
+    missionSlotSelectionCount() {
+      return this.$store.getters.missionSlotSelection.length
     }
   },
   methods: {
+    deleteSelectedMissionSlots() {
+      this.$store.dispatch('deleteSelectedMissionSlots', { missionSlug: this.$route.params.missionSlug })
+    },
     refreshMissionSlotlist() {
       this.$store.dispatch('getMissionSlotlist', { missionSlug: this.$route.params.missionSlug })
     }

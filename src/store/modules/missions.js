@@ -4,6 +4,7 @@ import utils from '../../utils'
 import router from '../../router'
 import Raven from 'raven-js'
 import moment from 'moment-timezone'
+import Promise from 'bluebird'
 
 import MissionsApi from '../../api/missions'
 
@@ -33,6 +34,7 @@ const state = {
   missionSlotlistFilter: {},
   missionSlotRegistrationDetails: null,
   missionSlotRegistrations: null,
+  missionSlotSelection: [],
   missionSlugAvailable: false,
   missionsRefreshSetInterval: null,
   refreshingMissions: false,
@@ -126,6 +128,9 @@ const getters = {
   },
   missionSlotRegistrationsPageCount() {
     return Math.ceil(state.totalMissionSlotRegistrations / limits.missionSlotRegistrations)
+  },
+  missionSlotSelection() {
+    return state.missionSlotSelection
   },
   missionSlugAvailable() {
     return state.missionSlugAvailable
@@ -340,6 +345,11 @@ const actions = {
   clearMissionSlotGroupDetails({ commit }) {
     commit({
       type: 'clearMissionSlotGroupDetails'
+    })
+  },
+  clearMissionSlotSelection({ commit }) {
+    commit({
+      type: 'clearMissionSlotSelection'
     })
   },
   createMission({ dispatch }, payload) {
@@ -817,6 +827,68 @@ const actions = {
           })
         }
       })
+  },
+  deleteSelectedMissionSlots({ dispatch, state }, payload) {
+    const selectedSlotCount = state.missionSlotSelection.length
+
+    dispatch('startWorking', i18n.tc('store.deleteSelectedMissionSlots', selectedSlotCount, { count: selectedSlotCount }))
+
+    return Promise.each(state.missionSlotSelection, (slotUid) => {
+      return MissionsApi.deleteMissionSlot(payload.missionSlug, slotUid)
+        .then((response) => {
+          if (response.status !== 200) {
+            console.error(response)
+            throw 'Deleting mission slot failed'
+          }
+
+          if (_.isEmpty(response.data)) {
+            console.error(response)
+            throw 'Received empty response'
+          }
+
+          if (response.data.success !== true) {
+            console.error(response)
+            throw 'Received invalid mission slot deletion'
+          }
+        })
+    }).then(() => {
+      dispatch('clearMissionSlotSelection')
+
+      dispatch('getMissionSlotlist', { missionSlug: payload.missionSlug })
+
+      dispatch('showAlert', {
+        showAlert: true,
+        alertVariant: 'success',
+        alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.tc('store.deleteSelectedMissionSlots.success', selectedSlotCount, { count: selectedSlotCount })}`
+      })
+
+      dispatch('stopWorking', i18n.tc('store.deleteSelectedMissionSlots', selectedSlotCount, { count: selectedSlotCount }))
+    }).catch((error) => {
+      if (error.response) {
+        console.error('deleteSelectedMissionSlots', error.response)
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'danger',
+          alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteSelectedMissionSlots.error')} - ${error.response.data.message}`
+        })
+      } else if (error.request) {
+        Raven.captureException(error, { extra: { module: 'missions', function: 'deleteSelectedMissionSlots' } })
+        console.error('deleteSelectedMissionSlots', error.request)
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'danger',
+          alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteSelectedMissionSlots.error')} - ${i18n.t('failed.request')}`
+        })
+      } else {
+        Raven.captureException(error, { extra: { module: 'missions', function: 'deleteSelectedMissionSlots' } })
+        console.error('deleteSelectedMissionSlots', error.message)
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'danger',
+          alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlot.error')} - ${i18n.t('failed.something')}`
+        })
+      }
+    })
   },
   duplicateMission({ dispatch, commit }, payload) {
     dispatch('startWorking', i18n.t('store.duplicateMission'))
@@ -1801,6 +1873,12 @@ const actions = {
       slotGroupDetails: payload
     })
   },
+  toggleMissionSlotSelection({ commit }, payload) {
+    commit({
+      type: 'toggleMissionSlotSelection',
+      missionSlotUid: payload.missionSlotUid
+    })
+  },
   unregisterFromMissionSlot({ dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.unregisterFromMissionSlot'))
 
@@ -1943,6 +2021,7 @@ const mutations = {
     state.missionSlotGroupDetails = null
     state.missionSlotGroups = null
     state.missionSlotRegistrations = null
+    state.missionSlotSelection = []
     state.totalMissionPermissions = 0
     state.totalMissionSlotRegistrations = 0
   },
@@ -1951,6 +2030,9 @@ const mutations = {
   },
   clearMissionSlotGroupDetails(state) {
     state.missionSlotGroupDetails = null
+  },
+  clearMissionSlotSelection(state) {
+    state.missionSlotSelection = []
   },
   refreshingMissions(state, payload) {
     state.refreshingMissions = payload.refreshing
@@ -2019,6 +2101,13 @@ const mutations = {
   },
   startCheckingMissionSlugAvailability(state) {
     state.checkingMissionSlugAvailability = true
+  },
+  toggleMissionSlotSelection(state, payload) {
+    if (_.indexOf(state.missionSlotSelection, payload.missionSlotUid) >= 0) {
+      state.missionSlotSelection = _.without(state.missionSlotSelection, payload.missionSlotUid)
+    } else {
+      state.missionSlotSelection.push(payload.missionSlotUid)
+    }
   }
 }
 
