@@ -1,7 +1,7 @@
 {
   "name": "slotlist-frontend",
   "main": "src/index.js",
-  "version": "1.0.0-beta21",
+  "version": "1.0.0-beta22",
   "scripts": {
     "build": "webpack --config build/webpack.prod.js",
     "dev": "cross-env MOCK_AXIOS_RESPONSES=false node build/server.js",
