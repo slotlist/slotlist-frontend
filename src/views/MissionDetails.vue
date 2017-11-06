@@ -55,6 +55,9 @@
           </div>
         </div>
         <div class="row text-center">
+          <div class="col small" v-html="$t('mission.timezone', { timezone: timezone })"></div>
+        </div>
+        <div class="row text-center">
           <div class="col">
             <h5>{{ $t('mission.techSupport') }}</h5>
             <p class="html ql-editor text-center" v-html="optionalTechSupport"></p>
@@ -249,6 +252,9 @@ export default {
     },
     optionalTechSupport() {
       return this.missionDetails.techSupport || `<div class='text-muted font-italic'>${this.$t('misc.notProvided')}</div>`
+    },
+    timezone() {
+      return this.$store.getters.timezone
     }
   },
   methods: {
