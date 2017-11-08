@@ -47,6 +47,8 @@
   "button.edit.mission.slotGroup": "Edit slot group",
   "button.export.calendar.google": "Add to Google calendar",
   "button.export.calendar.ical": "Export as iCal",
+  "button.move.down": "Move down",
+  "button.move.up": "Move up",
   "button.refresh": "Refresh",
   "button.refresh.authentication": "Refresh authentication",
   "button.refresh.authentication.explanation": "You can refresh your authentication to make sure your account is updated with the correct permissions, community or likewise.<br>After being accepted to a community, a refresh is required before your account shows you as a community member and you can create community missions.",

@@ -4,6 +4,12 @@
     <div class="word-wrap" v-show="missionSlotGroup.description">{{ missionSlotGroup.description }}</div>
     <mission-slot-template-slotlist-group-slots-table :missionSlotGroup="missionSlotGroup"></mission-slot-template-slotlist-group-slots-table>
     <div class="text-center">
+      <b-btn variant="secondary" v-if="index > 0" @click="moveMissionSlotTemplateSlotGroup(-1)">
+        <i class="fa fa-angle-up" aria-hidden="true"></i> {{ $t('button.move.up') }}
+      </b-btn>
+      <b-btn variant="secondary" v-if="index < (missionSlotGroupCount - 1)" @click="moveMissionSlotTemplateSlotGroup(1)">
+        <i class="fa fa-angle-down" aria-hidden="true"></i> {{ $t('button.move.down') }}
+      </b-btn>
       <b-btn variant="success" @click="setMissionSlotTemplateSlotGroupDetails" v-b-modal.missionSlotTemplateSlotCreateModal>
         <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.create.mission.slot') }}
       </b-btn>
@@ -32,7 +38,9 @@ export default {
     MissionSlotTemplateSlotlistGroupSlotsTable
   },
   props: [
-    'missionSlotGroup'
+    'index',
+    'missionSlotGroup',
+    'missionSlotGroupCount'
   ],
   methods: {
     deleteMissionSlotTemplateSlotGroup() {

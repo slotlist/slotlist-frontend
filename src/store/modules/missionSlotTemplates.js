@@ -418,6 +418,31 @@ const actions = {
         }
       })
   },
+  moveMissionSlotTemplateSlotGroup({ commit, state }, payload) {
+    const slotGroups = _.clone(state.missionSlotTemplateDetails.slotGroups)
+    if (_.isNil(slotGroups[payload.index])) {
+      console.error(`Did not find mission slot template slot group at index ${payload.index}, aborting move`)
+      return
+    }
+
+    const destinationIndex = payload.index + payload.direction
+    if (destinationIndex >= slotGroups.length || destinationIndex < 0) {
+      console.error(`Destination index ${destinationIndex} for mission slot template slot group at index ${payload.index} is invalid, aborting move`)
+      return
+    }
+
+    let tmpGroup = slotGroups[destinationIndex]
+    slotGroups[destinationIndex] = slotGroups[payload.index]
+    slotGroups[payload.index] = tmpGroup
+    let tmpOrderNumber = slotGroups[destinationIndex].orderNumber
+    slotGroups[destinationIndex].orderNumber = slotGroups[payload.index].orderNumber
+    slotGroups[payload.index].orderNumber = tmpOrderNumber
+
+    commit({
+      type: 'setMissionSlotTemplateSlotlist',
+      slotGroups
+    })
+  },
   setMissionSlotTemplateSlotDetails({ commit }, payload) {
     commit({
       type: 'setMissionSlotTemplateSlotDetails',
@@ -461,7 +486,7 @@ const mutations = {
   },
   setMissionSlotTemplateDetails(state, payload) {
     state.missionSlotTemplateDetails = payload.slotTemplate
-    state.missionSlotTemplateUnsavedChanges = true
+    state.missionSlotTemplateUnsavedChanges = false
     utils.setTitle(`${i18n.t('mission.slotTemplate')} ${state.missionSlotTemplateDetails.title}`)
   },
   setMissionSlotTemplates(state, payload) {
@@ -473,6 +498,10 @@ const mutations = {
   },
   setMissionSlotTemplateSlotGroupDetails(state, payload) {
     state.missionSlotTemplateSlotGroupDetails = payload.slotGroupDetails
+  },
+  setMissionSlotTemplateSlotlist(state, payload) {
+    state.missionSlotTemplateDetails.slotGroups = payload.slotGroups
+    state.missionSlotTemplateUnsavedChanges = true
   },
   setMissionSlotTemplateUnsavedChanges(state, payload) {
     state.missionSlotTemplateUnsavedChanges = payload.unsavedChanges

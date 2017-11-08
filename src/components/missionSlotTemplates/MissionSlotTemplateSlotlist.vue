@@ -1,6 +1,6 @@
 <template>
   <div>
-    <mission-slot-template-slotlist-group v-for="missionSlotGroup in missionSlotTemplateDetails.slotGroups" :missionSlotGroup="missionSlotGroup" :key="missionSlotGroup.uid"></mission-slot-template-slotlist-group>
+    <mission-slot-template-slotlist-group v-for="(missionSlotGroup, index) in missionSlotTemplateDetails.slotGroups" :index="index" :missionSlotGroupCount="missionSlotTemplateDetails.slotGroups.length" :missionSlotGroup="missionSlotGroup" :key="missionSlotGroup.uid"></mission-slot-template-slotlist-group>
     <br>
     <div class="text-center">
       <b-btn variant="success" v-b-modal.missionSlotTemplateSlotGroupCreateModal>
