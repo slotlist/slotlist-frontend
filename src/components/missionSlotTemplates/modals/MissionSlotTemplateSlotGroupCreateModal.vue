@@ -105,7 +105,7 @@ export default {
 
       this.hideMissionSlotTemplateSlotGroupCreateModal();
 
-      this.$store.dispatch("addMissionSlotTemplateSlotGroup", { slotGroupDetails: this.missionSlotTemplateSlotGroupCreateData })
+      this.$store.dispatch("addMissionSlotTemplateSlotGroup", this.missionSlotTemplateSlotGroupCreateData)
     },
     hideMissionSlotTemplateSlotGroupCreateModal() {
       this.$refs.missionSlotTemplateSlotGroupCreateModal.hide();
