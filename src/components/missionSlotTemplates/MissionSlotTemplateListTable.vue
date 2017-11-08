@@ -3,11 +3,10 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th style="width: 30%">{{ $t('mission.list.title') }}</th>
+          <th style="width: 40%">{{ $t('mission.list.title') }}</th>
           <th style="width: 25%">{{ $t('mission.list.creator') }}</th>
           <th style="width: 15%" class="text-center">{{ $t('mission.slotTemplate.list.counts.slots.groups')}}</th>
           <th style="width: 10%" class="text-center">{{ $t('mission.slotTemplate.list.counts.slots')}}</th>
-          <th style="width: 10%" class="text-center">{{ $t('mission.visibility') }}</th>
           <th style="width: 10%" class="text-center">{{ $t('misc.actions') }}</th>
         </tr>
       </thead>
@@ -16,11 +15,10 @@
       </tbody>
       <tfoot v-show="missionSlotTemplates.length >= 10">
         <tr>
-          <th style="width: 30%">{{ $t('mission.list.title') }}</th>
+          <th style="width: 40%">{{ $t('mission.list.title') }}</th>
           <th style="width: 25%">{{ $t('mission.list.creator') }}</th>
           <th style="width: 15%" class="text-center">{{ $t('mission.slotTemplate.list.counts.slots.groups')}}</th>
           <th style="width: 10%" class="text-center">{{ $t('mission.slotTemplate.list.counts.slots')}}</th>
-          <th style="width: 10%" class="text-center">{{ $t('mission.visibility') }}</th>
           <th style="width: 10%" class="text-center">{{ $t('misc.actions') }}</th>
         </tr>
       </tfoot>

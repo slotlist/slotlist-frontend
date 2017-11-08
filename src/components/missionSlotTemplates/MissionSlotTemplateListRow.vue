@@ -6,7 +6,6 @@
     </td>
     <td class="text-center">{{ missionSlotTemplate.slotGroupCount }}</td>
     <td class="text-center">{{ missionSlotTemplate.slotCount }}</td>
-    <td class="text-center">{{ missionSlotTemplateVisibility }}</td>
     <td class="text-center">
       <b-btn variant="primary" size="sm" :to="{name: 'missionSlotTemplateDetails', params: {missionSlotTemplateUid: missionSlotTemplate.uid}}">
         <i class="fa fa-info" aria-hidden="true"></i> {{ $t('button.details') }}
@@ -19,11 +18,6 @@
 export default {
   props: [
     'missionSlotTemplate'
-  ],
-  computed: {
-    missionSlotTemplateVisibility() {
-      return 'asd'
-    }
-  }
+  ]
 }
 </script>

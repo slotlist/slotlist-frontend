@@ -569,6 +569,8 @@ const actions = {
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteMission.success', { title: payload.missionTitle })}`
         })
 
+        dispatch('getMissions', { autoRefresh: true })
+
         router.push({ name: 'missionList' })
 
         dispatch('stopWorking', i18n.t('store.deleteMission'))

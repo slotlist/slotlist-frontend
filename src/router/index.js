@@ -9,6 +9,8 @@ import MissionList from '../views/MissionList'
 import MissionDetails from '../views/MissionDetails'
 import MissionCreator from '../views/MissionCreator'
 import MissionSlotTemplateList from '../views/MissionSlotTemplateList'
+import MissionSlotTemplateDetails from '../views/MissionSlotTemplateDetails'
+import MissionSlotTemplateCreator from '../views/MissionSlotTemplateCreator'
 import UserDetails from '../views/UserDetails'
 import Account from '../views/Account'
 import Login from '../views/Login'
@@ -66,7 +68,17 @@ export default new Router({
     {
       path: '/mission-slot-templates',
       name: 'missionSlotTemplateList',
-      component: MissionSlotTemplateList,
+      component: MissionSlotTemplateList
+    },
+    {
+      path: '/mission-slot-templates/:missionSlotTemplateUid',
+      name: 'missionSlotTemplateDetails',
+      component: MissionSlotTemplateDetails
+    },
+    {
+      path: '/mission-slot-templates-creator',
+      name: 'missionSlotTemplateCreator',
+      component: MissionSlotTemplateCreator,
       meta: {
         authenticated: true // only logged in users can access this page
       }
