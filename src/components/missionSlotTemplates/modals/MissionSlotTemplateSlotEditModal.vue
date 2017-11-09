@@ -141,7 +141,7 @@ export default {
         return options
       }
 
-      if (this.missionSlotGroupEditMoveAfter !== 0) {
+      if (this.missionSlotTemplateSlotEditMoveAfter !== 0) {
         options.push({
           value: -1,
           text: this.$t('mission.slot.insertAfter.top')

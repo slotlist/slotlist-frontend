@@ -91,7 +91,7 @@ const actions = {
       orderNumber: payload.insertAfter + 1,
       title: payload.title,
       description: payload.description,
-      slots: []
+      slots: _.isNil(payload.slots) ? [] : payload.slots
     })
 
     commit({
@@ -336,6 +336,42 @@ const actions = {
       })
 
       slotGroup.slots[slotIndex].orderNumber = orderNumber
+    }
+
+    commit({
+      type: 'setMissionSlotTemplateSlotlist',
+      slotGroups
+    })
+  },
+  editMissionSlotTemplateSlotGroup({ commit, state }, payload) {
+    let slotGroups = _.clone(state.missionSlotTemplateDetails.slotGroups)
+    const slotGroupIndex = _.findIndex(slotGroups, (g) => g.orderNumber === state.missionSlotTemplateSlotGroupDetails.orderNumber)
+    if (slotGroupIndex < 0) {
+      console.error(`Did not find mission slot template slot group with order number ${state.missionSlotTemplateSlotGroupDetails.orderNumber}, aborting slot editing`)
+      return
+    }
+
+    slotGroups[slotGroupIndex].title = payload.slotGroupPayload.title
+    slotGroups[slotGroupIndex].description = payload.slotGroupPayload.description
+
+    if (payload.moveAfter >= -1) {
+      const oldOrderNumber = slotGroups[slotGroupIndex].orderNumber
+      const increment = payload.moveAfter < oldOrderNumber
+      const orderNumber = increment ? payload.moveAfter + 1 : payload.moveAfter
+
+      _.each(slotGroups, (slotGroup) => {
+        if (slotGroup.orderNumber === oldOrderNumber) {
+          return
+        }
+
+        if (increment && slotGroup.orderNumber >= orderNumber && slotGroup.orderNumber < oldOrderNumber) {
+          slotGroup.orderNumber += 1
+        } else if (!increment && slotGroup.orderNumber <= orderNumber && slotGroup.orderNumber > oldOrderNumber) {
+          slotGroup.orderNumber -= 1
+        }
+      })
+
+      slotGroups[slotGroupIndex].orderNumber = orderNumber
     }
 
     commit({

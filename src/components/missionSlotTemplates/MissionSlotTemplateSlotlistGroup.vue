@@ -13,7 +13,7 @@
       <b-btn variant="success" @click="setMissionSlotTemplateSlotGroupDetails" v-b-modal.missionSlotTemplateSlotCreateModal>
         <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.create.mission.slot') }}
       </b-btn>
-      <b-btn variant="primary" @click="setMissionSlotTemplateSlotGroupDetails" v-b-modal.missionSlotTemplateSlotEditModal>
+      <b-btn variant="primary" @click="setMissionSlotTemplateSlotGroupDetails" v-b-modal.missionSlotTemplateSlotGroupEditModal>
         <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit.mission.slotGroup') }}
       </b-btn>
       <b-btn variant="secondary" @click="duplicateMissionSlotTemplateSlotGroup">
@@ -62,7 +62,14 @@ export default {
       this.$store.dispatch('deleteMissionSlotTemplateSlotGroup', { missionSlotGroup: this.missionSlotGroup })
     },
     duplicateMissionSlotTemplateSlotGroup() {
-      this.$store.dispatch('duplicateMissionSlotTemplateSlotGroup', { missionSlotGroup: this.missionSlotGroup })
+      const slotGroupDetails = {
+        title: this.missionSlotGroup.title,
+        description: this.missionSlotGroup.description,
+        slots: _.clone(this.missionSlotGroup.slots),
+        insertAfter: this.missionSlotGroup.orderNumber
+      }
+
+      this.$store.dispatch('addMissionSlotTemplateSlotGroup', slotGroupDetails)
     },
     moveMissionSlotTemplateSlotGroup(direction) {
       this.$store.dispatch('moveMissionSlotTemplateSlotGroup', { index: this.index, direction })

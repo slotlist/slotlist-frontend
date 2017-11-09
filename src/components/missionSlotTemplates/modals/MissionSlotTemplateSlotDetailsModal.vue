@@ -135,9 +135,9 @@ export default {
         insertAfter: _.max([this.missionSlotTemplateSlotDetails.orderNumber - 1, 0])
       }
 
-      this.hideMissionSlotTemplateSlotDetailsModal();
+      this.hideMissionSlotTemplateSlotDetailsModal()
 
-      this.$store.dispatch('addMissionSlotTemplateSlot', slotDetails);
+      this.$store.dispatch('addMissionSlotTemplateSlot', slotDetails)
     },
     hideMissionSlotTemplateSlotDetailsModal() {
       this.$refs.missionSlotTemplateSlotDetailsModal.hide()
