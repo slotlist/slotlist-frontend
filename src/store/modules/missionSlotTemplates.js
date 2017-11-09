@@ -570,6 +570,32 @@ const actions = {
       slotGroups
     })
   },
+  removeMissionSlotTemplateSlot({ commit, state }, payload) {
+    let slotGroups = _.clone(state.missionSlotTemplateDetails.slotGroups)
+    const slotGroupIndex = _.findIndex(slotGroups, (g) => g.orderNumber === payload.slotGroupOrderNumber)
+    if (slotGroupIndex < 0) {
+      console.error(`Did not find mission slot template slot group with order number ${payload.slotGroupOrderNumber}, aborting slot deletion`)
+      return
+    }
+    const slotGroup = slotGroups[slotGroupIndex]
+
+    slotGroup.slots.splice(payload.index, 1)
+
+    commit({
+      type: 'setMissionSlotTemplateSlotlist',
+      slotGroups
+    })
+  },
+  removeMissionSlotTemplateSlotGroup({ commit, state }, payload) {
+    let slotGroups = _.clone(state.missionSlotTemplateDetails.slotGroups)
+
+    slotGroups.splice(payload.index, 1)
+
+    commit({
+      type: 'setMissionSlotTemplateSlotlist',
+      slotGroups
+    })
+  },
   setMissionSlotTemplateSlotDetails({ commit }, payload) {
     commit({
       type: 'setMissionSlotTemplateSlotDetails',

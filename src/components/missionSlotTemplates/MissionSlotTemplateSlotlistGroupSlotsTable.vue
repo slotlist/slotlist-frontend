@@ -10,7 +10,7 @@
         </tr>
       </thead>
       <tbody>
-        <mission-slot-template-slotlist-group-slots-row v-for="missionSlot in missionSlotGroup.slots" :missionSlotDetails="missionSlot" :missionSlotGroup="missionSlotGroup" :hasAnyMissionSlotDescription="hasAnyMissionSlotDescription" :key="missionSlot.uid"></mission-slot-template-slotlist-group-slots-row>
+        <mission-slot-template-slotlist-group-slots-row v-for="(missionSlot, index) in missionSlotGroup.slots" :index="index" :missionSlotCount="missionSlotGroup.slots.length" :missionSlotDetails="missionSlot" :missionSlotGroup="missionSlotGroup" :hasAnyMissionSlotDescription="hasAnyMissionSlotDescription" :key="missionSlot.uid"></mission-slot-template-slotlist-group-slots-row>
       </tbody>
       <tfoot v-show="missionSlotGroup.slots.length >= 10">
         <tr>

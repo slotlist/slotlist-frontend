@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     deleteMissionSlotTemplateSlotGroup() {
-      this.$store.dispatch('deleteMissionSlotTemplateSlotGroup', { missionSlotGroup: this.missionSlotGroup })
+      this.$store.dispatch('removeMissionSlotTemplateSlotGroup', { index: this.index })
     },
     duplicateMissionSlotTemplateSlotGroup() {
       const slotGroupDetails = {

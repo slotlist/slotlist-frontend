@@ -30,7 +30,9 @@ import * as _ from 'lodash'
 
 export default {
   props: [
+    'index',
     'hasAnyMissionSlotDescription',
+    'missionSlotCount',
     'missionSlotDetails',
     'missionSlotGroup'
   ],
@@ -108,12 +110,7 @@ export default {
   },
   methods: {
     deleteMissionSlotTemplateMissionSlot() {
-      // this.$store.dispatch('deleteMissionSlotTemplateMissionSlot', {
-      //   missionSlug: this.$route.params.missionSlug,
-      //   slotUid: this.missionSlotDetails.uid,
-      //   slotOrderNumber: this.missionSlotDetails.orderNumber,
-      //   slotTitle: this.missionSlotDetails.title
-      // });
+      this.$store.dispatch('removeMissionSlotTemplateSlot', { index: this.index, slotGroupOrderNumber: this.missionSlotGroup.orderNumber })
     },
     moveMissionSlotTemplateSlot(direction) {
       // this.$store.dispatch('moveMissionSlotTemplateSlot', {
