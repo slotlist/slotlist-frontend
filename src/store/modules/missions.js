@@ -155,6 +155,9 @@ const getters = {
     })
 
     return slots
+  },
+  unfilteredMissionSlotGroups() {
+    return state.missionSlotGroups
   }
 }
 
