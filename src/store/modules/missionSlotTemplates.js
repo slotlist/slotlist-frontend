@@ -301,6 +301,48 @@ const actions = {
         }
       })
   },
+  editMissionSlotTemplateSlot({ commit, state }, payload) {
+    let slotGroups = _.clone(state.missionSlotTemplateDetails.slotGroups)
+    const slotGroupIndex = _.findIndex(slotGroups, (g) => g.orderNumber === state.missionSlotTemplateSlotGroupDetails.orderNumber)
+    if (slotGroupIndex < 0) {
+      console.error(`Did not find mission slot template slot group with order number ${state.missionSlotTemplateSlotGroupDetails.orderNumber}, aborting slot editing`)
+      return
+    }
+    const slotGroup = slotGroups[slotGroupIndex]
+
+    const slotIndex = _.findIndex(slotGroup.slots, (s) => s.orderNumber === payload.slotOrderNumber)
+    if (slotGroupIndex < 0) {
+      console.error(`Did not find mission slot template slot with order number ${payload.slotOrderNumber}, aborting slot editing`)
+      return
+    }
+
+    slotGroup.slots[slotIndex] = payload.slotPayload
+
+    if (payload.moveAfter >= -1) {
+      const oldOrderNumber = slotGroup.slots[slotIndex].orderNumber
+      const increment = payload.moveAfter < oldOrderNumber
+      const orderNumber = increment ? payload.moveAfter + 1 : payload.moveAfter
+
+      _.each(slotGroup.slots, (slot) => {
+        if (slot.orderNumber === oldOrderNumber) {
+          return
+        }
+
+        if (increment && slot.orderNumber >= orderNumber && slot.orderNumber < oldOrderNumber) {
+          slot.orderNumber += 1
+        } else if (!increment && slot.orderNumber <= orderNumber && slot.orderNumber > oldOrderNumber) {
+          slot.orderNumber -= 1
+        }
+      })
+
+      slotGroup.slots[slotIndex].orderNumber = orderNumber
+    }
+
+    commit({
+      type: 'setMissionSlotTemplateSlotlist',
+      slotGroups
+    })
+  },
   getMissionSlotTemplateDetails({ commit, dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.getMissionSlotTemplateDetails'))
 

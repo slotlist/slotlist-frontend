@@ -37,7 +37,7 @@
         <b-btn variant="secondary" v-if="isMissionSlotTemplateCreator" @click="duplicateMissionSlotTemplateSlot">
           <i class="fa fa-files-o" aria-hidden="true"></i> {{ $t('button.duplicate.mission.slot') }}
         </b-btn>
-        <b-btn variant="primary" v-if="isMissionSlotTemplateCreator" @click="hideMissionSlotTemplateSlotDetailsModal" v-b-modal.missionSlotEditModal>
+        <b-btn variant="primary" v-if="isMissionSlotTemplateCreator" @click="hideMissionSlotTemplateSlotDetailsModal" v-b-modal.missionSlotTemplateSlotEditModal>
           <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit') }}
         </b-btn>
         <b-btn @click="hideMissionSlotTemplateSlotDetailsModal">
