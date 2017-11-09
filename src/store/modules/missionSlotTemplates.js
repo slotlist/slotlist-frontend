@@ -41,6 +41,9 @@ const getters = {
   missionSlotTemplatesPageCount() {
     return Math.ceil(state.totalMissionSlotTemplates / limits.missionSlotTemplates)
   },
+  missionSlotTemplatesRefreshSetInterval() {
+    return state.missionSlotTemplatesRefreshSetInterval
+  },
   missionSlotTemplateUnsavedChanges() {
     return state.missionSlotTemplateUnsavedChanges
   },
@@ -457,10 +460,13 @@ const actions = {
     })
 
     if (_.isNil(payload)) {
-      payload = { page: 1, silent: false, autoRefresh: false }
+      payload = { page: 1, limit: limits.missionSlotTemplates, silent: false, autoRefresh: false }
     }
     if (_.isNil(payload.page)) {
       payload.page = 1
+    }
+    if (_.isNil(payload.limit)) {
+      payload.limit = limits.missionSlotTemplates
     }
     if (_.isNil(payload.silent)) {
       payload.silent = false
@@ -473,7 +479,7 @@ const actions = {
       dispatch('startWorking', i18n.t('store.getMissionSlotTemplates'))
     }
 
-    return MissionSlotTemplatesApi.getMissionSlotTemplates(limits.missionSlotTemplates, (payload.page - 1) * limits.missionSlotTemplates)
+    return MissionSlotTemplatesApi.getMissionSlotTemplates(payload.limit, (payload.page - 1) * payload.limit)
       .then(function (response) {
         if (response.status !== 200) {
           console.error(response)

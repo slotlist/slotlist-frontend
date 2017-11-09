@@ -5,6 +5,9 @@ export const v1 = {
   addMissionPermission(missionSlug, payload) {
     return axios.post(`/v1/missions/${missionSlug}/permissions`, payload)
   },
+  applySlotTemplateToMission(missionSlug, slotTemplateUid, insertAfter) {
+    return axios.post(`/v1/missions/${missionSlug}/slotTemplates/${slotTemplateUid}`, { insertAfter })
+  },
   assignMissionSlot(missionSlug, slotUid, userUid, force) {
     return axios.post(`/v1/missions/${missionSlug}/slots/${slotUid}/assign`, { userUid, force })
   },

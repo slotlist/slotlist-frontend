@@ -25,7 +25,7 @@ export default {
     MissionSlotTemplateListTable
   },
   beforeCreate: function() {
-    if (_.isNil(this.$store.getters.missionSlotTemplates) || _.isEmpty(this.$store.getters.missionSlotTemplates)) {
+    if (_.isNil(this.$store.getters.missionSlotTemplates) || _.isEmpty(this.$store.getters.missionSlotTemplates) || _.isNil(this.$store.getters.missionSlotTemplatesRefreshSetInterval)) {
       this.$store.dispatch('getMissionSlotTemplates', { autoRefresh: true })
     }
   },

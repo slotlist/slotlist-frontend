@@ -137,6 +137,7 @@
     <!-- End of content -->
     <!-- Begin of modals -->
     <div>
+      <mission-apply-slot-template-modal v-if="loggedIn && isMissionEditor"></mission-apply-slot-template-modal>
       <mission-banner-image-modal v-if="loggedIn && isMissionEditor"></mission-banner-image-modal>
       <mission-convert-to-slot-template-modal v-if="loggedIn"></mission-convert-to-slot-template-modal>
       <mission-duplicate-modal v-if="loggedIn && isMissionEditor"></mission-duplicate-modal>
@@ -159,6 +160,7 @@
 import * as _ from 'lodash'
 import moment from 'moment-timezone'
 import FileSaver from 'file-saver'
+import MissionApplySlotTemplateModal from 'components/missions/modals/MissionApplySlotTemplateModal.vue'
 import MissionBannerImageModal from 'components/missions/modals/MissionBannerImageModal.vue'
 import MissionConvertToSlotTemplateModal from 'components/missions/modals/MissionConvertToSlotTemplateModal.vue'
 import MissionDuplicateModal from 'components/missions/modals/MissionDuplicateModal.vue'
@@ -177,6 +179,7 @@ import utils from '../utils'
 
 export default {
   components: {
+    MissionApplySlotTemplateModal,
     MissionBannerImageModal,
     MissionConvertToSlotTemplateModal,
     MissionDuplicateModal,
