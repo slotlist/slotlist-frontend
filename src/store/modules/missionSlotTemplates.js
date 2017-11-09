@@ -52,27 +52,26 @@ const getters = {
 const actions = {
   addMissionSlotTemplateSlot({ commit, state }, payload) {
     let slotGroups = _.clone(state.missionSlotTemplateDetails.slotGroups)
-    const slotGroup = slotGroups[payload.index]
-    if (_.isNil(slotGroup)) {
-      console.error(`Did not find mission slot template slot group at index ${payload.index}, aborting slot addition`)
+    const slotGroupIndex = _.findIndex(slotGroups, (g) => g.orderNumber === state.missionSlotTemplateSlotGroupDetails.orderNumber)
+    if (slotGroupIndex < 0) {
+      console.error(`Did not find mission slot template slot group with order number ${state.missionSlotTemplateSlotGroupDetails.orderNumber}, aborting slot addition`)
       return
     }
+    const slotGroup = slotGroups[slotGroupIndex]
 
-    const slotPayload = payload.slotPayload
-
-    const slotsToIncrement = _.slice(slotGroup.slots, slotPayload.insertAfter)
+    const slotsToIncrement = _.slice(slotGroup.slots, payload.insertAfter)
     _.each(slotsToIncrement, (slot) => {
       slot.orderNumber += 1
     })
 
-    slotGroup.slots.splice(slotPayload.insertAfter, 0, {
-      orderNumber: slotPayload.insertAfter + 1,
-      title: slotPayload.title,
-      description: slotPayload.description,
-      detailedDescription: slotPayload.detailedDescription,
-      difficulty: slotPayload.difficulty,
-      blocked: slotPayload.blocked,
-      reserve: slotPayload.reserve
+    slotGroup.slots.splice(payload.insertAfter, 0, {
+      orderNumber: payload.insertAfter + 1,
+      title: payload.title,
+      description: payload.description,
+      detailedDescription: payload.detailedDescription,
+      difficulty: payload.difficulty,
+      blocked: payload.blocked,
+      reserve: payload.reserve
     })
 
     commit({
@@ -550,6 +549,23 @@ const mutations = {
     state.missionSlotTemplateSlotGroupDetails = payload.slotGroupDetails
   },
   setMissionSlotTemplateSlotlist(state, payload) {
+    payload.slotGroups = _.orderBy(payload.slotGroups, ['orderNumber'], ['asc'])
+
+    let slotGroupOrderNumber = 1
+    let slotOrderNumber = 1
+    _.each(payload.slotGroups, (slotGroup) => {
+      slotGroup.orderNumber = slotGroupOrderNumber
+      slotGroup.slots = _.orderBy(slotGroup.slots, ['orderNumber'], ['asc'])
+
+      _.each(slotGroup.slots, (slot) => {
+        slot.orderNumber = slotOrderNumber
+
+        slotOrderNumber += 1
+      })
+
+      slotGroupOrderNumber += 1
+    })
+
     state.missionSlotTemplateDetails.slotGroups = payload.slotGroups
     state.missionSlotTemplateUnsavedChanges = true
   },
