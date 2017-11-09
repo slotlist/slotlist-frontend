@@ -3,7 +3,7 @@
     <h5>{{ missionSlotGroup.title }}</h5>
     <div class="word-wrap" v-show="missionSlotGroup.description">{{ missionSlotGroup.description }}</div>
     <mission-slot-template-slotlist-group-slots-table :missionSlotGroup="missionSlotGroup"></mission-slot-template-slotlist-group-slots-table>
-    <div class="text-center">
+    <div class="text-center" v-if="isMissionSlotTemplateCreator">
       <b-btn variant="secondary" v-if="index > 0" @click="moveMissionSlotTemplateSlotGroup(-1)">
         <i class="fa fa-angle-up" aria-hidden="true"></i> {{ $t('button.move.up') }}
       </b-btn>
@@ -42,6 +42,21 @@ export default {
     'missionSlotGroup',
     'missionSlotGroupCount'
   ],
+  computed: {
+    isMissionSlotTemplateCreator() {
+      if (!this.loggedIn || _.isNil(this.missionSlotTemplateDetails)) {
+        return false
+      }
+
+      return this.missionSlotTemplateDetails.creator.uid === this.$store.getters.user.uid
+    },
+    loggedIn() {
+      return this.$store.getters.loggedIn
+    },
+    missionSlotTemplateDetails() {
+      return this.$store.getters.missionSlotTemplateDetails
+    }
+  },
   methods: {
     deleteMissionSlotTemplateSlotGroup() {
       this.$store.dispatch('deleteMissionSlotTemplateSlotGroup', { missionSlotGroup: this.missionSlotGroup })

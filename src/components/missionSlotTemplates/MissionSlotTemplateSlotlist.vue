@@ -1,8 +1,8 @@
 <template>
   <div>
     <mission-slot-template-slotlist-group v-for="(missionSlotGroup, index) in missionSlotTemplateDetails.slotGroups" :index="index" :missionSlotGroupCount="missionSlotTemplateDetails.slotGroups.length" :missionSlotGroup="missionSlotGroup" :key="missionSlotGroup.uid"></mission-slot-template-slotlist-group>
-    <br>
-    <div class="text-center">
+    <br v-if="isMissionSlotTemplateCreator">
+    <div class="text-center" v-if="isMissionSlotTemplateCreator">
       <b-btn variant="success" v-b-modal.missionSlotTemplateSlotGroupCreateModal>
         <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.create.mission.slotGroup') }}
       </b-btn>
@@ -24,6 +24,16 @@ export default {
     MissionSlotTemplateSlotlistGroup
   },
   computed: {
+    isMissionSlotTemplateCreator() {
+      if (!this.loggedIn || _.isNil(this.missionSlotTemplateDetails)) {
+        return false
+      }
+
+      return this.missionSlotTemplateDetails.creator.uid === this.$store.getters.user.uid
+    },
+    loggedIn() {
+      return this.$store.getters.loggedIn
+    },
     missionSlotTemplateDetails() {
       return this.$store.getters.missionSlotTemplateDetails
     },

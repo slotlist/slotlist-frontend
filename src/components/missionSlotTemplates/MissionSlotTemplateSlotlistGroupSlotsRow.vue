@@ -12,10 +12,10 @@
     <td v-if="hasAnyMissionSlotDescription">{{ missionSlotDetails.description }}</td>
     <td class="text-center">
       <div class="btn-group btn-group-sm" role="group" aria-label="Mission slot template slot actions">
-        <b-btn variant="primary" @click="prepareMissionSlotTemplateSlotDetails" v-b-modal.missionSlotTemplatesSlotDetailsModal>
+        <b-btn variant="primary" @click="prepareMissionSlotTemplateSlotDetails" v-b-modal.missionSlotTemplateSlotDetailsModal>
           <i class="fa fa-info" aria-hidden="true"></i> {{ $t('button.details') }}
         </b-btn>
-        <click-confirm yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('mission.slot.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
+        <click-confirm v-if="isMissionSlotTemplateCreator" yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('mission.slot.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
           <b-btn variant="danger" size="sm" @click="deleteMissionSlotTemplateMissionSlot">
             <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete') }}
           </b-btn>
@@ -76,6 +76,19 @@ export default {
 
       return `<i class="${this.difficultyIcon}" aria-hidden="true"></i> ${this.missionSlotDetails.title} - [${this.missionSlotDetails.restrictedCommunity.tag}]`
     },
+    isMissionSlotTemplateCreator() {
+      if (!this.loggedIn || _.isNil(this.missionSlotTemplateDetails)) {
+        return false
+      }
+
+      return this.missionSlotTemplateDetails.creator.uid === this.$store.getters.user.uid
+    },
+    loggedIn() {
+      return this.$store.getters.loggedIn
+    },
+    missionSlotTemplateDetails() {
+      return this.$store.getters.missionSlotTemplateDetails
+    },
     titleColor() {
       if (this.missionSlotDetails.blocked || !_.isNil(this.missionSlotDetails.restrictedCommunity)) {
         return 'text-primary'
@@ -109,21 +122,8 @@ export default {
       // })
     },
     prepareMissionSlotTemplateSlotDetails() {
-      // this.$store.dispatch('getMissionSlotRegistrations', {
-      //   missionSlug: this.$route.params.missionSlug,
-      //   slotUid: this.missionSlotDetails.uid,
-      //   slotOrderNumber: this.missionSlotDetails.orderNumber,
-      //   slotTitle: this.missionSlotDetails.title
-      // })
-
-      // this.setMissionSlotDetails()
-      // this.setMissionSlotGroupDetails()
-    },
-    setMissionSlotDetails() {
-      // this.$store.dispatch('setMissionSlotDetails', this.missionSlotDetails)
-    },
-    setMissionSlotGroupDetails() {
-      // this.$store.dispatch('setMissionSlotGroupDetails', this.missionSlotGroup)
+      this.$store.dispatch('setMissionSlotTemplateSlotDetails', this.missionSlotDetails)
+      this.$store.dispatch('setMissionSlotTemplateSlotGroupDetails', this.missionSlotGroup)
     }
   }
 }

@@ -17,7 +17,7 @@
               <i class="fa fa-tasks" aria-hidden="true"></i> {{ $t('nav.missions') }}
             </router-link>
           </li>
-          <li class="nav-item" v-if="loggedIn">
+          <li class="nav-item">
             <router-link class="nav-link" :to="{name:'missionSlotTemplateList'}">
               <i class="fa fa-file-text-o" aria-hidden="true"></i> {{ $t('nav.missionSlotTemplates') }}
             </router-link>
