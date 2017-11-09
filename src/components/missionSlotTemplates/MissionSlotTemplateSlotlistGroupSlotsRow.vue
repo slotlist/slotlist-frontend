@@ -112,12 +112,6 @@ export default {
     deleteMissionSlotTemplateMissionSlot() {
       this.$store.dispatch('removeMissionSlotTemplateSlot', { index: this.index, slotGroupOrderNumber: this.missionSlotGroup.orderNumber })
     },
-    moveMissionSlotTemplateSlot(direction) {
-      // this.$store.dispatch('moveMissionSlotTemplateSlot', {
-      //   index: this.index,
-      //   direction
-      // })
-    },
     prepareMissionSlotTemplateSlotDetails() {
       this.$store.dispatch('setMissionSlotTemplateSlotDetails', this.missionSlotDetails)
       this.$store.dispatch('setMissionSlotTemplateSlotGroupDetails', this.missionSlotGroup)

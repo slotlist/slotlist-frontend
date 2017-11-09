@@ -20,7 +20,7 @@
           <b-btn variant="primary" v-if="isMissionSlotTemplateCreator" v-b-modal.missionSlotTemplateEditModal>
             <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit') }}
           </b-btn>&nbsp;
-          <b-btn variant="secondary" v-if="loggedIn" v-b-modal.missionDuplicateModal>
+          <b-btn variant="secondary" v-if="loggedIn" v-b-modal.missionSlotTemplateDuplicateModal>
             <i class="fa fa-files-o" aria-hidden="true"></i> {{ $t('button.duplicate.mission.slotTemplate') }}
           </b-btn>&nbsp;
           <click-confirm v-if="isMissionSlotTemplateCreator" yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('mission.slotTemplate.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
@@ -40,6 +40,7 @@
     <!-- End of content -->
     <!-- Begin of modals -->
     <div>
+      <mission-slot-template-duplicate-modal v-if="loggedIn"></mission-slot-template-duplicate-modal>
       <mission-slot-template-edit-modal v-if="isMissionSlotTemplateCreator"></mission-slot-template-edit-modal>
       <mission-slot-template-slot-create-modal v-if="isMissionSlotTemplateCreator"></mission-slot-template-slot-create-modal>
       <mission-slot-template-slot-details-modal></mission-slot-template-slot-details-modal>
@@ -53,6 +54,7 @@
 
 <script>
 import * as _ from 'lodash'
+import MissionSlotTemplateDuplicateModal from 'components/missionSlotTemplates/modals/MissionSlotTemplateDuplicateModal.vue'
 import MissionSlotTemplateEditModal from 'components/missionSlotTemplates/modals/MissionSlotTemplateEditModal.vue'
 import MissionSlotTemplateSlotCreateModal from 'components/missionSlotTemplates/modals/MissionSlotTemplateSlotCreateModal.vue'
 import MissionSlotTemplateSlotDetailsModal from 'components/missionSlotTemplates/modals/MissionSlotTemplateSlotDetailsModal.vue'
@@ -64,6 +66,7 @@ import utils from '../utils'
 
 export default {
   components: {
+    MissionSlotTemplateDuplicateModal,
     MissionSlotTemplateEditModal,
     MissionSlotTemplateSlotCreateModal,
     MissionSlotTemplateSlotDetailsModal,

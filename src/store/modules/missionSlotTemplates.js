@@ -109,7 +109,7 @@ const actions = {
       type: 'clearMissionSlotTemplates'
     })
   },
-  createMissionSlotTemplate({ dispatch }, payload) {
+  createMissionSlotTemplate({ dispatch, commit }, payload) {
     dispatch('startWorking', i18n.t('store.createMissionSlotTemplate'))
 
     return MissionSlotTemplatesApi.createMissionSlotTemplate(payload)
@@ -138,6 +138,11 @@ const actions = {
         router.push({
           name: 'missionSlotTemplateDetails',
           params: { missionSlotTemplateUid: response.data.slotTemplate.uid }
+        })
+
+        commit({
+          type: 'setMissionSlotTemplateDetails',
+          slotTemplate: response.data.slotTemplate
         })
 
         dispatch('stopWorking', i18n.t('store.createMissionSlotTemplate'))
