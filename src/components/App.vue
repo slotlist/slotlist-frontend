@@ -4,44 +4,44 @@
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <router-link class="navbar-brand" to="/">slotlist.info</router-link>
+      <router-link class="navbar-brand" :to="{name:'home'}">slotlist.info</router-link>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <router-link class="nav-link" to="/">
+            <router-link class="nav-link" :to="{name:'home'}">
               <i class="fa fa-home" aria-hidden="true"></i> {{ $t('nav.home') }}
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/missions">
+            <router-link class="nav-link" :to="{name:'missionList'}">
               <i class="fa fa-tasks" aria-hidden="true"></i> {{ $t('nav.missions') }}
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/communities">
+            <router-link class="nav-link" :to="{name:'missionSlotTemplateList'}">
+              <i class="fa fa-file-text-o" aria-hidden="true"></i> {{ $t('nav.missionSlotTemplates') }}
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" :to="{name:'communityList'}">
               <i class="fa fa-users" aria-hidden="true"></i> {{ $t('nav.communities') }}
             </router-link>
           </li>
         </ul>
         <ul class="navbar-nav">
           <li class="nav-item" v-if="loggedIn">
-            <router-link class="nav-link" to="/account">
+            <router-link class="nav-link" :to="{name:'account'}">
               <i class="fa fa-user" aria-hidden="true"></i> {{ $t('nav.account') }}
             </router-link>
           </li>
           <li class="nav-item" v-if="!loggedIn">
-            <router-link class="nav-link text-primary" to="/login">
+            <router-link class="nav-link text-primary" :to="{name:'login'}">
               <i class="fa fa-sign-in" aria-hidden="true"></i> {{ $t('nav.login') }}
             </router-link>
           </li>
           <li class="nav-item" v-if="loggedIn">
-            <router-link class="nav-link text-danger" to="/" @click.native="logout">
+            <router-link class="nav-link text-danger" :to="{name:'home'}" @click.native="logout">
               <i class="fa fa-sign-out" aria-hidden="true"></i> {{ $t('nav.logout') }}
-            </router-link>
-          </li>
-          <li class="nav-item" v-if="$acl.can(['admin.panel'], true)">
-            <router-link class="nav-link text-warning" to="/admin">
-              <i class="fa fa-server" aria-hidden="true"></i> {{ $t('nav.admin.panel') }}
             </router-link>
           </li>
           <li class="nav-item dropdown">

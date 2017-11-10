@@ -8,3 +8,7 @@
   overflow-y: auto;
   border-top: none;
 }
+
+div.html.ql-editor img {
+  max-width: 100%;
+}

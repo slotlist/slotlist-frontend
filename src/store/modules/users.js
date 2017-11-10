@@ -305,7 +305,7 @@ const actions = {
 
         const users = _.map(response.data.users, (user) => {
           return {
-            title: user.nickname,
+            title: _.isNil(user.community) ? user.nickname : `[${user.community.tag}] ${user.nickname}`,
             value: user
           }
         })

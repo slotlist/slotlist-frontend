@@ -155,6 +155,9 @@ const getters = {
     })
 
     return slots
+  },
+  unfilteredMissionSlotGroups() {
+    return state.missionSlotGroups
   }
 }
 
@@ -216,6 +219,67 @@ const actions = {
           })
         }
       })
+  },
+  applySlotTemplateToMission({ dispatch, commit }, payload) {
+    dispatch('startWorking', i18n.t('store.applySlotTemplateToMission'))
+
+        return MissionsApi.applySlotTemplateToMission(payload.missionSlug, payload.slotTemplateUid, payload.insertAfter)
+          .then((response) => {
+            if (response.status !== 200) {
+              console.error(response)
+              throw 'Applying slot template to mission failed'
+            }
+
+            if (_.isEmpty(response.data)) {
+              console.error(response)
+              throw 'Received empty response'
+            }
+
+            if (_.isNil(response.data.slotGroups) || !_.isArray(response.data.slotGroups)) {
+              console.error(response)
+              throw 'Received invalid slot template application'
+            }
+
+            dispatch('showAlert', {
+              showAlert: true,
+              alertVariant: 'success',
+              alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.applySlotTemplateToMission.success')}`
+            })
+
+            commit({
+              type: 'setMissionSlotlist',
+              slotGroups: response.data.slotGroups
+            })
+
+            dispatch('stopWorking', i18n.t('store.applySlotTemplateToMission'))
+          }).catch((error) => {
+            dispatch('stopWorking', i18n.t('store.applySlotTemplateToMission'))
+
+            if (error.response) {
+              console.error('applySlotTemplateToMission', error.response)
+              dispatch('showAlert', {
+                showAlert: true,
+                alertVariant: 'danger',
+                alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.applySlotTemplateToMission.error')} - ${error.response.data.message}`
+              })
+            } else if (error.request) {
+              Raven.captureException(error, { extra: { module: 'missions', function: 'applySlotTemplateToMission' } })
+              console.error('applySlotTemplateToMission', error.request)
+              dispatch('showAlert', {
+                showAlert: true,
+                alertVariant: 'danger',
+                alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.applySlotTemplateToMission.error')} - ${i18n.t('failed.request')}`
+              })
+            } else {
+              Raven.captureException(error, { extra: { module: 'missions', function: 'applySlotTemplateToMission' } })
+              console.error('applySlotTemplateToMission', error.message)
+              dispatch('showAlert', {
+                showAlert: true,
+                alertVariant: 'danger',
+                alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.applySlotTemplateToMission.error')} - ${i18n.t('failed.something')}`
+              })
+            }
+          })
   },
   assignMissionSlot({ dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.assignMissionSlot'))
@@ -568,6 +632,8 @@ const actions = {
           alertVariant: 'success',
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteMission.success', { title: payload.missionTitle })}`
         })
+
+        dispatch('getMissions', { autoRefresh: true })
 
         router.push({ name: 'missionList' })
 
@@ -1702,7 +1768,7 @@ const actions = {
           throw 'Received empty response'
         }
 
-        if (_.isNil(response.data.slotGroups) || !_.isObject(response.data.slotGroups)) {
+        if (_.isNil(response.data.slotGroups) || !_.isArray(response.data.slotGroups)) {
           console.error(response)
           throw 'Received invalid mission slotlist'
         }

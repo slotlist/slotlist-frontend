@@ -6,6 +6,9 @@
       <b-btn variant="success" v-if="isMissionEditor && !hasMissionEnded" v-b-modal.missionSlotGroupCreateModal>
         <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.create.mission.slotGroup') }}
       </b-btn>
+      <b-btn variant="success" v-if="isMissionEditor && !hasMissionEnded" v-b-modal.missionApplySlotTemplateModal>
+        <i class="fa fa-file-text-o" aria-hidden="true"></i> {{ $t('button.apply.mission.slotGroup') }}
+      </b-btn>
       <b-btn @click="refreshMissionSlotlist">
         <i class="fa fa-refresh" aria-hidden="true"></i> {{ $t('button.refresh') }}
       </b-btn>
@@ -73,6 +76,9 @@ export default {
     },
     deleteSelectedMissionSlots() {
       this.$store.dispatch('deleteSelectedMissionSlots', { missionSlug: this.$route.params.missionSlug })
+    },
+    getMissionSlotTemplates() {
+      this.$store.dispatch('getMissionSlotTemplates', { limit: 100 })
     },
     refreshMissionSlotlist() {
       this.$store.dispatch('getMissionSlotlist', { missionSlug: this.$route.params.missionSlug })

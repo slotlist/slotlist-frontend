@@ -8,6 +8,7 @@
         <div class="card-block">
           <calendar-header></calendar-header>
           <calendar-body></calendar-body>
+          <div class="small text-center" v-html="$t('mission.timezone', { timezone: timezone })"></div>
         </div>
       </div>
     </div>
@@ -32,6 +33,9 @@ export default {
   computed: {
     loggedIn() {
       return this.$store.getters.loggedIn
+    },
+    timezone() {
+      return this.$store.getters.timezone
     }
   }
 }

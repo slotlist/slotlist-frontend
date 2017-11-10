@@ -8,10 +8,12 @@ import CommunityCreator from '../views/CommunityCreator'
 import MissionList from '../views/MissionList'
 import MissionDetails from '../views/MissionDetails'
 import MissionCreator from '../views/MissionCreator'
+import MissionSlotTemplateList from '../views/MissionSlotTemplateList'
+import MissionSlotTemplateDetails from '../views/MissionSlotTemplateDetails'
+import MissionSlotTemplateCreator from '../views/MissionSlotTemplateCreator'
 import UserDetails from '../views/UserDetails'
 import Account from '../views/Account'
 import Login from '../views/Login'
-import AdminPanel from '../views/AdminPanel'
 import About from '../views/About'
 import Imprint from '../views/Imprint'
 import Privacy from '../views/Privacy'
@@ -38,7 +40,7 @@ export default new Router({
       component: CommunityDetails
     },
     {
-      path: '/communitycreator',
+      path: '/community-creator',
       name: 'communityCreator',
       component: CommunityCreator,
       meta: {
@@ -56,9 +58,27 @@ export default new Router({
       component: MissionDetails
     },
     {
-      path: '/missioncreator',
+      path: '/mission-creator',
       name: 'missionCreator',
       component: MissionCreator,
+      meta: {
+        authenticated: true // only logged in users can access this page
+      }
+    },
+    {
+      path: '/mission-slot-templates',
+      name: 'missionSlotTemplateList',
+      component: MissionSlotTemplateList
+    },
+    {
+      path: '/mission-slot-templates/:missionSlotTemplateUid',
+      name: 'missionSlotTemplateDetails',
+      component: MissionSlotTemplateDetails
+    },
+    {
+      path: '/mission-slot-templates-creator',
+      name: 'missionSlotTemplateCreator',
+      component: MissionSlotTemplateCreator,
       meta: {
         authenticated: true // only logged in users can access this page
       }
@@ -84,15 +104,6 @@ export default new Router({
         // Set path of previous route before accessing login route, used for redirects after successful authentication
         store.dispatch('setRedirect', { path: from.path })
         next()
-      }
-    },
-    {
-      path: '/admin',
-      name: 'admin',
-      component: AdminPanel,
-      meta: {
-        authenticated: true, // only logged in users can access this page
-        permissions: 'admin.panel' // only users with the `admin.panel` permission can access this page
       }
     },
     {
