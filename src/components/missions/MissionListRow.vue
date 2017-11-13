@@ -6,8 +6,8 @@
       <router-link :to="{name: 'userDetails', params: {userUid: mission.creator.uid}}">{{ formatUserWithTag(mission.creator) }}</router-link>
     </td>
     <td class="text-center">
-      <b-popover :content="$t('mission.list.slot.counts.popover', {unassigned: mission.unassignedSlotCount, total: mission.totalSlotCount})" :triggers="['hover']">
-        {{ mission.unassignedSlotCount }}/{{ mission.totalSlotCount }}
+      <b-popover :content="$t('mission.list.slot.counts.popover', mission.slotCounts)" :triggers="['hover']">
+        {{ mission.slotCounts.open }}/{{ mission.slotCounts.total }}
       </b-popover>
     </td>
     <td class="text-center">
