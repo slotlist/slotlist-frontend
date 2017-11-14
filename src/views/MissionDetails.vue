@@ -74,6 +74,12 @@
           </b-btn>&nbsp;
           <b-btn variant="secondary" size="sm" @click="downloadICalFile">
             <i class="fa fa-calendar" aria-hidden="true"></i> {{ $t('button.export.calendar.ical') }}
+          </b-btn>&nbsp;
+          <b-btn variant="secondary" size="sm" v-if="isMissionEditor" v-b-modal.missionDuplicateModal>
+            <i class="fa fa-files-o" aria-hidden="true"></i> {{ $t('button.duplicate.mission') }}
+          </b-btn>&nbsp;
+          <b-btn variant="secondary" size="sm" v-if="isMissionEditor" v-b-modal.missionConvertToSlotTemplateModal>
+            <i class="fa fa-file-text-o" aria-hidden="true"></i> {{ $t('button.convert.slotTemplate') }}
           </b-btn>
         </div>
         <br v-if="isMissionEditor">
@@ -86,12 +92,6 @@
           </b-btn>&nbsp;
           <b-btn variant="primary" v-if="isMissionCreator" v-b-modal.missionPermissionModal>
             <i class="fa fa-key" aria-hidden="true"></i> {{ $t('button.edit.mission.permissions') }}
-          </b-btn>&nbsp;
-          <b-btn variant="secondary" v-b-modal.missionDuplicateModal>
-            <i class="fa fa-files-o" aria-hidden="true"></i> {{ $t('button.duplicate.mission') }}
-          </b-btn>&nbsp;
-          <b-btn variant="secondary" v-b-modal.missionConvertToSlotTemplateModal>
-            <i class="fa fa-file-text-o" aria-hidden="true"></i> {{ $t('button.convert.slotTemplate') }}
           </b-btn>&nbsp;
           <click-confirm v-if="isMissionCreator" yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('mission.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
             <b-btn variant="danger" @click="deleteMission">
