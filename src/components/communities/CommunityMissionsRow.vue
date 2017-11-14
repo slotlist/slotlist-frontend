@@ -6,9 +6,9 @@
       <router-link :to="{name: 'userDetails', params: {userUid: communityMission.creator.uid}}">{{ formatUserWithTag(communityMission.creator) }}</router-link>
     </td>
     <td class="text-center">
-      <router-link tag="button" class="btn btn-primary btn-sm" :to="{name: 'missionDetails', params: {missionSlug: communityMission.slug}}">
+      <b-btn variant="primary" size="sm" :to="{name: 'missionDetails', params: {missionSlug: communityMission.slug}}">
         <i class="fa fa-info" aria-hidden="true"></i> {{ $t('button.details') }}
-      </router-link>
+      </b-btn>
     </td>
   </tr>
 </template>
