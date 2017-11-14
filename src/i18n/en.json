@@ -179,6 +179,7 @@
   "mission.list.filter.assigned": "Missions with assigned slots",
   "mission.list.filter.ended": "Show past missions",
   "mission.list.filter.registered": "Missions with slot registrations",
+  "mission.list.isMissionEditor": "You have editor permissions for this mission",
   "mission.list.slot.counts": "Open slots",
   "mission.list.slot.counts.popover": "<strong>{open}<\/strong> out of <strong>{total}<\/strong> slots are unassigned and do not have any registrations yet.<br><strong>{unassigned}<\/strong> slots have registrations, but have not been assigned yet. <strong>{assigned}<\/strong> slots have been assigned.<br>There are <strong>{blocked}<\/strong> blocked, <strong>{restricted}<\/strong> restricted and <strong>{reserve}<\/strong> reserve slots.",
   "mission.list.slot.status": "Registration",
