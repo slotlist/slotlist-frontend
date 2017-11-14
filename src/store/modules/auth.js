@@ -507,6 +507,9 @@ const mutations = {
 
     Vue.acl.clearPermissions()
 
+    axios.defaults.headers.common['Authorization'] = undefined
+    delete axios.defaults.headers.common['Authorization']
+
     state.token = null
     state.decodedToken = null
     state.loggedIn = false
