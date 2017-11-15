@@ -1,5 +1,5 @@
 <template>
-  <b-jumbotron header="Datenschutzerklärung" lead="Zuletzt aktualisiert: <strong>2017-09-12 10:22</strong>.">
+  <b-jumbotron header="Datenschutzerklärung" lead="Zuletzt aktualisiert: <strong>2017-11-15 14:28 CET</strong>.">
     <p class="text-justify">
       Das
       <router-link :to="{name: 'home'}">slotlist.info</router-link> Team ("wir", "uns" oder "unser") betreibt die
@@ -48,6 +48,14 @@
       <br>Sollten Sie irgendwelche illegalen oder anderweitig anstößlichen Materialien auf irgendeiner Seite einer dritten Partei entdecken, auf welche von unserem Dienst verwiesen wird, so bitten wir Sie, uns auf einem der Wege zu kontaktieren, die auf unserer
       <router-link :to="{name: 'about'}">Über-</router-link> oder
       <router-link :to="{name: 'imprint'}">Impressum-Seite</router-link> angegeben sind, und uns über den Link zu informieren.
+      <br>
+      <br>
+      <h4>Urheber- und Kennzeichenrecht</h4>
+      Wir sind bemüht, in allen unserer Publikationen die Urheberrechte der verwendeten Bilder, Grafiken, Tondokumente, Videosequenzen und Texte zu beachten, von uns selbst erstellte Bilder, Grafiken, Tondokumente, Videosequenzen und Texte zu nutzen oder auf lizenzfreie Bilder, Grafiken, Tondokumente, Videosequenzen und Texte zurückzugefreifen. Alle innerhalb der Website genannten und gegebenenfalls durch Dritte geschützten Marken- und Warenzeichen unterliegen uneingeschränkt den Bestimmungen des jeweils gültigen Kennzeichenrechts und den Besitzrechten der jeweiligen eingetragenen Eigentümer. Allein aufgrund der bloßen Nennung ist nicht der Schluss zu ziehen, dass Markenzeichen nicht durch Rechte Dritter geschützt sind! Das Copyright für veröffentlichte, von uns selbst erstellte Objekte bleibt allein bei uns. Eine Vervielfältigung oder Verwendung solcher Bilder, Grafiken, Tondokumente, Videosequenzen und Texte in anderen elektronischen oder gedruckten Publikationen ist ohne ausdrückliche Zustimmung des Autors nicht gestattet.
+      <br>Inhalte, welche durch Dritte auf unserer Website erstellt wurden - zum Beispiel Missionen, Communities oder ähnliches - unterliegen komplett der Verantwortung der jeweiligen Ersteller. Wir übernehmen keinerlei Haftung für Copyright-, Kennzeichen- oder Marken-Verstöße, welche durch Dritt-Inhalte auf unserer Website begangen wurden.
+      <br>Sollten Sie urheberrechtlich geschützte Inhalte in von Dritten erstellten Inhalten auf unserer Website finden, so kontaktieren Sie uns bitte auf einem der Wege, die auf userer
+      <router-link :to="{name: 'about'}">Über</router-link> oder
+      <router-link :to="{name: 'imprint'}">Impressum-Seite</router-link> angegeben sind und übermitteln uns Nachweise Ihres Eigentums der betroffenen Inhalte. Nach erfolgreicher Prüfung entfernen wir die jeweiligen Inhalte dann umgehend.
       <br>
       <br>
       <h4>Schutz der Privatsphäre von Kindern</h4>

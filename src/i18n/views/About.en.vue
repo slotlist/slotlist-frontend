@@ -84,6 +84,10 @@
           <a href="https://task-force-wolf.de/">[TFW] Isaac</a>
         </dt>
         <dd class="col-sm-10">for feedback, suggestions and bug reports</dd>
+        <dt class="col-sm-2">
+          <a href="https://task-force-wolf.de/">[JgZg-A] Steff</a>
+        </dt>
+        <dd class="col-sm-10">for feature suggestions and providing an Austrian translation</dd>
       </dl>
     </p>
   </b-jumbotron>
