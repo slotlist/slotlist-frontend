@@ -2,6 +2,9 @@ import axios from 'axios'
 import * as _ from 'lodash'
 
 export const v1 = {
+  addMissionAccess(missionSlug, payload) {
+    return axios.post(`/v1/missions/${missionSlug}/accesses`, payload)
+  },
   addMissionPermission(missionSlug, payload) {
     return axios.post(`/v1/missions/${missionSlug}/permissions`, payload)
   },
@@ -26,6 +29,9 @@ export const v1 = {
   deleteMission(missionSlug) {
     return axios.delete(`/v1/missions/${missionSlug}`)
   },
+  deleteMissionAccess(missionSlug, missionAccessUid) {
+    return axios.delete(`/v1/missions/${missionSlug}/accesses/${missionAccessUid}`)
+  },
   deleteMissionBannerImage(missionSlug) {
     return axios.delete(`/v1/missions/${missionSlug}/bannerImage`)
   },
@@ -49,6 +55,9 @@ export const v1 = {
   },
   editMissionSlotGroup(missionSlug, slotGroupUid, payload) {
     return axios.patch(`/v1/missions/${missionSlug}/slotGroups/${slotGroupUid}`, payload)
+  },
+  getMissionAccesses(missionSlug, limit = 10, offset = 0) {
+    return axios.get(`/v1/missions/${missionSlug}/accesses?limit=${limit}&offset=${offset}`)
   },
   getMissionDetails(missionSlug) {
     return axios.get(`/v1/missions/${missionSlug}`)

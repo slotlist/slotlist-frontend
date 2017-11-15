@@ -35,9 +35,6 @@ window.Promise = Promise
 // Black-require API/axios utils
 require('./api/util')
 
-// Blank-require mock adapter so it gets loaded in dev environment
-require('./api/mock')
-
 if (process.env.SENTRY_DSN) {
   console.info('Configuring sentry.io integration')
   Raven

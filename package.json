@@ -4,8 +4,7 @@
   "version": "1.0.0-beta24",
   "scripts": {
     "build": "webpack --config build/webpack.prod.js",
-    "dev": "cross-env MOCK_AXIOS_RESPONSES=false node build/server.js",
-    "dev:mock": "cross-env MOCK_AXIOS_RESPONSES=true node build/server.js",
+    "dev": "cross-env node build/server.js",
     "lint": "xo **/src/**/*.{vue,js} !node_modules/**"
   },
   "license": "MIT",

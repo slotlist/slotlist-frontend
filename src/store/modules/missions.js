@@ -8,6 +8,7 @@ import moment from 'moment-timezone'
 import MissionsApi from '../../api/missions'
 
 const limits = {
+  missionAccesses: 10,
   missionPermissions: 10,
   missions: 10,
   missionSlotRegistrations: 10
@@ -20,6 +21,7 @@ const intervals = {
 
 const state = {
   checkingMissionSlugAvailability: false,
+  missionAccesses: null,
   missionCalendarCurrentMonth: null,
   missionDetails: null,
   missionListFilter: {},
@@ -38,6 +40,7 @@ const state = {
   missionsRefreshSetInterval: null,
   refreshingMissions: false,
   refreshingMissionsForCalendar: false,
+  totalMissionAccesses: 0,
   totalMissionPermissions: 0,
   totalMissions: 0,
   totalMissionSlotRegistrations: 0
@@ -46,6 +49,12 @@ const state = {
 const getters = {
   checkingMissionSlugAvailability() {
     return state.checkingMissionSlugAvailability
+  },
+  missionAccesses() {
+    return state.missionAccesses
+  },
+  missionAccessesPageCount() {
+    return Math.ceil(state.totalMissionAccesses / limits.missionAccesses)
   },
   missionCalendarCurrentMonth() {
     return state.missionCalendarCurrentMonth
@@ -162,6 +171,64 @@ const getters = {
 }
 
 const actions = {
+  addMissionAccess({ dispatch }, payload) {
+    dispatch('startWorking', i18n.t('store.addMissionAccess'))
+
+    return MissionsApi.addMissionAccess(payload.missionSlug, payload.missionAccessDetails)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Creating mission access failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (_.isNil(response.data.access) || !_.isObject(response.data.access)) {
+          console.error(response)
+          throw 'Received invalid mission access'
+        }
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.addMissionAccess.success')}`
+        })
+
+        dispatch('getMissionAccesses', { missionSlug: payload.missionSlug })
+
+        dispatch('stopWorking', i18n.t('store.addMissionAccess'))
+      }).catch((error) => {
+        dispatch('stopWorking', i18n.t('store.addMissionAccess'))
+
+        if (error.response) {
+          console.error('addMissionAccess', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.addMissionAccess.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'addMissionAccess' } })
+          console.error('addMissionAccess', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.addMissionAccess.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'addMissionAccess' } })
+          console.error('addMissionAccess', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.addMissionAccess.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
   addMissionPermission({ dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.addMissionPermission'))
 
@@ -663,6 +730,64 @@ const actions = {
             showAlert: true,
             alertVariant: 'danger',
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMission.error', { title: payload.missionTitle })} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
+  deleteMissionAccess({ dispatch }, payload) {
+    dispatch('startWorking', i18n.t('store.deleteMissionAccess'))
+
+    return MissionsApi.deleteMissionAccess(payload.missionSlug, payload.missionAccessUid)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Deleting mission access failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (response.data.success !== true) {
+          console.error(response)
+          throw 'Received invalid mission access deletion'
+        }
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteMissionAccess.success')}`
+        })
+
+        dispatch('getMissionAccesses', { missionSlug: payload.missionSlug })
+
+        dispatch('stopWorking', i18n.t('store.deleteMissionAccess'))
+      }).catch((error) => {
+        dispatch('stopWorking', i18n.t('store.deleteMissionAccess'))
+
+        if (error.response) {
+          console.error('deleteMissionAccess', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionAccess.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionAccess' } })
+          console.error('deleteMissionAccess', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionAccess.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionAccess' } })
+          console.error('deleteMissionAccess', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionAccess.error')} - ${i18n.t('failed.something')}`
           })
         }
       })
@@ -1438,6 +1563,66 @@ const actions = {
       missionSlotlistFilter: payload
     })
   },
+  getMissionAccesses({ commit, dispatch }, payload) {
+    dispatch('startWorking', i18n.t('store.getMissionAccesses'))
+
+    if (_.isNil(payload.page)) {
+      payload.page = 1
+    }
+
+    return MissionsApi.getMissionAccesses(payload.missionSlug, limits.missionAccesses, (payload.page - 1) * limits.missionAccesses)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Retrieving mission accesses failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (_.isNil(response.data.accesses) || !_.isArray(response.data.accesses)) {
+          console.error(response)
+          throw 'Received invalid mission accesses'
+        }
+
+        commit({
+          type: 'setMissionAccesses',
+          accesses: response.data.accesses,
+          total: response.data.total
+        })
+
+        dispatch('stopWorking', i18n.t('store.getMissionAccesses'))
+      }).catch((error) => {
+        dispatch('stopWorking', i18n.t('store.getMissionAccesses'))
+
+        if (error.response) {
+          console.error('getMissionAccesses', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionAccesses.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionAccesses' } })
+          console.error('getMissionAccesses', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionAccesses.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionAccesses' } })
+          console.error('getMissionAccesses', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionAccesses.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
   getMissionDetails({ commit, dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.getMissionDetails'))
 
@@ -2153,6 +2338,7 @@ const mutations = {
 
   },
   clearMissionDetails(state) {
+    state.missionAccesses = null
     state.missionDetails = null
     state.missionPermissions = null
     state.missionSlotDetails = null
@@ -2160,6 +2346,7 @@ const mutations = {
     state.missionSlotGroups = null
     state.missionSlotRegistrations = null
     state.missionSlotSelection = []
+    state.totalMissionAccesses = 0
     state.totalMissionPermissions = 0
     state.totalMissionSlotRegistrations = 0
   },
@@ -2177,6 +2364,10 @@ const mutations = {
   },
   refreshingMissionsForCalendar(state, payload) {
     state.refreshingMissionsForCalendar = payload.refreshing
+  },
+  setMissionAccesses(state, payload) {
+    state.missionAccesses = payload.accesses
+    state.totalMissionAccesses = payload.total
   },
   setMissionBannerImageUrl(state, payload) {
     if (_.isNil(state.missionDetails)) {
