@@ -355,11 +355,10 @@ export default {
           text: this.$t('mission.visibility.hidden'),
           value: 'hidden'
         },
-        // Disabled for now since the backend doesn't fully support this setting yet
-        /* {
+        {
           text: this.$t('mission.visibility.private'),
           value: 'private'
-        }, */
+        },
         {
           text: this.$t('mission.visibility.public'),
           value: 'public'

@@ -67,11 +67,6 @@ export default {
           text: this.$t('mission.slotTemplate.visibility.hidden'),
           value: 'hidden'
         },
-        // Disabled for now since the backend doesn't fully support this setting yet
-        /* {
-          text: this.$t('mission.slotTemplate.visibility.private'),
-          value: 'private'
-        }, */
         {
           text: this.$t('mission.slotTemplate.visibility.public'),
           value: 'public'

@@ -74,6 +74,12 @@
           </b-btn>&nbsp;
           <b-btn variant="secondary" size="sm" @click="downloadICalFile">
             <i class="fa fa-calendar" aria-hidden="true"></i> {{ $t('button.export.calendar.ical') }}
+          </b-btn>&nbsp;
+          <b-btn variant="secondary" size="sm" v-if="isMissionEditor" v-b-modal.missionDuplicateModal>
+            <i class="fa fa-files-o" aria-hidden="true"></i> {{ $t('button.duplicate.mission') }}
+          </b-btn>&nbsp;
+          <b-btn variant="secondary" size="sm" v-if="isMissionEditor" v-b-modal.missionConvertToSlotTemplateModal>
+            <i class="fa fa-file-text-o" aria-hidden="true"></i> {{ $t('button.convert.slotTemplate') }}
           </b-btn>
         </div>
         <br v-if="isMissionEditor">
@@ -87,12 +93,10 @@
           <b-btn variant="primary" v-if="isMissionCreator" v-b-modal.missionPermissionModal>
             <i class="fa fa-key" aria-hidden="true"></i> {{ $t('button.edit.mission.permissions') }}
           </b-btn>&nbsp;
-          <b-btn variant="secondary" v-b-modal.missionDuplicateModal>
-            <i class="fa fa-files-o" aria-hidden="true"></i> {{ $t('button.duplicate.mission') }}
-          </b-btn>&nbsp;
-          <b-btn variant="secondary" v-b-modal.missionConvertToSlotTemplateModal>
-            <i class="fa fa-file-text-o" aria-hidden="true"></i> {{ $t('button.convert.slotTemplate') }}
-          </b-btn>&nbsp;
+          <b-btn variant="primary" v-if="isMissionCreator && isPrivateMission" v-b-modal.missionAccessModal>
+            <i class="fa fa-user-secret" aria-hidden="true"></i> {{ $t('button.edit.mission.accesses') }}
+          </b-btn>
+          <span v-if="isMissionCreator && isPrivateMission">&nbsp;</span>
           <click-confirm v-if="isMissionCreator" yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('mission.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
             <b-btn variant="danger" @click="deleteMission">
               <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete') }}
@@ -137,6 +141,7 @@
     <!-- End of content -->
     <!-- Begin of modals -->
     <div>
+      <mission-access-modal v-if="loggedIn && isMissionCreator && isPrivateMission"></mission-access-modal>
       <mission-apply-slot-template-modal v-if="loggedIn && isMissionEditor"></mission-apply-slot-template-modal>
       <mission-banner-image-modal v-if="loggedIn && isMissionEditor"></mission-banner-image-modal>
       <mission-convert-to-slot-template-modal v-if="loggedIn"></mission-convert-to-slot-template-modal>
@@ -160,6 +165,7 @@
 import * as _ from 'lodash'
 import moment from 'moment-timezone'
 import FileSaver from 'file-saver'
+import MissionAccessModal from 'components/missions/modals/MissionAccessModal.vue'
 import MissionApplySlotTemplateModal from 'components/missions/modals/MissionApplySlotTemplateModal.vue'
 import MissionBannerImageModal from 'components/missions/modals/MissionBannerImageModal.vue'
 import MissionConvertToSlotTemplateModal from 'components/missions/modals/MissionConvertToSlotTemplateModal.vue'
@@ -179,6 +185,7 @@ import utils from '../utils'
 
 export default {
   components: {
+    MissionAccessModal,
     MissionApplySlotTemplateModal,
     MissionBannerImageModal,
     MissionConvertToSlotTemplateModal,
@@ -246,6 +253,13 @@ export default {
     },
     isMissionEditor() {
       return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`, `mission.${this.$route.params.missionSlug}.editor`])
+    },
+    isPrivateMission() {
+      if (_.isNil(this.missionDetails)) {
+        return false
+      }
+
+      return this.missionDetails.visibility === 'private'
     },
     loggedIn() {
       return this.$store.getters.loggedIn

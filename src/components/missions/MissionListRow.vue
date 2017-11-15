@@ -1,7 +1,12 @@
 <template>
   <tr>
     <td>{{ formatDateTime(mission.startTime) }}</td>
-    <td>{{ mission.title }}</td>
+    <td :class="{'text-primary': isMissionEditor}">
+      <b-popover v-if="isMissionEditor" :content="$t('mission.list.isMissionEditor')" :triggers="['hover']">
+        {{ mission.title }}
+      </b-popover>
+      <span v-else>{{ mission.title }}</span>
+      </td>
     <td>
       <router-link :to="{name: 'userDetails', params: {userUid: mission.creator.uid}}">{{ formatUserWithTag(mission.creator) }}</router-link>
     </td>
@@ -30,6 +35,11 @@
 export default {
   props: [
     'mission'
-  ]
+  ],
+  computed: {
+    isMissionEditor() {
+      return this.$acl.can([`mission.${this.mission.slug}.creator`, `mission.${this.mission.slug}.editor`])
+    }
+  }
 }
 </script>
