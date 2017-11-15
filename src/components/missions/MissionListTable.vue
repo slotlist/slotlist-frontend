@@ -7,8 +7,9 @@
           <th style="width: 32%">{{ $t('mission.list.title') }}</th>
           <th style="width: 20%">{{ $t('mission.list.creator') }}</th>
           <th style="width: 11%" class="text-center">{{ $t('mission.list.slot.counts')}}</th>
-          <th style="width: 10%" class="text-center">{{ $t('mission.list.slot.status') }}</th>
-          <th style="width: 10%" class="text-center">{{ $t('misc.actions') }}</th>
+          <th style="width: 15%" class="text-center">{{ $t('mission.list.slot.counts.available')}}</th>
+          <th style="width: 1%"></th>
+          <th style="width: 4%"></th>
         </tr>
       </thead>
       <tbody>
@@ -20,8 +21,9 @@
           <th style="width: 32%">{{ $t('mission.list.title') }}</th>
           <th style="width: 20%">{{ $t('mission.list.creator') }}</th>
           <th style="width: 11%" class="text-center">{{ $t('mission.list.slot.counts')}}</th>
-          <th style="width: 10%" class="text-center">{{ $t('mission.list.slot.status') }}</th>
-          <th style="width: 10%" class="text-center">{{ $t('misc.actions') }}</th>
+          <th style="width: 15%" class="text-center">{{ $t('mission.list.slot.counts.available')}}</th>
+          <th style="width: 1%"></th>
+          <th style="width: 4%"></th>
         </tr>
       </tfoot>
     </table>

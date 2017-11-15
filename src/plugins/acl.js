@@ -1,10 +1,10 @@
 import * as _ from 'lodash'
 
 class ACL {
-  can(permission, strict = false) {
+  can(permission, strict = false, includeSuperadmin = true) {
     if (_.keys(this.permissions).length <= 0) {
       return false
-    } else if (_.has(this.permissions, '*')) {
+    } else if (_.has(this.permissions, '*') && includeSuperadmin) {
       return true
     }
 
