@@ -21,7 +21,7 @@ import Api from '../views/Api'
 
 Vue.use(Router)
 
-export default new Router({
+export const router = new Router({
   mode: 'history',
   routes: [
     {
@@ -129,3 +129,11 @@ export default new Router({
   ],
   linkExactActiveClass: 'active'
 })
+
+router.afterEach(() => {
+  if (store.getters.showAlert && !store.getters.persistentAlert) {
+    store.dispatch('clearAlert')
+  }
+})
+
+export default router

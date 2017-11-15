@@ -74,7 +74,8 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteAccount.success')}`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteAccount.success')}`,
+          persistentAlert: true
         })
 
         router.push({ name: 'home' })

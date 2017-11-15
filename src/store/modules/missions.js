@@ -518,7 +518,8 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.createMission.success', { title: payload.title })}`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.createMission.success', { title: payload.title })}`,
+          persistentAlert: true
         })
 
         router.push({
@@ -697,7 +698,8 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteMission.success', { title: payload.missionTitle })}`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteMission.success', { title: payload.missionTitle })}`,
+          persistentAlert: true
         })
 
         dispatch('getMissions', { autoRefresh: true })
@@ -1117,7 +1119,8 @@ const actions = {
           showAlert: true,
           alertVariant: 'success',
           alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.duplicateMission.success')}`,
-          scrollToTop: true
+          scrollToTop: true,
+          persistentAlert: true
         })
 
         router.push({
@@ -1659,7 +1662,8 @@ const actions = {
             dispatch('showAlert', {
               showAlert: true,
               alertVariant: 'warning',
-              alertMessage: `<i class="fa fa-question" aria-hidden="true"></i> ${i18n.t('store.getMissionDetails.error.notFound', { slug: payload.missionSlug })}`
+              alertMessage: `<i class="fa fa-question" aria-hidden="true"></i> ${i18n.t('store.getMissionDetails.error.notFound', { slug: payload.missionSlug })}`,
+              persistentAlert: true
             })
 
             return router.push({ name: 'missionList' })

@@ -266,7 +266,8 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.createCommunity.success')}`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.createCommunity.success')}`,
+          persistentAlert: true
         })
 
         router.push({
@@ -386,7 +387,8 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteCommunity.success')} <strong>${payload.communityName}</strong>`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteCommunity.success')} <strong>${payload.communityName}</strong>`,
+          persistentAlert: true
         })
 
         router.push({ name: 'communityList' })
@@ -779,7 +781,8 @@ const actions = {
             dispatch('showAlert', {
               showAlert: true,
               alertVariant: 'warning',
-              alertMessage: `<i class="fa fa-question" aria-hidden="true"></i> ${i18n.t('store.getCommunityDetails.error.notFound', { slug: payload })}`
+              alertMessage: `<i class="fa fa-question" aria-hidden="true"></i> ${i18n.t('store.getCommunityDetails.error.notFound', { slug: payload })}`,
+              persistentAlert: true
             })
 
             return router.push({ name: 'communityList' })

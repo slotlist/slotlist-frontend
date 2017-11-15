@@ -135,7 +135,8 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.createMissionSlotTemplate.success', { title: payload.title })}`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.createMissionSlotTemplate.success', { title: payload.title })}`,
+          persistentAlert: true
         })
 
         router.push({
@@ -201,7 +202,8 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlotTemplate.success', { title: payload.missionSlotTemplateTitle })}`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlotTemplate.success', { title: payload.missionSlotTemplateTitle })}`,
+          persistentAlert: true
         })
 
         dispatch('getMissionSlotTemplates', { autoRefresh: true })
