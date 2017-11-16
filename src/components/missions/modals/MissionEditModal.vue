@@ -159,7 +159,7 @@ export default {
   },
   computed: {
     editorExplanationContent() {
-      let content = '<img src="https://slotlist-info.storage.googleapis.com/images/static/img/editor-explanation.png"><ol>'
+      let content = '<img src="https://slotlist-info.storage.googleapis.com/images/static/editor-explanation.png"><ol>'
       _.times(8, (i) => {
         content += `<li>${this.$t('editor.explanation.' + (i + 1))}</li>`
       });
