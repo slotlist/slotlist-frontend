@@ -147,7 +147,7 @@ export default {
           if (!_.isNil(this.$ls.get('auth-token'))) {
             const lastRefreshedAt = this.$ls.get('auth-token-last-refreshed')
             if (_.isNil(lastRefreshedAt) || moment(lastRefreshedAt) <= moment().subtract(1, 'hour')) {
-              this.$store.dispatch('refreshToken', { silent: true })
+              this.performInitialTokenRefresh()
             }
           }
         })
@@ -155,8 +155,6 @@ export default {
   },
   created: function() {
     utils.clearTitle()
-
-    setTimeout(this.performInitialTokenRefresh, 15000)
   },
   beforeDestroy: function() {
     this.dispatch('clearMissions')
