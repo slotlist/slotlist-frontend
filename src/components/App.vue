@@ -105,6 +105,7 @@ import * as _ from 'lodash'
 import moment from 'moment-timezone'
 
 import utils from '../utils'
+import { pendingRequestCount } from '../api/util'
 
 export default {
   beforeCreate: function() {
@@ -154,9 +155,16 @@ export default {
   },
   created: function() {
     utils.clearTitle()
+
+    setTimeout(this.performInitialTokenRefresh, 15000)
   },
   beforeDestroy: function() {
     this.dispatch('clearMissions')
+  },
+  data() {
+    return {
+      initialTokenRefresh: true
+    }
   },
   computed: {
     alertDismissible() {
@@ -206,6 +214,18 @@ export default {
         .then(() => {
           this.$router.push({ path: '/', query: { logout: true } })
         })
+    },
+    performInitialTokenRefresh() {
+      if (this.initialTokenRefresh) {
+        if (pendingRequestCount() > 0) {
+          setTimeout(this.performInitialTokenRefresh, 5000)
+          return
+        }
+
+        this.initialTokenRefresh = false
+
+        this.$store.dispatch('refreshToken', { silent: true })
+      }
     },
     setLocale(locale) {
       this.$store.dispatch('setLocale', locale)

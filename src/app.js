@@ -24,7 +24,6 @@ import VueI18n from 'vue-i18n'
 import Typeahead from './components/Typeahead.vue'
 import LoadingOverlay from './components/LoadingOverlay.vue'
 import EditorExplanation from './components/EditorExplanation.vue'
-import DateTimePicker from './components/DateTimePicker.vue'
 
 // Patch Promise globally to use more feature-rich bluebird Promises
 Promise.config({
@@ -78,7 +77,6 @@ Vue.component('loading-overlay', LoadingOverlay)
 Vue.component('paginate', VuePaginate)
 Vue.component('typeahead', Typeahead)
 Vue.component('editor-explanation', EditorExplanation)
-Vue.component('date-time-picker', DateTimePicker)
 
 const i18n = new VueI18n({
   fallbackLocale: 'en',

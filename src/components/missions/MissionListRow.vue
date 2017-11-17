@@ -16,16 +16,14 @@
       </b-popover>
     </td>
     <td class="text-center">
-      <b-popover :content="isUserInCommunity ? $t('mission.list.slot.counts.available.popover.community', {open: mission.slotCounts.open}) : $t('mission.list.slot.counts.available.popover', {open: mission.slotCounts.open})" :triggers="['hover']">
-        {{ mission.slotCounts.open }}
-      </b-popover>
-    </td>
-    <td>
       <b-popover v-if="mission.isAssignedToAnySlot" :content="$t('mission.list.slot.status.assigned')" :triggers="['hover']">
         <i class="fa fa-check fa-lg text-success" aria-hidden="true"></i>
       </b-popover>
       <b-popover v-if="!mission.isAssignedToAnySlot && mission.isRegisteredForAnySlot" :content="$t('mission.list.slot.status.registered')" :triggers="['hover']">
         <i class="fa fa-question-circle fa-lg text-muted" aria-hidden="true"></i>
+      </b-popover>
+      <b-popover v-if="!mission.isAssignedToAnySlot && !mission.isRegisteredForAnySlot" :content="isUserInCommunity ? $t('mission.list.slot.counts.available.popover.community', {open: mission.slotCounts.open}) : $t('mission.list.slot.counts.available.popover', {open: mission.slotCounts.open})" :triggers="['hover']">
+        {{ mission.slotCounts.open }}
       </b-popover>
     </td>
     <td class="text-center">
