@@ -4,7 +4,8 @@ const state = {
   showAlert: false,
   alertVariant: 'info',
   alertDismissible: true,
-  alertMessage: null
+  alertMessage: null,
+  persistentAlert: false
 }
 
 const getters = {
@@ -19,6 +20,9 @@ const getters = {
   },
   alertMessage() {
     return state.alertMessage
+  },
+  persistentAlert() {
+    return state.persistentAlert
   }
 }
 
@@ -48,7 +52,8 @@ const actions = {
       showAlert: payload.showAlert,
       alertVariant: payload.alertVariant,
       alertDismissible: payload.alertDismissible,
-      alertMessage: payload.alertMessage
+      alertMessage: payload.alertMessage,
+      persistentAlert: payload.persistentAlert
     })
 
     if (payload.scrollToTop || payload.alertVariant.toLowerCase() === 'warning' || payload.alertVariant.toLowerCase() === 'danger') {
@@ -68,12 +73,14 @@ const mutations = {
     state.alertDismissible = payload.alertDismissible
     state.alertMessage = payload.alertMessage
     state.showAlert = payload.showAlert
+    state.persistentAlert = payload.persistentAlert
   },
   clearAlert(state) {
     state.showAlert = false
     state.alertVariant = 'info'
     state.alertDismissible = true
     state.alertMessage = null
+    state.persistentAlert = false
   }
 }
 

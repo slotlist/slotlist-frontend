@@ -12,7 +12,7 @@
     </td>
     <td class="text-center">
       <b-popover :content="$t('mission.list.slot.counts.popover', mission.slotCounts)" :triggers="['hover']">
-        {{ mission.slotCounts.open }}/{{ mission.slotCounts.total }}
+        {{ mission.slotCounts.assigned + mission.slotCounts.unassigned }}/{{ mission.slotCounts.total }}
       </b-popover>
     </td>
     <td class="text-center">
@@ -21,6 +21,9 @@
       </b-popover>
       <b-popover v-if="!mission.isAssignedToAnySlot && mission.isRegisteredForAnySlot" :content="$t('mission.list.slot.status.registered')" :triggers="['hover']">
         <i class="fa fa-question-circle fa-lg text-muted" aria-hidden="true"></i>
+      </b-popover>
+      <b-popover v-if="!mission.isAssignedToAnySlot && !mission.isRegisteredForAnySlot" :content="isUserInCommunity ? $t('mission.list.slot.counts.available.popover.community', {open: mission.slotCounts.open}) : $t('mission.list.slot.counts.available.popover', {open: mission.slotCounts.open})" :triggers="['hover']">
+        {{ mission.slotCounts.open }}
       </b-popover>
     </td>
     <td class="text-center">
@@ -32,13 +35,23 @@
 </template>
 
 <script>
+import * as _ from 'lodash'
+
 export default {
   props: [
     'mission'
   ],
   computed: {
     isMissionEditor() {
-      return this.$acl.can([`mission.${this.mission.slug}.creator`, `mission.${this.mission.slug}.editor`])
+      return this.$acl.can([`mission.${this.mission.slug}.creator`, `mission.${this.mission.slug}.editor`], false, true)
+    },
+    isUserInCommunity() {
+      const user = this.$store.getters.user
+      if (_.isNil(user)) {
+        return false
+      }
+
+      return !_.isNil(user.community)
     }
   }
 }

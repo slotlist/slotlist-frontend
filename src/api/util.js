@@ -8,7 +8,11 @@ axios.defaults.baseURL = process.env.BASE_API_URL
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 axios.defaults.headers.patch['Content-Type'] = 'application/json'
 
+let pendingRequests = 0
+
 axios.interceptors.request.use((config) => {
+  pendingRequests += 1
+
   if (!store.getters.refreshingToken && shouldRefreshToken()) {
     console.info('Refreshing JWT before performing request')
 
@@ -32,6 +36,8 @@ axios.interceptors.request.use((config) => {
 })
 
 axios.interceptors.response.use((response) => {
+  pendingRequests -= 1
+
   console.debug('response', response.config.url, response)
 
   if (!_.isNil(response.data.token)) {
@@ -53,6 +59,10 @@ axios.interceptors.response.use((response) => {
 
   return Promise.reject(error)
 })
+
+export function pendingRequestCount() {
+  return pendingRequests
+}
 
 export function shouldRefreshToken() {
   const decodedToken = store.getters.decodedToken

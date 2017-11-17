@@ -4,10 +4,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="description" content="ArmA 3 mission planning and slotlist management tool">
     <meta name="keywords" content="ArmA 3, arma 3, ArmA3, arma3, ArmA, arma, mission, planning, management, tool">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= htmlWebpackPlugin.options.title %></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.4/cookieconsent.min.css" integrity="sha256-RWqxpxUH7ZGrrhTJ0I+v+zc6e8cRpm5ENBt7i3u3KrQ=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="/css/tempusdominus-bootstrap-4.min.css" integrity="sha256-Z6e4kLfnI2ECG8HrQTIJe2MzJ7DGonlmp6raX+u5K2E=" crossorigin="anonymous" />
   </head>
   <body>
     <div id="app"></div>
@@ -16,6 +16,9 @@
     <!-- The bundled bootstrap.js file apparently does not contain all code needed for the navbar collapse to work... This is actually pretty nasty, loading it twice, but oh well. Maybe the beta will fix it -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha256-+kIbbrvS+0dNOjhmQJzmwe/RILR/8lb/+4+PUNVW09k=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.4/cookieconsent.min.js" integrity="sha256-r0xmg4FKpSfK9TvePQIeaq/gCDO0Xy3q0EPIfteGRnQ=" crossorigin="anonymous"></script>
-    <script src="/cookieconsent.js" integrity="sha256-y1cB1+ObhAQXzDmRBk8OI7UFz6+zPAvF3JpzbyMPYyo=" crossorigin="anonymous"></script>
+    <script src="/js/cookieconsent.js" integrity="sha256-y1cB1+ObhAQXzDmRBk8OI7UFz6+zPAvF3JpzbyMPYyo=" crossorigin="anonymous"></script>
+    <!-- The DateTime picker does not recognise the bundled moment version, so we have to include it again... There's probably a way around that, but oh well -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.2/moment-with-locales.min.js" integrity="sha256-F4eMA/m8RMPXKF2D6cccsZi9tr8t7Mt8J3mK9laOaug=" crossorigin="anonymous"></script>
+    <script src="/js/tempusdominus-bootstrap-4.min.js" integrity="sha256-qdK4OxYmmHxO3ON4yjFR2Hlw8dsqbwMciYMQg2S3iDM=" crossorigin="anonymous"></script>
   </body>
 </html>
