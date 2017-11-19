@@ -43,7 +43,7 @@ export default {
   ],
   computed: {
     isMissionEditor() {
-      return this.$acl.can([`mission.${this.mission.slug}.creator`, `mission.${this.mission.slug}.editor`], false, true)
+      return this.$acl.can([`mission.${this.mission.slug}.creator`, `mission.${this.mission.slug}.editor`], false, false)
     },
     isUserInCommunity() {
       const user = this.$store.getters.user
