@@ -55,8 +55,25 @@
           </div>
         </div>
         <div class="row text-center">
-          <div class="col small" v-html="$t('mission.timezone', { timezone: timezone })"></div>
+          <div class="col">
+            <b-btn variant="secondary" size="sm" :href="googleCalendarLink(missionDetails.slottingTime)" target="_blank">
+              <i class="fa fa-calendar-plus-o" aria-hidden="true"></i> {{ $t('button.export.calendar.google') }}
+            </b-btn>
+            <b-btn variant="secondary" size="sm" @click="downloadICalFile(missionDetails.slottingTime)">
+              <i class="fa fa-calendar" aria-hidden="true"></i> {{ $t('button.export.calendar.ical') }}
+            </b-btn>
+          </div>
+          <div class="col-6 small" v-html="$t('mission.timezone', { timezone: timezone })"></div>
+          <div class="col">
+            <b-btn variant="secondary" size="sm" :href="googleCalendarLink(missionDetails.briefingTime)" target="_blank">
+              <i class="fa fa-calendar-plus-o" aria-hidden="true"></i> {{ $t('button.export.calendar.google') }}
+            </b-btn>
+            <b-btn variant="secondary" size="sm" @click="downloadICalFile(missionDetails.briefingTime)">
+              <i class="fa fa-calendar" aria-hidden="true"></i> {{ $t('button.export.calendar.ical') }}
+            </b-btn>
+          </div>
         </div>
+        <br>
         <div class="row text-center">
           <div class="col">
             <h5>{{ $t('mission.techSupport') }}</h5>
@@ -69,12 +86,6 @@
         </div>
         <hr class="my-4">
         <div class="row justify-content-center">
-          <b-btn variant="secondary" size="sm" :href="googleCalendarLink" target="_blank">
-            <i class="fa fa-calendar-plus-o" aria-hidden="true"></i> {{ $t('button.export.calendar.google') }}
-          </b-btn>&nbsp;
-          <b-btn variant="secondary" size="sm" @click="downloadICalFile">
-            <i class="fa fa-calendar" aria-hidden="true"></i> {{ $t('button.export.calendar.ical') }}
-          </b-btn>&nbsp;
           <b-btn variant="secondary" size="sm" v-if="isMissionEditor" v-b-modal.missionDuplicateModal>
             <i class="fa fa-files-o" aria-hidden="true"></i> {{ $t('button.duplicate.mission') }}
           </b-btn>&nbsp;
@@ -232,15 +243,6 @@ export default {
           return `<span class="text-muted font-italic"><i class="fa fa-question-circle" aria-hidden="true"></i> ${this.$t('mission.visibility.default')}</span>`
       }
     },
-    googleCalendarLink() {
-      let link = 'https://www.google.com/calendar/event?action=TEMPLATE'
-      link += `&text=${this.missionDetails.title}`
-      link += `&dates=${moment(this.missionDetails.startTime).format('YMMDD[T]HHmmss')}/${moment(this.missionDetails.endTime).format('YMMDD[T]HHmmss')}`
-      link += `&details=${this.$t('mission.details')}: ${process.env.BASE_URL}/missions/${this.missionDetails.slug} \n \n${this.missionDetails.description}`
-      link += `&location&trp=false&ctx=${this.$store.getters.timezone}`
-
-      return encodeURI(link)
-    },
     hasMissionEnded() {
       if (_.isNil(this.missionDetails)) {
         return false
@@ -287,22 +289,45 @@ export default {
         missionTitle: this.missionDetails.title
       })
     },
-    downloadICalFile() {
+    downloadICalFile(beginTime) {
       let data = `BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//slotlist.info//slotlist-frontend v${process.env.FRONTEND_VERSION}//EN\r\n`
       data += `CALSCALE:GREGORIAN\r\nMETHOD:PUBLIC\r\nX-WR-CALNAME:slotlist.info\r\nX-ORIGINAL-URL:${process.env.BASE_URL}\r\n`
       data += `X-WR-CALDESC:${this.$t('title.browser')}\r\nBEGIN:VEVENT\r\n`
-      data += `UID:${this.missionDetails.uid}@${process.env.BASE_URL}\r\n`
-      data += `DTSTART;TZID=${this.$store.getters.timezone}:${moment(this.missionDetails.startTime).format('YMMDD[T]HHmmss')}\r\n`
+      data += `UID:${this.missionDetails.slug}@${process.env.BASE_URL}\r\n`
+      data += `DTSTART;TZID=${this.$store.getters.timezone}:${moment(beginTime).format('YMMDD[T]HHmmss')}\r\n`
       data += `DTEND;TZID=${this.$store.getters.timezone}:${moment(this.missionDetails.endTime).format('YMMDD[T]HHmmss')}\r\n`
       data += `DTSTAMP:${moment().format('YMMDD[T]HHmmss')}\r\n`
       data += `SUMMARY:${this.missionDetails.title}\r\n`
-      data += `DESCRIPTION:${this.$t('mission.details')}: ${process.env.BASE_URL}/missions/${this.missionDetails.slug} \\n \\n${this.missionDetails.description}\r\n`
+      data += `DESCRIPTION:${this.$t('mission.details')}: ${process.env.BASE_URL}/missions/${this.missionDetails.slug} \\n \\n`
+      data += `${this.$t('mission.times.ical', {
+        start: this.formatDateTime(this.missionDetails.startTime),
+        briefing: this.formatDateTime(this.missionDetails.briefingTime),
+        slotting: this.formatDateTime(this.missionDetails.slottingTime),
+        end: this.formatDateTime(this.missionDetails.endTime)
+      })} \\n \\n`
+      data += `${this.missionDetails.description}\r\n`
       data += `URL:${process.env.BASE_URL}/missions/${this.missionDetails.slug}\r\n`
       data += `END:VEVENT\r\nEND:VCALENDAR`
 
       const blob = new Blob([data], { type: 'text/calendar' })
 
       FileSaver.saveAs(blob, `${this.missionDetails.title}.ics`)
+    },
+    googleCalendarLink(beginTime) {
+      let link = 'https://www.google.com/calendar/event?action=TEMPLATE'
+      link += `&text=${this.missionDetails.title}`
+      link += `&dates=${moment(beginTime).format('YMMDD[T]HHmmss')}/${moment(this.missionDetails.endTime).format('YMMDD[T]HHmmss')}`
+      link += `&details=${this.$t('mission.details')}: ${process.env.BASE_URL}/missions/${this.missionDetails.slug} \n \n`
+      link += `${this.$t('mission.times', {
+        start: this.formatDateTime(this.missionDetails.startTime),
+        briefing: this.formatDateTime(this.missionDetails.briefingTime),
+        slotting: this.formatDateTime(this.missionDetails.slottingTime),
+        end: this.formatDateTime(this.missionDetails.endTime)
+      })} \n \n`
+      link += `${this.missionDetails.description}`
+      link += `&location&trp=false&ctx=${this.$store.getters.timezone}`
+
+      return encodeURI(link)
     }
   },
   watch: {
