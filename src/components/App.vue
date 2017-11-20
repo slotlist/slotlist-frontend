@@ -27,6 +27,11 @@
               <i class="fa fa-users" aria-hidden="true"></i> {{ $t('nav.communities') }}
             </router-link>
           </li>
+          <li class="nav-item">
+            <router-link class="nav-link" :to="{name:'userList'}">
+              <i class="fa fa-user" aria-hidden="true"></i> {{ $t('nav.users') }}
+            </router-link>
+          </li>
         </ul>
         <ul class="navbar-nav">
           <li class="nav-item" v-if="loggedIn">

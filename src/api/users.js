@@ -13,6 +13,9 @@ export const v1 = {
   getUserMissions(userUid, limit = 10, offset = 0, includeEnded = true) {
     return axios.get(`/v1/users/${userUid}/missions?limit=${limit}&offset=${offset}&includeEnded=${includeEnded}`)
   },
+  getUsers(limit = 10, offset = 0) {
+    return axios.get(`/v1/users?limit=${limit}&offset=${offset}`)
+  },
   searchUsers(payload) {
     return axios.get(`/v1/users?search=${payload}`)
   }

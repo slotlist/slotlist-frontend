@@ -12,6 +12,7 @@ import MissionSlotTemplateList from '../views/MissionSlotTemplateList'
 import MissionSlotTemplateDetails from '../views/MissionSlotTemplateDetails'
 import MissionSlotTemplateCreator from '../views/MissionSlotTemplateCreator'
 import UserDetails from '../views/UserDetails'
+import UserList from '../views/UserList'
 import Account from '../views/Account'
 import Login from '../views/Login'
 import About from '../views/About'
@@ -82,6 +83,11 @@ export const router = new Router({
       meta: {
         authenticated: true // only logged in users can access this page
       }
+    },
+    {
+      path: '/users',
+      name: 'userList',
+      component: UserList
     },
     {
       path: '/users/:userUid',

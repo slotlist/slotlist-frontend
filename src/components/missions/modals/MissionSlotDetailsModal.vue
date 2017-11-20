@@ -88,7 +88,7 @@ export default {
         restrictedCommunityUid = this.missionSlotDetails.restrictedCommunity.uid
       }
 
-      return _.isNil(this.missionSlotDetails.assignee) && (_.isNil(restrictedCommunityUid) || _.isEqual(userCommunityUid, restrictedCommunityUid))
+      return _.isNil(this.missionSlotDetails.assignee) && _.isNil(this.missionSlotDetails.externalAssignee) && (_.isNil(restrictedCommunityUid) || _.isEqual(userCommunityUid, restrictedCommunityUid))
     },
     difficultyColor() {
       switch (this.missionSlotDetails.difficulty) {

@@ -1,6 +1,10 @@
 <template>
   <tr>
-    <td>{{ formatUserWithTag(registration.user) }}</td>
+    <td>
+      <router-link :to="{name: 'userDetails', params: {userUid: registration.user.uid}}">
+        {{ formatUserWithTag(registration.user) }}
+      </router-link>
+    </td>
     <td v-html="formattedComment" v-if="isMissionEditor"></td>
     <td>{{ formatDateTime(registration.createdAt) }}</td>
     <td class="text-center" v-html="formattedConfirmation"></td>

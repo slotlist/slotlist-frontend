@@ -19,7 +19,7 @@
           <div class="col">
             <h5>{{ $t('mission.community') }}</h5>
             <p>
-              <router-link v-if="missionDetails.community" :to="{name: 'communityDetails', params: {communitySlug: missionDetails.community.slug}}">{{ missionDetails.community.name }}</router-link>
+              <router-link v-if="missionDetails.community" :to="{name: 'communityDetails', params: {communitySlug: missionDetails.community.slug}}">[{{ missionDetails.community.tag }}] {{ missionDetails.community.name }}</router-link>
               <span v-if="!missionDetails.community" class="text-muted font-italic">{{ $t('account.notAssociated') }}</span>
             </p>
           </div>
