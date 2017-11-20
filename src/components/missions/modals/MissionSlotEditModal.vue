@@ -21,6 +21,11 @@
                 <b-form-select v-model="missionSlotEditData.difficulty" :options="missionSlotEditDifficultyOptions" class="mb-3" required></b-form-select>
               </b-form-fieldset>
             </div>
+            <div class="col">
+              <b-form-fieldset :label="$t('mission.slot.externalAssignee.optional')" state="success" :description="$t('mission.slot.externalAssignee.description')">
+                <b-form-input v-model="missionSlotEditData.externalAssignee" type="text" :disabled="missionSlotDetails.assignee !== null"></b-form-input>
+              </b-form-fieldset>
+            </div>
           </div>
           <div class="row">
             <div class="col">
@@ -66,10 +71,10 @@
       <div slot="modal-footer">
         <div class="btn-group" role="group" aria-label="Mission slot edit actions">
           <b-btn variant="success" @click="editMissionSlot">
-            <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.submit' ) }}
+            <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.submit') }}
           </b-btn>
           <b-btn @click="hideMissionSlotEditModal">
-            <i class="fa fa-close" aria-hidden="true"></i> {{ $t('button.cancel' ) }}
+            <i class="fa fa-close" aria-hidden="true"></i> {{ $t('button.cancel') }}
           </b-btn>
         </div>
       </div>
@@ -91,7 +96,8 @@ export default {
         restricted: false,
         restrictedCommunityUid: null,
         description: null,
-        title: null
+        title: null,
+        externalAssignee: null
       },
       missionSlotEditDetailedDescriptionEditorOptions: {
         modules: {
@@ -199,7 +205,8 @@ export default {
         restricted: !_.isNil(this.missionSlotDetails.restrictedCommunity),
         restrictedCommunityUid: _.isNil(this.missionSlotDetails.restrictedCommunity) ? null : this.missionSlotDetails.restrictedCommunity.uid,
         description: this.missionSlotDetails.description,
-        title: this.missionSlotDetails.title
+        title: this.missionSlotDetails.title,
+        externalAssignee: this.missionSlotDetails.externalAssignee
       }
 
       this.missionSlotEditMoveAfter = this.missionSlotDetails.orderNumber - 1
@@ -216,6 +223,9 @@ export default {
       }
       if (_.isString(this.missionSlotEditData.description) && _.isEmpty(this.missionSlotEditData.description)) {
         this.missionSlotEditData.description = null
+      }
+      if (_.isString(this.missionSlotEditData.externalAssignee) && _.isEmpty(this.missionSlotEditData.externalAssignee)) {
+        this.missionSlotEditData.externalAssignee = null
       }
 
       const updatedMissionSlotDetails = {}
