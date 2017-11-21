@@ -43,7 +43,7 @@ const getters = {
     return state.users
   },
   usersPageCount() {
-    return Math.ceil(state.totalUsers / limits.missionSlotTemplates)
+    return Math.ceil(state.totalUsers / limits.users)
   },
   refreshingUsers() {
     return state.refreshingUsers
