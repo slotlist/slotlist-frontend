@@ -11,7 +11,17 @@
         <div class="row">
           <div class="col col-1">{{ missionSlotDetails.orderNumber }}</div>
           <div class="col col-3">{{ missionSlotDetails.title }} </div>
-          <div class="col col-5" v-html="formattedAssignee"></div>
+          <div class="col col-5">
+            <span v-if="missionSlotDetails.blocked" class="text-muted font-italic">{{ $t('mission.slot.blocked') }}</span>
+            <span v-if="!missionSlotDetails.blocked && missionSlotDetails.assignee">
+              <router-link class="text-success font-weight-bold" :to="{name: 'userDetails', params: {userUid: missionSlotDetails.assignee.uid}}">
+                {{ formatUserWithTag(missionSlotDetails.assignee) }}
+              </router-link>
+            </span>
+            <span v-if="!missionSlotDetails.blocked && !missionSlotDetails.assignee && missionSlotDetails.externalAssignee" class="text-success font-weight-bold font-italic">{{ missionSlotDetails.externalAssignee }}</span>
+            <span v-if="!missionSlotDetails.blocked && !missionSlotDetails.assignee && !missionSlotDetails.externalAssignee && (!missionSlotDetails.registrationCount || missionSlotDetails.registrationCount <= 0)" class="text-muted font-italic">{{ `${this.$t('mission.slot.assignee.notAssigned')} - ${this.$tc('mission.slot.assignee.registration', 0)}` }}</span>
+            <span v-if="!missionSlotDetails.blocked && !missionSlotDetails.assignee && !missionSlotDetails.externalAssignee && missionSlotDetails.registrationCount && missionSlotDetails.registrationCount > 0" class="text-muted font-italic">{{ `${this.$t('mission.slot.assignee.notAssigned')} - ${this.missionSlotDetails.registrationCount} ${this.$tc('mission.slot.assignee.registration', this.missionSlotDetails.registrationCount > 1 ? 2 : 1)}` }}</span>
+          </div>
           <div class="col col-3">
             <i :class="difficultyIcon" aria-hidden="true"></i>
             <span :class="difficultyColor">{{ difficultyText }}</span>
@@ -88,7 +98,7 @@ export default {
         restrictedCommunityUid = this.missionSlotDetails.restrictedCommunity.uid
       }
 
-      return _.isNil(this.missionSlotDetails.assignee) && (_.isNil(restrictedCommunityUid) || _.isEqual(userCommunityUid, restrictedCommunityUid))
+      return _.isNil(this.missionSlotDetails.assignee) && _.isNil(this.missionSlotDetails.externalAssignee) && (_.isNil(restrictedCommunityUid) || _.isEqual(userCommunityUid, restrictedCommunityUid))
     },
     difficultyColor() {
       switch (this.missionSlotDetails.difficulty) {
@@ -118,17 +128,6 @@ export default {
         case 4: return this.$t('mission.slot.difficulty.expert')
         default: return ''
       }
-    },
-    formattedAssignee() {
-      if (!_.isNil(this.missionSlotDetails.assignee)) {
-        return `<span class="text-success font-weight-bold">${this.formatUserWithTag(this.missionSlotDetails.assignee)}</span>`
-      }
-
-      if (!_.isNumber(this.missionSlotDetails.registrationCount) || this.missionSlotDetails.registrationCount <= 0) {
-        return `<span class="text-muted font-italic">${this.$t('mission.slot.assignee.notAssigned')} - ${this.$tc('mission.slot.assignee.registration', 0)}</span>`
-      }
-
-      return `<span class="text-muted font-italic">${this.$t('mission.slot.assignee.notAssigned')} - ${this.missionSlotDetails.registrationCount} ${this.$tc('mission.slot.assignee.registration', this.missionSlotDetails.registrationCount > 1 ? 2 : 1)}</span>`
     },
     hasMissionEnded() {
       if (_.isNil(this.missionDetails)) {

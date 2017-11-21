@@ -54,10 +54,10 @@
       <div slot="modal-footer">
         <div class="btn-group" role="group" aria-label="Mission slot template slot edit actions">
           <b-btn variant="success" @click="editMissionSlotTemplateSlot">
-            <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.submit' ) }}
+            <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.submit') }}
           </b-btn>
           <b-btn @click="hideMissionSlotTemplateSlotEditModal">
-            <i class="fa fa-close" aria-hidden="true"></i> {{ $t('button.cancel' ) }}
+            <i class="fa fa-close" aria-hidden="true"></i> {{ $t('button.cancel') }}
           </b-btn>
         </div>
       </div>

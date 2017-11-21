@@ -29,10 +29,10 @@
       <div slot="modal-footer">
         <div class="btn-group" role="group" aria-label="Mission slot template slot group edit actions">
           <b-btn variant="success" @click="editMissionSlotTemplateSlotGroup">
-            <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.submit' ) }}
+            <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.submit') }}
           </b-btn>
           <b-btn @click="hideMissionSlotTemplateSlotGroupEditModal">
-            <i class="fa fa-close" aria-hidden="true"></i> {{ $t('button.cancel' ) }}
+            <i class="fa fa-close" aria-hidden="true"></i> {{ $t('button.cancel') }}
           </b-btn>
         </div>
       </div>

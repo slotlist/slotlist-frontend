@@ -12,7 +12,7 @@
     </td>
     <td class="text-center">
       <b-popover :content="$t('mission.list.slot.counts.popover', mission.slotCounts)" :triggers="['hover']">
-        {{ mission.slotCounts.assigned + mission.slotCounts.unassigned }}/{{ mission.slotCounts.total }}
+        {{ mission.slotCounts.assigned + mission.slotCounts.external + mission.slotCounts.unassigned }}/{{ mission.slotCounts.total }}
       </b-popover>
     </td>
     <td class="text-center">
@@ -43,7 +43,7 @@ export default {
   ],
   computed: {
     isMissionEditor() {
-      return this.$acl.can([`mission.${this.mission.slug}.creator`, `mission.${this.mission.slug}.editor`], false, true)
+      return this.$acl.can([`mission.${this.mission.slug}.creator`, `mission.${this.mission.slug}.editor`], false, false)
     },
     isUserInCommunity() {
       const user = this.$store.getters.user

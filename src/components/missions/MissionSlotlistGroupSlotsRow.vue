@@ -10,7 +10,17 @@
         <span :class="titleColor" v-html="formattedTitle"></span>
       </b-popover>
     </td>
-    <td v-html="formattedAssignee"></td>
+    <td>
+      <span v-if="missionSlotDetails.blocked" class="text-muted font-italic">{{ $t('mission.slot.blocked') }}</span>
+      <span v-if="!missionSlotDetails.blocked && missionSlotDetails.assignee">
+        <router-link class="text-success font-weight-bold" :to="{name: 'userDetails', params: {userUid: missionSlotDetails.assignee.uid}}">
+          {{ formatUserWithTag(missionSlotDetails.assignee) }}
+        </router-link>
+      </span>
+      <span v-if="!missionSlotDetails.blocked && !missionSlotDetails.assignee && missionSlotDetails.externalAssignee" class="text-success font-weight-bold font-italic">{{ missionSlotDetails.externalAssignee }}</span>
+      <span v-if="!missionSlotDetails.blocked && !missionSlotDetails.assignee && !missionSlotDetails.externalAssignee && (!missionSlotDetails.registrationCount || missionSlotDetails.registrationCount <= 0)" class="text-muted font-italic">{{ `${this.$t('mission.slot.assignee.notAssigned')} - ${this.$tc('mission.slot.assignee.registration', 0)}` }}</span>
+      <span v-if="!missionSlotDetails.blocked && !missionSlotDetails.assignee && !missionSlotDetails.externalAssignee && missionSlotDetails.registrationCount && missionSlotDetails.registrationCount > 0" class="text-muted font-italic">{{ `${this.$t('mission.slot.assignee.notAssigned')} - ${this.missionSlotDetails.registrationCount} ${this.$tc('mission.slot.assignee.registration', this.missionSlotDetails.registrationCount > 1 ? 2 : 1)}` }}</span>
+    </td>
     <td v-if="hasAnyMissionSlotDescription">{{ missionSlotDetails.description }}</td>
     <td class="text-center">
       <div class="btn-group btn-group-sm" role="group" aria-label="Mission slot actions">
@@ -61,7 +71,7 @@ export default {
         restrictedCommunityUid = this.missionSlotDetails.restrictedCommunity.uid
       }
 
-      return _.isNil(this.missionSlotDetails.assignee) && (_.isNil(restrictedCommunityUid) || _.isEqual(userCommunityUid, restrictedCommunityUid))
+      return _.isNil(this.missionSlotDetails.assignee) &&_.isNil(this.missionSlotDetails.externalAssignee) && (_.isNil(restrictedCommunityUid) || _.isEqual(userCommunityUid, restrictedCommunityUid))
     },
     difficultyColor() {
       switch (this.missionSlotDetails.difficulty) {

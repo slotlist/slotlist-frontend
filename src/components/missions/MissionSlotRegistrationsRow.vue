@@ -1,17 +1,21 @@
 <template>
   <tr>
-    <td>{{ formatUserWithTag(registration.user) }}</td>
-    <td v-html="formattedComment" v-if="isMissionEditor"></td>
+    <td>
+      <router-link :to="{name: 'userDetails', params: {userUid: registration.user.uid}}">
+        {{ formatUserWithTag(registration.user) }}
+      </router-link>
+    </td>
+    <td v-html="formattedComment" v-if="(isMissionEditor || hasMissionSlotlistCommunityPermission) && registration.uid"></td>
     <td>{{ formatDateTime(registration.createdAt) }}</td>
     <td class="text-center" v-html="formattedConfirmation"></td>
-    <td class="text-center" v-if="isMissionEditor && !hasMissionEnded">
+    <td class="text-center" v-if="(isMissionEditor || hasMissionSlotlistCommunityPermission) && registration.uid && !hasMissionEnded">
       <b-btn v-if="!registration.confirmed" variant="success" size="sm" @click="modifyMissionSlotRegistration(true)">
         <i class="fa fa-check" aria-hidden="true"></i>
       </b-btn>
       <b-btn v-if="registration.confirmed" variant="warning" size="sm" @click="modifyMissionSlotRegistration(false)">
         <i class="fa fa-times" aria-hidden="true"></i>
       </b-btn>
-      <b-btn variant="danger" size="sm" @click="deleteMissionSlotRegistration">
+      <b-btn variant="danger" size="sm" v-if="isMissionEditor" @click="deleteMissionSlotRegistration">
         <i class="fa fa-trash" aria-hidden="true"></i>
       </b-btn>
     </td>
@@ -41,6 +45,9 @@ export default {
       }
 
       return moment().isAfter(moment(this.missionDetails.endTime))
+    },
+    hasMissionSlotlistCommunityPermission() {
+      return this.$acl.can([`mission.${this.$route.params.missionSlug}.slotlist.community`])
     },
     isMissionEditor() {
       return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`, `mission.${this.$route.params.missionSlug}.editor`])

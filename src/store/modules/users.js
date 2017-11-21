@@ -7,14 +7,23 @@ import Raven from 'raven-js'
 import UsersApi from '../../api/users'
 
 const limits = {
-  userMissions: 10
+  userMissions: 10,
+  users: 10
+}
+
+const intervals = {
+  usersRefresh: 300000
 }
 
 const state = {
+  refreshingUsers: false,
   searchingUsers: false,
   totalUserMissions: 0,
+  totalUsers: 0,
   userDetails: null,
-  userMissions: null
+  userMissions: null,
+  users: null,
+  usersRefreshSetInterval: null
 }
 
 const getters = {
@@ -28,8 +37,17 @@ const getters = {
     return state.userMissions
   },
   userMissionsPageCount() {
-    return Math.ceil(state.totalUserMissions / limits.userMissions)
+    return Math.ceil(state.totalUserMissions / limits.users)
   },
+  users() {
+    return state.users
+  },
+  usersPageCount() {
+    return Math.ceil(state.totalUsers / limits.missionSlotTemplates)
+  },
+  refreshingUsers() {
+    return state.refreshingUsers
+  }
 }
 
 const actions = {
@@ -213,6 +231,109 @@ const actions = {
         }
       })
   },
+  getUsers({ commit, dispatch, state }, payload) {
+    commit({
+      type: 'refreshingUsers',
+      refreshing: true
+    })
+
+    if (_.isNil(payload)) {
+      payload = { page: 1, limit: limits.users, silent: false, autoRefresh: false }
+    }
+    if (_.isNil(payload.page)) {
+      payload.page = 1
+    }
+    if (_.isNil(payload.limit)) {
+      payload.limit = limits.users
+    }
+    if (_.isNil(payload.silent)) {
+      payload.silent = false
+    }
+    if (_.isNil(payload.autoRefresh)) {
+      payload.autoRefresh = false
+    }
+
+    if (!payload.silent) {
+      dispatch('startWorking', i18n.t('store.getUsers'))
+    }
+
+    return UsersApi.getUsers(payload.limit, (payload.page - 1) * payload.limit)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Retrieving users failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (_.isNil(response.data.users) || !_.isArray(response.data.users)) {
+          console.error(response)
+          throw 'Received invalid users'
+        }
+
+        commit({
+          type: 'setUsers',
+          users: response.data.users,
+          total: response.data.total
+        })
+
+        if (!payload.silent) {
+          dispatch('stopWorking', i18n.t('store.getUsers'))
+        }
+
+        commit({
+          type: 'refreshingUsers',
+          refreshing: false
+        })
+
+        if (payload.autoRefresh) {
+          if (!_.isNil(state.usersRefreshSetInterval)) {
+            clearInterval(state.usersRefreshSetInterval)
+          }
+
+          state.usersRefreshSetInterval = setInterval(() => {
+            dispatch('getUsers', { silent: true })
+          }, intervals.usersRefresh)
+        }
+      }).catch((error) => {
+        commit({
+          type: 'refreshingUsers',
+          refreshing: false
+        })
+
+        if (!payload.silent) {
+          dispatch('stopWorking', i18n.t('store.getUsers'))
+        }
+
+        if (error.response) {
+          console.error('getUsers', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getUsers.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'users', function: 'getUsers' } })
+          console.error('getUsers', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getUsers.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          Raven.captureException(error, { extra: { module: 'users', function: 'getUsers' } })
+          console.error('getUsers', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getUsers.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
   getUserMissions({ commit, dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.getUserMissions'))
 
@@ -352,6 +473,9 @@ const mutations = {
     state.userDetails = null
     state.userMissions = null
   },
+  refreshingUsers(state, payload) {
+    state.refreshingUsers = payload.refreshing
+  },
   searchingUsers(state, payload) {
     state.searchingUsers = payload.searching
   },
@@ -363,6 +487,10 @@ const mutations = {
   setUserMissions(state, payload) {
     state.userMissions = payload.userMissions
     state.totalUserMissions = payload.total
+  },
+  setUsers(state, payload) {
+    state.users = payload.users
+    state.totalUsers = payload.total
   }
 }
 
