@@ -72,7 +72,8 @@ export default {
   computed: {
     missionPermissionAddPermissionOptions() {
       return [
-        { value: 'editor', text: this.$t('mission.permission.editor') }
+        { value: 'editor', text: this.$t('mission.permission.editor') },
+        { value: 'slotlist.community', text: this.$t('mission.permission.slotlist.community') }
       ]
     },
     missionPermissionAddPermissionState() {

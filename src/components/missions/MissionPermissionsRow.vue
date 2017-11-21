@@ -26,6 +26,8 @@ export default {
         return this.$t('mission.permission.creator')
       } else if (_.endsWith(permission, 'editor')) {
         return this.$t('mission.permission.editor')
+      } else if (_.endsWith(permission, 'slotlist.community')) {
+        return this.$t('mission.permission.slotlist.community')
       } else {
         return `<span class="text-italic font-muted">${this.missionPermission.permission}</span>`
       }
