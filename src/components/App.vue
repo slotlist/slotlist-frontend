@@ -35,6 +35,11 @@
         </ul>
         <ul class="navbar-nav">
           <li class="nav-item" v-if="loggedIn">
+            <router-link class="nav-link" :class="{'text-danger': unseenNotificationCount > 0, 'font-weight-bold': unseenNotificationCount > 0}" :to="{name:'notificationList'}">
+              <i class="fa fa-bell" aria-hidden="true"></i> {{ unseenNotificationCount }} {{ $t('nav.notifications') }}
+            </router-link>
+          </li>
+          <li class="nav-item" v-if="loggedIn">
             <router-link class="nav-link" :to="{name:'account'}">
               <i class="fa fa-user" aria-hidden="true"></i> {{ $t('nav.account') }}
             </router-link>
@@ -154,6 +159,10 @@ export default {
             if (_.isNil(lastRefreshedAt) || moment(lastRefreshedAt) <= moment().subtract(1, 'hour')) {
               this.performInitialTokenRefresh()
             }
+
+            if (!this.$store.getters.pollingUnseenNotifications) {
+              this.$store.dispatch('getUnseenNotificationCount', { autoRefresh: true })
+            }
           }
         })
     }
@@ -194,6 +203,9 @@ export default {
     },
     showAlert() {
       return this.$store.getters.showAlert
+    },
+    unseenNotificationCount() {
+      return this.$store.getters.unseenNotificationCount
     },
     working() {
       return this.$store.getters.working

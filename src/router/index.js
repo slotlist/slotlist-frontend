@@ -136,6 +136,14 @@ export const router = new Router({
   linkExactActiveClass: 'active'
 })
 
+router.beforeEach((to, from, next) => {
+  if (store.getters.loggedIn && !store.getters.pollingUnseenNotifications) {
+    store.dispatch('getUnseenNotificationCount', { autoRefresh: true })
+  }
+
+  next()
+})
+
 router.afterEach(() => {
   if (store.getters.showAlert && !store.getters.persistentAlert) {
     store.dispatch('clearAlert')
