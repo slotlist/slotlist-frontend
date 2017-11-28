@@ -111,7 +111,8 @@ export default {
       if (this.current < this.items.length - 1) this.current++
     },
     highlight(title, val) {
-      return title.replace(new RegExp('(' + val + ')', 'gi'), '<strong>$1</strong>')
+      const escapedVal = val.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
+      return title.replace(new RegExp('(' + escapedVal + ')', 'gi'), '<strong>$1</strong>')
     }
   }
 }
