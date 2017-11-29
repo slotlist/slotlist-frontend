@@ -1776,7 +1776,7 @@ const actions = {
       dispatch('startWorking', i18n.t('store.getMissions'))
     }
 
-    let includeEnded = _.has(state.missionListFilter, 'ended')
+    const includeEnded = _.has(state.missionListFilter, 'ended')
 
     return MissionsApi.getMissions(limits.missions, (payload.page - 1) * limits.missions, includeEnded)
       .then(function (response) {

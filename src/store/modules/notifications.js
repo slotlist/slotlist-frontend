@@ -4,22 +4,49 @@ import Raven from 'raven-js'
 
 import NotificationsApi from '../../api/notifications'
 
+const limits = {
+  notifications: 10
+}
+
 const intervals = {
   unseenNotificationCountRefresh: 300000
 }
 
 const state = {
+  notificationListFilter: {},
   notifications: null,
+  notificationsPage: 1,
+  refreshingNotifications: false,
   unseenNotificationCount: 0,
   unseenNotificationCountSetInterval: null
 }
 
 const getters = {
+  notificationListFilter() {
+    return _.keys(state.notificationListFilter)
+  },
+  notificationsPageCount() {
+    if (!_.isArray(state.notifications)) {
+      return 0
+    }
+
+    return Math.ceil(state.notifications.length / limits.notifications)
+  },
   notifications() {
-    return state.notifications
+    if (!_.isArray(state.notifications)) {
+      return null
+    }
+
+    const start = _.min([((state.notificationsPage - 1) * limits.notifications), state.notifications.length])
+    const end = _.min([(start + limits.notifications), state.notifications.length])
+
+    return _.slice(state.notifications, start, end)
   },
   pollingUnseenNotifications() {
     return !_.isNil(state.unseenNotificationCountSetInterval)
+  },
+  refreshingNotifications() {
+    return state.refreshingNotifications
   },
   unseenNotificationCount() {
     return state.unseenNotificationCount
@@ -27,10 +54,44 @@ const getters = {
 }
 
 const actions = {
-  getNotifications({ commit, dispatch }) {
-    dispatch('startWorking', i18n.t('store.getNotifications'))
+  clearNotifications({ commit }) {
+    commit({
+      type: 'clearNotifications'
+    })
+  },
+  filterNotificationList({ commit, dispatch, state }, payload) {
+    const hadSeenFilter = _.has(state.notificationListFilter, 'seen')
 
-    return NotificationsApi.getNotifications()
+    commit({
+      type: 'setNotificationListFilter',
+      notificationListFilter: payload
+    })
+
+    const hasSeenFilter = _.has(state.notificationListFilter, 'seen')
+    if ((hadSeenFilter && !hasSeenFilter) || (!hadSeenFilter && hasSeenFilter)) {
+      dispatch('getNotifications')
+    }
+  },
+  getNotifications({ commit, dispatch, state }, payload) {
+    commit({
+      type: 'refreshingNotifications',
+      refreshing: true
+    })
+
+    if (_.isNil(payload)) {
+      payload = { silent: false }
+    }
+    if (_.isNil(payload.silent)) {
+      payload.silent = false
+    }
+
+    if (!payload.silent) {
+      dispatch('startWorking', i18n.t('store.getNotifications'))
+    }
+
+    const includeSeen = _.has(state.notificationListFilter, 'seen')
+
+    return NotificationsApi.getNotifications(includeSeen)
       .then(function (response) {
         if (response.status !== 200) {
           console.error(response)
@@ -52,9 +113,23 @@ const actions = {
           notifications: response.data.notifications
         })
 
-        dispatch('stopWorking', i18n.t('store.getNotifications'))
+        if (!payload.silent) {
+          dispatch('stopWorking', i18n.t('store.getNotifications'))
+        }
+
+        commit({
+          type: 'refreshingNotifications',
+          refreshing: false
+        })
       }).catch((error) => {
-        dispatch('stopWorking', i18n.t('store.getNotifications'))
+        commit({
+          type: 'refreshingNotifications',
+          refreshing: false
+        })
+
+        if (!payload.silent) {
+          dispatch('stopWorking', i18n.t('store.getNotifications'))
+        }
 
         if (error.response) {
           console.error('getNotifications', error.response)
@@ -149,6 +224,12 @@ const actions = {
         }
       })
   },
+  paginateNotifications( { commit }, payload) {
+    commit({
+      type: 'setNotificationsPage',
+      page: payload.page
+    })
+  },
   stopNotificationPolling({ state }) {
     if (!_.isNil(state.unseenNotificationCountSetInterval)) {
       clearInterval(state.unseenNotificationCountSetInterval)
@@ -159,9 +240,25 @@ const actions = {
 const mutations = {
   clearNotifications(state) {
     state.notifications = null
+    state.notificationsPage = 1
+    state.refreshingNotifications = false
+  },
+  refreshingNotifications(state, payload) {
+    state.refreshingNotifications = payload.refreshing
+  },
+  setNotificationListFilter(state, payload) {
+    const filter = {}
+    _.each(payload.notificationListFilter, (f) => {
+      filter[f] = true
+    })
+
+    state.notificationListFilter = filter
   },
   setNotifications(state, payload) {
     state.notifications = payload.notifications
+  },
+  setNotificationsPage(state, payload) {
+    state.notificationsPage = payload.page
   },
   setUnseenNotificationCount(state, payload) {
     state.unseenNotificationCount = payload.unseen
