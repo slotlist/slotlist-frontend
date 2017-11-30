@@ -6,6 +6,7 @@ import auth from './modules/auth'
 import communities from './modules/communities'
 import missions from './modules/missions'
 import missionSlotTemplates from './modules/missionSlotTemplates'
+import notifications from './modules/notifications'
 import users from './modules/users'
 import util from './modules/util'
 
@@ -18,6 +19,7 @@ const store = new Vuex.Store({
     communities,
     missions,
     missionSlotTemplates,
+    notifications,
     users,
     util
   }

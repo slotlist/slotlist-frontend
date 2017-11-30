@@ -221,7 +221,9 @@ const actions = {
         }
       })
   },
-  performLogout({ commit }) {
+  performLogout({ commit, dispatch }) {
+    dispatch('stopNotificationPolling')
+
     commit({
       type: "logout"
     })

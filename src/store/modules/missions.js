@@ -942,7 +942,7 @@ const actions = {
         dispatch('showAlert', {
           showAlert: true,
           alertVariant: 'success',
-          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlot.success', { slotInfo: `${payload.slotOrderNumber} ${payload.slotTitle}` })}`
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlot.success', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })}`
         })
 
         dispatch('stopWorking', i18n.t('store.deleteMissionSlot'))
@@ -1776,7 +1776,7 @@ const actions = {
       dispatch('startWorking', i18n.t('store.getMissions'))
     }
 
-    let includeEnded = _.has(state.missionListFilter, 'ended')
+    const includeEnded = _.has(state.missionListFilter, 'ended')
 
     return MissionsApi.getMissions(limits.missions, (payload.page - 1) * limits.missions, includeEnded)
       .then(function (response) {

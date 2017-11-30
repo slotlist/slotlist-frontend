@@ -11,6 +11,7 @@ import MissionCreator from '../views/MissionCreator'
 import MissionSlotTemplateList from '../views/MissionSlotTemplateList'
 import MissionSlotTemplateDetails from '../views/MissionSlotTemplateDetails'
 import MissionSlotTemplateCreator from '../views/MissionSlotTemplateCreator'
+import NotificationList from '../views/NotificationList'
 import UserDetails from '../views/UserDetails'
 import UserList from '../views/UserList'
 import Account from '../views/Account'
@@ -85,6 +86,14 @@ export const router = new Router({
       }
     },
     {
+      path: '/notifications',
+      name: 'notificationList',
+      component: NotificationList,
+      meta: {
+        authenticated: true // only logged in users can access this page
+      }
+    },
+    {
       path: '/users',
       name: 'userList',
       component: UserList
@@ -134,6 +143,14 @@ export const router = new Router({
     }
   ],
   linkExactActiveClass: 'active'
+})
+
+router.beforeEach((to, from, next) => {
+  if (store.getters.loggedIn && !store.getters.pollingUnseenNotifications) {
+    store.dispatch('getUnseenNotificationCount', { autoRefresh: true })
+  }
+
+  next()
 })
 
 router.afterEach(() => {
