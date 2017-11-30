@@ -16,15 +16,21 @@ export default {
   props: [
     'notification'
   ],
+  created: function() {
+    const notificationsRequiringRefresh = ['community.application.accepted', 'community.application.removed', 'community.deleted', 'community.permission.granted', 'community.permission.revoked', 'mission.permission.granted', 'mission.permission.revoked'];
+    if (_.isNil(this.notification.seenAt) && _.indexOf(notificationsRequiringRefresh, this.notification.notificationType) >= 0) {
+      this.$store.dispatch('refreshToken', { silent: true })
+    }
+  },
   computed: {
     notificationTarget() {
       switch (this.notification.notificationType) {
         case 'community.application.accepted':
         case 'community.application.denied':
         case 'community.application.new':
+        case 'community.application.removed':
         case 'community.permission.granted':
         case 'community.permission.revoked':
-        case 'community.application.removed':
           return {name: 'communityDetails', params: {communitySlug: this.notification.data.communitySlug}}
         case 'community.application.deleted':
           return {name: 'userDetails', params: {userUid: this.notification.data.userUid}}

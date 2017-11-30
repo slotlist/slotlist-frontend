@@ -9,7 +9,7 @@ const limits = {
 }
 
 const intervals = {
-  unseenNotificationCountRefresh: 300000
+  unseenNotificationCountRefresh: 60000
 }
 
 const state = {

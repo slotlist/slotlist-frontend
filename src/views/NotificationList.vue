@@ -32,6 +32,9 @@ export default {
   },
   beforeCreate: function() {
     this.$store.dispatch('getNotifications')
+      .then(() => {
+        this.$store.dispatch('getUnseenNotificationCount', { autoRefresh: true })
+      })
   },
   created: function() {
     this.notificationListFilter = this.$store.getters.notificationListFilter
@@ -67,6 +70,9 @@ export default {
     },
     refreshNotifications() {
       this.$store.dispatch('getNotifications', { silent: true })
+        .then(() => {
+          this.$store.dispatch('getUnseenNotificationCount', { autoRefresh: true })
+        })
     }
   },
   watch: {
