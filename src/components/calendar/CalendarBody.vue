@@ -85,11 +85,13 @@ export default {
 
       const endDate = moment(momentIterator.subtract(1, 'day').endOf('day'))
 
-      this.$store.dispatch('getMissionsForCalendar', {
-        autoRefresh: true,
-        startDate,
-        endDate
-      })
+      if (_.isNil(this.$store.getters.missionsForCalendar) || _.isEmpty(this.$store.getters.missionsForCalendar)) {
+        this.$store.dispatch('getMissionsForCalendar', {
+          autoRefresh: true,
+          startDate,
+          endDate
+        })
+      }
 
       return weeks
     }
