@@ -17,6 +17,7 @@ const state = {
   notifications: null,
   notificationsPage: 1,
   refreshingNotifications: false,
+  totalNotifications: 0,
   unseenNotificationCount: 0,
   unseenNotificationCountSetInterval: null
 }
@@ -26,15 +27,15 @@ const getters = {
     return _.keys(state.notificationListFilter)
   },
   notificationsPageCount() {
-    if (!_.isArray(state.notifications)) {
-      return 0
-    }
-
-    return Math.ceil(state.notifications.length / limits.notifications)
+    return Math.ceil(state.totalNotifications / limits.notifications)
   },
   notifications() {
     if (!_.isArray(state.notifications)) {
       return null
+    }
+
+    if (_.has(state.notificationListFilter, 'seen')) {
+      return state.notifications
     }
 
     const start = _.min([((state.notificationsPage - 1) * limits.notifications), state.notifications.length])
@@ -79,7 +80,13 @@ const actions = {
     })
 
     if (_.isNil(payload)) {
-      payload = { silent: false }
+      payload = { page: 1, limit: limits.notifications, silent: false }
+    }
+    if (_.isNil(payload.page)) {
+      payload.page = 1
+    }
+    if (_.isNil(payload.limit)) {
+      payload.limit = limits.notifications
     }
     if (_.isNil(payload.silent)) {
       payload.silent = false
@@ -91,7 +98,7 @@ const actions = {
 
     const includeSeen = _.has(state.notificationListFilter, 'seen')
 
-    return NotificationsApi.getNotifications(includeSeen)
+    return NotificationsApi.getNotifications(payload.limit, (payload.page - 1) * payload.limit, includeSeen)
       .then(function (response) {
         if (response.status !== 200) {
           console.error(response)
@@ -110,7 +117,8 @@ const actions = {
 
         commit({
           type: 'setNotifications',
-          notifications: response.data.notifications
+          notifications: response.data.notifications,
+          total: _.isNil(response.data.total) ? response.data.notifications.length : response.data.total
         })
 
         if (!payload.silent) {
@@ -242,6 +250,7 @@ const mutations = {
     state.notifications = null
     state.notificationsPage = 1
     state.refreshingNotifications = false
+    state.totalNotifications = 0
   },
   refreshingNotifications(state, payload) {
     state.refreshingNotifications = payload.refreshing
@@ -256,6 +265,7 @@ const mutations = {
   },
   setNotifications(state, payload) {
     state.notifications = payload.notifications
+    state.totalNotifications = payload.total
   },
   setNotificationsPage(state, payload) {
     state.notificationsPage = payload.page

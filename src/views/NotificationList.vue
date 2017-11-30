@@ -59,7 +59,11 @@ export default {
   },
   methods: {
     notificationsPaginate(page) {
-      this.$store.dispatch('paginateNotifications', { page })
+      if (_.indexOf(this.notificationListFilter, 'seen') >= 0) {
+        this.$store.dispatch('getNotifications', { page })
+      } else {
+        this.$store.dispatch('paginateNotifications', { page })
+      }
     },
     refreshNotifications() {
       this.$store.dispatch('getNotifications', { silent: true })
