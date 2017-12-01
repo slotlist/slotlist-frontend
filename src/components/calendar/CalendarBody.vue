@@ -85,7 +85,7 @@ export default {
 
       const endDate = moment(momentIterator.subtract(1, 'day').endOf('day'))
 
-      if (_.isNil(this.$store.getters.missionsForCalendar) || _.isEmpty(this.$store.getters.missionsForCalendar)) {
+      if ((_.isNil(this.$store.getters.missionsForCalendar) || _.isNil(this.$store.getters.missionsForCalendarRefreshSetInterval)) && !this.$store.getters.refreshingMissionsForCalendar) {
         this.$store.dispatch('getMissionsForCalendar', {
           autoRefresh: true,
           startDate,
