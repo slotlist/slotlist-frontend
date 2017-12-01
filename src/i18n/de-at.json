@@ -243,7 +243,6 @@
   "mission.slot.assign.force.description": "Durch das Erzwingen einer Slotzuweisung wird der ausgew\u00e4hlte Benutzer von seinem Slot entfernt, falls er bereits zugewiesen ist - au\u00dferdem wird der Benutzer, der aktuell auf den gew\u00e4hlten Slot zugewiesen ist, entfernt",
   "mission.slot.assign.selection": "Suach noch Benutza f\u00fcr Zuaweisung",
   "mission.slot.assign.selection.description": "Suche nach einem Benutzer mit dem angegebenen Nickname, inklusive Teil-\u00dcbereinstimmungen",
-  "mission.slot.assignee.notAssigned": "ned zuagwiesn",
   "mission.slot.assignee.registration": "keine Anmeldungen | Anmeldung | Anmeldungen",
   "mission.slot.blocked": "geht ned - koane Aum\u00f6dungen meglich",
   "mission.slot.blocked.description": "Blockierte Slots stengan ned fia Aunm\u00f6dungen zua Vaf\u00fcgung",

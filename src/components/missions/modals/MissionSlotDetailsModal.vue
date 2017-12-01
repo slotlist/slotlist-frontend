@@ -19,8 +19,8 @@
               </router-link>
             </span>
             <span v-if="!missionSlotDetails.blocked && !missionSlotDetails.assignee && missionSlotDetails.externalAssignee" class="text-success font-weight-bold font-italic">{{ missionSlotDetails.externalAssignee }}</span>
-            <span v-if="!missionSlotDetails.blocked && !missionSlotDetails.assignee && !missionSlotDetails.externalAssignee && (!missionSlotDetails.registrationCount || missionSlotDetails.registrationCount <= 0)" class="text-muted font-italic">{{ `${this.$t('mission.slot.assignee.notAssigned')} - ${this.$tc('mission.slot.assignee.registration', 0)}` }}</span>
-            <span v-if="!missionSlotDetails.blocked && !missionSlotDetails.assignee && !missionSlotDetails.externalAssignee && missionSlotDetails.registrationCount && missionSlotDetails.registrationCount > 0" class="text-muted font-italic">{{ `${this.$t('mission.slot.assignee.notAssigned')} - ${this.missionSlotDetails.registrationCount} ${this.$tc('mission.slot.assignee.registration', this.missionSlotDetails.registrationCount > 1 ? 2 : 1)}` }}</span>
+            <span v-if="!missionSlotDetails.blocked && !missionSlotDetails.assignee && !missionSlotDetails.externalAssignee && (!missionSlotDetails.registrationCount || missionSlotDetails.registrationCount <= 0)" class="text-muted font-italic">{{ `${this.$tc('mission.slot.assignee.registration', 0)}` }}</span>
+            <span v-if="!missionSlotDetails.blocked && !missionSlotDetails.assignee && !missionSlotDetails.externalAssignee && missionSlotDetails.registrationCount && missionSlotDetails.registrationCount > 0" class="text-muted">{{ `${this.missionSlotDetails.registrationCount} ${this.$tc('mission.slot.assignee.registration', this.missionSlotDetails.registrationCount > 1 ? 2 : 1)}` }}</span>
           </div>
           <div class="col col-3">
             <i :class="difficultyIcon" aria-hidden="true"></i>

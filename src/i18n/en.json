@@ -243,7 +243,6 @@
   "mission.slot.assign.force.description": "Forcing a slot assignment removes the selected user from their current slot if they have been assigned already - furthermore, the user currently assigned to the selected slot will be removed",
   "mission.slot.assign.selection": "Search for user to assign to slot",
   "mission.slot.assign.selection.description": "Start typing to search for an user with the given nickname, including partial matches",
-  "mission.slot.assignee.notAssigned": "not assigned",
   "mission.slot.assignee.registration": "no registrations | registration | registrations",
   "mission.slot.blocked": "blocked - no registration possible",
   "mission.slot.blocked.description": "Blocked slots are not available for registration",
