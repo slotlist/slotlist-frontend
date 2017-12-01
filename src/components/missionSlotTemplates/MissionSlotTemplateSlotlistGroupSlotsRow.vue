@@ -56,21 +56,6 @@ export default {
     difficultyIcon() {
       return `${this.difficultyColor} fa fa-thermometer-${this.missionSlotDetails.difficulty} fa-lg`
     },
-    formattedAssignee() {
-      if (this.missionSlotDetails.blocked) {
-        return `<span class="text-muted font-italic">${this.$t('mission.slot.blocked')}</span>`
-      }
-
-      if (!_.isNil(this.missionSlotDetails.assignee)) {
-        return `<span class="text-success font-weight-bold">${this.formatUserWithTag(this.missionSlotDetails.assignee)}</span>`
-      }
-
-      if (!_.isNumber(this.missionSlotDetails.registrationCount) || this.missionSlotDetails.registrationCount <= 0) {
-        return `<span class="text-muted font-italic">${this.$t('mission.slot.assignee.notAssigned')} - ${this.$tc('mission.slot.assignee.registration', 0)}</span>`
-      }
-
-      return `<span class="text-muted font-italic">${this.$t('mission.slot.assignee.notAssigned')} - ${this.missionSlotDetails.registrationCount} ${this.$tc('mission.slot.assignee.registration', this.missionSlotDetails.registrationCount > 1 ? 2 : 1)}</span>`
-    },
     formattedTitle() {
       if (_.isNil(this.missionSlotDetails.restrictedCommunity)) {
         return `<i class="${this.difficultyIcon}" aria-hidden="true"></i> ${this.missionSlotDetails.title}`

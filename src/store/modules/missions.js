@@ -90,6 +90,9 @@ const getters = {
   missionsForCalendar() {
     return state.missionsForCalendar
   },
+  missionsForCalendarRefreshSetInterval() {
+    return state.missionsForCalendarRefreshSetInterval
+  },
   missionSlotDetails() {
     return state.missionSlotDetails
   },
@@ -105,7 +108,7 @@ const getters = {
     _.each(state.missionSlotGroups, (slotGroup) => {
       const filteredSlots = []
       _.each(slotGroup.slots, (slot) => {
-        if (_.has(state.missionSlotlistFilter, 'assigned') && !_.isNil(slot.assignee)) {
+        if (_.has(state.missionSlotlistFilter, 'assigned') && (!_.isNil(slot.assignee) || !_.isNil(slot.externalAssignee))) {
           filteredSlots.push(slot)
         } else if (_.has(state.missionSlotlistFilter, 'hasRegistrations') && _.isNil(slot.assignee) && slot.registrationCount > 0) {
           filteredSlots.push(slot)
