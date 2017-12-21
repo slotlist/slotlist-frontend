@@ -21,6 +21,11 @@
         <b-btn variant="primary" v-b-modal.missionSlotSelectionEditModal>
           <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit.mission.slot.selection') }}
         </b-btn>
+        <click-confirm yes-icon="fa fa-close" yes-class="btn btn-warning" button-size="sm" :messages="{title: $t('mission.slot.confirm.unassign.selection'), yes: $t('button.confirm'), no: $t('button.cancel')}">
+          <b-btn variant="warning" @click="unassignSelectedMissionSlots">
+            <i class="fa fa-close" aria-hidden="true"></i> {{ $t('button.unassign.mission.slot.selection') }}
+          </b-btn>
+        </click-confirm>
         <click-confirm yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('mission.slot.confirm.delete.selection'), yes: $t('button.confirm'), no: $t('button.cancel')}">
           <b-btn variant="danger" @click="deleteSelectedMissionSlots">
             <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete.mission.slot.selection') }}
@@ -82,6 +87,9 @@ export default {
     },
     refreshMissionSlotlist() {
       this.$store.dispatch('getMissionSlotlist', { missionSlug: this.$route.params.missionSlug })
+    },
+    unassignSelectedMissionSlots() {
+      this.$store.dispatch('unassignSelectedMissionSlots', { missionSlug: this.$route.params.missionSlug })
     }
   }
 }
