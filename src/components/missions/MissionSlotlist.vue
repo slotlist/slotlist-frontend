@@ -13,7 +13,7 @@
         <i class="fa fa-refresh" aria-hidden="true"></i> {{ $t('button.refresh') }}
       </b-btn>
     </div>
-    <div v-if="isMissionEditor">
+    <div v-if="isMissionEditor && !hasMissionEnded">
       <br>
       <div class="small text-muted text-center" v-html="anyMissionSlotSelected ? $tc('mission.slot.selection.actions', missionSlotSelectionCount, { count: missionSlotSelectionCount }) : $t('mission.slot.selection.hint')"></div>
       <br v-if="anyMissionSlotSelected">
