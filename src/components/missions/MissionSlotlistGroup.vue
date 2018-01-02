@@ -19,6 +19,7 @@
         </b-btn>
       </click-confirm>
     </div>
+    <br>
   </div>
 </template>
 

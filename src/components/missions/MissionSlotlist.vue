@@ -1,7 +1,6 @@
 <template>
   <div>
     <mission-slotlist-group v-for="missionSlotGroup in missionSlotGroups" :missionSlotGroup="missionSlotGroup" :key="missionSlotGroup.uid"></mission-slotlist-group>
-    <br>
     <div class="text-center">
       <b-btn variant="success" v-if="isMissionEditor && !hasMissionEnded" v-b-modal.missionSlotGroupCreateModal>
         <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.create.mission.slotGroup') }}
