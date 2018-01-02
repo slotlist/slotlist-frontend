@@ -174,7 +174,7 @@ export default {
       this.$store.dispatch('setMissionSlotGroupDetails', this.missionSlotGroup)
     },
     toggleMissionSlotSelection() {
-      if (!this.loggedIn || !this.isMissionEditor) {
+      if (!this.loggedIn || !this.isMissionEditor || this.hasMissionEnded) {
         return
       }
 

@@ -35,6 +35,7 @@ const state = {
   missionSlotlistFilter: {},
   missionSlotRegistrationDetails: null,
   missionSlotRegistrations: null,
+  missionSlotRegistrationSuppressNotifications: false,
   missionSlotSelection: [],
   missionSlugAvailable: false,
   missionsRefreshSetInterval: null,
@@ -140,6 +141,9 @@ const getters = {
   missionSlotRegistrationsPageCount() {
     return Math.ceil(state.totalMissionSlotRegistrations / limits.missionSlotRegistrations)
   },
+  missionSlotRegistrationSuppressNotifications() {
+    return state.missionSlotRegistrationSuppressNotifications
+  },
   missionSlotSelection() {
     return state.missionSlotSelection
   },
@@ -235,7 +239,11 @@ const actions = {
   addMissionPermission({ dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.addMissionPermission'))
 
-    return MissionsApi.addMissionPermission(payload.missionSlug, payload.permissionDetails)
+    if (_.isNil(payload.suppressNotifications)) {
+      payload.suppressNotifications = false
+    }
+
+    return MissionsApi.addMissionPermission(payload.missionSlug, payload.permissionDetails, payload.suppressNotifications)
       .then((response) => {
         if (response.status !== 200) {
           console.error(response)
@@ -354,7 +362,11 @@ const actions = {
   assignMissionSlot({ dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.assignMissionSlot'))
 
-    return MissionsApi.assignMissionSlot(payload.missionSlug, payload.slotUid, payload.userUid, payload.force)
+    if (_.isNil(payload.suppressNotifications)) {
+      payload.suppressNotifications = false
+    }
+
+    return MissionsApi.assignMissionSlot(payload.missionSlug, payload.slotUid, payload.userUid, payload.force, payload.suppressNotifications)
       .then((response) => {
         if (response.status !== 200) {
           console.error(response)
@@ -1072,6 +1084,8 @@ const actions = {
 
       dispatch('stopWorking', i18n.tc('store.deleteSelectedMissionSlots', selectedSlotCount, { count: selectedSlotCount }))
     }).catch((error) => {
+      dispatch('stopWorking', i18n.tc('store.deleteSelectedMissionSlots', selectedSlotCount, { count: selectedSlotCount }))
+
       if (error.response) {
         console.error('deleteSelectedMissionSlots', error.response)
         dispatch('showAlert', {
@@ -1316,7 +1330,11 @@ const actions = {
   editMission({ commit, dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.editMission'))
 
-    return MissionsApi.editMission(payload.missionSlug, payload.updatedMissionDetails)
+    if (_.isNil(payload.suppressNotifications)) {
+      payload.suppressNotifications = false
+    }
+
+    return MissionsApi.editMission(payload.missionSlug, payload.updatedMissionDetails, payload.suppressNotifications)
       .then((response) => {
         if (response.status !== 200) {
           console.error(response)
@@ -1524,6 +1542,8 @@ const actions = {
 
       dispatch('stopWorking', i18n.tc('store.editSelectedMissionSlots', selectedSlotCount, { count: selectedSlotCount }))
     }).catch((error) => {
+      dispatch('stopWorking', i18n.tc('store.editSelectedMissionSlots', selectedSlotCount, { count: selectedSlotCount }))
+
       if (error.response) {
         console.error('editSelectedMissionSlots', error.response)
         dispatch('showAlert', {
@@ -2007,10 +2027,14 @@ const actions = {
       })
   },
   getMissionSlotRegistrations({ commit, dispatch }, payload) {
-    dispatch('startWorking', i18n.t('store.getMissionSlotRegistrations'))
-
     if (_.isNil(payload.page)) {
       payload.page = 1
+    } else if (_.isNil(payload.silent)) {
+      payload.silent = false
+    }
+
+    if (!payload.silent) {
+      dispatch('startWorking', i18n.t('store.getMissionSlotRegistrations'))
     }
 
     return MissionsApi.getMissionSlotRegistrations(payload.missionSlug, payload.slotUid, limits.missionSlotRegistrations, (payload.page - 1) * limits.missionSlotRegistrations)
@@ -2036,9 +2060,13 @@ const actions = {
           total: response.data.total
         })
 
-        dispatch('stopWorking', i18n.t('store.getMissionSlotRegistrations'))
+        if (!payload.silent) {
+          dispatch('stopWorking', i18n.t('store.getMissionSlotRegistrations'))
+        }
       }).catch((error) => {
-        dispatch('stopWorking', i18n.t('store.getMissionSlotRegistrations'))
+        if (!payload.silent) {
+          dispatch('stopWorking', i18n.t('store.getMissionSlotRegistrations'))
+        }
 
         if (error.response) {
           console.error('getMissionSlotRegistrations', error.response)
@@ -2069,7 +2097,11 @@ const actions = {
   modifyMissionSlotRegistration({ dispatch, state }, payload) {
     dispatch('startWorking', i18n.t('store.modifyMissionSlotRegistration'))
 
-    return MissionsApi.modifyMissionSlotRegistration(payload.missionSlug, payload.slotUid, payload.registrationUid, payload.confirm)
+    if (_.isNil(payload.suppressNotifications)) {
+      payload.suppressNotifications = _.isNil(state.missionSlotRegistrationSuppressNotifications) ? false : state.missionSlotRegistrationSuppressNotifications
+    }
+
+    return MissionsApi.modifyMissionSlotRegistration(payload.missionSlug, payload.slotUid, payload.registrationUid, payload.confirm, payload.suppressNotifications)
       .then((response) => {
         if (response.status !== 200) {
           console.error(response)
@@ -2203,10 +2235,100 @@ const actions = {
       slotGroupDetails: payload
     })
   },
+  setMissionSlotRegistrationSuppressNotifications({ commit }, payload) {
+    commit({
+      type: 'setMissionSlotRegistrationSuppressNotifications',
+      suppressNotifications: payload.suppressNotifications
+    })
+  },
   toggleMissionSlotSelection({ commit }, payload) {
     commit({
       type: 'toggleMissionSlotSelection',
       missionSlotUid: payload.missionSlotUid
+    })
+  },
+  unassignSelectedMissionSlots({ dispatch, state }, payload) {
+    const selectedSlotCount = state.missionSlotSelection.length
+
+    dispatch('startWorking', i18n.tc('store.unassignSelectedMissionSlots', selectedSlotCount, { count: selectedSlotCount }))
+
+    return Promise.each(state.missionSlotSelection, (slotUid) => {
+      let missionSlot = null
+
+      _.each(state.missionSlotGroups, (missionSlotGroup) => {
+        const slot = _.find(missionSlotGroup.slots, { uid: slotUid })
+        if (!_.isNil(slot)) {
+          if (_.isNil(slot.assignee) && _.isNil(slot.externalAssignee)) {
+            return
+          }
+
+          missionSlot = slot
+          return false
+        }
+
+        return
+      })
+
+      if (_.isNil(missionSlot)) {
+        return Promise.resolve()
+      }
+
+      return MissionsApi.unassignMissionSlot(payload.missionSlug, slotUid)
+        .then((response) => {
+          if (response.status !== 200) {
+            console.error(response)
+            throw 'Unassigning mission slot failed'
+          }
+
+          if (_.isEmpty(response.data)) {
+            console.error(response)
+            throw 'Received empty response'
+          }
+
+          if (_.isNil(response.data.slot) || !_.isObject(response.data.slot)) {
+            console.error(response)
+            throw 'Received invalid mission slot'
+          }
+        })
+    }).then(() => {
+      dispatch('clearMissionSlotSelection')
+
+      dispatch('getMissionSlotlist', { missionSlug: payload.missionSlug })
+
+      dispatch('showAlert', {
+        showAlert: true,
+        alertVariant: 'success',
+        alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.tc('store.unassignSelectedMissionSlots.success', selectedSlotCount, { count: selectedSlotCount })}`
+      })
+
+      dispatch('stopWorking', i18n.tc('store.unassignSelectedMissionSlots', selectedSlotCount, { count: selectedSlotCount }))
+    }).catch((error) => {
+      dispatch('stopWorking', i18n.tc('store.unassignSelectedMissionSlots', selectedSlotCount, { count: selectedSlotCount }))
+
+      if (error.response) {
+        console.error('unassignSelectedMissionSlots', error.response)
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'danger',
+          alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.unassignSelectedMissionSlots.error')} - ${error.response.data.message}`
+        })
+      } else if (error.request) {
+        Raven.captureException(error, { extra: { module: 'missions', function: 'unassignSelectedMissionSlots' } })
+        console.error('unassignSelectedMissionSlots', error.request)
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'danger',
+          alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.unassignSelectedMissionSlots.error')} - ${i18n.t('failed.request')}`
+        })
+      } else {
+        Raven.captureException(error, { extra: { module: 'missions', function: 'unassignSelectedMissionSlots' } })
+        console.error('unassignSelectedMissionSlots', error.message)
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'danger',
+          alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.unassignSelectedMissionSlots.error')} - ${i18n.t('failed.something')}`
+        })
+      }
     })
   },
   unregisterFromMissionSlot({ dispatch }, payload) {
@@ -2352,6 +2474,7 @@ const mutations = {
     state.missionSlotGroupDetails = null
     state.missionSlotGroups = null
     state.missionSlotRegistrations = null
+    state.missionSlotRegistrationSuppressNotifications = false
     state.missionSlotSelection = []
     state.totalMissionAccesses = 0
     state.totalMissionPermissions = 0
@@ -2386,6 +2509,12 @@ const mutations = {
   },
   setMissionCalendarCurrentMonth(state, payload) {
     state.missionCalendarCurrentMonth = payload.currentMonth
+    state.missionsForCalendar = null
+    state.refreshingMissionsForCalendar = false
+
+    if (!_.isNil(state.missionsForCalendarRefreshSetInterval)) {
+      clearInterval(state.missionsForCalendarRefreshSetInterval)
+    }
   },
   setMissionDetails(state, payload) {
     state.missionDetails = payload.mission
@@ -2434,6 +2563,9 @@ const mutations = {
   setMissionSlotRegistrations(state, payload) {
     state.missionSlotRegistrations = payload.registrations
     state.totalMissionSlotRegistrations = payload.total
+  },
+  setMissionSlotRegistrationSuppressNotifications(state, payload) {
+    state.missionSlotRegistrationSuppressNotifications = payload.suppressNotifications
   },
   startCheckingMissionSlugAvailability(state) {
     state.checkingMissionSlugAvailability = true

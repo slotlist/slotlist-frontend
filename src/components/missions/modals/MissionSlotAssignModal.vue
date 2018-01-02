@@ -16,6 +16,11 @@
                 <b-form-checkbox v-model="missionSlotAssign.force"></b-form-checkbox>
               </b-form-fieldset>
             </div>
+            <div class="col text-center">
+              <b-form-fieldset :label="$t('notification.suppress')" state="success" :description="$t('notification.suppress.description')">
+                <b-form-checkbox v-model="missionSlotAssignSuppressNotifications"></b-form-checkbox>
+              </b-form-fieldset>
+            </div>
           </div>
         </b-form>
       </div>
@@ -40,7 +45,8 @@ export default {
       missionSlotAssign: {
         userUid: null,
         force: true
-      }
+      },
+      missionSlotAssignSuppressNotifications: false
     }
   },
   computed: {
@@ -66,7 +72,8 @@ export default {
         missionSlug: this.$route.params.missionSlug,
         slotUid: this.missionSlotDetails.uid,
         userUid: this.missionSlotAssign.userUid,
-        force: this.missionSlotAssign.force
+        force: this.missionSlotAssign.force,
+        suppressNotifications: this.missionSlotAssignSuppressNotifications
       })
     },
     assignUserSelected(item) {
@@ -77,6 +84,8 @@ export default {
         userUid: null,
         force: true
       }
+
+      this.missionSlotAssignSuppressNotifications = false
 
       this.$refs.missionSlotAssignUserTypeahead.reset()
     },

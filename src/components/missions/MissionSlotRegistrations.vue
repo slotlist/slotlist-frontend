@@ -1,6 +1,13 @@
 <template>
   <div>
     <mission-slot-registrations-table></mission-slot-registrations-table>
+    <div class="row">
+      <div class="col text-center">
+        <b-form-fieldset :label="$t('notification.suppress')" state="success" :description="$t('notification.suppress.description')">
+          <b-form-checkbox v-model="missionSlotRegistrationSuppressNotifications"></b-form-checkbox>
+        </b-form-fieldset>
+      </div>
+    </div>
     <div class="text-center">
       <div class="btn-group" role="group" aria-label="Mission slot registrations actions">
         <b-btn variant="secondary" @click="refreshMissionSlotRegistrations">
@@ -21,6 +28,14 @@ export default {
   props: [
     'missionSlotDetails'
   ],
+  data() {
+    return {
+      missionSlotRegistrationSuppressNotifications: false
+    }
+  },
+  beforeCreate: function() {
+    this.$store.dispatch('setMissionSlotRegistrationSuppressNotifications', { suppressNotifications: false })
+  },
   methods: {
     refreshMissionSlotRegistrations() {
       this.$store.dispatch('getMissionSlotRegistrations', {
@@ -29,6 +44,11 @@ export default {
         slotOrderNumber: this.missionSlotDetails.orderNumber,
         slotTitle: this.missionSlotDetails.title
       })
+    }
+  },
+  watch: {
+    missionSlotRegistrationSuppressNotifications(val) {
+      this.$store.dispatch('setMissionSlotRegistrationSuppressNotifications', { suppressNotifications: val })
     }
   }
 }
