@@ -33,6 +33,13 @@
               </div>
               <div class="row">
                 <div class="col text-center">
+                  <b-form-fieldset :label="$t('notification.suppress')" state="success" :description="$t('notification.suppress.description')">
+                    <b-form-checkbox v-model="missionPermissionAddSuppressNotifications"></b-form-checkbox>
+                  </b-form-fieldset>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col text-center">
                   <b-btn variant="success" @click="addMissionPermission">
                     <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.add.mission.permission') }}
                   </b-btn>
@@ -66,7 +73,8 @@ export default {
       missionPermissionAdd: {
         userUid: null,
         permission: null
-      }
+      },
+      missionPermissionAddSuppressNotifications: false
     }
   },
   computed: {
@@ -97,17 +105,21 @@ export default {
         userUid: this.missionPermissionAdd.userUid,
         permission
       }
+      const suppressNotifications = this.missionPermissionAddSuppressNotifications
 
       this.missionPermissionAdd = {
         userUid: null,
         permission: null
       }
 
+      this.missionPermissionAddSuppressNotifications = false
+
       this.$refs.missionPermissionAddUserTypeahead.reset()
 
       this.$store.dispatch('addMissionPermission', {
         missionSlug: this.$route.params.missionSlug,
-        permissionDetails
+        permissionDetails,
+        suppressNotifications
       })
     },
     hideMissionPermissionModal() {
@@ -123,6 +135,8 @@ export default {
         userUid: null,
         permission: null
       }
+
+      this.missionPermissionAddSuppressNotifications = false
 
       this.$refs.missionPermissionAddUserTypeahead.reset()
     }

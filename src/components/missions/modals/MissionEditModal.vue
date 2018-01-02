@@ -77,6 +77,11 @@
                 <b-form-select v-model="missionEditData.visibility" :options="missionEditVisibilityOptions" class="mb-3" required></b-form-select>
               </b-form-fieldset>
             </div>
+            <div class="col text-center">
+              <b-form-fieldset :label="$t('notification.suppress')" state="success" :description="$t('notification.suppress.description')">
+                <b-form-checkbox v-model="missionEditSuppressNotifications"></b-form-checkbox>
+              </b-form-fieldset>
+            </div>
           </div>
         </b-form>
       </div>
@@ -114,6 +119,7 @@ export default {
         title: null,
         visibility: null
       },
+      missionEditSuppressNotifications: false,
       missionEditDetailedDescriptionQuillEditorOptions: {
         modules: {
           toolbar: [
@@ -358,7 +364,8 @@ export default {
       this.$store.dispatch('editMission', {
         missionSlug: this.$route.params.missionSlug,
         updatedMissionDetails: updatedMissionDetails,
-        missionTitle: this.missionDetails.title
+        missionTitle: this.missionDetails.title,
+        suppressNotifications: this.missionEditSuppressNotifications
       })
     },
     hideMissionEditModal() {
@@ -381,6 +388,8 @@ export default {
         title: this.missionDetails.title,
         visibility: this.missionDetails.visibility
       }
+
+      this.missionEditSuppressNotifications = false
     }
   }
 }

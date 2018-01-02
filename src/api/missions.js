@@ -5,14 +5,14 @@ export const v1 = {
   addMissionAccess(missionSlug, payload) {
     return axios.post(`/v1/missions/${missionSlug}/accesses`, payload)
   },
-  addMissionPermission(missionSlug, payload) {
-    return axios.post(`/v1/missions/${missionSlug}/permissions`, payload)
+  addMissionPermission(missionSlug, payload, suppressNotifications) {
+    return axios.post(`/v1/missions/${missionSlug}/permissions`, _.defaults(payload, { suppressNotifications }))
   },
   applySlotTemplateToMission(missionSlug, slotTemplateUid, insertAfter) {
     return axios.post(`/v1/missions/${missionSlug}/slotTemplates/${slotTemplateUid}`, { insertAfter })
   },
-  assignMissionSlot(missionSlug, slotUid, userUid, force) {
-    return axios.post(`/v1/missions/${missionSlug}/slots/${slotUid}/assign`, { userUid, force })
+  assignMissionSlot(missionSlug, slotUid, userUid, force, suppressNotifications) {
+    return axios.post(`/v1/missions/${missionSlug}/slots/${slotUid}/assign`, { userUid, force, suppressNotifications })
   },
   checkMissionSlugAvailability(missionSlug) {
     return axios.get(`/v1/missions/slugAvailable?slug=${missionSlug}`)
@@ -47,8 +47,8 @@ export const v1 = {
   duplicateMission(missionSlug, payload) {
     return axios.post(`/v1/missions/${missionSlug}/duplicate`, payload)
   },
-  editMission(missionSlug, payload) {
-    return axios.patch(`/v1/missions/${missionSlug}`, payload)
+  editMission(missionSlug, payload, suppressNotifications) {
+    return axios.patch(`/v1/missions/${missionSlug}`, _.defaults(payload, { suppressNotifications }))
   },
   editMissionSlot(missionSlug, slotUid, payload) {
     return axios.patch(`/v1/missions/${missionSlug}/slots/${slotUid}`, payload)
@@ -77,8 +77,8 @@ export const v1 = {
   getMissionSlotRegistrations(missionSlug, slotUid, limit = 10, offset = 0) {
     return axios.get(`/v1/missions/${missionSlug}/slots/${slotUid}/registrations?limit=${limit}&offset=${offset}`)
   },
-  modifyMissionSlotRegistration(missionSlug, slotUid, registrationUid, confirm) {
-    return axios.patch(`/v1/missions/${missionSlug}/slots/${slotUid}/registrations/${registrationUid}`, { confirmed: confirm })
+  modifyMissionSlotRegistration(missionSlug, slotUid, registrationUid, confirm, suppressNotifications) {
+    return axios.patch(`/v1/missions/${missionSlug}/slots/${slotUid}/registrations/${registrationUid}`, { confirmed: confirm, suppressNotifications })
   },
   registerForMissionSlot(missionSlug, slotUid, comment) {
     return axios.post(`/v1/missions/${missionSlug}/slots/${slotUid}/registrations`, { comment })

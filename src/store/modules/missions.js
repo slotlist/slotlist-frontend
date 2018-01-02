@@ -35,6 +35,7 @@ const state = {
   missionSlotlistFilter: {},
   missionSlotRegistrationDetails: null,
   missionSlotRegistrations: null,
+  missionSlotRegistrationSuppressNotifications: false,
   missionSlotSelection: [],
   missionSlugAvailable: false,
   missionsRefreshSetInterval: null,
@@ -140,6 +141,9 @@ const getters = {
   missionSlotRegistrationsPageCount() {
     return Math.ceil(state.totalMissionSlotRegistrations / limits.missionSlotRegistrations)
   },
+  missionSlotRegistrationSuppressNotifications() {
+    return state.missionSlotRegistrationSuppressNotifications
+  },
   missionSlotSelection() {
     return state.missionSlotSelection
   },
@@ -235,7 +239,11 @@ const actions = {
   addMissionPermission({ dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.addMissionPermission'))
 
-    return MissionsApi.addMissionPermission(payload.missionSlug, payload.permissionDetails)
+    if (_.isNil(payload.suppressNotifications)) {
+      payload.suppressNotifications = false
+    }
+
+    return MissionsApi.addMissionPermission(payload.missionSlug, payload.permissionDetails, payload.suppressNotifications)
       .then((response) => {
         if (response.status !== 200) {
           console.error(response)
@@ -354,7 +362,11 @@ const actions = {
   assignMissionSlot({ dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.assignMissionSlot'))
 
-    return MissionsApi.assignMissionSlot(payload.missionSlug, payload.slotUid, payload.userUid, payload.force)
+    if (_.isNil(payload.suppressNotifications)) {
+      payload.suppressNotifications = false
+    }
+
+    return MissionsApi.assignMissionSlot(payload.missionSlug, payload.slotUid, payload.userUid, payload.force, payload.suppressNotifications)
       .then((response) => {
         if (response.status !== 200) {
           console.error(response)
@@ -1318,7 +1330,11 @@ const actions = {
   editMission({ commit, dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.editMission'))
 
-    return MissionsApi.editMission(payload.missionSlug, payload.updatedMissionDetails)
+    if (_.isNil(payload.suppressNotifications)) {
+      payload.suppressNotifications = false
+    }
+
+    return MissionsApi.editMission(payload.missionSlug, payload.updatedMissionDetails, payload.suppressNotifications)
       .then((response) => {
         if (response.status !== 200) {
           console.error(response)
@@ -2081,7 +2097,11 @@ const actions = {
   modifyMissionSlotRegistration({ dispatch, state }, payload) {
     dispatch('startWorking', i18n.t('store.modifyMissionSlotRegistration'))
 
-    return MissionsApi.modifyMissionSlotRegistration(payload.missionSlug, payload.slotUid, payload.registrationUid, payload.confirm)
+    if (_.isNil(payload.suppressNotifications)) {
+      payload.suppressNotifications = _.isNil(state.missionSlotRegistrationSuppressNotifications) ? false : state.missionSlotRegistrationSuppressNotifications
+    }
+
+    return MissionsApi.modifyMissionSlotRegistration(payload.missionSlug, payload.slotUid, payload.registrationUid, payload.confirm, payload.suppressNotifications)
       .then((response) => {
         if (response.status !== 200) {
           console.error(response)
@@ -2213,6 +2233,12 @@ const actions = {
     commit({
       type: 'setMissionSlotGroupDetails',
       slotGroupDetails: payload
+    })
+  },
+  setMissionSlotRegistrationSuppressNotifications({ commit }, payload) {
+    commit({
+      type: 'setMissionSlotRegistrationSuppressNotifications',
+      suppressNotifications: payload.suppressNotifications
     })
   },
   toggleMissionSlotSelection({ commit }, payload) {
@@ -2448,6 +2474,7 @@ const mutations = {
     state.missionSlotGroupDetails = null
     state.missionSlotGroups = null
     state.missionSlotRegistrations = null
+    state.missionSlotRegistrationSuppressNotifications = false
     state.missionSlotSelection = []
     state.totalMissionAccesses = 0
     state.totalMissionPermissions = 0
@@ -2536,6 +2563,9 @@ const mutations = {
   setMissionSlotRegistrations(state, payload) {
     state.missionSlotRegistrations = payload.registrations
     state.totalMissionSlotRegistrations = payload.total
+  },
+  setMissionSlotRegistrationSuppressNotifications(state, payload) {
+    state.missionSlotRegistrationSuppressNotifications = payload.suppressNotifications
   },
   startCheckingMissionSlugAvailability(state) {
     state.checkingMissionSlugAvailability = true

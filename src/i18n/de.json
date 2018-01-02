@@ -389,6 +389,8 @@
   "notification.notification": "Benachrichtigung",
   "notification.received": "Erhalten",
   "notification.seen": "Gelesen",
+  "notification.suppress": "Benachrichtigungen unterdr\u00fccken",
+  "notification.suppress.description": "Durch das Unterdr\u00fccken von Benachrichtigungen kannst du verhindern, andere Benutzer mit mehreren, aufeinander folgenden oder unwichtigen Aktualisierungen vollzuspammen. Wenn diese Checkbox ausgew\u00e4hlt ist, werden keine Nachrichten f\u00fcr die ausgef\u00fchrte Aktion erstellt. Dabei ist zu beachten, dass die Benachrichtigungen f\u00fcr \"destruktive\" Aktionen wie das Entfernen einer Slotzuweisung oder von Berechtigungen oder das L\u00f6schen einer Mission nicht unterdr\u00fcckt werden k\u00f6nnen",
   "notification.type.community.application.accepted": "Deine Bewerbung bei der Community <strong>{communityName}<\/strong> wurde <span class='text-success font-weight-bold'>angenommen<\/span>",
   "notification.type.community.application.deleted": "<strong>{userNickname}<\/strong> hat seine Bewerbung bei deiner Community <strong>{communityName}<\/strong> <span class='text-danger font-weight-bold'>gel\u00f6scht<\/span>",
   "notification.type.community.application.denied": "Deine Bewerbung bei der Community <strong>{communityName}<\/strong> wurde <span class='text-danger font-weight-bold'>abgelehnt<\/span>",
