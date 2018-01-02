@@ -2482,6 +2482,12 @@ const mutations = {
   },
   setMissionCalendarCurrentMonth(state, payload) {
     state.missionCalendarCurrentMonth = payload.currentMonth
+    state.missionsForCalendar = null
+    state.refreshingMissionsForCalendar = false
+
+    if (!_.isNil(state.missionsForCalendarRefreshSetInterval)) {
+      clearInterval(state.missionsForCalendarRefreshSetInterval)
+    }
   },
   setMissionDetails(state, payload) {
     state.missionDetails = payload.mission
