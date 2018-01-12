@@ -81,11 +81,11 @@
         </dt>
         <dd class="col-sm-10">für konstantes Feedback und Verbesserungsvorschläge und das Testen aller möglichen Funktionalitäten</dd>
         <dt class="col-sm-2">
-          <a href="https://task-force-wolf.de/">[TFW] Isaac</a>
+          <a href="https://task-force-wolf.de">[TFW] Isaac</a>
         </dt>
         <dd class="col-sm-10">für Feedback, Verbesserungsvorschläge und Fehlerberichte</dd>
         <dt class="col-sm-2">
-          <a href="https://task-force-wolf.de/">[JgZg-A] Steff</a>
+          <a href="http://www.jaegerzug-achilles.de">[JgZg-A] Steff</a>
         </dt>
         <dd class="col-sm-10">für Feature-Vorschläge und die Übersetzung ins Österreichische</dd>
       </dl>
