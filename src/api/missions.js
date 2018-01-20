@@ -44,6 +44,9 @@ export const v1 = {
   deleteMissionSlotGroup(missionSlug, slotGroupUid) {
     return axios.delete(`/v1/missions/${missionSlug}/slotGroups/${slotGroupUid}`)
   },
+  deleteMissionToken(missionSlug) {
+    return axios.delete(`/v1/missions/${missionSlug}/token`)
+  },
   duplicateMission(missionSlug, payload) {
     return axios.post(`/v1/missions/${missionSlug}/duplicate`, payload)
   },
@@ -55,6 +58,9 @@ export const v1 = {
   },
   editMissionSlotGroup(missionSlug, slotGroupUid, payload) {
     return axios.patch(`/v1/missions/${missionSlug}/slotGroups/${slotGroupUid}`, payload)
+  },
+  generateMissionToken(missionSlug) {
+    return axios.post(`/v1/missions/${missionSlug}/token`)
   },
   getMissionAccesses(missionSlug, limit = 10, offset = 0) {
     return axios.get(`/v1/missions/${missionSlug}/accesses?limit=${limit}&offset=${offset}`)
@@ -76,6 +82,9 @@ export const v1 = {
   },
   getMissionSlotRegistrations(missionSlug, slotUid, limit = 10, offset = 0) {
     return axios.get(`/v1/missions/${missionSlug}/slots/${slotUid}/registrations?limit=${limit}&offset=${offset}`)
+  },
+  getMissionToken(missionSlug) {
+    return axios.get(`/v1/missions/${missionSlug}/token`)
   },
   modifyMissionSlotRegistration(missionSlug, slotUid, registrationUid, confirm, suppressNotifications) {
     return axios.patch(`/v1/missions/${missionSlug}/slots/${slotUid}/registrations/${registrationUid}`, { confirmed: confirm, suppressNotifications })

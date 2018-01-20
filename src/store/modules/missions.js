@@ -26,6 +26,7 @@ const state = {
   missionDetails: null,
   missionListFilter: {},
   missionPermissions: null,
+  missionToken: null,
   missions: null,
   missionsForCalendar: null,
   missionsForCalendarRefreshSetInterval: null,
@@ -152,6 +153,9 @@ const getters = {
   },
   missionsPageCount() {
     return Math.ceil(state.totalMissions / limits.missions)
+  },
+  missionToken() {
+    return state.missionToken
   },
   refreshingMissions() {
     return state.refreshingMissions
@@ -1048,6 +1052,66 @@ const actions = {
         }
       })
   },
+  deleteMissionToken({ dispatch, commit }, payload) {
+    dispatch('startWorking', i18n.t('store.deleteMissionToken'))
+
+    return MissionsApi.deleteMissionToken(payload.missionSlug)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Deleting mission token failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (response.data.success !== true) {
+          console.error(response)
+          throw 'Received invalid mission token deletion'
+        }
+
+        commit({
+          type: 'clearMissionToken'
+        })
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteMissionToken.success')}`
+        })
+
+        dispatch('stopWorking', i18n.t('store.deleteMissionToken'))
+      }).catch((error) => {
+        dispatch('stopWorking', i18n.t('store.deleteMissionToken'))
+
+        if (error.response) {
+          console.error('deleteMissionToken', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionToken.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionToken' } })
+          console.error('deleteMissionToken', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionToken.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionToken' } })
+          console.error('deleteMissionToken', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionToken.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
   deleteSelectedMissionSlots({ dispatch, state }, payload) {
     const selectedSlotCount = state.missionSlotSelection.length
 
@@ -1589,6 +1653,67 @@ const actions = {
       missionSlotlistFilter: payload
     })
   },
+  generateMissionToken({ commit, dispatch }, payload) {
+    dispatch('startWorking', i18n.t('store.generateMissionToken'))
+
+    return MissionsApi.generateMissionToken(payload.missionSlug)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Generating mission token failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (_.isNil(response.data.missionToken) || !_.isString(response.data.missionToken)) {
+          console.error(response)
+          throw 'Received invalid mission token'
+        }
+
+        commit({
+          type: 'setMissionToken',
+          missionToken: response.data.missionToken
+        })
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.generateMissionToken.success')}`
+        })
+
+        dispatch('stopWorking', i18n.t('store.generateMissionToken'))
+      }).catch((error) => {
+        dispatch('stopWorking', i18n.t('store.generateMissionToken'))
+
+        if (error.response) {
+          console.error('generateMissionToken', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.generateMissionToken.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'generateMissionToken' } })
+          console.error('generateMissionToken', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.generateMissionToken.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'generateMissionToken' } })
+          console.error('generateMissionToken', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.generateMissionToken.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
   getMissionAccesses({ commit, dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.getMissionAccesses'))
 
@@ -2094,6 +2219,71 @@ const actions = {
         }
       })
   },
+  getMissionToken({ commit, dispatch }, payload) {
+    if (_.isNil(payload.silent)) {
+      payload.silent = false
+    }
+
+    if (!payload.silent) {
+      dispatch('startWorking', i18n.t('store.getMissionToken'))
+    }
+
+    return MissionsApi.getMissionToken(payload.missionSlug)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Retrieving mission token failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (!_.isString(response.data.missionToken) && !_.isNull(response.data.missionToken)) {
+          console.error(response)
+          throw 'Received invalid mission token'
+        }
+
+        commit({
+          type: 'setMissionToken',
+          missionToken: response.data.missionToken
+        })
+
+        if (!payload.silent) {
+          dispatch('stopWorking', i18n.t('store.getMissionToken'))
+        }
+      }).catch((error) => {
+        if (!payload.silent) {
+          dispatch('stopWorking', i18n.t('store.getMissionToken'))
+        }
+
+        if (error.response) {
+          console.error('getMissionToken', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionToken.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionToken' } })
+          console.error('getMissionToken', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionToken.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionToken' } })
+          console.error('getMissionToken', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionToken.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
   modifyMissionSlotRegistration({ dispatch, state }, payload) {
     dispatch('startWorking', i18n.t('store.modifyMissionSlotRegistration'))
 
@@ -2476,6 +2666,7 @@ const mutations = {
     state.missionSlotRegistrations = null
     state.missionSlotRegistrationSuppressNotifications = false
     state.missionSlotSelection = []
+    state.missionToken = null
     state.totalMissionAccesses = 0
     state.totalMissionPermissions = 0
     state.totalMissionSlotRegistrations = 0
@@ -2488,6 +2679,9 @@ const mutations = {
   },
   clearMissionSlotSelection(state) {
     state.missionSlotSelection = []
+  },
+  clearMissionToken(state) {
+    state.missionToken = null
   },
   refreshingMissions(state, payload) {
     state.refreshingMissions = payload.refreshing
@@ -2566,6 +2760,9 @@ const mutations = {
   },
   setMissionSlotRegistrationSuppressNotifications(state, payload) {
     state.missionSlotRegistrationSuppressNotifications = payload.suppressNotifications
+  },
+  setMissionToken(state, payload) {
+    state.missionToken = payload.missionToken
   },
   startCheckingMissionSlugAvailability(state) {
     state.checkingMissionSlugAvailability = true

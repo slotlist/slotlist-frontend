@@ -91,6 +91,9 @@
           </b-btn>&nbsp;
           <b-btn variant="secondary" size="sm" v-if="isMissionEditor" v-b-modal.missionConvertToSlotTemplateModal>
             <i class="fa fa-file-text-o" aria-hidden="true"></i> {{ $t('button.convert.slotTemplate') }}
+          </b-btn>&nbsp;
+          <b-btn variant="secondary" size="sm" v-if="isMissionCreator" v-b-modal.missionEmbedModal>
+            <i class="fa fa-external-link" aria-hidden="true"></i> {{ $t('button.embed.mission') }}
           </b-btn>
         </div>
         <br v-if="isMissionEditor">
@@ -167,6 +170,7 @@
       <mission-slot-group-edit-modal v-if="loggedIn && isMissionEditor && !hasMissionEnded"></mission-slot-group-edit-modal>
       <mission-slot-registration-modal v-if="loggedIn && !hasMissionEnded"></mission-slot-registration-modal>
       <mission-slot-selection-edit-modal v-if="loggedIn && isMissionEditor && !hasMissionEnded"></mission-slot-selection-edit-modal>
+      <mission-embed-modal v-if="loggedIn && isMissionCreator"></mission-embed-modal>
     </div>
     <!-- End of modals -->
   </div>
@@ -192,6 +196,7 @@ import MissionSlotGroupEditModal from 'components/missions/modals/MissionSlotGro
 import MissionSlotlist from 'components/missions/MissionSlotlist.vue'
 import MissionSlotRegistrationModal from 'components/missions/modals/MissionSlotRegistrationModal.vue'
 import MissionSlotSelectionEditModal from 'components/missions/modals/MissionSlotSelectionEditModal.vue'
+import MissionEmbedModal from 'components/missions/modals/MissionEmbedModal.vue'
 import utils from '../utils'
 
 export default {
@@ -211,7 +216,8 @@ export default {
     MissionSlotGroupEditModal,
     MissionSlotlist,
     MissionSlotRegistrationModal,
-    MissionSlotSelectionEditModal
+    MissionSlotSelectionEditModal,
+    MissionEmbedModal
   },
   beforeCreate: function() {
     this.$store.dispatch('getMissionDetails', { missionSlug: this.$route.params.missionSlug })
