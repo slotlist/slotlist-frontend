@@ -16,6 +16,9 @@ export const v1 = {
   deleteCommunity(communitySlug) {
     return axios.delete(`/v1/communities/${communitySlug}`)
   },
+  deleteCommunityLogo(communitySlug) {
+    return axios.delete(`/v1/communities/${communitySlug}/logo`)
+  },
   deleteCommunityPermission(communitySlug, permissionUid) {
     return axios.delete(`/v1/communities/${communitySlug}/permissions/${permissionUid}`)
   },
@@ -48,6 +51,9 @@ export const v1 = {
   },
   searchCommunities(payload) {
     return axios.get(`/v1/communities?search=${payload}`)
+  },
+  uploadCommunityLogo(communitySlug, imageType, imageData) {
+    return axios.put(`/v1/communities/${communitySlug}/logo`, { imageType, image: imageData })
   }
 }
 

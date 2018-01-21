@@ -423,6 +423,71 @@ const actions = {
         }
       })
   },
+  deleteCommunityLogo({ dispatch, commit, state }, payload) {
+    dispatch('startWorking', i18n.t('store.deleteCommunityLogo'))
+
+    return CommunitiesApi.deleteCommunityLogo(payload.communitySlug)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Deleting community logo failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (response.data.success !== true) {
+          console.error(response)
+          throw 'Received invalid community logo deletion'
+        }
+
+        const updatedCommunityDetails = state.communityDetails
+        updatedCommunityDetails.logoUrl = null
+
+        commit({
+          type: 'setCommunityDetails',
+          communityDetails: updatedCommunityDetails
+        })
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.deleteCommunityLogo.success')}`,
+          scrollToTop: true
+        })
+
+        dispatch('stopWorking', i18n.t('store.deleteCommunityLogo'))
+      }).catch((error) => {
+        dispatch('stopWorking', i18n.t('store.deleteCommunityLogo'))
+
+        if (error.response) {
+          console.error('deleteCommunityLogo', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteCommunityLogo.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'deleteCommunityLogo' } })
+          console.error('deleteCommunityLogo', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteCommunityLogo.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'deleteCommunityLogo' } })
+          console.error('deleteCommunityLogo', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteCommunityLogo.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
   deleteCommunityPermission({ dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.deleteCommunityPermission'))
 
@@ -1116,6 +1181,68 @@ const actions = {
             showAlert: true,
             alertVariant: 'danger',
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.searchCommunities.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
+  uploadCommunityLogo({ dispatch, commit }, payload) {
+    dispatch('startWorking', i18n.t('store.uploadCommunityLogo'))
+
+    return CommunitiesApi.uploadCommunityLogo(payload.communitySlug, payload.imageType, payload.imageData)
+      .then((response) => {
+        if (response.status !== 200) {
+          console.error(response)
+          throw 'Uploading community logo failed'
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw 'Received empty response'
+        }
+
+        if (_.isNil(response.data.community) || !_.isObject(response.data.community)) {
+          console.error(response)
+          throw 'Received invalid community logo upload'
+        }
+
+        commit({
+          type: 'setCommunityDetails',
+          communityDetails: response.data.community
+        })
+
+        dispatch('showAlert', {
+          showAlert: true,
+          alertVariant: 'success',
+          alertMessage: `<i class="fa fa-check" aria-hidden="true"></i> ${i18n.t('store.uploadCommunityLogo.success')}`,
+          scrollToTop: true
+        })
+
+        dispatch('stopWorking', i18n.t('store.uploadCommunityLogo'))
+      }).catch((error) => {
+        dispatch('stopWorking', i18n.t('store.uploadCommunityLogo'))
+
+        if (error.response) {
+          console.error('uploadCommunityLogo', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.uploadCommunityLogo.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'uploadCommunityLogo' } })
+          console.error('uploadCommunityLogo', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.uploadCommunityLogo.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'uploadCommunityLogo' } })
+          console.error('uploadCommunityLogo', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.uploadCommunityLogo.error')} - ${i18n.t('failed.something')}`
           })
         }
       })

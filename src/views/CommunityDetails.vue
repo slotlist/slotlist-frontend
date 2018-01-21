@@ -5,6 +5,10 @@
       <div class="jumbotron">
         <h1 class="display-4  text-center">{{ communityDetails.name }}</h1>
         <br>
+        <div class="text-center" v-if="communityDetails.logoUrl">
+          <img :src="communityDetails.logoUrl" style="max-width: 100%; max-height: 240px">
+          <br><br>
+        </div>
         <div class="row text-center">
           <div class="col">
             <h5>{{ $t('community.tag') }}</h5>
@@ -19,6 +23,9 @@
         <div class="row justify-content-center" v-if="canEditCommunity">
           <b-btn variant="primary" v-b-modal.communityEditModal>
             <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit') }}
+          </b-btn>&nbsp;
+          <b-btn variant="primary" v-b-modal.communityLogoModal>
+            <i class="fa fa-picture-o" aria-hidden="true"></i> {{ $t('button.edit.community.logo') }}
           </b-btn>&nbsp;
           <b-btn variant="primary" v-if="isCommunityFounder" v-b-modal.communityPermissionModal>
             <i class="fa fa-key" aria-hidden="true"></i> {{ $t('button.edit.community.permissions') }}
@@ -70,6 +77,7 @@
     <!-- Begin of modals -->
     <div v-if="loggedIn">
       <community-edit-modal v-if="canEditCommunity"></community-edit-modal>
+      <community-logo-modal v-if="canEditCommunity"></community-logo-modal>
       <community-permission-modal v-if="isCommunityFounder"></community-permission-modal>
     </div>
     <!-- End of modals -->
@@ -81,6 +89,7 @@ import * as _ from 'lodash'
 
 import CommunityApplications from '../components/communities/CommunityApplications.vue'
 import CommunityEditModal from '../components/communities/modals/CommunityEditModal.vue'
+import CommunityLogoModal from '../components/communities/modals/CommunityLogoModal.vue'
 import CommunityMembers from '../components/communities/CommunityMembers.vue'
 import CommunityMissions from '../components/communities/CommunityMissions.vue'
 import CommunityPermissionModal from '../components/communities/modals/CommunityPermissionModal.vue'
@@ -91,6 +100,7 @@ export default {
   components: {
     CommunityApplications,
     CommunityEditModal,
+    CommunityLogoModal,
     CommunityMembers,
     CommunityMissions,
     CommunityPermissionModal
