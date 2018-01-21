@@ -106,11 +106,12 @@
           </b-btn>&nbsp;
           <b-btn variant="primary" v-if="isMissionCreator" v-b-modal.missionPermissionModal>
             <i class="fa fa-key" aria-hidden="true"></i> {{ $t('button.edit.mission.permissions') }}
-          </b-btn>&nbsp;
-          <b-btn variant="primary" v-if="isMissionCreator && isPrivateMission" v-b-modal.missionAccessModal>
+          </b-btn>
+          <span v-if="isMissionCreator">&nbsp;</span>
+          <b-btn variant="primary" v-if="isMissionEditor && isPrivateMission" v-b-modal.missionAccessModal>
             <i class="fa fa-user-secret" aria-hidden="true"></i> {{ $t('button.edit.mission.accesses') }}
           </b-btn>
-          <span v-if="isMissionCreator && isPrivateMission">&nbsp;</span>
+          <span v-if="isMissionEditor && isPrivateMission">&nbsp;</span>
           <click-confirm v-if="isMissionCreator" yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('mission.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
             <b-btn variant="danger" @click="deleteMission">
               <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete') }}
@@ -155,7 +156,7 @@
     <!-- End of content -->
     <!-- Begin of modals -->
     <div>
-      <mission-access-modal v-if="loggedIn && isMissionCreator && isPrivateMission"></mission-access-modal>
+      <mission-access-modal v-if="loggedIn && isMissionEditor && isPrivateMission"></mission-access-modal>
       <mission-apply-slot-template-modal v-if="loggedIn && isMissionEditor"></mission-apply-slot-template-modal>
       <mission-banner-image-modal v-if="loggedIn && isMissionEditor"></mission-banner-image-modal>
       <mission-convert-to-slot-template-modal v-if="loggedIn"></mission-convert-to-slot-template-modal>
