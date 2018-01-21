@@ -9,6 +9,15 @@
         <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.create.community') }}
       </router-link>
     </div>
+    <br>
+    <div class="row justify-content-center">
+      <div class="col-4 text-center">
+        <h6>{{ $t('community.list.search') }}</h6>
+        <b-form-fieldset :description="$t('community.list.search.description')">
+          <typeahead ref="communitySearchTypeahead" action="searchCommunities" actionIndicator="searchingCommunities" :onHit="communitySelected"></typeahead>
+        </b-form-fieldset>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -43,6 +52,9 @@ export default {
   methods: {
     communityListPaginate(page) {
       this.$store.dispatch('getCommunities', { page })
+    },
+    communitySelected(item) {
+      this.$router.push({ name: 'communityDetails', params: {communitySlug: item.value.slug}})
     }
   }
 }

@@ -28,6 +28,15 @@
         <i class="fa fa-refresh" :class="{'fa-spin': refreshingMissions}" aria-hidden="true"></i> {{ $t('button.refresh') }}
       </b-btn>
     </div>
+    <br>
+    <div class="row justify-content-center">
+      <div class="col-4 text-center">
+        <h6>{{ $t('mission.list.search') }}</h6>
+        <b-form-fieldset :description="$t('mission.list.search.description')">
+          <typeahead ref="missionSearchTypeahead" action="searchMissions" actionIndicator="searchingMissions" :onHit="missionSelected"></typeahead>
+        </b-form-fieldset>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -73,6 +82,9 @@ export default {
     }
   },
   methods: {
+    missionSelected(item) {
+      this.$router.push({ name: 'missionDetails', params: {missionSlug: item.value.slug}})
+    },
     missionsPaginate(page) {
       this.$store.dispatch('getMissions', { page, autoRefresh: true })
     }

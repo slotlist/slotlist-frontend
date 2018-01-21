@@ -1147,7 +1147,7 @@ const actions = {
 
         const communities = _.map(response.data.communities, (community) => {
           return {
-            title: community.name,
+            title: `[${community.tag}] ${community.name}`,
             value: community
           }
         })

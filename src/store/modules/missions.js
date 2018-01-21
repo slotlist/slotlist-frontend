@@ -42,6 +42,7 @@ const state = {
   missionsRefreshSetInterval: null,
   refreshingMissions: false,
   refreshingMissionsForCalendar: false,
+  searchingMissions: false,
   totalMissionAccesses: 0,
   totalMissionPermissions: 0,
   totalMissions: 0,
@@ -162,6 +163,9 @@ const getters = {
   },
   refreshingMissionsForCalendar() {
     return state.refreshingMissionsForCalendar
+  },
+  searchingMissions() {
+    return state.searchingMissions
   },
   selectedMissionSlots() {
     const slots = []
@@ -2413,6 +2417,74 @@ const actions = {
         }
       })
   },
+  searchMissions({ dispatch, commit }, payload) {
+    commit({
+      type: 'searchingMissions',
+      searching: true
+    })
+
+    return MissionsApi.searchMissions(payload)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Searching missions failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (_.isNil(response.data.missions) || !_.isArray(response.data.missions)) {
+          console.error(response)
+          throw "Received invalid missions"
+        }
+
+        commit({
+          type: 'searchingMissions',
+          searching: false
+        })
+
+        const missions = _.map(response.data.missions, (mission) => {
+          return {
+            title: `[${moment(mission.startTime).format('L LT')}] ${mission.title} (${mission.creator.nickname})`,
+            value: mission
+          }
+        })
+
+        return missions
+      }).catch((error) => {
+        commit({
+          type: 'searchingMissions',
+          searching: false
+        })
+
+        if (error.response) {
+          console.error('searchMissions', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.searchMissions.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'searchMissions' } })
+          console.error('searchMissions', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.searchMissions.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          Raven.captureException(error, { extra: { module: 'missions', function: 'searchMissions' } })
+          console.error('searchMissions', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.searchMissions.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
   setMissionSlotDetails({ commit }, payload) {
     commit({
       type: 'setMissionSlotDetails',
@@ -2688,6 +2760,9 @@ const mutations = {
   },
   refreshingMissionsForCalendar(state, payload) {
     state.refreshingMissionsForCalendar = payload.refreshing
+  },
+  searchingMissions(state, payload) {
+    state.searchingMissions = payload.searching
   },
   setMissionAccesses(state, payload) {
     state.missionAccesses = payload.accesses

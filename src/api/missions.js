@@ -92,6 +92,9 @@ export const v1 = {
   registerForMissionSlot(missionSlug, slotUid, comment) {
     return axios.post(`/v1/missions/${missionSlug}/slots/${slotUid}/registrations`, { comment })
   },
+  searchMissions(payload) {
+    return axios.get(`/v1/missions?search=${payload}`)
+  },
   unassignMissionSlot(missionSlug, slotUid) {
     return axios.post(`/v1/missions/${missionSlug}/slots/${slotUid}/unassign`)
   },
