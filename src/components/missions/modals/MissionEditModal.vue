@@ -73,6 +73,42 @@
           </div>
           <div class="row">
             <div class="col">
+              <b-form-fieldset :label="$t('mission.gameServer.hostname.optional')" state="success" :description="$t('mission.gameServer.hostname.description')">
+                <b-form-input v-model="missionEditData.gameServer.hostname" type="text"></b-form-input>
+              </b-form-fieldset>
+            </div>
+            <div class="col">
+              <b-form-fieldset :label="$t('mission.voiceComms.hostname.optional')" state="success" :description="$t('mission.voiceComms.hostname.description')">
+                <b-form-input v-model="missionEditData.voiceComms.hostname" type="text"></b-form-input>
+              </b-form-fieldset>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <b-form-fieldset :label="$t('mission.gameServer.port.optional')" state="success" :description="$t('mission.gameServer.port.description')">
+                <b-form-input v-model="missionEditData.gameServer.port" type="number" min="0" max="65535"></b-form-input>
+              </b-form-fieldset>
+            </div>
+            <div class="col">
+              <b-form-fieldset :label="$t('mission.voiceComms.port.optional')" state="success" :description="$t('mission.voiceComms.port.description')">
+                <b-form-input v-model="missionEditData.voiceComms.port" type="number" min="0" max="65535"></b-form-input>
+              </b-form-fieldset>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <b-form-fieldset :label="$t('mission.gameServer.password.optional')" state="success" :description="$t('mission.gameServer.password.description')">
+                <b-form-input v-model="missionEditData.gameServer.password" type="text"></b-form-input>
+              </b-form-fieldset>
+            </div>
+            <div class="col">
+              <b-form-fieldset :label="$t('mission.voiceComms.password.optional')" state="success" :description="$t('mission.voiceComms.password.description')">
+                <b-form-input v-model="missionEditData.voiceComms.password" type="text"></b-form-input>
+              </b-form-fieldset>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
               <b-form-fieldset :label="$t('mission.visibility')" state="success" :description="$t('mission.visibility.description')">
                 <b-form-select v-model="missionEditData.visibility" :options="missionEditVisibilityOptions" class="mb-3" required></b-form-select>
               </b-form-fieldset>
@@ -110,6 +146,11 @@ export default {
         briefingTime: null,
         detailedDescription: null,
         endTime: null,
+        gameServer: {
+          hostname: null,
+          port: null,
+          password: null
+        },
         repositoryUrl: null,
         rules: null,
         description: null,
@@ -117,7 +158,12 @@ export default {
         startTime: null,
         techSupport: null,
         title: null,
-        visibility: null
+        visibility: null,
+        voiceComms: {
+          hostname: null,
+          port: null,
+          password: null
+        }
       },
       missionEditSuppressNotifications: false,
       missionEditDetailedDescriptionQuillEditorOptions: {
@@ -348,10 +394,37 @@ export default {
       const updatedMissionDetails = {}
       _.each(this.missionEditData, (value, key) => {
         if (!_.isEqual(value, this.missionDetails[key])) {
-          if (key.toLowerCase().indexOf("time") !== -1) {
+          let skip = false
+
+          if (key.toLowerCase().indexOf('time') !== -1) {
             value = moment(value).utc().format()
+
+            if (moment(value).utc().isSame(moment(this.missionDetails[key]).utc())) {
+              skip = true
+            }
+          } else if (key.toLowerCase().indexOf('gameserver') !== -1 || key.toLowerCase().indexOf('voicecomms') !== -1) {
+            if (_.isString(value.hostname) && _.isEmpty(value.hostname)) {
+              value.hostname = null
+            }
+            if (_.isString(value.port) && _.isEmpty(value.port)) {
+              value.port = null
+            }
+            if (_.isString(value.password) && _.isEmpty(value.password)) {
+              value.password = null
+            }
+
+            if (_.isNil(value.hostname) && _.isNil(value.port)) {
+              value = null
+              skip = _.isNil(this.missionDetails[key])
+            } else if ((_.isNil(value.hostname) && !_.isNil(value.port)) || (!_.isNil(value.hostname) && _.isNil(value.port))) {
+              console.log(value.hostname, value.port)
+              skip = true
+            }
           }
-          updatedMissionDetails[key] = value
+
+          if (!skip) {
+            updatedMissionDetails[key] = value
+          }
         }
       })
 
@@ -387,6 +460,26 @@ export default {
         techSupport: this.missionDetails.techSupport,
         title: this.missionDetails.title,
         visibility: this.missionDetails.visibility
+      }
+
+      if (!_.isNil(this.missionDetails.gameServer)) {
+        this.missionEditData.gameServer = _.clone(this.missionDetails.gameServer)
+      } else {
+        this.missionEditData.gameServer = {
+          hostname: null,
+          port: null,
+          password: null
+        }
+      }
+
+      if (!_.isNil(this.missionDetails.voiceComms)) {
+        this.missionEditData.voiceComms = _.clone(this.missionDetails.voiceComms)
+      } else {
+        this.missionEditData.voiceComms = {
+          hostname: null,
+          port: null,
+          password: null
+        }
       }
 
       this.missionEditSuppressNotifications = false

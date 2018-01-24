@@ -83,6 +83,42 @@
           </div>
         </div>
         <div class="row">
+          <div class="col">
+            <b-form-fieldset :label="$t('mission.gameServer.hostname.optional')" :state="missionCreateGameServerHostnameState" :feedback="missionCreateGameServerHostnameFeedback" :description="$t('mission.gameServer.hostname.description')">
+              <b-form-input v-model="missionCreateGameServerHostname" type="text"></b-form-input>
+            </b-form-fieldset>
+          </div>
+          <div class="col">
+            <b-form-fieldset :label="$t('mission.voiceComms.hostname.optional')" :state="missionCreateVoiceCommsHostnameState" :feedback="missionCreateVoiceCommsHostnameFeedback" :description="$t('mission.voiceComms.hostname.description')">
+              <b-form-input v-model="missionCreateVoiceCommsHostname" type="text"></b-form-input>
+            </b-form-fieldset>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <b-form-fieldset :label="$t('mission.gameServer.port.optional')" :state="missionCreateGameServerPortState" :feedback="missionCreateGameServerPortFeedback" :description="$t('mission.gameServer.port.description')">
+              <b-form-input v-model="missionCreateGameServerPort" type="number" min="0" max="65535"></b-form-input>
+            </b-form-fieldset>
+          </div>
+          <div class="col">
+            <b-form-fieldset :label="$t('mission.voiceComms.port.optional')" :state="missionCreateVoiceCommsPortState" :feedback="missionCreateVoiceCommsPortFeedback" :description="$t('mission.voiceComms.port.description')">
+              <b-form-input v-model="missionCreateVoiceCommsPort" type="number" min="0" max="65535"></b-form-input>
+            </b-form-fieldset>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <b-form-fieldset :label="$t('mission.gameServer.password.optional')" state="success" :description="$t('mission.gameServer.password.description')">
+              <b-form-input v-model="missionCreateGameServerPassword" type="text"></b-form-input>
+            </b-form-fieldset>
+          </div>
+          <div class="col">
+            <b-form-fieldset :label="$t('mission.voiceComms.password.optional')" state="success" :description="$t('mission.voiceComms.password.description')">
+              <b-form-input v-model="missionCreateVoiceCommsPassword" type="text"></b-form-input>
+            </b-form-fieldset>
+          </div>
+        </div>
+        <div class="row">
           <div class="col text-center" v-if="user.community">
             <b-form-fieldset :label="$t('mission.creator.addToCommunity')" :state="missionCreateAddToCommunityState" :feedback="missionCreateAddToCommunityFeedback" :description="missionCreateAddToCommunityDescription">
               <b-form-checkbox v-model="missionCreateAddToCommunity"></b-form-checkbox>
@@ -163,6 +199,12 @@ export default {
       missionCreateRepositoryUrl: null,
       missionCreateTechSupport: null,
       missionCreateRules: null,
+      missionCreateGameServerHostname: null,
+      missionCreateGameServerPort: null,
+      missionCreateGameServerPassword: null,
+      missionCreateVoiceCommsHostname: null,
+      missionCreateVoiceCommsPort: null,
+      missionCreateVoiceCommsPassword: null,
       missionCreateAddToCommunity: true,
       missionCreateVisibility: 'hidden'
     }
@@ -228,6 +270,58 @@ export default {
     },
     missionCreateDetailedDescriptionFeedback() {
       return _.isNil(this.missionCreateDetailedDescription) || _.isEmpty(this.missionCreateDetailedDescription) ? this.$t('mission.feedback.detailedDescription') : ''
+    },
+    missionCreateGameServerHostnameFeedback() {
+      return ((_.isNil(this.missionCreateGameServerHostname) || _.isEmpty(this.missionCreateGameServerHostname)) &&
+      (!_.isNil(this.missionCreateGameServerPort) && !_.isEmpty(this.missionCreateGameServerPort))) ? this.$t('mission.feedback.serverInfo.hostnamePort') : ''
+    },
+    missionCreateGameServerHostnameState() {
+      return ((_.isNil(this.missionCreateGameServerHostname) || _.isEmpty(this.missionCreateGameServerHostname)) &&
+      (!_.isNil(this.missionCreateGameServerPort) && !_.isEmpty(this.missionCreateGameServerPort))) ? 'danger' : 'success'
+    },
+    missionCreateGameServerPortFeedback() {
+      const port = parseInt(this.missionCreateGameServerPort);
+      if (port < 0 || port > 65535) {
+        return this.$t('mission.feedback.serverInfo.portRange')
+      }
+
+      return ((_.isNil(this.missionCreateGameServerPort) || _.isEmpty(this.missionCreateGameServerPort)) &&
+      (!_.isNil(this.missionCreateGameServerHostname) && !_.isEmpty(this.missionCreateGameServerHostname))) ? this.$t('mission.feedback.serverInfo.hostnamePort') : ''
+    },
+    missionCreateGameServerPortState() {
+      const port = parseInt(this.missionCreateGameServerPort);
+      if (port < 0 || port > 65535) {
+        return 'danger'
+      }
+
+      return ((_.isNil(this.missionCreateGameServerPort) || _.isEmpty(this.missionCreateGameServerPort)) &&
+      (!_.isNil(this.missionCreateGameServerHostname) && !_.isEmpty(this.missionCreateGameServerHostname))) ? 'danger' : 'success'
+    },
+    missionCreateVoiceCommsHostnameFeedback() {
+      return ((_.isNil(this.missionCreateVoiceCommsHostname) || _.isEmpty(this.missionCreateVoiceCommsHostname)) &&
+      (!_.isNil(this.missionCreateVoiceCommsPort) && !_.isEmpty(this.missionCreateVoiceCommsPort))) ? this.$t('mission.feedback.serverInfo.hostnamePort') : ''
+    },
+    missionCreateVoiceCommsHostnameState() {
+      return ((_.isNil(this.missionCreateVoiceCommsHostname) || _.isEmpty(this.missionCreateVoiceCommsHostname)) &&
+      (!_.isNil(this.missionCreateVoiceCommsPort) && !_.isEmpty(this.missionCreateVoiceCommsPort))) ? 'danger' : 'success'
+    },
+    missionCreateVoiceCommsPortFeedback() {
+      const port = parseInt(this.missionCreateVoiceCommsPort);
+      if (port < 0 || port > 65535) {
+        return this.$t('mission.feedback.serverInfo.portRange')
+      }
+
+      return ((_.isNil(this.missionCreateVoiceCommsPort) || _.isEmpty(this.missionCreateVoiceCommsPort)) &&
+      (!_.isNil(this.missionCreateVoiceCommsHostname) && !_.isEmpty(this.missionCreateVoiceCommsHostname))) ? this.$t('mission.feedback.serverInfo.hostnamePort') : ''
+    },
+    missionCreateVoiceCommsPortState() {
+      const port = parseInt(this.missionCreateVoiceCommsPort);
+      if (port < 0 || port > 65535) {
+        return 'danger'
+      }
+
+      return ((_.isNil(this.missionCreateVoiceCommsPort) || _.isEmpty(this.missionCreateVoiceCommsPort)) &&
+      (!_.isNil(this.missionCreateVoiceCommsHostname) && !_.isEmpty(this.missionCreateVoiceCommsHostname))) ? 'danger' : 'success'
     },
     missionCreateSlottingTimeState() {
       return _.isNil(this.missionCreateSlottingTime) || _.isEmpty(this.missionCreateSlottingTime) || !moment(this.missionCreateSlottingTime).isValid() ? 'danger' : 'success'
@@ -412,6 +506,34 @@ export default {
       return moment(val).format('Y-MM-DD HH:mm')
     },
     submitMissionCreate() {
+      let gameServer = null
+      const gameServerPort = parseInt(this.missionCreateGameServerPort)
+      if (_.isString(this.missionCreateGameServerHostname) &&
+      !_.isEmpty(this.missionCreateGameServerHostname) &&
+      _.isFinite(gameServerPort) &&
+      gameServerPort >= 0 &&
+      gameServerPort <= 65535) {
+        gameServer = {
+          hostname: this.missionCreateGameServerHostname,
+          port: gameServerPort,
+          password: _.isString(this.missionCreateGameServerPassword) && !_.isEmpty(this.missionCreateGameServerPassword) ? this.missionCreateGameServerPassword : null
+        }
+      }
+
+      let voiceComms = null
+      const voiceCommsPort = parseInt(this.missionCreateVoiceCommsPort)
+      if (_.isString(this.missionCreateVoiceCommsHostname) &&
+      !_.isEmpty(this.missionCreateVoiceCommsHostname) &&
+      _.isFinite(voiceCommsPort) &&
+      voiceCommsPort >= 0 &&
+      voiceCommsPort <= 65535) {
+        voiceComms = {
+          hostname: this.missionCreateVoiceCommsHostname,
+          port: voiceCommsPort,
+          password: _.isString(this.missionCreateVoiceCommsPassword) && !_.isEmpty(this.missionCreateVoiceCommsPassword) ? this.missionCreateVoiceCommsPassword : null
+        }
+      }
+
       const missionDetails = {
         title: this.missionCreateTitle,
         slug: this.missionCreateSlug,
@@ -424,6 +546,8 @@ export default {
         repositoryUrl: this.missionCreateRepositoryUrl,
         techSupport: this.missionCreateTechSupport,
         rules: this.missionCreateRules,
+        gameServer,
+        voiceComms,
         addToCommunity: this.missionCreateAddToCommunity,
         visibility: this.missionCreateVisibility
       }

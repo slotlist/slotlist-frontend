@@ -76,6 +76,61 @@
         <br>
         <div class="row text-center">
           <div class="col">
+            <h5>{{ $t('mission.gameServer') }}</h5>
+            <div v-if="missionDetails.gameServer">
+              <div class="row">
+                <div class="col font-weight-bold text-left">{{ $t('mission.serverInfo.hostname') }}</div>
+                <div class="col">{{ missionDetails.gameServer.hostname }}</div>
+              </div>
+              <div class="row">
+                <div class="col font-weight-bold text-left">{{ $t('mission.serverInfo.port') }}</div>
+                <div class="col">{{ missionDetails.gameServer.port }}</div>
+              </div>
+              <div class="row">
+                <div class="col font-weight-bold text-left">{{ $t('mission.serverInfo.password') }}</div>
+                <div class="col">
+                  <span v-if="missionDetails.gameServer.password">{{ missionDetails.gameServer.password }}</span>
+                  <span v-else class="text-muted font-italic">{{ $t('misc.notRequired') }}</span>
+                </div>
+              </div>
+              <div class="row justify-content-center">
+                <b-btn size="sm" :href="`steam://connect/${missionDetails.gameServer.hostname}:${missionDetails.gameServer.port}${missionDetails.gameServer.password ? `/${missionDetails.gameServer.password}` : ''}`">
+                  <i class="fa fa-sign-in" aria-hidden="true"></i> {{ $t('button.join') }}
+                </b-btn>
+              </div>
+            </div>
+            <p v-if="!missionDetails.gameServer" class="text-muted font-italic">{{ $t('misc.notProvided') }}</p>
+          </div>
+          <div class="col">
+            <h5>{{ $t('mission.voiceComms') }}</h5>
+            <div v-if="missionDetails.voiceComms">
+              <div class="row">
+                <div class="col font-weight-bold text-left">{{ $t('mission.serverInfo.hostname') }}</div>
+                <div class="col">{{ missionDetails.voiceComms.hostname }}</div>
+              </div>
+              <div class="row">
+                <div class="col font-weight-bold text-left">{{ $t('mission.serverInfo.port') }}</div>
+                <div class="col">{{ missionDetails.voiceComms.port }}</div>
+              </div>
+              <div class="row">
+                <div class="col font-weight-bold text-left">{{ $t('mission.serverInfo.password') }}</div>
+                <div class="col">
+                  <span v-if="missionDetails.voiceComms.password">{{ missionDetails.voiceComms.password }}</span>
+                  <span v-else class="text-muted font-italic">{{ $t('misc.notRequired') }}</span>
+                </div>
+              </div>
+              <div class="row justify-content-center">
+                <b-btn size="sm" :href="`ts3server://${missionDetails.voiceComms.hostname}?port=${missionDetails.voiceComms.port}${missionDetails.voiceComms.password ? `&password=${missionDetails.voiceComms.password}` : ''}`">
+                  <i class="fa fa-sign-in" aria-hidden="true"></i> {{ $t('button.join') }}
+                </b-btn>
+              </div>
+            </div>
+            <p v-if="!missionDetails.voiceComms" class="text-center text-muted font-italic">{{ $t('misc.notProvided') }}</p>
+          </div>
+        </div>
+        <br>
+        <div class="row text-center">
+          <div class="col">
             <h5>{{ $t('mission.techSupport') }}</h5>
             <p class="html ql-editor text-center" v-html="optionalTechSupport"></p>
           </div>
