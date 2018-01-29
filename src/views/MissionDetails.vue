@@ -94,6 +94,9 @@
                 </div>
               </div>
               <div class="row justify-content-center">
+                <b-btn size="sm" v-clipboard:copy="gameServerHostnamePort">
+                  <i class="fa fa-clipboard" aria-hidden="true"></i> {{ $t('button.copy') }}
+                </b-btn>&nbsp;
                 <b-btn size="sm" :href="`steam://connect/${missionDetails.gameServer.hostname}:${missionDetails.gameServer.port}${missionDetails.gameServer.password ? `/${missionDetails.gameServer.password}` : ''}`">
                   <i class="fa fa-sign-in" aria-hidden="true"></i> {{ $t('button.join') }}
                 </b-btn>
@@ -120,6 +123,9 @@
                 </div>
               </div>
               <div class="row justify-content-center">
+                <b-btn size="sm" v-clipboard:copy="voiceCommsHostnamePort">
+                  <i class="fa fa-clipboard" aria-hidden="true"></i> {{ $t('button.copy') }}
+                </b-btn>&nbsp;
                 <b-btn size="sm" :href="`ts3server://${missionDetails.voiceComms.hostname}?port=${missionDetails.voiceComms.port}${missionDetails.voiceComms.password ? `&password=${missionDetails.voiceComms.password}` : ''}`">
                   <i class="fa fa-sign-in" aria-hidden="true"></i> {{ $t('button.join') }}
                 </b-btn>
@@ -305,6 +311,9 @@ export default {
           return `<span class="text-muted font-italic"><i class="fa fa-question-circle" aria-hidden="true"></i> ${this.$t('mission.visibility.default')}</span>`
       }
     },
+    gameServerHostnamePort() {
+      return `${this.missionDetails.gameServer.hostname}:${this.missionDetails.gameServer.port}`
+    },
     hasMissionEnded() {
       if (_.isNil(this.missionDetails)) {
         return false
@@ -342,6 +351,9 @@ export default {
     },
     timezone() {
       return this.$store.getters.timezone
+    },
+    voiceCommsHostnamePort() {
+      return `${this.missionDetails.voiceComms.hostname}:${this.missionDetails.voiceComms.port}`
     }
   },
   methods: {
