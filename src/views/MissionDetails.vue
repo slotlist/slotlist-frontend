@@ -78,17 +78,17 @@
           <div class="col">
             <h5>{{ $t('mission.gameServer') }}</h5>
             <div v-if="missionDetails.gameServer">
-              <div class="row">
-                <div class="col font-weight-bold text-left">{{ $t('mission.serverInfo.hostname') }}</div>
-                <div class="col">{{ missionDetails.gameServer.hostname }}</div>
+              <div class="row justify-content-center">
+                <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.hostname') }}</div>
+                <div class="col-4">{{ missionDetails.gameServer.hostname }}</div>
               </div>
-              <div class="row">
-                <div class="col font-weight-bold text-left">{{ $t('mission.serverInfo.port') }}</div>
-                <div class="col">{{ missionDetails.gameServer.port }}</div>
+              <div class="row justify-content-center">
+                <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.port') }}</div>
+                <div class="col-4">{{ missionDetails.gameServer.port }}</div>
               </div>
-              <div class="row">
-                <div class="col font-weight-bold text-left">{{ $t('mission.serverInfo.password') }}</div>
-                <div class="col">
+              <div class="row justify-content-center">
+                <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.password') }}</div>
+                <div class="col-4">
                   <span v-if="missionDetails.gameServer.password">{{ missionDetails.gameServer.password }}</span>
                   <span v-else class="text-muted font-italic">{{ $t('misc.notRequired') }}</span>
                 </div>
@@ -104,17 +104,17 @@
           <div class="col">
             <h5>{{ $t('mission.voiceComms') }}</h5>
             <div v-if="missionDetails.voiceComms">
-              <div class="row">
-                <div class="col font-weight-bold text-left">{{ $t('mission.serverInfo.hostname') }}</div>
-                <div class="col">{{ missionDetails.voiceComms.hostname }}</div>
+              <div class="row justify-content-center">
+                <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.hostname') }}</div>
+                <div class="col-4">{{ missionDetails.voiceComms.hostname }}</div>
               </div>
-              <div class="row">
-                <div class="col font-weight-bold text-left">{{ $t('mission.serverInfo.port') }}</div>
-                <div class="col">{{ missionDetails.voiceComms.port }}</div>
+              <div class="row justify-content-center">
+                <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.port') }}</div>
+                <div class="col-4">{{ missionDetails.voiceComms.port }}</div>
               </div>
-              <div class="row">
-                <div class="col font-weight-bold text-left">{{ $t('mission.serverInfo.password') }}</div>
-                <div class="col">
+              <div class="row justify-content-center">
+                <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.password') }}</div>
+                <div class="col-4">
                   <span v-if="missionDetails.voiceComms.password">{{ missionDetails.voiceComms.password }}</span>
                   <span v-else class="text-muted font-italic">{{ $t('misc.notRequired') }}</span>
                 </div>
