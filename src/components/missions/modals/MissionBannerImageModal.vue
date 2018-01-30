@@ -27,7 +27,7 @@
           <b-btn variant="success" @click="uploadMissionBannerImage">
             <i class="fa fa-upload" aria-hidden="true"></i> {{ $t('button.upload') }}
           </b-btn>
-          <b-btn variant="danger" @click="deleteMissionBannerImage">
+          <b-btn variant="danger" @click="deleteMissionBannerImage" :disabled="!missionBannerImageData.url">
             <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete') }}
           </b-btn>
           <b-btn @click="hideMissionBannerImageModal">

@@ -16,6 +16,9 @@ export const v1 = {
   deleteCommunity(communitySlug) {
     return axios.delete(`/v1/communities/${communitySlug}`)
   },
+  deleteCommunityLogo(communitySlug) {
+    return axios.delete(`/v1/communities/${communitySlug}/logo`)
+  },
   deleteCommunityPermission(communitySlug, permissionUid) {
     return axios.delete(`/v1/communities/${communitySlug}/permissions/${permissionUid}`)
   },
@@ -40,6 +43,9 @@ export const v1 = {
   getCommunityPermissions(communitySlug, limit = 10, offset = 0) {
     return axios.get(`/v1/communities/${communitySlug}/permissions?limit=${limit}&offset=${offset}`)
   },
+  getCommunityServers(communitySlug) {
+    return axios.get(`/v1/communities/${communitySlug}/servers`)
+  },
   processCommunityApplication(communitySlug, applicationUid, accepted) {
     return axios.patch(`/v1/communities/${communitySlug}/applications/${applicationUid}`, { status: accepted ? 'accepted' : 'denied' })
   },
@@ -48,6 +54,9 @@ export const v1 = {
   },
   searchCommunities(payload) {
     return axios.get(`/v1/communities?search=${payload}`)
+  },
+  uploadCommunityLogo(communitySlug, imageType, imageData) {
+    return axios.put(`/v1/communities/${communitySlug}/logo`, { imageType, image: imageData })
   }
 }
 

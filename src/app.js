@@ -21,6 +21,7 @@ import VueSimpleSpinner from 'vue-simple-spinner'
 import VueClickConfirm from 'click-confirm'
 import VuePaginate from 'vuejs-paginate'
 import VueI18n from 'vue-i18n'
+import VueClipboard from 'vue-clipboard2'
 import Typeahead from './components/Typeahead.vue'
 import LoadingOverlay from './components/LoadingOverlay.vue'
 import EditorExplanation from './components/EditorExplanation.vue'
@@ -70,6 +71,8 @@ import VueQuillEditor from 'vue-quill-editor'
 Vue.use(VueQuillEditor)
 
 Vue.use(VueI18n)
+
+Vue.use(VueClipboard)
 
 Vue.component('click-confirm', VueClickConfirm)
 Vue.component('spinner', VueSimpleSpinner)

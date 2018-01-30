@@ -76,6 +76,81 @@
         <br>
         <div class="row text-center">
           <div class="col">
+            <h5>{{ $t('mission.gameServer') }}</h5>
+            <div v-if="missionDetails.gameServer">
+              <div class="row justify-content-center">
+                <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.hostname') }}</div>
+                <div class="col-4">{{ missionDetails.gameServer.hostname }}</div>
+              </div>
+              <div class="row justify-content-center">
+                <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.port') }}</div>
+                <div class="col-4">{{ missionDetails.gameServer.port }}</div>
+              </div>
+              <div class="row justify-content-center">
+                <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.name') }}</div>
+                <div class="col-4">
+                  <span v-if="missionDetails.gameServer.name">{{ missionDetails.gameServer.name }}</span>
+                  <span v-else class="text-muted font-italic">{{ $t('misc.notProvided') }}</span>
+                </div>
+              </div>
+              <div class="row justify-content-center">
+                <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.password') }}</div>
+                <div class="col-4">
+                  <span v-if="missionDetails.gameServer.password">{{ missionDetails.gameServer.password }}</span>
+                  <span v-else class="text-muted font-italic">{{ $t('misc.notRequired') }}</span>
+                </div>
+              </div>
+              <div class="row justify-content-center">
+                <b-btn size="sm" v-clipboard:copy="gameServerHostnamePort">
+                  <i class="fa fa-clipboard" aria-hidden="true"></i> {{ $t('button.copy') }}
+                </b-btn>&nbsp;
+                <b-btn size="sm" :href="`steam://connect/${missionDetails.gameServer.hostname}:${missionDetails.gameServer.port}${missionDetails.gameServer.password ? `/${missionDetails.gameServer.password}` : ''}`">
+                  <i class="fa fa-sign-in" aria-hidden="true"></i> {{ $t('button.join') }}
+                </b-btn>
+              </div>
+            </div>
+            <p v-if="!missionDetails.gameServer" class="text-muted font-italic">{{ $t('misc.notProvided') }}</p>
+          </div>
+          <div class="col">
+            <h5>{{ $t('mission.voiceComms') }}</h5>
+            <div v-if="missionDetails.voiceComms">
+              <div class="row justify-content-center">
+                <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.hostname') }}</div>
+                <div class="col-4">{{ missionDetails.voiceComms.hostname }}</div>
+              </div>
+              <div class="row justify-content-center">
+                <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.port') }}</div>
+                <div class="col-4">{{ missionDetails.voiceComms.port }}</div>
+              </div>
+              <div class="row justify-content-center">
+                <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.name') }}</div>
+                <div class="col-4">
+                  <span v-if="missionDetails.voiceComms.name">{{ missionDetails.voiceComms.name }}</span>
+                  <span v-else class="text-muted font-italic">{{ $t('misc.notProvided') }}</span>
+                </div>
+              </div>
+              <div class="row justify-content-center">
+                <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.password') }}</div>
+                <div class="col-4">
+                  <span v-if="missionDetails.voiceComms.password">{{ missionDetails.voiceComms.password }}</span>
+                  <span v-else class="text-muted font-italic">{{ $t('misc.notRequired') }}</span>
+                </div>
+              </div>
+              <div class="row justify-content-center">
+                <b-btn size="sm" v-clipboard:copy="voiceCommsHostnamePort">
+                  <i class="fa fa-clipboard" aria-hidden="true"></i> {{ $t('button.copy') }}
+                </b-btn>&nbsp;
+                <b-btn size="sm" :href="`ts3server://${missionDetails.voiceComms.hostname}?port=${missionDetails.voiceComms.port}${missionDetails.voiceComms.password ? `&password=${missionDetails.voiceComms.password}` : ''}`">
+                  <i class="fa fa-sign-in" aria-hidden="true"></i> {{ $t('button.join') }}
+                </b-btn>
+              </div>
+            </div>
+            <p v-if="!missionDetails.voiceComms" class="text-center text-muted font-italic">{{ $t('misc.notProvided') }}</p>
+          </div>
+        </div>
+        <br>
+        <div class="row text-center">
+          <div class="col">
             <h5>{{ $t('mission.techSupport') }}</h5>
             <p class="html ql-editor text-center" v-html="optionalTechSupport"></p>
           </div>
@@ -91,6 +166,9 @@
           </b-btn>&nbsp;
           <b-btn variant="secondary" size="sm" v-if="isMissionEditor" v-b-modal.missionConvertToSlotTemplateModal>
             <i class="fa fa-file-text-o" aria-hidden="true"></i> {{ $t('button.convert.slotTemplate') }}
+          </b-btn>&nbsp;
+          <b-btn variant="secondary" size="sm" v-if="isMissionCreator" v-b-modal.missionEmbedModal>
+            <i class="fa fa-external-link" aria-hidden="true"></i> {{ $t('button.embed.mission') }}
           </b-btn>
         </div>
         <br v-if="isMissionEditor">
@@ -103,11 +181,12 @@
           </b-btn>&nbsp;
           <b-btn variant="primary" v-if="isMissionCreator" v-b-modal.missionPermissionModal>
             <i class="fa fa-key" aria-hidden="true"></i> {{ $t('button.edit.mission.permissions') }}
-          </b-btn>&nbsp;
-          <b-btn variant="primary" v-if="isMissionCreator && isPrivateMission" v-b-modal.missionAccessModal>
+          </b-btn>
+          <span v-if="isMissionCreator">&nbsp;</span>
+          <b-btn variant="primary" v-if="isMissionEditor && isPrivateMission" v-b-modal.missionAccessModal>
             <i class="fa fa-user-secret" aria-hidden="true"></i> {{ $t('button.edit.mission.accesses') }}
           </b-btn>
-          <span v-if="isMissionCreator && isPrivateMission">&nbsp;</span>
+          <span v-if="isMissionEditor && isPrivateMission">&nbsp;</span>
           <click-confirm v-if="isMissionCreator" yes-icon="fa fa-trash" yes-class="btn btn-danger" button-size="sm" :messages="{title: $t('mission.confirm.delete'), yes: $t('button.confirm'), no: $t('button.cancel')}">
             <b-btn variant="danger" @click="deleteMission">
               <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.delete') }}
@@ -152,7 +231,7 @@
     <!-- End of content -->
     <!-- Begin of modals -->
     <div>
-      <mission-access-modal v-if="loggedIn && isMissionCreator && isPrivateMission"></mission-access-modal>
+      <mission-access-modal v-if="loggedIn && isMissionEditor && isPrivateMission"></mission-access-modal>
       <mission-apply-slot-template-modal v-if="loggedIn && isMissionEditor"></mission-apply-slot-template-modal>
       <mission-banner-image-modal v-if="loggedIn && isMissionEditor"></mission-banner-image-modal>
       <mission-convert-to-slot-template-modal v-if="loggedIn"></mission-convert-to-slot-template-modal>
@@ -167,6 +246,7 @@
       <mission-slot-group-edit-modal v-if="loggedIn && isMissionEditor && !hasMissionEnded"></mission-slot-group-edit-modal>
       <mission-slot-registration-modal v-if="loggedIn && !hasMissionEnded"></mission-slot-registration-modal>
       <mission-slot-selection-edit-modal v-if="loggedIn && isMissionEditor && !hasMissionEnded"></mission-slot-selection-edit-modal>
+      <mission-embed-modal v-if="loggedIn && isMissionCreator"></mission-embed-modal>
     </div>
     <!-- End of modals -->
   </div>
@@ -192,6 +272,7 @@ import MissionSlotGroupEditModal from 'components/missions/modals/MissionSlotGro
 import MissionSlotlist from 'components/missions/MissionSlotlist.vue'
 import MissionSlotRegistrationModal from 'components/missions/modals/MissionSlotRegistrationModal.vue'
 import MissionSlotSelectionEditModal from 'components/missions/modals/MissionSlotSelectionEditModal.vue'
+import MissionEmbedModal from 'components/missions/modals/MissionEmbedModal.vue'
 import utils from '../utils'
 
 export default {
@@ -211,7 +292,8 @@ export default {
     MissionSlotGroupEditModal,
     MissionSlotlist,
     MissionSlotRegistrationModal,
-    MissionSlotSelectionEditModal
+    MissionSlotSelectionEditModal,
+    MissionEmbedModal
   },
   beforeCreate: function() {
     this.$store.dispatch('getMissionDetails', { missionSlug: this.$route.params.missionSlug })
@@ -242,6 +324,9 @@ export default {
         default:
           return `<span class="text-muted font-italic"><i class="fa fa-question-circle" aria-hidden="true"></i> ${this.$t('mission.visibility.default')}</span>`
       }
+    },
+    gameServerHostnamePort() {
+      return `${this.missionDetails.gameServer.hostname}:${this.missionDetails.gameServer.port}`
     },
     hasMissionEnded() {
       if (_.isNil(this.missionDetails)) {
@@ -280,6 +365,9 @@ export default {
     },
     timezone() {
       return this.$store.getters.timezone
+    },
+    voiceCommsHostnamePort() {
+      return `${this.missionDetails.voiceComms.hostname}:${this.missionDetails.voiceComms.port}`
     }
   },
   methods: {
