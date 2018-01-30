@@ -20,10 +20,12 @@ const state = {
   communityApplicationsFilter: {},
   communityApplicationStatus: null,
   communityDetails: null,
+  communityGameServers: null,
   communityMembers: null,
   communityMissions: null,
   communityPermissions: null,
   communitySlugAvailable: false,
+  communityVoiceComms: null,
   searchingCommunities: false,
   totalCommunities: 0,
   totalCommunityApplications: 0,
@@ -62,6 +64,9 @@ const getters = {
   },
   communityDetails() {
     return state.communityDetails
+  },
+  communityGameServers() {
+    return state.communityGameServers
   },
   communityListPageCount() {
     return Math.ceil(state.totalCommunities / limits.communities)
@@ -104,6 +109,9 @@ const getters = {
   },
   communitySlugAvailable() {
     return state.communitySlugAvailable
+  },
+  communityVoiceComms() {
+    return state.communityVoiceComms
   },
   searchingCommunities() {
     return state.searchingCommunities
@@ -236,6 +244,11 @@ const actions = {
   clearCommunityDetails({ commit }) {
     commit({
       type: 'clearCommunityDetails'
+    })
+  },
+  clearCommunityServers({ commit }) {
+    commit({
+      type: 'clearCommunityServers'
     })
   },
   clearCommunitySlugAvailability({ commit }) {
@@ -1000,6 +1013,62 @@ const actions = {
         }
       })
   },
+  getCommunityServers({ commit, dispatch }, payload) {
+    dispatch('startWorking', i18n.t('store.getCommunityServers'))
+
+    return CommunitiesApi.getCommunityServers(payload.communitySlug)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Retrieving community servers failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (_.isNil(response.data.gameServers) || !_.isArray(response.data.gameServers) || _.isNil(response.data.voiceComms) || !_.isArray(response.data.voiceComms)) {
+          console.error(response)
+          throw "Received invalid community servers"
+        }
+
+        commit({
+          type: 'setCommunityServers',
+          gameServers: response.data.gameServers,
+          voiceComms: response.data.voiceComms
+        })
+
+        dispatch('stopWorking', i18n.t('store.getCommunityServers'))
+      }).catch((error) => {
+        dispatch('stopWorking', i18n.t('store.getCommunityServers'))
+
+        if (error.response) {
+          console.error('getCommunityServers', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityServers.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityServers' } })
+          console.error('getCommunityServers', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityServers.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityServers' } })
+          console.error('getCommunityServers', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityServers.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
   processCommunityApplication({ dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.processCommunityApplication'))
 
@@ -1264,6 +1333,10 @@ const mutations = {
     state.totalCommunityMissions = 0
     state.totalCommunityPermissions = 0
   },
+  clearCommunityServers(state) {
+    state.communityGameServers = null
+    state.communityVoiceComms = null
+  },
   clearCommunitySlugAvailability(state) {
     state.checkingCommunitySlugAvalability = false
     state.communitySlug = false
@@ -1303,6 +1376,10 @@ const mutations = {
   setCommunityPermissions(state, payload) {
     state.communityPermissions = payload.permissions
     state.totalCommunityPermissions = payload.total
+  },
+  setCommunityServers(state, payload) {
+    state.communityGameServers = payload.gameServers
+    state.communityVoiceComms = payload.voiceComms
   },
   setCommunitySlugAvailability(state, payload) {
     state.checkCommunitySlugAvailability = false

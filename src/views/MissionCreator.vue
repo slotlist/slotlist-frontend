@@ -108,6 +108,18 @@
         </div>
         <div class="row">
           <div class="col">
+            <b-form-fieldset :label="$t('mission.gameServer.name.optional')" state="success" :description="$t('mission.gameServer.name.description')">
+              <b-form-input v-model="missionCreateGameServerName" type="text"></b-form-input>
+            </b-form-fieldset>
+          </div>
+          <div class="col">
+            <b-form-fieldset :label="$t('mission.voiceComms.name.optional')" state="success" :description="$t('mission.voiceComms.name.description')">
+              <b-form-input v-model="missionCreateVoiceCommsName" type="text"></b-form-input>
+            </b-form-fieldset>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
             <b-form-fieldset :label="$t('mission.gameServer.password.optional')" state="success" :description="$t('mission.gameServer.password.description')">
               <b-form-input v-model="missionCreateGameServerPassword" type="text"></b-form-input>
             </b-form-fieldset>
@@ -115,6 +127,18 @@
           <div class="col">
             <b-form-fieldset :label="$t('mission.voiceComms.password.optional')" state="success" :description="$t('mission.voiceComms.password.description')">
               <b-form-input v-model="missionCreateVoiceCommsPassword" type="text"></b-form-input>
+            </b-form-fieldset>
+          </div>
+        </div>
+        <div class="row" v-if="(communityGameServers && communityGameServers.length > 0) || (communityVoiceComms && communityVoiceComms.length > 0)">
+          <div class="col">
+            <b-form-fieldset v-if="communityGameServers && communityGameServers.length > 0" :label="$t('community.gameServers')" state="success" :description="$t('community.gameServers.description')">
+              <b-form-select v-model="missionCreateCommunityGameServersSelected" :options="missionCreateCommunityGameServers" class="mb-3"></b-form-select>
+            </b-form-fieldset>
+          </div>
+          <div class="col">
+            <b-form-fieldset v-if="communityVoiceComms && communityVoiceComms.length > 0" :label="$t('community.voiceComms')" state="success" :description="$t('community.voiceComms.description')">
+              <b-form-select v-model="missionCreateCommunityVoiceCommsSelected" :options="missionCreateCommunityVoiceComms" class="mb-3"></b-form-select>
             </b-form-fieldset>
           </div>
         </div>
@@ -200,16 +224,26 @@ export default {
       missionCreateTechSupport: null,
       missionCreateRules: null,
       missionCreateGameServerHostname: null,
+      missionCreateGameServerName: null,
       missionCreateGameServerPort: null,
       missionCreateGameServerPassword: null,
       missionCreateVoiceCommsHostname: null,
+      missionCreateVoiceCommsName: null,
       missionCreateVoiceCommsPort: null,
       missionCreateVoiceCommsPassword: null,
+      missionCreateCommunityGameServersSelected: null,
+      missionCreateCommunityVoiceCommsSelected: null,
       missionCreateAddToCommunity: true,
       missionCreateVisibility: 'hidden'
     }
   },
   computed: {
+    communityGameServers() {
+      return this.$store.getters.communityGameServers
+    },
+    communityVoiceComms() {
+      return this.$store.getters.communityVoiceComms
+    },
     user() {
       return this.$store.getters.user
     },
@@ -271,6 +305,22 @@ export default {
     missionCreateDetailedDescriptionFeedback() {
       return _.isNil(this.missionCreateDetailedDescription) || _.isEmpty(this.missionCreateDetailedDescription) ? this.$t('mission.feedback.detailedDescription') : ''
     },
+    missionCreateCommunityGameServers() {
+      if (_.isNil(this.communityGameServers) || _.isEmpty(this.communityGameServers)) {
+        return []
+      }
+
+      let servers = []
+      _.each(this.communityGameServers, (gameServer, index) => {
+        let name = _.isNil(gameServer.name) ? '' : ` - ${gameServer.name}`
+        servers.push({
+          text: `${gameServer.hostname}:${gameServer.port}${name}`,
+          value: index
+        })
+      })
+
+      return servers
+    },
     missionCreateGameServerHostnameFeedback() {
       return ((_.isNil(this.missionCreateGameServerHostname) || _.isEmpty(this.missionCreateGameServerHostname)) &&
       (!_.isNil(this.missionCreateGameServerPort) && !_.isEmpty(this.missionCreateGameServerPort))) ? this.$t('mission.feedback.serverInfo.hostnamePort') : ''
@@ -296,6 +346,22 @@ export default {
 
       return ((_.isNil(this.missionCreateGameServerPort) || _.isEmpty(this.missionCreateGameServerPort)) &&
       (!_.isNil(this.missionCreateGameServerHostname) && !_.isEmpty(this.missionCreateGameServerHostname))) ? 'danger' : 'success'
+    },
+    missionCreateCommunityVoiceComms() {
+      if (_.isNil(this.communityVoiceComms) || _.isEmpty(this.communityVoiceComms)) {
+        return []
+      }
+
+      let servers = []
+      _.each(this.communityVoiceComms, (voiceComms, index) => {
+        let name = _.isNil(voiceComms.name) ? '' : ` - ${voiceComms.name}`
+        servers.push({
+          text: `${voiceComms.hostname}:${voiceComms.port}${name}`,
+          value: index
+        })
+      })
+
+      return servers
     },
     missionCreateVoiceCommsHostnameFeedback() {
       return ((_.isNil(this.missionCreateVoiceCommsHostname) || _.isEmpty(this.missionCreateVoiceCommsHostname)) &&
@@ -516,6 +582,7 @@ export default {
         gameServer = {
           hostname: this.missionCreateGameServerHostname,
           port: gameServerPort,
+          name: _.isString(this.missionCreateGameServerName) && !_.isEmpty(this.missionCreateGameServerName) ? this.missionCreateGameServerName : null,
           password: _.isString(this.missionCreateGameServerPassword) && !_.isEmpty(this.missionCreateGameServerPassword) ? this.missionCreateGameServerPassword : null
         }
       }
@@ -530,6 +597,7 @@ export default {
         voiceComms = {
           hostname: this.missionCreateVoiceCommsHostname,
           port: voiceCommsPort,
+          name: _.isString(this.missionCreateVoiceCommsName) && !_.isEmpty(this.missionCreateVoiceCommsName) ? this.missionCreateVoiceCommsName : null,
           password: _.isString(this.missionCreateVoiceCommsPassword) && !_.isEmpty(this.missionCreateVoiceCommsPassword) ? this.missionCreateVoiceCommsPassword : null
         }
       }
@@ -565,8 +633,39 @@ export default {
       this.$store.dispatch('createMission', missionDetails)
     }
   },
+  watch: {
+    missionCreateCommunityGameServersSelected(val) {
+      const server = this.communityGameServers[val];
+      if (_.isNil(server)) {
+        return
+      }
+
+      this.missionCreateGameServerHostname = server.hostname
+      this.missionCreateGameServerPort = `${server.port}`
+      this.missionCreateGameServerName = server.name
+      this.missionCreateGameServerPassword = server.password
+    },
+    missionCreateCommunityVoiceCommsSelected(val) {
+      const server = this.communityVoiceComms[val];
+      if (_.isNil(server)) {
+        return
+      }
+
+      this.missionCreateVoiceCommsHostname = server.hostname
+      this.missionCreateVoiceCommsPort = `${server.port}`
+      this.missionCreateVoiceCommsName = server.name
+      this.missionCreateVoiceCommsPassword = server.password
+    }
+  },
   created: function() {
     utils.setTitle(this.$t('mission.creator.title.browser'))
+
+    if (!_.isNil(this.user) && !_.isNil(this.user.community)) {
+      this.$store.dispatch('getCommunityServers', { communitySlug: this.user.community.slug })
+    }
+  },
+  beforeDestroy: function() {
+    this.$store.dispatch('clearCommunityServers')
   }
 }
 </script>

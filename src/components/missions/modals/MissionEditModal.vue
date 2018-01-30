@@ -119,6 +119,18 @@
               </b-form-fieldset>
             </div>
           </div>
+          <div class="row" v-if="(communityGameServers && communityGameServers.length > 0) || (communityVoiceComms && communityVoiceComms.length > 0)">
+            <div class="col">
+              <b-form-fieldset v-if="communityGameServers && communityGameServers.length > 0" :label="$t('community.gameServers')" state="success" :description="$t('community.gameServers.description')">
+                <b-form-select v-model="missionEditCommunityGameServersSelected" :options="missionEditCommunityGameServers" class="mb-3"></b-form-select>
+              </b-form-fieldset>
+            </div>
+            <div class="col">
+              <b-form-fieldset v-if="communityVoiceComms && communityVoiceComms.length > 0" :label="$t('community.voiceComms')" state="success" :description="$t('community.voiceComms.description')">
+                <b-form-select v-model="missionEditCommunityVoiceCommsSelected" :options="missionEditCommunityVoiceComms" class="mb-3"></b-form-select>
+              </b-form-fieldset>
+            </div>
+          </div>
           <div class="row">
             <div class="col">
               <b-form-fieldset :label="$t('mission.visibility')" state="success" :description="$t('mission.visibility.description')">
@@ -179,6 +191,8 @@ export default {
           password: null
         }
       },
+      missionEditCommunityGameServersSelected: null,
+      missionEditCommunityVoiceCommsSelected: null,
       missionEditSuppressNotifications: false,
       missionEditDetailedDescriptionQuillEditorOptions: {
         modules: {
@@ -223,7 +237,21 @@ export default {
       }
     }
   },
+  created: function() {
+    if (!_.isNil(this.user) && !_.isNil(this.user.community)) {
+      this.$store.dispatch('getCommunityServers', { communitySlug: this.user.community.slug })
+    }
+  },
+  beforeDestroy: function() {
+    this.$store.dispatch('clearCommunityServers')
+  },
   computed: {
+    communityGameServers() {
+      return this.$store.getters.communityGameServers
+    },
+    communityVoiceComms() {
+      return this.$store.getters.communityVoiceComms
+    },
     editorExplanationContent() {
       let content = '<img src="https://slotlist-info.storage.googleapis.com/images/static/editor-explanation.png"><ol>'
       _.times(8, (i) => {
@@ -244,6 +272,38 @@ export default {
       return _.isString(this.missionEditData.briefingTime)
         && !_.isEmpty(this.missionEditData.briefingTime)
         && moment(this.missionEditData.briefingTime).isValid ? 'success' : 'danger'
+    },
+    missionEditCommunityGameServers() {
+      if (_.isNil(this.communityGameServers) || _.isEmpty(this.communityGameServers)) {
+        return []
+      }
+
+      let servers = []
+      _.each(this.communityGameServers, (gameServer, index) => {
+        let name = _.isNil(gameServer.name) ? '' : ` - ${gameServer.name}`
+        servers.push({
+          text: `${gameServer.hostname}:${gameServer.port}${name}`,
+          value: index
+        })
+      })
+
+      return servers
+    },
+    missionEditCommunityVoiceComms() {
+      if (_.isNil(this.communityVoiceComms) || _.isEmpty(this.communityVoiceComms)) {
+        return []
+      }
+
+      let servers = []
+      _.each(this.communityVoiceComms, (voiceComms, index) => {
+        let name = _.isNil(voiceComms.name) ? '' : ` - ${voiceComms.name}`
+        servers.push({
+          text: `${voiceComms.hostname}:${voiceComms.port}${name}`,
+          value: index
+        })
+      })
+
+      return servers
     },
     missionEditDetailedDescriptionFeedback() {
       return _.isString(this.missionEditData.detailedDescription) && !_.isEmpty(this.missionEditData.detailedDescription) ? '' : this.$t('mission.feedback.detailedDescription')
@@ -543,8 +603,34 @@ export default {
         }
       }
 
+      this.missionEditCommunityGameServersSelected = null
+      this.missionEditCommunityVoiceCommsSelected = null
       this.missionEditSuppressNotifications = false
     }
-  }
+  },
+  watch: {
+    missionEditCommunityGameServersSelected(val) {
+      const server = this.communityGameServers[val];
+      if (_.isNil(server)) {
+        return
+      }
+
+      this.missionEditData.gameServer.hostname = server.hostname
+      this.missionEditData.gameServer.port = `${server.port}`
+      this.missionEditData.gameServer.name = server.name
+      this.missionEditData.gameServer.password = server.password
+    },
+    missionEditCommunityVoiceCommsSelected(val) {
+      const server = this.communityVoiceComms[val];
+      if (_.isNil(server)) {
+        return
+      }
+
+      this.missionEditData.voiceComms.hostname = server.hostname
+      this.missionEditData.voiceComms.port = `${server.port}`
+      this.missionEditData.voiceComms.name = server.name
+      this.missionEditData.voiceComms.password = server.password
+    }
+  },
 }
 </script>

@@ -43,6 +43,9 @@ export const v1 = {
   getCommunityPermissions(communitySlug, limit = 10, offset = 0) {
     return axios.get(`/v1/communities/${communitySlug}/permissions?limit=${limit}&offset=${offset}`)
   },
+  getCommunityServers(communitySlug) {
+    return axios.get(`/v1/communities/${communitySlug}/servers`)
+  },
   processCommunityApplication(communitySlug, applicationUid, accepted) {
     return axios.patch(`/v1/communities/${communitySlug}/applications/${applicationUid}`, { status: accepted ? 'accepted' : 'denied' })
   },
