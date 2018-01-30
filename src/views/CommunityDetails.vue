@@ -19,6 +19,68 @@
             <p v-html="optionalCommunityWebsite"></p>
           </div>
         </div>
+        <div class="row text-center" v-if="isCommunityMember">
+          <div class="col" v-if="communityDetails.gameServers">
+            <h5>{{ $t('community.gameServers') }}</h5>
+            <div class="row" v-for="(gameServer, index) in communityDetails.gameServers" :key="`${gameServer.hostname}:${gameServer.port}`">
+              <div class="col">
+                <div class="row justify-content-center">
+                  <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.hostname') }}</div>
+                  <div class="col-4">{{ gameServer.hostname }}</div>
+                </div>
+                <div class="row justify-content-center">
+                  <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.port') }}</div>
+                  <div class="col-4">{{ gameServer.port }}</div>
+                </div>
+                <div class="row justify-content-center">
+                  <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.name') }}</div>
+                  <div class="col-4">
+                    <span v-if="gameServer.name">{{ gameServer.name }}</span>
+                    <span v-else class="text-muted font-italic">{{ $t('misc.notProvided') }}</span>
+                  </div>
+                </div>
+                <div class="row justify-content-center">
+                  <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.password') }}</div>
+                  <div class="col-4">
+                    <span v-if="gameServer.password">{{ gameServer.password }}</span>
+                    <span v-else class="text-muted font-italic">{{ $t('misc.notRequired') }}</span>
+                  </div>
+                </div>
+                <br v-if="index < communityDetails.gameServers.length - 1">
+              </div>
+            </div>
+          </div>
+          <div class="col" v-if="communityDetails.voiceComms">
+            <h5>{{ $t('community.voiceComms') }}</h5>
+            <div class="row" v-for="(voiceComms, index) in communityDetails.voiceComms" :key="`${voiceComms.hostname}:${voiceComms.port}`">
+              <div class="col">
+                <div class="row justify-content-center">
+                  <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.hostname') }}</div>
+                  <div class="col-4">{{ voiceComms.hostname }}</div>
+                </div>
+                <div class="row justify-content-center">
+                  <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.port') }}</div>
+                  <div class="col-4">{{ voiceComms.port }}</div>
+                </div>
+                <div class="row justify-content-center">
+                  <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.name') }}</div>
+                  <div class="col-4">
+                    <span v-if="voiceComms.name">{{ voiceComms.name }}</span>
+                    <span v-else class="text-muted font-italic">{{ $t('misc.notProvided') }}</span>
+                  </div>
+                </div>
+                <div class="row justify-content-center">
+                  <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.password') }}</div>
+                  <div class="col-4">
+                    <span v-if="voiceComms.password">{{ voiceComms.password }}</span>
+                    <span v-else class="text-muted font-italic">{{ $t('misc.notRequired') }}</span>
+                  </div>
+                </div>
+                <br v-if="index < communityDetails.gameServers.length - 1">
+              </div>
+            </div>
+          </div>
+        </div>
         <hr class="my-4" v-show="canEditCommunity">
         <div class="row justify-content-center" v-if="canEditCommunity">
           <b-btn variant="primary" v-b-modal.communityEditModal>

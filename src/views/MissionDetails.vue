@@ -87,6 +87,13 @@
                 <div class="col-4">{{ missionDetails.gameServer.port }}</div>
               </div>
               <div class="row justify-content-center">
+                <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.name') }}</div>
+                <div class="col-4">
+                  <span v-if="missionDetails.gameServer.name">{{ missionDetails.gameServer.name }}</span>
+                  <span v-else class="text-muted font-italic">{{ $t('misc.notProvided') }}</span>
+                </div>
+              </div>
+              <div class="row justify-content-center">
                 <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.password') }}</div>
                 <div class="col-4">
                   <span v-if="missionDetails.gameServer.password">{{ missionDetails.gameServer.password }}</span>
@@ -114,6 +121,13 @@
               <div class="row justify-content-center">
                 <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.port') }}</div>
                 <div class="col-4">{{ missionDetails.voiceComms.port }}</div>
+              </div>
+              <div class="row justify-content-center">
+                <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.name') }}</div>
+                <div class="col-4">
+                  <span v-if="missionDetails.voiceComms.name">{{ missionDetails.voiceComms.name }}</span>
+                  <span v-else class="text-muted font-italic">{{ $t('misc.notProvided') }}</span>
+                </div>
               </div>
               <div class="row justify-content-center">
                 <div class="col-4 font-weight-bold text-left">{{ $t('mission.serverInfo.password') }}</div>

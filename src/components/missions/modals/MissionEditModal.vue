@@ -97,6 +97,18 @@
           </div>
           <div class="row">
             <div class="col">
+              <b-form-fieldset :label="$t('mission.gameServer.name.optional')" state="success" :description="$t('mission.gameServer.name.description')">
+                <b-form-input v-model="missionEditData.gameServer.name" type="text"></b-form-input>
+              </b-form-fieldset>
+            </div>
+            <div class="col">
+              <b-form-fieldset :label="$t('mission.voiceComms.name.optional')" state="success" :description="$t('mission.voiceComms.name.description')">
+                <b-form-input v-model="missionEditData.voiceComms.name" type="text"></b-form-input>
+              </b-form-fieldset>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
               <b-form-fieldset :label="$t('mission.gameServer.password.optional')" state="success" :description="$t('mission.gameServer.password.description')">
                 <b-form-input v-model="missionEditData.gameServer.password" type="text"></b-form-input>
               </b-form-fieldset>
@@ -149,6 +161,7 @@ export default {
         gameServer: {
           hostname: null,
           port: null,
+          name: null,
           password: null
         },
         repositoryUrl: null,
@@ -162,6 +175,7 @@ export default {
         voiceComms: {
           hostname: null,
           port: null,
+          name: null,
           password: null
         }
       },
@@ -461,6 +475,9 @@ export default {
             if (_.isString(value.port) && _.isEmpty(value.port)) {
               value.port = null
             }
+            if (_.isString(value.name) && _.isEmpty(value.name)) {
+              value.name = null
+            }
             if (_.isString(value.password) && _.isEmpty(value.password)) {
               value.password = null
             }
@@ -510,6 +527,7 @@ export default {
         gameServer: {
           hostname: _.isNil(this.missionDetails.gameServer) ? null : this.missionDetails.gameServer.hostname,
           port: _.isNil(this.missionDetails.gameServer) ? null : `${this.missionDetails.gameServer.port}`,
+          name: _.isNil(this.missionDetails.gameServer) ? null : this.missionDetails.gameServer.name,
           password: _.isNil(this.missionDetails.gameServer) ? null : this.missionDetails.gameServer.password,
         },
         slottingTime: moment(this.missionDetails.slottingTime).format('Y-MM-DD HH:mm'),
@@ -520,6 +538,7 @@ export default {
         voiceComms: {
           hostname: _.isNil(this.missionDetails.voiceComms) ? null : this.missionDetails.voiceComms.hostname,
           port: _.isNil(this.missionDetails.voiceComms) ? null : `${this.missionDetails.voiceComms.port}`,
+          name: _.isNil(this.missionDetails.voiceComms) ? null : this.missionDetails.voiceComms.name,
           password: _.isNil(this.missionDetails.voiceComms) ? null : this.missionDetails.voiceComms.password,
         }
       }
