@@ -19,7 +19,7 @@
             <p v-html="optionalCommunityWebsite"></p>
           </div>
         </div>
-        <div class="row text-center" v-if="isCommunityMember">
+        <div class="row text-center" v-if="isCommunityMember || isCommunityAdmin">
           <div class="col" v-if="communityDetails.gameServers">
             <h5>{{ $t('community.gameServers') }}</h5>
             <div class="row" v-for="(gameServer, index) in communityDetails.gameServers" :key="`${gameServer.hostname}:${gameServer.port}`">
@@ -197,6 +197,9 @@ export default {
     },
     communityDetails() {
       return this.$store.getters.communityDetails
+    },
+    isCommunityAdmin() {
+      return this.$acl.can(['admin.community'])
     },
     isCommunityFounder() {
       return this.$acl.can([`community.${this.$route.params.communitySlug}.founder`])

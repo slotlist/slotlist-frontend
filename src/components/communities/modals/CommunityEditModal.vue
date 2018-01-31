@@ -319,8 +319,8 @@ export default {
       this.communityEditData.gameServers.push({
         hostname: this.communityEditGameServer.hostname,
         port: this.communityEditGameServer.port,
-        name: this.communityEditGameServer.name,
-        password: this.communityEditGameServer.password
+        name: _.isEmpty(this.communityEditGameServer.name) ? null : this.communityEditGameServer.name,
+        password: _.isEmpty(this.communityEditGameServer.password) ? null : this.communityEditGameServer.password
       })
 
       this.communityEditGameServer = {
@@ -341,8 +341,8 @@ export default {
       this.communityEditData.voiceComms.push({
         hostname: this.communityEditVoiceComms.hostname,
         port: this.communityEditVoiceComms.port,
-        name: this.communityEditVoiceComms.name,
-        password: this.communityEditVoiceComms.password
+        name: _.isEmpty(this.communityEditVoiceComms.name) ? null : this.communityEditVoiceComms.name,
+        password: _.isEmpty(this.communityEditVoiceComms.password) ? null : this.communityEditVoiceComms.password
       })
 
       this.communityEditVoiceComms = {
