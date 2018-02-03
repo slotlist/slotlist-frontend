@@ -49,14 +49,6 @@
           </div>
           <div class="row">
             <div class="col">
-              <b-form-fieldset :label="$t('mission.repositoryUrl.optional')" state="success" :description="$t('mission.repositoryUrl.description')">
-                <quill-editor v-model="missionEditData.repositoryUrl" ref="missionEditrepositoryUrlEditor" :options="missionEditQuillEditorOptions"></quill-editor>
-                <editor-explanation></editor-explanation>
-              </b-form-fieldset>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
               <b-form-fieldset :label="$t('mission.techSupport.optional')" state="success" :description="$t('mission.techSupport.description')">
                 <quill-editor v-model="missionEditData.techSupport" ref="missionEditTechSupportEditor" :options="missionEditQuillEditorOptions"></quill-editor>
                 <editor-explanation></editor-explanation>
@@ -176,7 +168,6 @@ export default {
           name: null,
           password: null
         },
-        repositoryUrl: null,
         rules: null,
         description: null,
         slottingTime: null,
@@ -507,9 +498,6 @@ export default {
         return
       }
 
-      if (_.isString(this.missionEditData.repositoryUrl) && _.isEmpty(this.missionEditData.repositoryUrl)) {
-        this.missionEditData.repositoryUrl = null
-      }
       if (_.isString(this.missionEditData.rules) && _.isEmpty(this.missionEditData.rules)) {
         this.missionEditData.rules = null
       }
@@ -581,7 +569,6 @@ export default {
         briefingTime: moment(this.missionDetails.briefingTime).format('Y-MM-DD HH:mm'),
         detailedDescription: this.missionDetails.detailedDescription,
         endTime: moment(this.missionDetails.endTime).format('Y-MM-DD HH:mm'),
-        repositoryUrl: this.missionDetails.repositoryUrl,
         rules: this.missionDetails.rules,
         description: this.missionDetails.description,
         gameServer: {

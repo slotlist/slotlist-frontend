@@ -24,10 +24,6 @@
             </p>
           </div>
           <div class="col">
-            <h5>{{ $t('mission.repositoryUrl') }}</h5>
-            <p class="html ql-editor text-center" v-html="optionalRepositoryUrl"></p>
-          </div>
-          <div class="col">
             <h5>{{ $t('mission.visibility') }}</h5>
             <p v-html="formattedMissionVisibility"></p>
           </div>
@@ -157,6 +153,86 @@
           <div class="col">
             <h5>{{ $t('mission.rules') }}</h5>
             <p class="html ql-editor text-center" v-html="optionalRules"></p>
+          </div>
+        </div>
+        <div class="row text-center">
+          <div class="col">
+            <b-btn variant="primary" v-if="missionDetails.repositories.length > 0" v-b-toggle.missionRepositoriesCollapse>
+              <i class="fa fa-cubes" aria-hidden="true"></i> {{ $t('mission.repository.list') }}
+            </b-btn>
+            <span v-if="missionDetails.repositories.length === 0" class="font-italic text-muted">{{ $t('misc.notProvided') }}</span>
+            <b-collapse id="missionRepositoriesCollapse">
+              <div v-for="(chunk, chunkIndex) in missionRepositoryChunks" :key="chunk">
+                <br>
+                <div class="row">
+                  <div class="col" v-for="(missionRepository, index) in chunk" :key="missionRepository">
+                    <div v-if="missionRepository.name" class="row justify-content-center">
+                      <div class="col-4 font-weight-bold text-left">{{ $t('mission.repository.name') }}</div>
+                      <div class="col-4">{{ missionRepository.name }}</div>
+                    </div>
+                    <div class="row justify-content-center">
+                      <div class="col-4 font-weight-bold text-left">{{ $t('mission.repository.url') }}</div>
+                      <div class="col-4">
+                        <span v-if="missionRepository.url">
+                          <a v-if="missionRepository.kind === 'arma3sync'" :href="missionRepository.url" @click.prevent="$copyText(missionRepository.url)">{{ missionRepository.url }}</a>
+                          <a v-else :href="missionRepository.url">{{ missionRepository.url }}</a>
+                        </span>
+                        <span v-else class="text-muted font-italic">{{ $t('misc.notProvided') }}</span>
+                      </div>
+                    </div>
+                    <div class="row justify-content-center">
+                      <div class="col-4 font-weight-bold text-left">{{ $t('mission.repository.notes') }}</div>
+                      <div class="col-4">
+                        <span v-if="missionRepository.notes" v-html="missionRepository.notes"></span>
+                        <span v-else class="text-muted font-italic">{{ $t('misc.notProvided') }}</span>
+                      </div>
+                    </div>
+                    <div class="row justify-content-center">
+                      <b-btn size="sm" v-clipboard:copy="missionRepository.url" :disabled="!missionRepository.url">
+                        <i class="fa fa-clipboard" aria-hidden="true"></i> {{ $t('button.copy') }}
+                      </b-btn>
+                      <span v-if="isMissionEditor">&nbsp;</span>
+                      <b-btn v-if="isMissionEditor" size="sm" variant="danger" @click="removeMissionRepository(chunkIndex * 2 + index)">
+                        <i class="fa fa-trash" aria-hidden="true"></i> {{ $t('button.remove') }}
+                      </b-btn>
+                    </div>
+                  </div>
+                  <div class="col" v-if="chunk.length === 1"></div>
+                </div>
+              </div>
+              <div v-if="isMissionEditor">
+                <br>
+                <div class="row">
+                  <div class="col-3">
+                    <b-form-fieldset :label="$t('mission.repository.name.optional')" state="success" :description="$t('mission.repository.name.description')">
+                      <b-form-input v-model="missionRepositoryCreateData.name" type="text"></b-form-input>
+                    </b-form-fieldset>
+                  </div>
+                  <div class="col-3">
+                    <b-form-fieldset :label="$t('mission.repository.kind')" :state="missionRepositoryCreateKindState" :feedback="missionRepositoryCreateKindFeedback" :description="$t('mission.repository.kind.description')">
+                      <b-form-select v-model="missionRepositoryCreateData.kind" :options="missionRepositoryCreateKindOptions" class="mb-3"></b-form-select>
+                    </b-form-fieldset>
+                  </div>
+                  <div class="col-3">
+                    <b-form-fieldset :label="$t('mission.repository.url.optional')" :state="missionRepositoryCreateUrlState" :feedback="missionRepositoryCreateUrlFeedback" :description="$t('mission.repository.url.description')">
+                      <b-form-input v-model="missionRepositoryCreateData.url" type="text"></b-form-input>
+                    </b-form-fieldset>
+                  </div>
+                  <div class="col-3">
+                    <b-form-fieldset :label="$t('mission.repository.notes.optional')" :state="missionRepositoryCreateNotesState" :feedback="missionRepositoryCreateNotesFeedback" :description="$t('mission.repository.notes.description')">
+                      <b-form-input v-model="missionRepositoryCreateData.notes" textarea></b-form-input>
+                    </b-form-fieldset>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <b-btn size="sm" variant="success" @click="createMissionRepository">
+                      <i class="fa fa-plus" aria-hidden="true"></i> {{ $t('button.add') }}
+                    </b-btn>
+                  </div>
+                </div>
+              </div>
+            </b-collapse>
           </div>
         </div>
         <hr class="my-4">
@@ -307,6 +383,16 @@ export default {
   },
   data() {
     return {
+      missionRepositoryCreateData: {
+        name: null,
+        kind: null,
+        url: null,
+        notes: null
+      },
+      missionRepositoryCreateKindOptions: [
+        { text: this.$t('mission.repository.kind.arma3sync'), value: 'arma3sync' },
+        { text: this.$t('mission.repository.kind.other'), value: 'other' }
+      ],
       missionSlotlistFilter: []
     }
   },
@@ -341,6 +427,11 @@ export default {
     isMissionEditor() {
       return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`, `mission.${this.$route.params.missionSlug}.editor`])
     },
+    isMissionRepositoryUrlValid() {
+      // Taken from: https://stackoverflow.com/a/5717133 @ 2017-08-04 09:43
+      const urlPattern = /^((https?|ftp):\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(\:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i
+      return urlPattern.test(this.missionRepositoryCreateData.url)
+    },
     isPrivateMission() {
       if (_.isNil(this.missionDetails)) {
         return false
@@ -354,8 +445,54 @@ export default {
     missionDetails() {
       return this.$store.getters.missionDetails
     },
-    optionalRepositoryUrl() {
-      return this.missionDetails.repositoryUrl || `<div class='text-muted font-italic'>${this.$t('misc.notProvided')}</div>`
+    missionRepositoryChunks() {
+      if (_.isNil(this.missionDetails)) {
+        return []
+      }
+
+      return _.chunk(this.missionDetails.repositories, 2);
+    },
+    missionRepositoryCreateKindFeedback() {
+      return _.isEmpty(this.missionRepositoryCreateData.kind) ? this.$t('mission.feedback.repository.kind') : ''
+    },
+    missionRepositoryCreateKindState() {
+      return _.isEmpty(this.missionRepositoryCreateData.kind) ? 'danger' : 'success'
+    },
+    missionRepositoryCreateNotesFeedback() {
+      if (_.isEmpty(this.missionRepositoryCreateData.url) && _.isEmpty(this.missionRepositoryCreateData.notes)) {
+        return this.$t('mission.feedback.repository.urlOrNotes')
+      }
+
+      return ''
+    },
+    missionRepositoryCreateNotesState() {
+      if (_.isEmpty(this.missionRepositoryCreateData.url) && _.isEmpty(this.missionRepositoryCreateData.notes)) {
+        return 'danger'
+      }
+
+      return 'success'
+    },
+    missionRepositoryCreateUrlFeedback() {
+      if (_.isEmpty(this.missionRepositoryCreateData.url) && _.isEmpty(this.missionRepositoryCreateData.notes)) {
+        return this.$t('mission.feedback.repository.urlOrNotes')
+      } else if (this.missionRepositoryCreateData.kind === 'arma3sync' && _.isEmpty(this.missionRepositoryCreateData.url)) {
+        return this.$t('mission.feedback.repository.url.arma3sync')
+      }  else if (_.isEmpty(this.missionRepositoryCreateData.url)) {
+        return ''
+      }
+
+      return this.isMissionRepositoryUrlValid ? '' : this.$t('mission.feedback.repository.url')
+    },
+    missionRepositoryCreateUrlState() {
+      if (_.isEmpty(this.missionRepositoryCreateData.url) && _.isEmpty(this.missionRepositoryCreateData.notes)) {
+        return 'danger'
+      } else if (this.missionRepositoryCreateData.kind === 'arma3sync' && _.isEmpty(this.missionRepositoryCreateData.url)) {
+        return 'danger'
+      } else if (_.isEmpty(this.missionRepositoryCreateData.url)) {
+        return 'success'
+      }
+
+      return this.isMissionRepositoryUrlValid ? 'success' : 'danger'
     },
     optionalRules() {
       return this.missionDetails.rules || `<div class='text-muted font-italic'>${this.$t('misc.notSpecified')}</div>`
@@ -371,6 +508,36 @@ export default {
     }
   },
   methods: {
+    createMissionRepository() {
+      if (_.isEmpty(this.missionRepositoryCreateData.kind)) {
+        return
+      } else if (_.isEmpty(this.missionRepositoryCreateData.url) && _.isEmpty(this.missionRepositoryCreateData.notes)) {
+        return
+      }
+
+      const repositories = _.clone(this.missionDetails.repositories)
+      repositories.push({
+        name: _.isEmpty(this.missionRepositoryCreateData.name) ? null : this.missionRepositoryCreateData.name,
+        kind: this.missionRepositoryCreateData.kind,
+        url: _.isEmpty(this.missionRepositoryCreateData.url) ? null : this.missionRepositoryCreateData.url,
+        notes: _.isEmpty(this.missionRepositoryCreateData.notes) ? null : this.missionRepositoryCreateData.notes,
+      })
+
+      this.$store.dispatch('editMission', {
+        missionSlug: this.$route.params.missionSlug,
+        updatedMissionDetails: {
+          repositories
+        },
+        missionTitle: this.missionDetails.title
+      })
+
+      this.missionRepositoryCreateData = {
+        name: null,
+        kind: null,
+        url: null,
+        notes: null
+      }
+    },
     deleteMission() {
       this.$store.dispatch('deleteMission', {
         missionSlug: this.$route.params.missionSlug,
@@ -416,6 +583,18 @@ export default {
       link += `&location&trp=false&ctx=${this.$store.getters.timezone}`
 
       return encodeURI(link)
+    },
+    removeMissionRepository(index) {
+      const repositories = _.clone(this.missionDetails.repositories)
+      repositories.splice(index, 1)
+
+      this.$store.dispatch('editMission', {
+        missionSlug: this.$route.params.missionSlug,
+        updatedMissionDetails: {
+          repositories
+        },
+        missionTitle: this.missionDetails.title
+      })
     }
   },
   watch: {

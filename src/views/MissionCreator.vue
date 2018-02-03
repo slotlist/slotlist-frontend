@@ -60,14 +60,6 @@
         </div>
         <div class="row">
           <div class="col">
-            <b-form-fieldset :label="$t('mission.repositoryUrl.optional')" state="success" :description="$t('mission.repositoryUrl.description')">
-              <quill-editor v-model="missionCreateRepositoryUrl" ref="missionCreateRepositoryUrlEditor" :options="editorOptions"></quill-editor>
-              <editor-explanation></editor-explanation>
-            </b-form-fieldset>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
             <b-form-fieldset :label="$t('mission.techSupport.optional')" :state="missionCreateTechSupportState" :feedback="missionCreateTechSupportFeedback" :description="$t('mission.techSupport.description')">
               <quill-editor v-model="missionCreateTechSupport" ref="missionCreateTechSupportEditor" :options="editorOptions"></quill-editor>
               <editor-explanation></editor-explanation>
@@ -220,7 +212,6 @@ export default {
       missionCreateStartTime: null,
       missionCreateEndTime: null,
       missionCreateBriefingTime: null,
-      missionCreateRepositoryUrl: null,
       missionCreateTechSupport: null,
       missionCreateRules: null,
       missionCreateGameServerHostname: null,
@@ -611,7 +602,6 @@ export default {
         startTime: moment(this.missionCreateStartTime).utc().format(),
         endTime: moment(this.missionCreateEndTime).utc().format(),
         briefingTime: moment(this.missionCreateBriefingTime).utc().format(),
-        repositoryUrl: this.missionCreateRepositoryUrl,
         techSupport: this.missionCreateTechSupport,
         rules: this.missionCreateRules,
         gameServer,
@@ -620,9 +610,6 @@ export default {
         visibility: this.missionCreateVisibility
       }
 
-      if (_.isEmpty(missionDetails.repositoryUrl)) {
-        missionDetails.repositoryUrl = null
-      }
       if (_.isEmpty(missionDetails.techSupport)) {
         missionDetails.techSupport = null
       }
