@@ -1,7 +1,7 @@
 <template>
   <div>
     <mission-slot-registrations-table></mission-slot-registrations-table>
-    <div class="row">
+    <div class="row" v-if="isMissionEditor">
       <div class="col text-center">
         <b-form-fieldset :label="$t('notification.suppress')" state="success" :description="$t('notification.suppress.description')">
           <b-form-checkbox v-model="missionSlotRegistrationSuppressNotifications"></b-form-checkbox>
@@ -35,6 +35,11 @@ export default {
   },
   beforeCreate: function() {
     this.$store.dispatch('setMissionSlotRegistrationSuppressNotifications', { suppressNotifications: false })
+  },
+  computed: {
+    isMissionEditor() {
+      return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`, `mission.${this.$route.params.missionSlug}.editor`])
+    }
   },
   methods: {
     refreshMissionSlotRegistrations() {
