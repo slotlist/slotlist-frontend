@@ -38,9 +38,16 @@
                 <b-form-checkbox v-model="missionSlotEditData.reserve"></b-form-checkbox>
               </b-form-fieldset>
             </div>
+          </div>
+          <div class="row">
             <div class="col">
               <b-form-fieldset :label="$t('mission.slot.blocked.slot')" state="success" :description="$t('mission.slot.blocked.description')">
                 <b-form-checkbox v-model="missionSlotEditData.blocked"></b-form-checkbox>
+              </b-form-fieldset>
+            </div>
+            <div class="col">
+              <b-form-fieldset :label="$t('mission.slot.autoAssignable.slot')" state="success" :description="$t('mission.slot.autoAssignable.description')">
+                <b-form-checkbox v-model="missionSlotEditData.autoAssignable"></b-form-checkbox>
               </b-form-fieldset>
             </div>
           </div>
@@ -89,6 +96,7 @@ export default {
   data() {
     return {
       missionSlotEditData: {
+        autoAssignable: false,
         detailedDescription: null,
         difficulty: 0,
         reserve: false,
@@ -197,6 +205,7 @@ export default {
   methods: {
     setMissionSlotEditData() {
       this.missionSlotEditData = {
+        autoAssignable: this.missionSlotDetails.autoAssignable,
         detailedDescription: this.missionSlotDetails.detailedDescription,
         difficulty: this.missionSlotDetails.difficulty,
         orderNumber: this.missionSlotDetails.orderNumber,
