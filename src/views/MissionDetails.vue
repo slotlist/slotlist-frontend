@@ -238,12 +238,12 @@
             </b-collapse>
           </div>
         </div>
-        <hr class="my-4">
-        <div class="row justify-content-center">
-          <b-btn variant="secondary" size="sm" v-if="isMissionEditor" v-b-modal.missionDuplicateModal>
+        <hr class="my-4" v-if="isMissionEditor">
+        <div class="row justify-content-center" v-if="isMissionEditor">
+          <b-btn variant="secondary" size="sm" v-b-modal.missionDuplicateModal>
             <i class="fa fa-files-o" aria-hidden="true"></i> {{ $t('button.duplicate.mission') }}
           </b-btn>&nbsp;
-          <b-btn variant="secondary" size="sm" v-if="isMissionEditor" v-b-modal.missionConvertToSlotTemplateModal>
+          <b-btn variant="secondary" size="sm" v-b-modal.missionConvertToSlotTemplateModal>
             <i class="fa fa-file-text-o" aria-hidden="true"></i> {{ $t('button.convert.slotTemplate') }}
           </b-btn>&nbsp;
           <b-btn variant="secondary" size="sm" v-if="isMissionCreator" v-b-modal.missionEmbedModal>
@@ -277,6 +277,22 @@
         <div class="card-block text-nowrap">
           <div class="html ql-editor" v-html="missionDetails.detailedDescription"></div>
         </div>
+      </div>
+      <div v-if="missionDetails.collapsedDescription">
+        <br>
+        <div class="text-center">
+          <b-btn variant="primary" v-b-toggle.missioncollapsedDescriptionCollapse @click="toggleMissioncollapsedDescription">
+            <i class="fa" :class="{'fa-chevron-down': !isMissioncollapsedDescriptionExtended, 'fa-chevron-up': isMissioncollapsedDescriptionExtended}" aria-hidden="true"></i> {{ isMissioncollapsedDescriptionExtended ? $t('mission.collapsedDescription.toggle.close') : $t('mission.collapsedDescription.toggle.open') }}
+          </b-btn>
+        </div>
+        <b-collapse id="missioncollapsedDescriptionCollapse">
+          <br>
+          <div class="card">
+            <div class="card-block text-nowrap">
+              <div class="html ql-editor" v-html="missionDetails.collapsedDescription"></div>
+            </div>
+          </div>
+        </b-collapse>
       </div>
       <br>
       <div class="card">
@@ -396,7 +412,8 @@ export default {
         { text: this.$t('mission.repository.kind.arma3sync'), value: 'arma3sync' },
         { text: this.$t('mission.repository.kind.other'), value: 'other' }
       ],
-      missionSlotlistFilter: []
+      missionSlotlistFilter: [],
+      missioncollapsedDescriptionExtended: false
     }
   },
   computed: {
@@ -434,6 +451,9 @@ export default {
       // Taken from: https://stackoverflow.com/a/5717133 @ 2017-08-04 09:43
       const urlPattern = /^((https?|ftp):\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(\:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i
       return urlPattern.test(this.missionRepositoryCreateData.url)
+    },
+    isMissioncollapsedDescriptionExtended() {
+      return this.missioncollapsedDescriptionExtended
     },
     isPrivateMission() {
       if (_.isNil(this.missionDetails)) {
@@ -598,6 +618,9 @@ export default {
         },
         missionTitle: this.missionDetails.title
       })
+    },
+    toggleMissioncollapsedDescription() {
+      this.missioncollapsedDescriptionExtended = !this.missioncollapsedDescriptionExtended
     }
   },
   watch: {
