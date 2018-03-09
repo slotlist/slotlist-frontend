@@ -226,7 +226,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.addMissionAccess.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'addMissionAccess' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'addMissionAccess' } }) : null
           console.error('addMissionAccess', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -234,7 +234,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.addMissionAccess.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'addMissionAccess' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'addMissionAccess' } }) : null
           console.error('addMissionAccess', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -288,7 +288,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.addMissionPermission.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'addMissionPermission' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'addMissionPermission' } }) : null
           console.error('addMissionPermission', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -296,7 +296,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.addMissionPermission.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'addMissionPermission' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'addMissionPermission' } }) : null
           console.error('addMissionPermission', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -349,7 +349,7 @@ const actions = {
                 alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.applySlotTemplateToMission.error')} - ${error.response.data.message}`
               })
             } else if (error.request) {
-              Raven.captureException(error, { extra: { module: 'missions', function: 'applySlotTemplateToMission' } })
+              error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'applySlotTemplateToMission' } }) : null
               console.error('applySlotTemplateToMission', error.request)
               dispatch('showAlert', {
                 showAlert: true,
@@ -357,7 +357,7 @@ const actions = {
                 alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.applySlotTemplateToMission.error')} - ${i18n.t('failed.request')}`
               })
             } else {
-              Raven.captureException(error, { extra: { module: 'missions', function: 'applySlotTemplateToMission' } })
+              error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'applySlotTemplateToMission' } }) : null
               console.error('applySlotTemplateToMission', error.message)
               dispatch('showAlert', {
                 showAlert: true,
@@ -411,7 +411,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.assignMissionSlot.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'assignMissionSlot' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'assignMissionSlot' } }) : null
           console.error('assignMissionSlot', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -419,7 +419,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.assignMissionSlot.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'assignMissionSlot' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'assignMissionSlot' } }) : null
           console.error('assignMissionSlot', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -475,7 +475,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.checkMissionSlugAvailability', { slug: payload })} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'setMissionSlugAvailability' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'setMissionSlugAvailability' } }) : null
           console.error('checkMissionSlugAvailability', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -483,7 +483,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.checkMissionSlugAvailability', { slug: payload })} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'setMissionSlugAvailability' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'setMissionSlugAvailability' } }) : null
           console.error('checkMissionSlugAvailability', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -562,7 +562,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMission.error', { title: payload.title })} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'createMission' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'createMission' } }) : null
           console.error('createMission', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -570,7 +570,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMission.error', { title: payload.title })} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'createMission' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'createMission' } }) : null
           console.error('createMission', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -622,7 +622,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.tc('store.createMissionSlot.error', slotCount, { count: slotCount })} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'createMissionSlot' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'createMissionSlot' } }) : null
           console.error('createMissionSlot', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -630,7 +630,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.tc('store.createMissionSlot.error', slotCount, { count: slotCount })} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'createMissionSlot' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'createMissionSlot' } }) : null
           console.error('createMissionSlot', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -680,7 +680,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissionSlotGroup.error', { slotInfo: `#${payload.slotGroupDetails.orderNumber} ${payload.slotGroupDetails.title}` })} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'createMissionSlotGroup' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'createMissionSlotGroup' } }) : null
           console.error('createMissionSlotGroup', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -688,7 +688,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissionSlotGroup.error', { slotInfo: `#${payload.slotGroupDetails.orderNumber} ${payload.slotGroupDetails.title}` })} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'createMissionSlotGroup' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'createMissionSlotGroup' } }) : null
           console.error('createMissionSlotGroup', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -741,7 +741,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMission.error', { title: payload.missionTitle })} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMission' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMission' } }) : null
           console.error('deleteMission', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -749,7 +749,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMission.error', { title: payload.missionTitle })} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMission' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMission' } }) : null
           console.error('deleteMission', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -799,7 +799,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionAccess.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionAccess' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionAccess' } }) : null
           console.error('deleteMissionAccess', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -807,7 +807,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionAccess.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionAccess' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionAccess' } }) : null
           console.error('deleteMissionAccess', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -864,7 +864,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionBannerImage.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionBannerImage' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionBannerImage' } }) : null
           console.error('deleteMissionBannerImage', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -872,7 +872,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionBannerImage.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionBannerImage' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionBannerImage' } }) : null
           console.error('deleteMissionBannerImage', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -922,7 +922,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionPermission.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionPermission' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionPermission' } }) : null
           console.error('deleteMissionPermission', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -930,7 +930,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionPermission.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionPermission' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionPermission' } }) : null
           console.error('deleteMissionPermission', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -980,7 +980,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionSlot' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionSlot' } }) : null
           console.error('deleteMissionSlot', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -988,7 +988,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionSlot' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionSlot' } }) : null
           console.error('deleteMissionSlot', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1038,7 +1038,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlotGroup.error', { title: payload.slotGroupTitle })} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionSlotGroup' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionSlotGroup' } }) : null
           console.error('deleteMissionSlotGroup', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1046,7 +1046,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlotGroup.error', { title: payload.slotGroupTitle })} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionSlotGroup' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionSlotGroup' } }) : null
           console.error('deleteMissionSlotGroup', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1098,7 +1098,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionToken.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionToken' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionToken' } }) : null
           console.error('deleteMissionToken', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1106,7 +1106,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionToken.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionToken' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionToken' } }) : null
           console.error('deleteMissionToken', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1162,7 +1162,7 @@ const actions = {
           alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteSelectedMissionSlots.error')} - ${error.response.data.message}`
         })
       } else if (error.request) {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'deleteSelectedMissionSlots' } })
+        error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'deleteSelectedMissionSlots' } }) : null
         console.error('deleteSelectedMissionSlots', error.request)
         dispatch('showAlert', {
           showAlert: true,
@@ -1170,7 +1170,7 @@ const actions = {
           alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteSelectedMissionSlots.error')} - ${i18n.t('failed.request')}`
         })
       } else {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'deleteSelectedMissionSlots' } })
+        error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'deleteSelectedMissionSlots' } }) : null
         console.error('deleteSelectedMissionSlots', error.message)
         dispatch('showAlert', {
           showAlert: true,
@@ -1230,7 +1230,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.duplicateMission.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'duplicateMission' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'duplicateMission' } }) : null
           console.error('duplicateMission', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1238,7 +1238,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.duplicateMission.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'duplicateMission' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'duplicateMission' } }) : null
           console.error('duplicateMission', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1312,7 +1312,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.duplicateMissionSlotGroup.error', { slotGroupInfo: `#${payload.missionSlotGroup.orderNumber} ${payload.missionSlotGroup.title}` })} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'duplicateMissionSlotGroup' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'duplicateMissionSlotGroup' } }) : null
           console.error('duplicateMissionSlotGroup', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1320,7 +1320,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.duplicateMissionSlotGroup.error', { slotGroupInfo: `#${payload.missionSlotGroup.orderNumber} ${payload.missionSlotGroup.title}` })} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'duplicateMissionSlotGroup' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'duplicateMissionSlotGroup' } }) : null
           console.error('duplicateMissionSlotGroup', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1377,7 +1377,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlotRegistration.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionSlotRegistration' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionSlotRegistration' } }) : null
           console.error('deleteMissionSlotRegistration', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1385,7 +1385,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlotRegistration.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionSlotRegistration' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'deleteMissionSlotRegistration' } }) : null
           console.error('deleteMissionSlotRegistration', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1442,7 +1442,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editMission.error', { title: payload.missionTitle })} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'editMission' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'editMission' } }) : null
           console.error('editMission', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1450,7 +1450,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editMission.error', { title: payload.missionTitle })} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'editMission' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'editMission' } }) : null
           console.error('editMission', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1500,7 +1500,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'editMissionSlot' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'editMissionSlot' } }) : null
           console.error('editMissionSlot', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1508,7 +1508,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'editMissionSlot' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'editMissionSlot' } }) : null
           console.error('editMissionSlot', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1558,7 +1558,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editMissionSlotGroup.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'editMissionSlotGroup' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'editMissionSlotGroup' } }) : null
           console.error('editMissionSlotGroup', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1566,7 +1566,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editMissionSlotGroup.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'editMissionSlotGroup' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'editMissionSlotGroup' } }) : null
           console.error('editMissionSlotGroup', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1620,7 +1620,7 @@ const actions = {
           alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editSelectedMissionSlots.error')} - ${error.response.data.message}`
         })
       } else if (error.request) {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'editSelectedMissionSlots' } })
+        error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'editSelectedMissionSlots' } }) : null
         console.error('editSelectedMissionSlots', error.request)
         dispatch('showAlert', {
           showAlert: true,
@@ -1628,7 +1628,7 @@ const actions = {
           alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editSelectedMissionSlots.error')} - ${i18n.t('failed.request')}`
         })
       } else {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'editSelectedMissionSlots' } })
+        error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'editSelectedMissionSlots' } }) : null
         console.error('editSelectedMissionSlots', error.message)
         dispatch('showAlert', {
           showAlert: true,
@@ -1700,7 +1700,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.generateMissionToken.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'generateMissionToken' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'generateMissionToken' } }) : null
           console.error('generateMissionToken', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1708,7 +1708,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.generateMissionToken.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'generateMissionToken' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'generateMissionToken' } }) : null
           console.error('generateMissionToken', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1760,7 +1760,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionAccesses.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionAccesses' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionAccesses' } }) : null
           console.error('getMissionAccesses', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1768,7 +1768,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionAccesses.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionAccesses' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionAccesses' } }) : null
           console.error('getMissionAccesses', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1827,7 +1827,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionDetails.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionDetails' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionDetails' } }) : null
           console.error('getMissionDetails', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1835,7 +1835,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionDetails.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionDetails' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionDetails' } }) : null
           console.error('getMissionDetails', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1887,7 +1887,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionPermissions.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionPermissions' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionPermissions' } }) : null
           console.error('getMissionPermissions', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1895,7 +1895,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionPermissions.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionPermissions' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionPermissions' } }) : null
           console.error('getMissionPermissions', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1989,7 +1989,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissions.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissions' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'getMissions' } }) : null
           console.error('getMissions', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1997,7 +1997,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissions.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissions' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'getMissions' } }) : null
           console.error('getMissions', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -2076,7 +2076,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionsForCalendar.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionsForCalendar' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionsForCalendar' } }) : null
           console.error('getMissionsForCalendar', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -2084,7 +2084,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionsForCalendar.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionsForCalendar' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionsForCalendar' } }) : null
           console.error('getMissionsForCalendar', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -2137,7 +2137,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionSlotlist.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionSlotlist' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionSlotlist' } }) : null
           console.error('getMissionSlotlist', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -2145,7 +2145,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionSlotlist.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionSlotlist' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionSlotlist' } }) : null
           console.error('getMissionSlotlist', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -2205,7 +2205,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionSlotRegistrations.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionSlotRegistrations' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionSlotRegistrations' } }) : null
           console.error('getMissionSlotRegistrations', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -2213,7 +2213,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionSlotRegistrations.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionSlotRegistrations' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionSlotRegistrations' } }) : null
           console.error('getMissionSlotRegistrations', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -2270,7 +2270,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionToken.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionToken' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionToken' } }) : null
           console.error('getMissionToken', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -2278,7 +2278,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionToken.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionToken' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'getMissionToken' } }) : null
           console.error('getMissionToken', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -2338,7 +2338,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.modifyMissionSlotRegistration.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'modifyMissionSlotRegistration' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'modifyMissionSlotRegistration' } }) : null
           console.error('modifyMissionSlotRegistration', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -2346,7 +2346,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.modifyMissionSlotRegistration.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'modifyMissionSlotRegistration' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'modifyMissionSlotRegistration' } }) : null
           console.error('modifyMissionSlotRegistration', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -2399,7 +2399,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.registerForMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'registerForMissionSlot' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'registerForMissionSlot' } }) : null
           console.error('registerForMissionSlot', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -2407,7 +2407,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.registerForMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'registerForMissionSlot' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'registerForMissionSlot' } }) : null
           console.error('registerForMissionSlot', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -2467,7 +2467,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.searchMissions.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'searchMissions' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'searchMissions' } }) : null
           console.error('searchMissions', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -2475,7 +2475,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.searchMissions.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'searchMissions' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'searchMissions' } }) : null
           console.error('searchMissions', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -2575,7 +2575,7 @@ const actions = {
           alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.unassignSelectedMissionSlots.error')} - ${error.response.data.message}`
         })
       } else if (error.request) {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'unassignSelectedMissionSlots' } })
+        error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'unassignSelectedMissionSlots' } }) : null
         console.error('unassignSelectedMissionSlots', error.request)
         dispatch('showAlert', {
           showAlert: true,
@@ -2583,7 +2583,7 @@ const actions = {
           alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.unassignSelectedMissionSlots.error')} - ${i18n.t('failed.request')}`
         })
       } else {
-        Raven.captureException(error, { extra: { module: 'missions', function: 'unassignSelectedMissionSlots' } })
+        error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'unassignSelectedMissionSlots' } }) : null
         console.error('unassignSelectedMissionSlots', error.message)
         dispatch('showAlert', {
           showAlert: true,
@@ -2634,7 +2634,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.unregisterFromMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'unregisterFromMissionSlot' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'unregisterFromMissionSlot' } }) : null
           console.error('unregisterFromMissionSlot', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -2642,7 +2642,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.unregisterFromMissionSlot.error', { slotInfo: `#${payload.slotOrderNumber} ${payload.slotTitle}` })} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'unregisterFromMissionSlot' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'unregisterFromMissionSlot' } }) : null
           console.error('unregisterFromMissionSlot', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -2696,7 +2696,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.uploadMissionBannerImage.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'uploadMissionBannerImage' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'uploadMissionBannerImage' } }) : null
           console.error('uploadMissionBannerImage', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -2704,7 +2704,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.uploadMissionBannerImage.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missions', function: 'uploadMissionBannerImage' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missions', function: 'uploadMissionBannerImage' } }) : null
           console.error('uploadMissionBannerImage', error.message)
           dispatch('showAlert', {
             showAlert: true,

@@ -160,7 +160,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.applyToCommunity.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'applyToCommunity' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'applyToCommunity' } }) : null
           console.error('applyToCommunity', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -168,7 +168,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.applyToCommunity.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'applyToCommunity' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'applyToCommunity' } }) : null
           console.error('applyToCommunity', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -218,7 +218,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.checkCommunitySlugAvailability.error')} <strong>${payload}</strong> - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'checkCommunitySlugAvailability' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'checkCommunitySlugAvailability' } }) : null
           console.error('checkingCommunitySlugAvalability', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -226,7 +226,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.checkCommunitySlugAvailability.error')} <strong>${payload}</strong> - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'checkCommunitySlugAvailability' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'checkCommunitySlugAvailability' } }) : null
           console.error('checkingCommunitySlugAvalability', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -300,7 +300,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createCommunity.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'createCommunity' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'createCommunity' } }) : null
           console.error('createCommunity', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -308,7 +308,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createCommunity.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'createCommunity' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'createCommunity' } }) : null
           console.error('createCommunity', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -359,7 +359,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createCommunityPermission.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'createCommunityPermission' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'createCommunityPermission' } }) : null
           console.error('createCommunityPermission', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -367,7 +367,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createCommunityPermission.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'createCommunityPermission' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'createCommunityPermission' } }) : null
           console.error('createCommunityPermission', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -418,7 +418,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteCommunity.error')} <strong>${payload.communityName}</strong> - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'deleteCommunity' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'deleteCommunity' } }) : null
           console.error('deleteCommunity', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -426,7 +426,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteCommunity.error')} <strong>${payload.communityName}</strong> - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'deleteCommunity' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'deleteCommunity' } }) : null
           console.error('deleteCommunity', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -483,7 +483,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteCommunityLogo.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'deleteCommunityLogo' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'deleteCommunityLogo' } }) : null
           console.error('deleteCommunityLogo', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -491,7 +491,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteCommunityLogo.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'deleteCommunityLogo' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'deleteCommunityLogo' } }) : null
           console.error('deleteCommunityLogo', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -542,7 +542,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteCommunityPermission.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'deleteCommunityPermission' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'deleteCommunityPermission' } }) : null
           console.error('deleteCommunityPermission', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -550,7 +550,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteCommunityPermission.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'deleteCommunityPermission' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'deleteCommunityPermission' } }) : null
           console.error('deleteCommunityPermission', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -603,7 +603,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editCommunity.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'editCommunity' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'editCommunity' } }) : null
           console.error('editCommunity', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -611,7 +611,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editCommunity.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'editCommunity' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'editCommunity' } }) : null
           console.error('editCommunity', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -682,7 +682,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunities.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunities' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunities' } }) : null
           console.error('getCommunities', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -690,7 +690,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunities.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunities' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunities' } }) : null
           console.error('getCommunities', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -744,7 +744,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityApplications.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityApplications' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityApplications' } }) : null
           console.error('getCommunityApplications', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -752,7 +752,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityApplications.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityApplications' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityApplications' } }) : null
           console.error('getCommunityApplications', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -805,7 +805,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityApplicationStatus.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityApplicationStatus' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityApplicationStatus' } }) : null
           console.error('getCommunityApplicationStatus', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -813,7 +813,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityApplicationStatus.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityApplicationStatus' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityApplicationStatus' } }) : null
           console.error('getCommunityApplicationStatus', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -872,7 +872,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityDetails.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityDetails' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityDetails' } }) : null
           console.error('getCommunityDetails', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -880,7 +880,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityDetails.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityDetails' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityDetails' } }) : null
           console.error('getCommunityDetails', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -935,7 +935,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityMissions.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityMissions' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityMissions' } }) : null
           console.error('getCommunityMissions', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -943,7 +943,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityMissions.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityMissions' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityMissions' } }) : null
           console.error('getCommunityMissions', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -995,7 +995,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityPermissions.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityPermissions' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityPermissions' } }) : null
           console.error('getCommunityPermissions', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1003,7 +1003,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityPermissions.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityPermissions' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityPermissions' } }) : null
           console.error('getCommunityPermissions', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1051,7 +1051,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityServers.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityServers' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityServers' } }) : null
           console.error('getCommunityServers', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1059,7 +1059,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityServers.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityServers' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityServers' } }) : null
           console.error('getCommunityServers', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1110,7 +1110,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.processCommunityApplication.error', { action: payload.accepted ? i18n.t('store.processCommunityApplication.accept') : i18n.t('store.processCommunityApplication.deny'), nickname: payload.applicationUserNickname })} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'processCommunityApplication' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'processCommunityApplication' } }) : null
           console.error('processCommunityApplication', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1118,7 +1118,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.processCommunityApplication.error', { action: payload.accepted ? i18n.t('store.processCommunityApplication.accept') : i18n.t('store.processCommunityApplication.deny'), nickname: payload.applicationUserNickname })} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'processCommunityApplication' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'processCommunityApplication' } }) : null
           console.error('processCommunityApplication', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1168,7 +1168,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.removeCommunityMember.error', { nickname: payload.memberNickname })} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'removeCommunityMember' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'removeCommunityMember' } }) : null
           console.error('removeCommunityMember', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1176,7 +1176,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.removeCommunityMember.error', { nickname: payload.memberNickname })} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'removeCommunityMember' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'removeCommunityMember' } }) : null
           console.error('removeCommunityMember', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1236,7 +1236,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.searchCommunities.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'searchCommunities' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'searchCommunities' } }) : null
           console.error('searchCommunities', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1244,7 +1244,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.searchCommunities.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'searchCommunities' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'searchCommunities' } }) : null
           console.error('searchCommunities', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -1298,7 +1298,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.uploadCommunityLogo.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'uploadCommunityLogo' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'uploadCommunityLogo' } }) : null
           console.error('uploadCommunityLogo', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -1306,7 +1306,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.uploadCommunityLogo.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'communities', function: 'uploadCommunityLogo' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'uploadCommunityLogo' } }) : null
           console.error('uploadCommunityLogo', error.message)
           dispatch('showAlert', {
             showAlert: true,
