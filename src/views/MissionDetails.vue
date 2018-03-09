@@ -157,11 +157,14 @@
         </div>
         <div class="row text-center">
           <div class="col">
-            <b-btn variant="primary" v-if="missionDetails.repositories.length > 0" v-b-toggle.missionRepositoriesCollapse>
+            <b-btn variant="primary" v-b-toggle.missionRepositoriesCollapse>
               <i class="fa fa-cubes" aria-hidden="true"></i> {{ $t('mission.repository.list') }}
             </b-btn>
-            <span v-if="missionDetails.repositories.length === 0" class="font-italic text-muted">{{ $t('misc.notProvided') }}</span>
             <b-collapse id="missionRepositoriesCollapse">
+              <div v-if="missionDetails.repositories.length === 0">
+                <br>
+                <span class="font-italic text-muted">{{ $t('mission.repository.list.empty') }}</span>
+              </div>
               <div v-for="(chunk, chunkIndex) in missionRepositoryChunks" :key="chunk">
                 <br>
                 <div class="row">
