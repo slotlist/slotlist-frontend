@@ -157,7 +157,7 @@
         </div>
         <div class="row text-center">
           <div class="col">
-            <b-btn variant="primary" v-b-toggle.missionRepositoriesCollapse>
+            <b-btn variant="primary" v-b-toggle.missionRepositoriesCollapse @click="fetchCommunityRepositories">
               <i class="fa fa-cubes" aria-hidden="true"></i> {{ $t('mission.repository.list') }}
             </b-btn>
             <b-collapse id="missionRepositoriesCollapse">
@@ -227,6 +227,13 @@
                     </b-form-fieldset>
                   </div>
                 </div>
+                <div class="row justify-content-center" v-if="communityRepositories && communityRepositories.length > 0">
+                  <div class="col-6">
+                    <b-form-fieldset :label="$t('community.repositories')" state="success" :description="$t('community.repositories.description')">
+                      <b-form-select v-model="communityRepositoriesSelected" :options="communityRepositoryOptions" class="mb-3"></b-form-select>
+                    </b-form-fieldset>
+                  </div>
+                </div>
                 <div class="row">
                   <div class="col">
                     <b-btn size="sm" variant="success" @click="createMissionRepository">
@@ -252,7 +259,7 @@
         </div>
         <br v-if="isMissionEditor">
         <div class="row justify-content-center" v-if="isMissionEditor">
-          <b-btn variant="primary" v-b-modal.missionEditModal>
+          <b-btn variant="primary" v-b-modal.missionEditModal @click="fetchCommunityServers">
             <i class="fa fa-edit" aria-hidden="true"></i> {{ $t('button.edit') }}
           </b-btn>&nbsp;
           <b-btn variant="primary" v-b-modal.missionBannerImageModal>
@@ -282,7 +289,7 @@
         <br>
         <div class="text-center">
           <b-btn variant="primary" v-b-toggle.missioncollapsedDescriptionCollapse @click="toggleMissioncollapsedDescription">
-            <i class="fa" :class="{'fa-chevron-down': !isMissioncollapsedDescriptionExtended, 'fa-chevron-up': isMissioncollapsedDescriptionExtended}" aria-hidden="true"></i> {{ isMissioncollapsedDescriptionExtended ? $t('mission.collapsedDescription.toggle.close') : $t('mission.collapsedDescription.toggle.open') }}
+            <i class="fa" :class="{'fa-chevron-down': !isMissionCollapsedDescriptionExtended, 'fa-chevron-up': isMissionCollapsedDescriptionExtended}" aria-hidden="true"></i> {{ isMissionCollapsedDescriptionExtended ? $t('mission.collapsedDescription.toggle.close') : $t('mission.collapsedDescription.toggle.open') }}
           </b-btn>
         </div>
         <b-collapse id="missioncollapsedDescriptionCollapse">
@@ -399,6 +406,8 @@ export default {
   },
   beforeDestroy: function() {
     this.$store.dispatch('clearMissionDetails')
+    this.$store.dispatch('clearCommunityServers')
+    this.$store.dispatch('clearCommunityRepositories')
   },
   data() {
     return {
@@ -413,10 +422,32 @@ export default {
         { text: this.$t('mission.repository.kind.other'), value: 'other' }
       ],
       missionSlotlistFilter: [],
-      missioncollapsedDescriptionExtended: false
+      communityRepositoriesSelected: null,
+      missionCollapsedDescriptionExtended: false,
+      missionRepositoriesExtended: false
     }
   },
   computed: {
+    communityRepositories() {
+      return this.$store.getters.communityRepositories
+    },
+    communityRepositoryOptions() {
+      if (_.isNil(this.communityRepositories) || _.isEmpty(this.communityRepositories)) {
+        return []
+      }
+
+      let repositories = []
+      _.each(this.communityRepositories, (repository, index) => {
+        let kind = repository.kind === 'arma3sync' ? this.$t('mission.repository.kind.arma3sync') : this.$t('mission.repository.kind.other')
+        let name = _.isNil(repository.name) ? '' : ` - ${repository.name}`
+        repositories.push({
+          text: `${kind} - ${repository.url ? repository.url : this.$t('mission.repository.url.empty') }${name}`,
+          value: index
+        })
+      })
+
+      return repositories
+    },
     formattedMissionVisibility() {
       switch (this.missionDetails.visibility) {
         case 'community':
@@ -441,6 +472,19 @@ export default {
 
       return moment().isAfter(moment(this.missionDetails.endTime))
     },
+    isCommunityMember() {
+      if (_.isNil(this.user)) {
+        return false
+      } else if (_.isNil(this.user.community)) {
+        return false
+      } else if (_.isNil(this.missionDetails)) {
+        return false
+      } else if (_.isNil(this.missionDetails.community)) {
+        return false
+      }
+
+      return this.user.community.slug === this.missionDetails.community.slug
+    },
     isMissionCreator() {
       return this.$acl.can([`mission.${this.$route.params.missionSlug}.creator`])
     },
@@ -452,8 +496,8 @@ export default {
       const urlPattern = /^((https?|ftp):\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(\:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i
       return urlPattern.test(this.missionRepositoryCreateData.url)
     },
-    isMissioncollapsedDescriptionExtended() {
-      return this.missioncollapsedDescriptionExtended
+    isMissionCollapsedDescriptionExtended() {
+      return this.missionCollapsedDescriptionExtended
     },
     isPrivateMission() {
       if (_.isNil(this.missionDetails)) {
@@ -523,6 +567,9 @@ export default {
     optionalTechSupport() {
       return this.missionDetails.techSupport || `<div class='text-muted font-italic'>${this.$t('misc.notProvided')}</div>`
     },
+    user() {
+      return this.$store.getters.user
+    },
     timezone() {
       return this.$store.getters.timezone
     },
@@ -560,6 +607,8 @@ export default {
         url: null,
         notes: null
       }
+
+      this.communityRepositoriesSelected = null
     },
     deleteMission() {
       this.$store.dispatch('deleteMission', {
@@ -591,6 +640,20 @@ export default {
 
       FileSaver.saveAs(blob, `${this.missionDetails.title}.ics`)
     },
+    fetchCommunityRepositories() {
+      this.missionRepositoriesExtended = !this.missionRepositoriesExtended
+
+      if (this.missionRepositoriesExtended && this.isCommunityMember && _.isNil(this.$store.getters.communityRepositories)) {
+        this.$store.dispatch('getCommunityRepositories', { communitySlug: this.user.community.slug })
+      }
+
+      this.communityRepositoriesSelected = null
+    },
+    fetchCommunityServers() {
+      if (this.isCommunityMember && (_.isNil(this.$store.getters.communityGameServers) || _.isNil(this.$store.getters.communityVoiceComms))) {
+        this.$store.dispatch('getCommunityServers', { communitySlug: this.user.community.slug })
+      }
+    },
     googleCalendarLink(beginTime) {
       let link = 'https://www.google.com/calendar/event?action=TEMPLATE'
       link += `&text=${this.missionDetails.title}`
@@ -620,12 +683,23 @@ export default {
       })
     },
     toggleMissioncollapsedDescription() {
-      this.missioncollapsedDescriptionExtended = !this.missioncollapsedDescriptionExtended
+      this.missionCollapsedDescriptionExtended = !this.missionCollapsedDescriptionExtended
     }
   },
   watch: {
     missionSlotlistFilter(val) {
       this.$store.dispatch('filterMissionSlotlist', val)
+    },
+    communityRepositoriesSelected(val) {
+      const repository = this.communityRepositories[val];
+      if (_.isNil(repository)) {
+        return
+      }
+
+      this.missionRepositoryCreateData.name = repository.name
+      this.missionRepositoryCreateData.kind = repository.kind
+      this.missionRepositoryCreateData.url = repository.url
+      this.missionRepositoryCreateData.notes = repository.notes
     }
   }
 }

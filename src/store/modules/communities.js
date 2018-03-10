@@ -24,6 +24,7 @@ const state = {
   communityMembers: null,
   communityMissions: null,
   communityPermissions: null,
+  communityRepositories: null,
   communitySlugAvailable: false,
   communityVoiceComms: null,
   searchingCommunities: false,
@@ -106,6 +107,9 @@ const getters = {
   },
   communityPermissionsPageCount() {
     return Math.ceil(state.totalCommunityPermissions / limits.communityPermissions)
+  },
+  communityRepositories() {
+    return state.communityRepositories
   },
   communitySlugAvailable() {
     return state.communitySlugAvailable
@@ -244,6 +248,11 @@ const actions = {
   clearCommunityDetails({ commit }) {
     commit({
       type: 'clearCommunityDetails'
+    })
+  },
+  clearCommunityRepositories({ commit }) {
+    commit({
+      type: 'clearCommunityRepositories'
     })
   },
   clearCommunityServers({ commit }) {
@@ -1013,6 +1022,61 @@ const actions = {
         }
       })
   },
+  getCommunityRepositories({ commit, dispatch }, payload) {
+    dispatch('startWorking', i18n.t('store.getCommunityRepositories'))
+
+    return CommunitiesApi.getCommunityRepositories(payload.communitySlug)
+      .then(function (response) {
+        if (response.status !== 200) {
+          console.error(response)
+          throw "Retrieving community repositories failed"
+        }
+
+        if (_.isEmpty(response.data)) {
+          console.error(response)
+          throw "Received empty response"
+        }
+
+        if (_.isNil(response.data.repositories) || !_.isArray(response.data.repositories)) {
+          console.error(response)
+          throw "Received invalid community repositories"
+        }
+
+        commit({
+          type: 'setCommunityRepositories',
+          repositories: response.data.repositories
+        })
+
+        dispatch('stopWorking', i18n.t('store.getCommunityRepositories'))
+      }).catch((error) => {
+        dispatch('stopWorking', i18n.t('store.getCommunityRepositories'))
+
+        if (error.response) {
+          console.error('getCommunityRepositories', error.response)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityRepositories.error')} - ${error.response.data.message}`
+          })
+        } else if (error.request) {
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityRepositories' } }) : null
+          console.error('getCommunityRepositories', error.request)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityRepositories.error')} - ${i18n.t('failed.request')}`
+          })
+        } else {
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'communities', function: 'getCommunityRepositories' } }) : null
+          console.error('getCommunityRepositories', error.message)
+          dispatch('showAlert', {
+            showAlert: true,
+            alertVariant: 'danger',
+            alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getCommunityRepositories.error')} - ${i18n.t('failed.something')}`
+          })
+        }
+      })
+  },
   getCommunityServers({ commit, dispatch }, payload) {
     dispatch('startWorking', i18n.t('store.getCommunityServers'))
 
@@ -1333,6 +1397,9 @@ const mutations = {
     state.totalCommunityMissions = 0
     state.totalCommunityPermissions = 0
   },
+  clearCommunityRepositories(state) {
+    state.communityRepositories = null
+  },
   clearCommunityServers(state) {
     state.communityGameServers = null
     state.communityVoiceComms = null
@@ -1376,6 +1443,9 @@ const mutations = {
   setCommunityPermissions(state, payload) {
     state.communityPermissions = payload.permissions
     state.totalCommunityPermissions = payload.total
+  },
+  setCommunityRepositories(state, payload) {
+    state.communityRepositories = payload.repositories
   },
   setCommunityServers(state, payload) {
     state.communityGameServers = payload.gameServers

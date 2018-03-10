@@ -237,14 +237,6 @@ export default {
       }
     }
   },
-  created: function() {
-    if (!_.isNil(this.user) && !_.isNil(this.user.community)) {
-      this.$store.dispatch('getCommunityServers', { communitySlug: this.user.community.slug })
-    }
-  },
-  beforeDestroy: function() {
-    this.$store.dispatch('clearCommunityServers')
-  },
   computed: {
     communityGameServers() {
       return this.$store.getters.communityGameServers
