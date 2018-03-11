@@ -295,6 +295,7 @@
   "mission.repository.list.empty": "No mod repositories required",
   "mission.repository.name": "Name",
   "mission.repository.name.description": "Name of the mod repository, mostly useful for searching in repo lists",
+  "mission.repository.name.optional": "Name <em>(optional)<\/em>",
   "mission.repository.name.required": "Name",
   "mission.repository.notes": "Notes",
   "mission.repository.notes.description": "Optional notes about a repository, e.g. explaining the usage or required files. Required if no URL is provided",
