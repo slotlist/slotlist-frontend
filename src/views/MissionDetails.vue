@@ -207,7 +207,7 @@
                 <br>
                 <div class="row">
                   <div class="col-3">
-                    <b-form-fieldset :label="$t('mission.repository.name.optional')" state="success" :description="$t('mission.repository.name.description')">
+                    <b-form-fieldset :label="$t('mission.repository.name.required')" :state="missionRepositoryCreateNameState" :feedback="missionRepositoryCreateNameFeedback" :description="$t('mission.repository.name.description')">
                       <b-form-input v-model="missionRepositoryCreateData.name" type="text"></b-form-input>
                     </b-form-fieldset>
                   </div>
@@ -439,9 +439,8 @@ export default {
       let repositories = []
       _.each(this.communityRepositories, (repository, index) => {
         let kind = repository.kind === 'arma3sync' ? this.$t('mission.repository.kind.arma3sync') : this.$t('mission.repository.kind.other')
-        let name = _.isNil(repository.name) ? '' : ` - ${repository.name}`
         repositories.push({
-          text: `${kind} - ${repository.url ? repository.url : this.$t('mission.repository.url.empty') }${name}`,
+          text: `${kind} - ${repository.name} - ${repository.url ? repository.url : this.$t('mission.repository.url.empty') }`,
           value: index
         })
       })
@@ -525,6 +524,12 @@ export default {
     missionRepositoryCreateKindState() {
       return _.isEmpty(this.missionRepositoryCreateData.kind) ? 'danger' : 'success'
     },
+    missionRepositoryCreateNameFeedback() {
+      return _.isEmpty(this.missionRepositoryCreateData.name) ? this.$t('mission.feedback.repository.name') : ''
+    },
+    missionRepositoryCreateNameState() {
+      return _.isEmpty(this.missionRepositoryCreateData.name) ? 'danger' : 'success'
+    },
     missionRepositoryCreateNotesFeedback() {
       if (_.isEmpty(this.missionRepositoryCreateData.url) && _.isEmpty(this.missionRepositoryCreateData.notes)) {
         return this.$t('mission.feedback.repository.urlOrNotes')
@@ -579,7 +584,7 @@ export default {
   },
   methods: {
     createMissionRepository() {
-      if (_.isEmpty(this.missionRepositoryCreateData.kind)) {
+      if (_.isEmpty(this.missionRepositoryCreateData.kind) || _.isEmpty(this.missionRepositoryCreateData.name)) {
         return
       } else if (_.isEmpty(this.missionRepositoryCreateData.url) && _.isEmpty(this.missionRepositoryCreateData.notes)) {
         return
@@ -587,7 +592,7 @@ export default {
 
       const repositories = _.clone(this.missionDetails.repositories)
       repositories.push({
-        name: _.isEmpty(this.missionRepositoryCreateData.name) ? null : this.missionRepositoryCreateData.name,
+        name: this.missionRepositoryCreateData.name,
         kind: this.missionRepositoryCreateData.kind,
         url: _.isEmpty(this.missionRepositoryCreateData.url) ? null : this.missionRepositoryCreateData.url,
         notes: _.isEmpty(this.missionRepositoryCreateData.notes) ? null : this.missionRepositoryCreateData.notes,
