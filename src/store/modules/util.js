@@ -51,10 +51,10 @@ const actions = {
         if (error.response) {
           console.error('getBackendVersion', error.response)
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'util', function: 'getBackendVersion' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'util', function: 'getBackendVersion' } }) : null
           console.error('getBackendVersion', error.request)
         } else {
-          Raven.captureException(error, { extra: { module: 'util', function: 'getBackendVersion' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'util', function: 'getBackendVersion' } }) : null
           console.error('getBackendVersion', error.message)
         }
       })

@@ -161,7 +161,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissionSlotTemplate.error', { title: payload.title })} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missionSlotTemplates', function: 'createMissionSlotTemplate' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missionSlotTemplates', function: 'createMissionSlotTemplate' } }) : null
           console.error('createMissionSlotTemplate', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -169,7 +169,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.createMissionSlotTemplate.error', { title: payload.title })} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missionSlotTemplates', function: 'createMissionSlotTemplate' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missionSlotTemplates', function: 'createMissionSlotTemplate' } }) : null
           console.error('createMissionSlotTemplate', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -222,7 +222,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlotTemplate.error', { title: payload.missionSlotTemplateTitle })} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missionSlotTemplates', function: 'deleteMissionSlotTemplate' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missionSlotTemplates', function: 'deleteMissionSlotTemplate' } }) : null
           console.error('deleteMissionSlotTemplate', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -230,7 +230,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteMissionSlotTemplate.error', { title: payload.missionSlotTemplateTitle })} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missionSlotTemplates', function: 'deleteMissionSlotTemplate' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missionSlotTemplates', function: 'deleteMissionSlotTemplate' } }) : null
           console.error('deleteMissionSlotTemplate', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -293,7 +293,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editMissionSlotTemplate.error', { title: payload.missionSlotTemplateTitle })} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missionSlotTemplates', function: 'editMissionSlotTemplate' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missionSlotTemplates', function: 'editMissionSlotTemplate' } }) : null
           console.error('editMissionSlotTemplate', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -301,7 +301,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editMissionSlotTemplate.error', { title: payload.missionSlotTemplateTitle })} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missionSlotTemplates', function: 'editMissionSlotTemplate' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missionSlotTemplates', function: 'editMissionSlotTemplate' } }) : null
           console.error('editMissionSlotTemplate', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -437,7 +437,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionSlotTemplateDetails.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missionSlotTemplates', function: 'getMissionSlotTemplateDetails' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missionSlotTemplates', function: 'getMissionSlotTemplateDetails' } }) : null
           console.error('getMissionSlotTemplateDetails', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -445,7 +445,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionSlotTemplateDetails.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missionSlotTemplates', function: 'getMissionSlotTemplateDetails' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missionSlotTemplates', function: 'getMissionSlotTemplateDetails' } }) : null
           console.error('getMissionSlotTemplateDetails', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -540,7 +540,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionSlotTemplates.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'missionSlotTemplates', function: 'getMissionSlotTemplates' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missionSlotTemplates', function: 'getMissionSlotTemplates' } }) : null
           console.error('getMissionSlotTemplates', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -548,7 +548,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getMissionSlotTemplates.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'missionSlotTemplates', function: 'getMissionSlotTemplates' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'missionSlotTemplates', function: 'getMissionSlotTemplates' } }) : null
           console.error('getMissionSlotTemplates', error.message)
           dispatch('showAlert', {
             showAlert: true,

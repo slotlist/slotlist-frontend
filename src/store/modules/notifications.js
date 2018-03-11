@@ -147,7 +147,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getNotifications.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'notifications', function: 'getNotifications' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'notifications', function: 'getNotifications' } }) : null
           console.error('getNotifications', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -155,7 +155,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getNotifications.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'notifications', function: 'getNotifications' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'notifications', function: 'getNotifications' } }) : null
           console.error('getNotifications', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -214,7 +214,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getUnseenNotificationCount.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'notifications', function: 'getUnseenNotificationCount' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'notifications', function: 'getUnseenNotificationCount' } }) : null
           console.error('getUnseenNotificationCount', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -222,7 +222,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getUnseenNotificationCount.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'notifications', function: 'getUnseenNotificationCount' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'notifications', function: 'getUnseenNotificationCount' } }) : null
           console.error('getUnseenNotificationCount', error.message)
           dispatch('showAlert', {
             showAlert: true,

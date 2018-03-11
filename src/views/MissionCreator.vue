@@ -36,6 +36,14 @@
         </div>
         <div class="row">
           <div class="col">
+            <b-form-fieldset :label="$t('mission.collapsedDescription.optional')" state="success" :description="$t('mission.collapsedDescription.description')">
+              <quill-editor v-model="missionCreatecollapsedDescription" ref="missionCreatecollapsedDescriptionEditor" :options="descriptionEditorOptions"></quill-editor>
+              <editor-explanation></editor-explanation>
+            </b-form-fieldset>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
             <b-form-fieldset :label="$t('mission.slottingTime')" :state="missionCreateSlottingTimeState" :feedback="missionCreateSlottingTimeFeedback" :description="$t('mission.slottingTime.description')">
               <b-form-input v-model="missionCreateSlottingTime" type="text" required placeholder="YYYY-MM-DD HH:mm" :formatter="missionCreateTimeFormatter" @blur="missionCreateSlottingTimeBlur" lazy-formatter></b-form-input>
             </b-form-fieldset>
@@ -55,14 +63,6 @@
           <div class="col">
             <b-form-fieldset :label="$t('mission.briefingTime')" :state="missionCreateBriefingTimeState" :feedback="missionCreateBriefingTimeFeedback" :description="$t('mission.briefingTime.description')">
               <b-form-input v-model="missionCreateBriefingTime" type="text" required placeholder="YYYY-MM-DD HH:mm" :formatter="missionCreateTimeFormatter" lazy-formatter></b-form-input>
-            </b-form-fieldset>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <b-form-fieldset :label="$t('mission.repositoryUrl.optional')" state="success" :description="$t('mission.repositoryUrl.description')">
-              <quill-editor v-model="missionCreateRepositoryUrl" ref="missionCreateRepositoryUrlEditor" :options="editorOptions"></quill-editor>
-              <editor-explanation></editor-explanation>
             </b-form-fieldset>
           </div>
         </div>
@@ -215,12 +215,12 @@ export default {
       missionCreateTitle: null,
       missionCreateSlug: null,
       missionCreateDescription: null,
+      missionCreatecollapsedDescription: null,
       missionCreateDetailedDescription: null,
       missionCreateSlottingTime: null,
       missionCreateStartTime: null,
       missionCreateEndTime: null,
       missionCreateBriefingTime: null,
-      missionCreateRepositoryUrl: null,
       missionCreateTechSupport: null,
       missionCreateRules: null,
       missionCreateGameServerHostname: null,
@@ -606,12 +606,12 @@ export default {
         title: this.missionCreateTitle,
         slug: this.missionCreateSlug,
         description: this.missionCreateDescription,
+        collapsedDescription: this.missionCreatecollapsedDescription,
         detailedDescription: this.missionCreateDetailedDescription,
         slottingTime: moment(this.missionCreateSlottingTime).utc().format(),
         startTime: moment(this.missionCreateStartTime).utc().format(),
         endTime: moment(this.missionCreateEndTime).utc().format(),
         briefingTime: moment(this.missionCreateBriefingTime).utc().format(),
-        repositoryUrl: this.missionCreateRepositoryUrl,
         techSupport: this.missionCreateTechSupport,
         rules: this.missionCreateRules,
         gameServer,
@@ -620,8 +620,8 @@ export default {
         visibility: this.missionCreateVisibility
       }
 
-      if (_.isEmpty(missionDetails.repositoryUrl)) {
-        missionDetails.repositoryUrl = null
+      if (_.isEmpty(missionDetails.collapsedDescription)) {
+        missionDetails.collapsedDescription = null
       }
       if (_.isEmpty(missionDetails.techSupport)) {
         missionDetails.techSupport = null

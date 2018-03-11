@@ -25,6 +25,14 @@
           </div>
           <div class="row">
             <div class="col">
+              <b-form-fieldset :label="$t('mission.collapsedDescription.optional')" state="success" :description="$t('mission.collapsedDescription.description')">
+                <quill-editor v-model="missionEditData.collapsedDescription" ref="missionEditcollapsedDescriptionEditor" :options="missionEditDetailedDescriptionQuillEditorOptions"></quill-editor>
+                <editor-explanation></editor-explanation>
+              </b-form-fieldset>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
               <b-form-fieldset :label="$t('mission.slottingTime')" :state="missionEditSlottingTimeState" :feedback="missionEditSlottingTimeFeedback" :description="$t('mission.slottingTime.description')">
                 <b-form-input v-model="missionEditData.slottingTime" type="text" required placeholder="YYYY-MM-DD HH:mm" :formatter="missionEditTimeFormatter" lazy-formatter></b-form-input>
               </b-form-fieldset>
@@ -44,14 +52,6 @@
             <div class="col">
               <b-form-fieldset :label="$t('mission.briefingTime')" :state="missionEditBriefingTimeState" :feedback="missionEditBriefingTimeFeedback" :description="$t('mission.briefingTime.description')">
                 <b-form-input v-model="missionEditData.briefingTime" type="text" required placeholder="YYYY-MM-DD HH:mm" :formatter="missionEditTimeFormatter" lazy-formatter></b-form-input>
-              </b-form-fieldset>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <b-form-fieldset :label="$t('mission.repositoryUrl.optional')" state="success" :description="$t('mission.repositoryUrl.description')">
-                <quill-editor v-model="missionEditData.repositoryUrl" ref="missionEditrepositoryUrlEditor" :options="missionEditQuillEditorOptions"></quill-editor>
-                <editor-explanation></editor-explanation>
               </b-form-fieldset>
             </div>
           </div>
@@ -168,6 +168,7 @@ export default {
     return {
       missionEditData: {
         briefingTime: null,
+        collapsedDescription: null,
         detailedDescription: null,
         endTime: null,
         gameServer: {
@@ -176,7 +177,6 @@ export default {
           name: null,
           password: null
         },
-        repositoryUrl: null,
         rules: null,
         description: null,
         slottingTime: null,
@@ -236,14 +236,6 @@ export default {
         theme: 'snow'
       }
     }
-  },
-  created: function() {
-    if (!_.isNil(this.user) && !_.isNil(this.user.community)) {
-      this.$store.dispatch('getCommunityServers', { communitySlug: this.user.community.slug })
-    }
-  },
-  beforeDestroy: function() {
-    this.$store.dispatch('clearCommunityServers')
   },
   computed: {
     communityGameServers() {
@@ -507,8 +499,8 @@ export default {
         return
       }
 
-      if (_.isString(this.missionEditData.repositoryUrl) && _.isEmpty(this.missionEditData.repositoryUrl)) {
-        this.missionEditData.repositoryUrl = null
+      if (_.isString(this.missionEditData.collapsedDescription) && _.isEmpty(this.missionEditData.collapsedDescription)) {
+        this.missionEditData.collapsedDescription = null
       }
       if (_.isString(this.missionEditData.rules) && _.isEmpty(this.missionEditData.rules)) {
         this.missionEditData.rules = null
@@ -579,9 +571,9 @@ export default {
     setMissionData() {
       this.missionEditData = {
         briefingTime: moment(this.missionDetails.briefingTime).format('Y-MM-DD HH:mm'),
+        collapsedDescription: this.missionDetails.collapsedDescription,
         detailedDescription: this.missionDetails.detailedDescription,
         endTime: moment(this.missionDetails.endTime).format('Y-MM-DD HH:mm'),
-        repositoryUrl: this.missionDetails.repositoryUrl,
         rules: this.missionDetails.rules,
         description: this.missionDetails.description,
         gameServer: {

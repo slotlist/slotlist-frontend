@@ -97,7 +97,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteUser.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'users', function: 'deleteUser' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'users', function: 'deleteUser' } }) : null
           console.error('deleteUser', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -105,7 +105,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.deleteUser.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'users', function: 'deleteUser' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'users', function: 'deleteUser' } }) : null
           console.error('deleteUser', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -158,7 +158,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editUser.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'users', function: 'editUser' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'users', function: 'editUser' } }) : null
           console.error('editUser', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -166,7 +166,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.editUser.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'users', function: 'editUser' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'users', function: 'editUser' } }) : null
           console.error('editUser', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -213,7 +213,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getUserDetails.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'users', function: 'getUserDetails' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'users', function: 'getUserDetails' } }) : null
           console.error('getUserDetails', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -221,7 +221,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getUserDetails.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'users', function: 'getUserDetails' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'users', function: 'getUserDetails' } }) : null
           console.error('getUserDetails', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -316,7 +316,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getUsers.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'users', function: 'getUsers' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'users', function: 'getUsers' } }) : null
           console.error('getUsers', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -324,7 +324,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getUsers.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'users', function: 'getUsers' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'users', function: 'getUsers' } }) : null
           console.error('getUsers', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -379,7 +379,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getUserMissions.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'users', function: 'getUserMissions' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'users', function: 'getUserMissions' } }) : null
           console.error('getUserMissions', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -387,7 +387,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.getUserMissions.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'users', function: 'getUserMissions' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'users', function: 'getUserMissions' } }) : null
           console.error('getUserMissions', error.message)
           dispatch('showAlert', {
             showAlert: true,
@@ -447,7 +447,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.searchUsers.error')} - ${error.response.data.message}`
           })
         } else if (error.request) {
-          Raven.captureException(error, { extra: { module: 'users', function: 'searchUsers' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'users', function: 'searchUsers' } }) : null
           console.error('searchUsers', error.request)
           dispatch('showAlert', {
             showAlert: true,
@@ -455,7 +455,7 @@ const actions = {
             alertMessage: `<i class="fa fa-bolt" aria-hidden="true"></i> ${i18n.t('store.searchUsers.error')} - ${i18n.t('failed.request')}`
           })
         } else {
-          Raven.captureException(error, { extra: { module: 'users', function: 'searchUsers' } })
+          error.message !== "Network Error" ? Raven.captureException(error, { extra: { module: 'users', function: 'searchUsers' } }) : null
           console.error('searchUsers', error.message)
           dispatch('showAlert', {
             showAlert: true,

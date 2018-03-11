@@ -43,6 +43,9 @@ export const v1 = {
   getCommunityPermissions(communitySlug, limit = 10, offset = 0) {
     return axios.get(`/v1/communities/${communitySlug}/permissions?limit=${limit}&offset=${offset}`)
   },
+  getCommunityRepositories(communitySlug) {
+    return axios.get(`/v1/communities/${communitySlug}/repositories`)
+  },
   getCommunityServers(communitySlug) {
     return axios.get(`/v1/communities/${communitySlug}/servers`)
   },
