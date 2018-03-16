@@ -102,7 +102,7 @@
                     </div>
                     <div class="row justify-content-center">
                       <div class="col-4 font-weight-bold text-left">{{ $t('mission.repository.url') }}</div>
-                      <div class="col-4">
+                      <div class="col-4 word-wrap">
                         <span v-if="communityRepository.url">
                           <a v-if="communityRepository.kind === 'arma3sync'" :href="communityRepository.url" @click.prevent="$copyText(communityRepository.url)">{{ communityRepository.url }}</a>
                           <a v-else :href="communityRepository.url">{{ communityRepository.url }}</a>
@@ -112,7 +112,7 @@
                     </div>
                     <div class="row justify-content-center">
                       <div class="col-4 font-weight-bold text-left">{{ $t('mission.repository.notes') }}</div>
-                      <div class="col-4">
+                      <div class="col-4 word-wrap">
                         <span v-if="communityRepository.notes" v-html="communityRepository.notes"></span>
                         <span v-else class="text-muted font-italic">{{ $t('misc.notProvided') }}</span>
                       </div>
