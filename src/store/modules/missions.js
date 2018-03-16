@@ -1285,6 +1285,7 @@ const actions = {
             restrictedCommunityUid: _.isNil(slot.restrictedCommunity) ? null : slot.restrictedCommunity.uid,
             description: slot.description,
             title: slot.title,
+            autoAssignable: slot.autoAssignable,
             insertAfter: _.max([slot.orderNumber - 1, 0]),
             slotGroupUid
           }

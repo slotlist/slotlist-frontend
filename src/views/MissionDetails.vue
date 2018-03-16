@@ -171,11 +171,11 @@
                   <div class="col" v-for="(missionRepository, index) in chunk" :key="missionRepository">
                     <div v-if="missionRepository.name" class="row justify-content-center">
                       <div class="col-4 font-weight-bold text-left">{{ $t('mission.repository.name') }}</div>
-                      <div class="col-4">{{ missionRepository.name }}</div>
+                      <div class="col-4 word-wrap">{{ missionRepository.name }}</div>
                     </div>
                     <div class="row justify-content-center">
                       <div class="col-4 font-weight-bold text-left">{{ $t('mission.repository.url') }}</div>
-                      <div class="col-4">
+                      <div class="col-4 word-wrap">
                         <span v-if="missionRepository.url">
                           <a v-if="missionRepository.kind === 'arma3sync'" :href="missionRepository.url" @click.prevent="$copyText(missionRepository.url)">{{ missionRepository.url }}</a>
                           <a v-else :href="missionRepository.url">{{ missionRepository.url }}</a>
@@ -185,7 +185,7 @@
                     </div>
                     <div class="row justify-content-center">
                       <div class="col-4 font-weight-bold text-left">{{ $t('mission.repository.notes') }}</div>
-                      <div class="col-4">
+                      <div class="col-4 word-wrap">
                         <span v-if="missionRepository.notes" v-html="missionRepository.notes"></span>
                         <span v-else class="text-muted font-italic">{{ $t('misc.notProvided') }}</span>
                       </div>
