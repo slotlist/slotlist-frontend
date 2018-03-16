@@ -200,6 +200,7 @@ export default {
         restrictedCommunityUid: _.isNil(this.missionSlotDetails.restrictedCommunity) ? null : this.missionSlotDetails.restrictedCommunity.uid,
         reserve: this.missionSlotDetails.reserve,
         blocked: this.missionSlotDetails.blocked,
+        autoAssignable: this.missionSlotDetails.autoAssignable,
         insertAfter: this.missionSlotDetails.orderNumber,
         slotGroupUid: this.missionSlotDetails.slotGroupUid
       }
