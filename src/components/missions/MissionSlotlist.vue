@@ -35,6 +35,17 @@
         </b-btn>
       </div>
     </div>
+    <br>
+    <div class="text-center small text-muted">
+      <i class="icon-arma-3-apex-dlc"></i> {{ $t('mission.slot.dlc.apex') }} |
+      <i class="icon-arma-3-helicopters-dlc"></i> {{ $t('mission.slot.dlc.helicopters') }} |
+      <i class="icon-arma-3-jets-dlc"></i> {{ $t('mission.slot.dlc.jets') }} |
+      <i class="icon-arma-3-karts-dlc"></i> {{ $t('mission.slot.dlc.karts') }} |
+      <i class="icon-arma-3-laws-of-war-dlc"></i> {{ $t('mission.slot.dlc.laws-of-war') }} |
+      <i class="icon-arma-3-marksmen-dlc"></i> {{ $t('mission.slot.dlc.marksmen') }} |
+      <i class="icon-arma-3-tac-ops-dlc"></i> {{ $t('mission.slot.dlc.tac-ops') }} |
+      <i class="icon-arma-3-tanks-dlc"></i> {{ $t('mission.slot.dlc.tanks') }}
+    </div>
   </div>
 </template>
 

@@ -5,9 +5,11 @@
     <td>
       <div v-if="!missionSlotDetails.restrictedCommunity && !missionSlotDetails.reserve && !missionSlotDetails.blocked">
         <i :class="difficultyIcon" aria-hidden="true"></i> {{ missionSlotDetails.title }}
+        <i v-for="requiredDLC in missionSlotRequiredDLCs" :key="requiredDLC" :class="requiredDLC"></i>
       </div>
       <b-popover v-if="missionSlotDetails.restrictedCommunity || missionSlotDetails.reserve || missionSlotDetails.blocked" :content="titlePopoverContent" :triggers="['hover']">
         <span :class="titleColor" v-html="formattedTitle"></span>
+        <i v-for="requiredDLC in missionSlotRequiredDLCs" :key="requiredDLC" :class="requiredDLC"></i>
       </b-popover>
     </td>
     <td>
@@ -114,6 +116,19 @@ export default {
     },
     missionDetails() {
       return this.$store.getters.missionDetails
+    },
+    missionSlotRequiredDLCs() {
+      if (_.isNil(this.missionSlotDetails)) {
+        return []
+      }
+
+      if (_.isEmpty(this.missionSlotDetails.requiredDLCs)) {
+        return []
+      }
+
+      return _.map(this.missionSlotDetails.requiredDLCs, (requiredDLC) => {
+        return `icon-arma-3-${requiredDLC.toLowerCase()}-dlc`
+      })
     },
     missionSlotSelected() {
       return _.indexOf(this.missionSlotSelection, this.missionSlotDetails.uid) >= 0
