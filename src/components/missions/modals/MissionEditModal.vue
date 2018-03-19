@@ -138,6 +138,13 @@
               </b-form-fieldset>
             </div>
             <div class="col text-center">
+              <b-form-fieldset :label="$t('mission.slotsAutoAssignable')" state="success" :description="$t('mission.slotsAutoAssignable.description')">
+                <b-form-checkbox v-model="missionEditData.slotsAutoAssignable"></b-form-checkbox>
+              </b-form-fieldset>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col text-center">
               <b-form-fieldset :label="$t('notification.suppress')" state="success" :description="$t('notification.suppress.description')">
                 <b-form-checkbox v-model="missionEditSuppressNotifications"></b-form-checkbox>
               </b-form-fieldset>
@@ -179,6 +186,7 @@ export default {
         },
         rules: null,
         description: null,
+        slotsAutoAssignable: false,
         slottingTime: null,
         startTime: null,
         techSupport: null,
@@ -582,6 +590,7 @@ export default {
           name: _.isNil(this.missionDetails.gameServer) ? null : this.missionDetails.gameServer.name,
           password: _.isNil(this.missionDetails.gameServer) ? null : this.missionDetails.gameServer.password,
         },
+        slotsAutoAssignable: this.missionDetails.slotsAutoAssignable,
         slottingTime: moment(this.missionDetails.slottingTime).format('Y-MM-DD HH:mm'),
         startTime: moment(this.missionDetails.startTime).format('Y-MM-DD HH:mm'),
         techSupport: this.missionDetails.techSupport,

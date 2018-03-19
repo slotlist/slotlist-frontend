@@ -148,6 +148,13 @@
               <b-form-checkbox v-model="missionCreateAddToCommunity"></b-form-checkbox>
             </b-form-fieldset>
           </div>
+          <div class="col text-center">
+            <b-form-fieldset :label="$t('mission.slotsAutoAssignable')" state="success" :description="$t('mission.slotsAutoAssignable.description')">
+              <b-form-checkbox v-model="missionCreateSlotsAutoAssignable"></b-form-checkbox>
+            </b-form-fieldset>
+          </div>
+        </div>
+        <div class="row">
           <div class="col">
             <b-form-fieldset :label="$t('mission.visibility')" :state="missionCreateVisibilityState" :feedback="missionCreateVisibilityFeedback" :description="$t('mission.visibility.description')">
               <b-form-select v-model="missionCreateVisibility" :options="missionCreateVisibilityOptions" class="mb-3" required></b-form-select>
@@ -234,6 +241,7 @@ export default {
       missionCreateCommunityGameServersSelected: null,
       missionCreateCommunityVoiceCommsSelected: null,
       missionCreateAddToCommunity: true,
+      missionCreateSlotsAutoAssignable: false,
       missionCreateVisibility: 'hidden'
     }
   },
@@ -617,6 +625,7 @@ export default {
         gameServer,
         voiceComms,
         addToCommunity: this.missionCreateAddToCommunity,
+        slotsAutoAssignable: this.missionCreateSlotsAutoAssignable,
         visibility: this.missionCreateVisibility
       }
 

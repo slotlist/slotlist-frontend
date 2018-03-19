@@ -202,7 +202,8 @@ export default {
         blocked: this.missionSlotDetails.blocked,
         autoAssignable: this.missionSlotDetails.autoAssignable,
         insertAfter: this.missionSlotDetails.orderNumber,
-        slotGroupUid: this.missionSlotDetails.slotGroupUid
+        slotGroupUid: this.missionSlotDetails.slotGroupUid,
+        duplicate: true
       }
 
       this.hideMissionSlotDetailsModal();
