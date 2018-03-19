@@ -201,6 +201,7 @@ export default {
         reserve: this.missionSlotDetails.reserve,
         blocked: this.missionSlotDetails.blocked,
         autoAssignable: this.missionSlotDetails.autoAssignable,
+        requiredDLCs: this.missionSlotDetails.requiredDLCs,
         insertAfter: this.missionSlotDetails.orderNumber,
         slotGroupUid: this.missionSlotDetails.slotGroupUid,
         duplicate: true

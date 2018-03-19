@@ -24,6 +24,15 @@
             </p>
           </div>
           <div class="col">
+            <h5>{{ $t('mission.requiredDLCs') }}</h5>
+            <p>
+              <span v-if="missionRequiredDLCs && missionRequiredDLCs.length > 0">
+                <i v-for="requiredDLC in missionRequiredDLCs" :key="requiredDLC" :class="requiredDLC" style="font-size: large"></i>
+              </span>
+              <span v-else class="text-muted font-italic">{{ $t('mission.requiredDLCs.none') }}</span>
+            </p>
+          </div>
+          <div class="col">
             <h5>{{ $t('mission.visibility') }}</h5>
             <p v-html="formattedMissionVisibility"></p>
           </div>
@@ -565,6 +574,19 @@ export default {
       }
 
       return this.isMissionRepositoryUrlValid ? 'success' : 'danger'
+    },
+    missionRequiredDLCs() {
+      if (_.isNil(this.missionDetails)) {
+        return []
+      }
+
+      if (_.isEmpty(this.missionDetails.requiredDLCs)) {
+        return []
+      }
+
+      return _.map(this.missionDetails.requiredDLCs, (requiredDLC) => {
+        return `icon-arma-3-${requiredDLC.toLowerCase()}-dlc`
+      })
     },
     optionalRules() {
       return this.missionDetails.rules || `<div class='text-muted font-italic'>${this.$t('misc.notSpecified')}</div>`

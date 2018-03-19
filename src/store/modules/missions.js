@@ -1286,6 +1286,7 @@ const actions = {
             description: slot.description,
             title: slot.title,
             autoAssignable: slot.autoAssignable,
+            requiredDLCs: slot.requiredDLCs,
             insertAfter: _.max([slot.orderNumber - 1, 0]),
             slotGroupUid,
             duplicate: true
