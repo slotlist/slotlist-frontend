@@ -61,6 +61,35 @@
               </b-form-fieldset>
             </div>
           </div>
+          <span class="text-success" style="font-size: 1rem; font-weight: 400; line-height: 1.5">{{ $t('mission.requiredDLCs') }}</span>
+          <div class="row">
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotCreateRequiredDLCs.apex"><i class="icon-arma-3-apex-dlc"></i> {{ $t('mission.requiredDLCs.apex') }}</b-form-checkbox>
+            </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotCreateRequiredDLCs.helicopters"><i class="icon-arma-3-helicopters-dlc"></i> {{ $t('mission.requiredDLCs.helicopters') }}</b-form-checkbox>
+            </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotCreateRequiredDLCs.jets"><i class="icon-arma-3-jets-dlc"></i> {{ $t('mission.requiredDLCs.jets') }}</b-form-checkbox>
+            </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotCreateRequiredDLCs.karts"><i class="icon-arma-3-karts-dlc"></i> {{ $t('mission.requiredDLCs.karts') }}</b-form-checkbox>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotCreateRequiredDLCs.lawsofwar"><i class="icon-arma-3-laws-of-war-dlc"></i> {{ $t('mission.requiredDLCs.laws-of-war') }}</b-form-checkbox>
+            </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotCreateRequiredDLCs.marksmen"><i class="icon-arma-3-marksmen-dlc"></i> {{ $t('mission.requiredDLCs.marksmen') }}</b-form-checkbox>
+            </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotCreateRequiredDLCs.tacops"><i class="icon-arma-3-tac-ops-dlc"></i> {{ $t('mission.requiredDLCs.tac-ops') }}</b-form-checkbox>
+            </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotCreateRequiredDLCs.tanks"><i class="icon-arma-3-tanks-dlc"></i> {{ $t('mission.requiredDLCs.tanks') }}</b-form-checkbox>
+            </div>
+          </div>
           <div class="row">
             <div class="col">
               <b-form-fieldset :label="$t('mission.slot.insertAfter')" state="success" :description="$t('mission.slot.insertAfter.description')">
@@ -101,6 +130,16 @@ export default {
         restrictedCommunityUid: null,
         description: null,
         title: null
+      },
+      missionSlotCreateRequiredDLCs: {
+        apex: false,
+        helicopters: false,
+        jets: false,
+        karts: false,
+        lawsofwar: false,
+        marksmen: false,
+        tacops: false,
+        tanks: false
       },
       missionSlotCreateDetailedDescriptionEditorOptions: {
         modules: {
@@ -214,6 +253,17 @@ export default {
         description: null,
         title: null
       }
+
+      this.missionSlotCreateRequiredDLCs = {
+        apex: false,
+        helicopters: false,
+        jets: false,
+        karts: false,
+        lawsofwar: false,
+        marksmen: false,
+        tacops: false,
+        tanks: false
+      }
     },
     createMissionSlot() {
       if (_.isEmpty(this.missionSlotCreateData.title)) {
@@ -232,7 +282,22 @@ export default {
         this.missionSlotCreateData.restrictedCommunityUid = null
       }
 
-      const payload = _.assign({ slotGroupUid: this.missionSlotGroupDetails.uid }, _.omit(this.missionSlotCreateData, 'restricted'))
+      const missionSlotRequiredDLCs = []
+      _.each(_.keys(this.missionSlotCreateRequiredDLCs), (dlc) => {
+        if (!this.missionSlotCreateRequiredDLCs[dlc]) {
+          return
+        }
+
+        if (dlc === 'lawsofwar') {
+          missionSlotRequiredDLCs.push('laws-of-war')
+        } else if (dlc === 'tacops') {
+          missionSlotRequiredDLCs.push('tac-ops')
+        } else {
+          missionSlotRequiredDLCs.push(dlc)
+        }
+      })
+
+      const payload = _.assign({ slotGroupUid: this.missionSlotGroupDetails.uid, requiredDLCs: missionSlotRequiredDLCs }, _.omit(this.missionSlotCreateData, 'restricted'))
 
       this.hideMissionSlotCreateModal()
 
