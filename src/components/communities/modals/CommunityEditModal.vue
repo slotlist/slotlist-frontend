@@ -316,6 +316,10 @@ export default {
         return
       }
 
+      if (_.isNil(this.communityEditData.gameServers)) {
+        this.communityEditData.gameServers = []
+      }
+
       this.communityEditData.gameServers.push({
         hostname: this.communityEditGameServer.hostname,
         port: this.communityEditGameServer.port,
@@ -336,6 +340,10 @@ export default {
       _.isNil(this.communityEditVoiceComms.port) ||
       _.isEmpty(this.communityEditVoiceComms.port)) {
         return
+      }
+
+      if (_.isNil(this.communityEditData.voiceComms)) {
+        this.communityEditData.voiceComms = []
       }
 
       this.communityEditData.voiceComms.push({
@@ -397,8 +405,8 @@ export default {
         name: this.communityDetails.name,
         tag: this.communityDetails.tag,
         website: this.communityDetails.website,
-        gameServers: _.clone(this.communityDetails.gameServers),
-        voiceComms: _.clone(this.communityDetails.voiceComms)
+        gameServers: _.isNil(this.communityDetails.gameServers) ? [] : _.clone(this.communityDetails.gameServers),
+        voiceComms: _.isNil(this.communityDetails.voiceComms) ? [] : _.clone(this.communityDetails.voiceComms)
       }
     }
   }
