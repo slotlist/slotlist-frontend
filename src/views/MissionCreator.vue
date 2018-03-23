@@ -154,6 +154,35 @@
             </b-form-fieldset>
           </div>
         </div>
+        <span class="text-success" style="font-size: 1rem; font-weight: 400; line-height: 1.5">{{ $t('mission.requiredDLCs') }}</span>
+        <div class="row">
+          <div class="col">
+            <b-form-checkbox v-model="missionCreateRequiredDLCs.apex"><i class="icon-arma-3-apex-dlc"></i> {{ $t('mission.requiredDLCs.apex') }}</b-form-checkbox>
+          </div>
+          <div class="col">
+            <b-form-checkbox v-model="missionCreateRequiredDLCs.helicopters"><i class="icon-arma-3-helicopters-dlc"></i> {{ $t('mission.requiredDLCs.helicopters') }}</b-form-checkbox>
+          </div>
+          <div class="col">
+            <b-form-checkbox v-model="missionCreateRequiredDLCs.jets"><i class="icon-arma-3-jets-dlc"></i> {{ $t('mission.requiredDLCs.jets') }}</b-form-checkbox>
+          </div>
+          <div class="col">
+            <b-form-checkbox v-model="missionCreateRequiredDLCs.karts"><i class="icon-arma-3-karts-dlc"></i> {{ $t('mission.requiredDLCs.karts') }}</b-form-checkbox>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <b-form-checkbox v-model="missionCreateRequiredDLCs.lawsofwar"><i class="icon-arma-3-laws-of-war-dlc"></i> {{ $t('mission.requiredDLCs.laws-of-war') }}</b-form-checkbox>
+          </div>
+          <div class="col">
+            <b-form-checkbox v-model="missionCreateRequiredDLCs.marksmen"><i class="icon-arma-3-marksmen-dlc"></i> {{ $t('mission.requiredDLCs.marksmen') }}</b-form-checkbox>
+          </div>
+          <div class="col">
+            <b-form-checkbox v-model="missionCreateRequiredDLCs.tacops"><i class="icon-arma-3-tac-ops-dlc"></i> {{ $t('mission.requiredDLCs.tac-ops') }}</b-form-checkbox>
+          </div>
+          <div class="col">
+            <b-form-checkbox v-model="missionCreateRequiredDLCs.tanks"><i class="icon-arma-3-tanks-dlc"></i> {{ $t('mission.requiredDLCs.tanks') }}</b-form-checkbox>
+          </div>
+        </div>
         <div class="row">
           <div class="col">
             <b-form-fieldset :label="$t('mission.visibility')" :state="missionCreateVisibilityState" :feedback="missionCreateVisibilityFeedback" :description="$t('mission.visibility.description')">
@@ -242,6 +271,16 @@ export default {
       missionCreateCommunityVoiceCommsSelected: null,
       missionCreateAddToCommunity: true,
       missionCreateSlotsAutoAssignable: false,
+      missionCreateRequiredDLCs: {
+        apex: false,
+        helicopters: false,
+        jets: false,
+        karts: false,
+        lawsofwar: false,
+        marksmen: false,
+        tacops: false,
+        tanks: false
+      },
       missionCreateVisibility: 'hidden'
     }
   },
@@ -610,6 +649,21 @@ export default {
         }
       }
 
+      const missionRequiredDLCs = []
+      _.each(_.keys(this.missionCreateRequiredDLCs), (dlc) => {
+        if (!this.missionCreateRequiredDLCs[dlc]) {
+          return
+        }
+
+        if (dlc === 'lawsofwar') {
+          missionRequiredDLCs.push('laws-of-war')
+        } else if (dlc === 'tacops') {
+          missionRequiredDLCs.push('tac-ops')
+        } else {
+          missionRequiredDLCs.push(dlc)
+        }
+      })
+
       const missionDetails = {
         title: this.missionCreateTitle,
         slug: this.missionCreateSlug,
@@ -626,6 +680,7 @@ export default {
         voiceComms,
         addToCommunity: this.missionCreateAddToCommunity,
         slotsAutoAssignable: this.missionCreateSlotsAutoAssignable,
+        requiredDLCs: missionRequiredDLCs,
         visibility: this.missionCreateVisibility
       }
 
