@@ -34,7 +34,22 @@ Promise.config({
 
 window.Promise = Promise
 
-// Black-require API/axios utils
+// Taken from https://stackoverflow.com/a/27081419 on 2018-03-23 15:36
+if (typeof localStorage === 'object') {
+  try {
+    localStorage.setItem('sl__localStorageTest', 1)
+    localStorage.removeItem('sl__localStorageTest')
+
+    console.debug('Your web browser supports local storage. Authentication and local preferences will be persisted!')
+  } catch (err) {
+    Storage.prototype._setItem = Storage.prototype.setItem;
+    Storage.prototype.setItem = function() {}
+
+    console.warn('Your web browser does not support local storage. Authentication and local preferences will not be persisted!')
+  }
+}
+
+// Blank-require API/axios utils
 require('./api/util')
 
 if (process.env.SENTRY_DSN) {
