@@ -35,6 +35,17 @@
         </b-btn>
       </div>
     </div>
+    <br v-if="hasMissionAnyRequiredDLCs">
+    <div v-if="hasMissionAnyRequiredDLCs" class="text-center small text-muted">
+      <i class="icon-arma-3-apex-dlc"></i> {{ $t('mission.requiredDLCs.apex') }} |
+      <i class="icon-arma-3-helicopters-dlc"></i> {{ $t('mission.requiredDLCs.helicopters') }} |
+      <i class="icon-arma-3-jets-dlc"></i> {{ $t('mission.requiredDLCs.jets') }} |
+      <i class="icon-arma-3-karts-dlc"></i> {{ $t('mission.requiredDLCs.karts') }} |
+      <i class="icon-arma-3-laws-of-war-dlc"></i> {{ $t('mission.requiredDLCs.laws-of-war') }} |
+      <i class="icon-arma-3-marksmen-dlc"></i> {{ $t('mission.requiredDLCs.marksmen') }} |
+      <i class="icon-arma-3-tac-ops-dlc"></i> {{ $t('mission.requiredDLCs.tac-ops') }} |
+      <i class="icon-arma-3-tanks-dlc"></i> {{ $t('mission.requiredDLCs.tanks') }}
+    </div>
   </div>
 </template>
 
@@ -50,6 +61,21 @@ export default {
   computed: {
     anyMissionSlotSelected() {
       return !_.isEmpty(this.$store.getters.missionSlotSelection)
+    },
+    hasMissionAnyRequiredDLCs() {
+      if (_.isNil(this.missionDetails)) {
+        return false
+      }
+
+      if (!_.isEmpty(this.missionDetails.requiredDLCs)) {
+        return true
+      }
+
+      return _.some(this.missionSlotGroups, (slotGroup) => {
+        return _.some(slotGroup.slots, (slot) => {
+          return !_.isEmpty(slot.requiredDLCs)
+        })
+      })
     },
     hasMissionEnded() {
       if (_.isNil(this.missionDetails)) {

@@ -25,6 +25,7 @@ const state = {
   missionCalendarCurrentMonth: null,
   missionDetails: null,
   missionListFilter: {},
+  missionListRequiredDLCsFilter: [],
   missionPermissions: null,
   missionToken: null,
   missions: null,
@@ -34,6 +35,7 @@ const state = {
   missionSlotGroupDetails: null,
   missionSlotGroups: null,
   missionSlotlistFilter: {},
+  missionSlotlistRequiredDLCsFilter: [],
   missionSlotRegistrationDetails: null,
   missionSlotRegistrations: null,
   missionSlotRegistrationSuppressNotifications: false,
@@ -68,6 +70,9 @@ const getters = {
   missionListFilter() {
     return _.keys(state.missionListFilter)
   },
+  missionListRequiredDLCsFilter() {
+    return state.missionListRequiredDLCsFilter
+  },
   missionPermissions() {
     return state.missionPermissions
   },
@@ -75,15 +80,43 @@ const getters = {
     return Math.ceil(state.totalMissionPermissions / limits.missionPermissions)
   },
   missions() {
-    if (_.isEmpty(_.keys(state.missionListFilter)) || (_.keys(state.missionListFilter).length === 1 && _.has(state.missionListFilter, 'ended'))) {
+    if ((_.isEmpty(_.keys(state.missionListFilter)) ||
+      (_.keys(state.missionListFilter).length === 1 && _.has(state.missionListFilter, 'ended'))) &&
+      _.isEmpty(state.missionListRequiredDLCsFilter)) {
       return state.missions
+    }
+
+    function missionListFilter(mission) {
+      if (_.isEmpty(_.keys(state.missionListFilter)) || (_.keys(state.missionListFilter).length === 1 && _.has(state.missionListFilter, 'ended'))) {
+        return true
+      }
+
+      if (_.has(state.missionListFilter, 'assigned') && mission.isAssignedToAnySlot) {
+        return true
+      } else if (_.has(state.missionListFilter, 'registered') && mission.isRegisteredForAnySlot) {
+        return true
+      }
+
+      return false
+    }
+
+    function missionListRequiredDLCsFilter(mission) {
+      if (_.isEmpty(state.missionListRequiredDLCsFilter)) {
+        return true
+      }
+
+      if (_.isEmpty(mission.requiredDLCs)) {
+        return false
+      }
+
+      return _.every(state.missionListRequiredDLCsFilter, (filter) => {
+        return _.indexOf(mission.requiredDLCs, filter) >= 0
+      })
     }
 
     const filteredMissions = []
     _.each(state.missions, (mission) => {
-      if (_.has(state.missionListFilter, 'assigned') && mission.isAssignedToAnySlot) {
-        filteredMissions.push(mission)
-      } else if (_.has(state.missionListFilter, 'registered') && mission.isRegisteredForAnySlot) {
+      if (missionListFilter(mission) && missionListRequiredDLCsFilter(mission)) {
         filteredMissions.push(mission)
       }
     })
@@ -103,23 +136,50 @@ const getters = {
     return state.missionSlotGroupDetails
   },
   missionSlotGroups() {
-    if (_.isEmpty(_.keys(state.missionSlotlistFilter))) {
+    if (_.isEmpty(_.keys(state.missionSlotlistFilter)) && _.isEmpty(state.missionSlotlistRequiredDLCsFilter)) {
       return state.missionSlotGroups
+    }
+
+    function slotlistFilter(slot) {
+      if (_.isEmpty(_.keys(state.missionSlotlistFilter))) {
+        return true
+      }
+
+      if (_.has(state.missionSlotlistFilter, 'assigned') && (!_.isNil(slot.assignee) || !_.isNil(slot.externalAssignee))) {
+        return true
+      } else if (_.has(state.missionSlotlistFilter, 'hasRegistrations') && _.isNil(slot.assignee) && slot.registrationCount > 0) {
+        return true
+      } else if (_.has(state.missionSlotlistFilter, 'open') && _.isNil(slot.assignee) && slot.registrationCount <= 0 && !slot.blocked) {
+        return true
+      } else if (_.has(state.missionSlotlistFilter, 'blocked') && slot.blocked) {
+        return true
+      } else if (_.has(state.missionSlotlistFilter, 'restricted') && !_.isNil(slot.restrictedCommunity)) {
+        return true
+      }
+
+      return false
+    }
+
+    function slotlistRequiredDLCsFilter(slot) {
+      if (_.isEmpty(state.missionSlotlistRequiredDLCsFilter)) {
+        return true
+      }
+
+      if (_.isEmpty(slot.requiredDLCs)) {
+        return false
+      }
+
+      return _.every(state.missionSlotlistRequiredDLCsFilter, (filter) => {
+        return _.indexOf(slot.requiredDLCs, filter) >= 0
+      })
     }
 
     const filteredSlotGroups = []
     _.each(state.missionSlotGroups, (slotGroup) => {
       const filteredSlots = []
+
       _.each(slotGroup.slots, (slot) => {
-        if (_.has(state.missionSlotlistFilter, 'assigned') && (!_.isNil(slot.assignee) || !_.isNil(slot.externalAssignee))) {
-          filteredSlots.push(slot)
-        } else if (_.has(state.missionSlotlistFilter, 'hasRegistrations') && _.isNil(slot.assignee) && slot.registrationCount > 0) {
-          filteredSlots.push(slot)
-        } else if (_.has(state.missionSlotlistFilter, 'open') && _.isNil(slot.assignee) && slot.registrationCount <= 0 && !slot.blocked) {
-          filteredSlots.push(slot)
-        } else if (_.has(state.missionSlotlistFilter, 'blocked') && slot.blocked) {
-          filteredSlots.push(slot)
-        } else if (_.has(state.missionSlotlistFilter, 'restricted') && !_.isNil(slot.restrictedCommunity)) {
+        if (slotlistFilter(slot) && slotlistRequiredDLCsFilter(slot)) {
           filteredSlots.push(slot)
         }
       })
@@ -133,6 +193,9 @@ const getters = {
   },
   missionSlotlistFilter() {
     return _.keys(state.missionSlotlistFilter)
+  },
+  missionSlotlistRequiredDLCsFilter() {
+    return state.missionSlotlistRequiredDLCsFilter
   },
   missionSlotRegistrationDetails() {
     return state.missionSlotRegistrationDetails
@@ -1286,8 +1349,10 @@ const actions = {
             description: slot.description,
             title: slot.title,
             autoAssignable: slot.autoAssignable,
+            requiredDLCs: slot.requiredDLCs,
             insertAfter: _.max([slot.orderNumber - 1, 0]),
-            slotGroupUid
+            slotGroupUid,
+            duplicate: true
           }
         })
 
@@ -1652,10 +1717,22 @@ const actions = {
       dispatch('getMissions')
     }
   },
+  filterMissionListRequiredDLCs({ commit }, payload) {
+    commit({
+      type: 'setMissionListRequiredDLCsFilter',
+      missionListRequiredDLCsFilter: payload
+    })
+  },
   filterMissionSlotlist({ commit }, payload) {
     commit({
       type: 'setMissionSlotlistFilter',
       missionSlotlistFilter: payload
+    })
+  },
+  filterMissionSlotlistRequiredDLCs({ commit }, payload) {
+    commit({
+      type: 'setMissionSlotlistRequiredDLCsFilter',
+      missionSlotlistRequiredDLCsFilter: payload
     })
   },
   generateMissionToken({ commit, dispatch }, payload) {
@@ -2822,6 +2899,9 @@ const mutations = {
 
     state.missionListFilter = filter
   },
+  setMissionListRequiredDLCsFilter(state, payload) {
+    state.missionListRequiredDLCsFilter = payload.missionListRequiredDLCsFilter
+  },
   setMissionSlotlistFilter(state, payload) {
     const filter = {}
     _.each(payload.missionSlotlistFilter, (f) => {
@@ -2829,6 +2909,9 @@ const mutations = {
     })
 
     state.missionSlotlistFilter = filter
+  },
+  setMissionSlotlistRequiredDLCsFilter(state, payload) {
+    state.missionSlotlistRequiredDLCsFilter = payload.missionSlotlistRequiredDLCsFilter
   },
   setMissionSlotRegistrations(state, payload) {
     state.missionSlotRegistrations = payload.registrations

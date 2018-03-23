@@ -66,6 +66,35 @@
               </b-form-fieldset>
             </div>
           </div>
+          <span class="text-success" style="font-size: 1rem; font-weight: 400; line-height: 1.5">{{ $t('mission.requiredDLCs') }}</span>
+          <div class="row">
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.apex"><i class="icon-arma-3-apex-dlc"></i> {{ $t('mission.requiredDLCs.apex') }}</b-form-checkbox>
+            </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.helicopters"><i class="icon-arma-3-helicopters-dlc"></i> {{ $t('mission.requiredDLCs.helicopters') }}</b-form-checkbox>
+            </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.jets"><i class="icon-arma-3-jets-dlc"></i> {{ $t('mission.requiredDLCs.jets') }}</b-form-checkbox>
+            </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.karts"><i class="icon-arma-3-karts-dlc"></i> {{ $t('mission.requiredDLCs.karts') }}</b-form-checkbox>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.lawsofwar"><i class="icon-arma-3-laws-of-war-dlc"></i> {{ $t('mission.requiredDLCs.laws-of-war') }}</b-form-checkbox>
+            </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.marksmen"><i class="icon-arma-3-marksmen-dlc"></i> {{ $t('mission.requiredDLCs.marksmen') }}</b-form-checkbox>
+            </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.tacops"><i class="icon-arma-3-tac-ops-dlc"></i> {{ $t('mission.requiredDLCs.tac-ops') }}</b-form-checkbox>
+            </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.tanks"><i class="icon-arma-3-tanks-dlc"></i> {{ $t('mission.requiredDLCs.tanks') }}</b-form-checkbox>
+            </div>
+          </div>
           <div class="row">
             <div class="col">
               <b-form-fieldset :label="$t('mission.slot.moveAfter')" state="success" :description="$t('mission.slot.moveAfter.description')">
@@ -106,6 +135,16 @@ export default {
         description: null,
         title: null,
         externalAssignee: null
+      },
+      missionSlotEditRequiredDLCs: {
+        apex: false,
+        helicopters: false,
+        jets: false,
+        karts: false,
+        lawsofwar: false,
+        marksmen: false,
+        tacops: false,
+        tanks: false
       },
       missionSlotEditDetailedDescriptionEditorOptions: {
         modules: {
@@ -218,6 +257,17 @@ export default {
         externalAssignee: this.missionSlotDetails.externalAssignee
       }
 
+      this.missionSlotEditRequiredDLCs = {
+        apex: this.hasSlotRequiredDLC('apex'),
+        helicopters: this.hasSlotRequiredDLC('helicopters'),
+        jets: this.hasSlotRequiredDLC('jets'),
+        karts: this.hasSlotRequiredDLC('karts'),
+        lawsofwar: this.hasSlotRequiredDLC('laws-of-war'),
+        marksmen: this.hasSlotRequiredDLC('marksmen'),
+        tacops: this.hasSlotRequiredDLC('tac-ops'),
+        tanks: this.hasSlotRequiredDLC('tanks')
+      }
+
       this.missionSlotEditMoveAfter = this.missionSlotDetails.orderNumber - 1
     },
     editMissionSlot() {
@@ -236,6 +286,21 @@ export default {
       if (_.isString(this.missionSlotEditData.externalAssignee) && _.isEmpty(this.missionSlotEditData.externalAssignee)) {
         this.missionSlotEditData.externalAssignee = null
       }
+
+      const updatedMissionSlotRequiredDLCs = []
+      _.each(_.keys(this.missionSlotEditRequiredDLCs), (dlc) => {
+        if (!this.missionSlotEditRequiredDLCs[dlc]) {
+          return
+        }
+
+        if (dlc === 'lawsofwar') {
+          updatedMissionSlotRequiredDLCs.push('laws-of-war')
+        } else if (dlc === 'tacops') {
+          updatedMissionSlotRequiredDLCs.push('tac-ops')
+        } else {
+          updatedMissionSlotRequiredDLCs.push(dlc)
+        }
+      })
 
       const updatedMissionSlotDetails = {}
       _.each(this.missionSlotEditData, (value, key) => {
@@ -259,6 +324,10 @@ export default {
         updatedMissionSlotDetails.moveAfter = _.max([this.missionSlotEditMoveAfter, 0])
       }
 
+      if (!_.isEqual(this.missionSlotDetails.requiredDLCs, updatedMissionSlotRequiredDLCs)) {
+        updatedMissionSlotDetails.requiredDLCs = updatedMissionSlotRequiredDLCs
+      }
+
       this.hideMissionSlotEditModal()
 
       if (_.isEmpty(_.keys(updatedMissionSlotDetails))) {
@@ -272,6 +341,17 @@ export default {
         slotOrderNumber: this.missionSlotDetails.orderNumber,
         slotTitle: this.missionSlotDetails.title
       })
+    },
+    hasSlotRequiredDLC(dlc) {
+      if (_.isNil(this.missionSlotDetails)) {
+        return false
+      }
+
+      if (_.isEmpty(this.missionSlotDetails.requiredDLCs)) {
+        return false
+      }
+
+      return (_.indexOf(this.missionSlotDetails.requiredDLCs, dlc) >= 0)
     },
     hideMissionSlotEditModal() {
       this.$refs.missionSlotEditModal.hide()

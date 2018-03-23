@@ -41,8 +41,8 @@
               </b-form-fieldset>
             </div>
             <div class="col">
-              <b-form-fieldset :label="$t('mission.slot.autoAssignable.slot')" state="success" :description="$t('mission.slot.autoAssignable.description')">
-                <b-form-checkbox v-model="missionSlotCreateData.autoAssignable"></b-form-checkbox>
+              <b-form-fieldset :label="$t('mission.slot.autoAssignable.slot')" state="success" :description="$t('mission.slot.autoAssignable.description')" :feedback="missionSlotCreateAutoAssignableFeedback">
+                <b-form-checkbox v-model="missionSlotCreateData.autoAssignable" :disabled="areMissionSlotAutoAssignable"></b-form-checkbox>
               </b-form-fieldset>
             </div>
           </div>
@@ -148,6 +148,23 @@ export default {
     }
   },
   computed: {
+    areMissionSlotAutoAssignable() {
+      if (_.isNil(this.missionDetails)) {
+        return false
+      }
+
+      return this.missionDetails.slotsAutoAssignable
+    },
+    missionDetails() {
+      return this.$store.getters.missionDetails
+    },
+    missionSlotCreateAutoAssignableFeedback() {
+      if (!this.areMissionSlotAutoAssignable) {
+        return ''
+      }
+
+      return this.$t('mission.feedback.slot.autoAssignable.mission')
+    },
     missionSlotCreateInsertAfterOptions() {
       const options = [{
         value: 0,
@@ -186,7 +203,7 @@ export default {
   methods: {
     clearMissionSlotCreateData() {
       this.missionSlotCreateData = {
-        autoAssignable: false,
+        autoAssignable: this.areMissionSlotAutoAssignable,
         detailedDescription: null,
         difficulty: 0,
         insertAfter: _.isNil(this.missionSlotGroupDetails) || _.isNil(this.missionSlotGroupDetails.slots) || _.isEmpty(this.missionSlotGroupDetails.slots) ? 0 : _.last(this.missionSlotGroupDetails.slots).orderNumber,

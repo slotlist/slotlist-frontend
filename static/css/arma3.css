@@ -1,0 +1,67 @@
+/**
+ * The ArmA 3 font (used for displaying DLC icons in mission slotlists)
+ * is sole property of Bohemia Interactive a.s. and was taken from https://arma3.com.
+ * The ArmA 3 font, ArmA 3 and all other related assets are trademarks or
+ * registered trademarks of Bohemia Interactive a.s.
+ */
+
+[class*=" icon-"]:before,
+[class^=icon-]:before,
+[data-icon]:before {
+    font-family: arma-3 !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-variant: normal !important;
+    display: inline-block;
+    text-decoration: inherit;
+    text-align: center;
+    line-height: inherit;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-transform: none !important;
+    vertical-align: middle
+}
+
+@font-face {
+    font-family: arma-3;
+    src: url(/fonts/arma3/arma-3.eot);
+    src: url(/fonts/arma3/arma-3.eot#iefix) format("embedded-opentype"), url(/fonts/arma3/arma-3.woff) format("woff"), url(/fonts/arma3/arma-3.ttf) format("truetype"), url(/fonts/arma3/arma-3.svg#arma-3) format("svg");
+    font-weight: 400;
+    font-style: normal
+}
+
+[data-icon]:before {
+    content: attr(data-icon)
+}
+
+.icon-arma-3-apex-dlc:before {
+    content: "\61"
+}
+
+.icon-arma-3-helicopters-dlc:before {
+    content: "\62";
+}
+
+.icon-arma-3-jets-dlc:before {
+    content: "\63"
+}
+
+.icon-arma-3-karts-dlc:before {
+    content: "\64"
+}
+
+.icon-arma-3-laws-of-war-dlc:before {
+  content: "\67"
+}
+
+.icon-arma-3-marksmen-dlc:before {
+    content: "\66"
+}
+
+.icon-arma-3-tac-ops-dlc:before {
+    content: "\69"
+}
+
+.icon-arma-3-tanks-dlc:before {
+    content: "\6a"
+}

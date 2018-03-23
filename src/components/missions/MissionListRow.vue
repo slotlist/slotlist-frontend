@@ -3,9 +3,12 @@
     <td>{{ formatDateTime(mission.startTime) }}</td>
     <td :class="{'text-primary': isMissionEditor}">
       <b-popover v-if="isMissionEditor" :content="$t('mission.list.isMissionEditor')" :triggers="['hover']">
-        {{ mission.title }}
+        <span>
+          {{ mission.title }}
+          <i v-for="requiredDLC in missionRequiredDLCs" :key="requiredDLC" :class="requiredDLC"></i>
+        </span>
       </b-popover>
-      <span v-else>{{ mission.title }}</span>
+      <span v-else>{{ mission.title }} <i v-for="requiredDLC in missionRequiredDLCs" :key="requiredDLC" :class="requiredDLC"></i></span>
       </td>
     <td>
       <router-link :to="{name: 'userDetails', params: {userUid: mission.creator.uid}}">{{ formatUserWithTag(mission.creator) }}</router-link>
@@ -52,6 +55,15 @@ export default {
       }
 
       return !_.isNil(user.community)
+    },
+    missionRequiredDLCs() {
+      if (_.isEmpty(this.mission.requiredDLCs)) {
+        return []
+      }
+
+      return _.map(this.mission.requiredDLCs, (requiredDLC) => {
+        return `icon-arma-3-${requiredDLC.toLowerCase()}-dlc`
+      })
     }
   }
 }

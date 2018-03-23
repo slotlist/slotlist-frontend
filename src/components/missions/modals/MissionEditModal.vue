@@ -138,6 +138,42 @@
               </b-form-fieldset>
             </div>
             <div class="col text-center">
+              <b-form-fieldset :label="$t('mission.slotsAutoAssignable')" state="success" :description="$t('mission.slotsAutoAssignable.description')">
+                <b-form-checkbox v-model="missionEditData.slotsAutoAssignable"></b-form-checkbox>
+              </b-form-fieldset>
+            </div>
+          </div>
+          <span class="text-success" style="font-size: 1rem; font-weight: 400; line-height: 1.5">{{ $t('mission.requiredDLCs') }}</span>
+          <div class="row">
+            <div class="col">
+              <b-form-checkbox v-model="missionEditRequiredDLCs.apex"><i class="icon-arma-3-apex-dlc"></i> {{ $t('mission.requiredDLCs.apex') }}</b-form-checkbox>
+            </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionEditRequiredDLCs.helicopters"><i class="icon-arma-3-helicopters-dlc"></i> {{ $t('mission.requiredDLCs.helicopters') }}</b-form-checkbox>
+            </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionEditRequiredDLCs.jets"><i class="icon-arma-3-jets-dlc"></i> {{ $t('mission.requiredDLCs.jets') }}</b-form-checkbox>
+            </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionEditRequiredDLCs.karts"><i class="icon-arma-3-karts-dlc"></i> {{ $t('mission.requiredDLCs.karts') }}</b-form-checkbox>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <b-form-checkbox v-model="missionEditRequiredDLCs.lawsofwar"><i class="icon-arma-3-laws-of-war-dlc"></i> {{ $t('mission.requiredDLCs.laws-of-war') }}</b-form-checkbox>
+            </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionEditRequiredDLCs.marksmen"><i class="icon-arma-3-marksmen-dlc"></i> {{ $t('mission.requiredDLCs.marksmen') }}</b-form-checkbox>
+            </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionEditRequiredDLCs.tacops"><i class="icon-arma-3-tac-ops-dlc"></i> {{ $t('mission.requiredDLCs.tac-ops') }}</b-form-checkbox>
+            </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionEditRequiredDLCs.tanks"><i class="icon-arma-3-tanks-dlc"></i> {{ $t('mission.requiredDLCs.tanks') }}</b-form-checkbox>
+            </div>
+          </div>
+          <div class="row text-center">
+            <div class="col">
               <b-form-fieldset :label="$t('notification.suppress')" state="success" :description="$t('notification.suppress.description')">
                 <b-form-checkbox v-model="missionEditSuppressNotifications"></b-form-checkbox>
               </b-form-fieldset>
@@ -179,6 +215,7 @@ export default {
         },
         rules: null,
         description: null,
+        slotsAutoAssignable: false,
         slottingTime: null,
         startTime: null,
         techSupport: null,
@@ -193,6 +230,16 @@ export default {
       },
       missionEditCommunityGameServersSelected: null,
       missionEditCommunityVoiceCommsSelected: null,
+      missionEditRequiredDLCs: {
+        apex: false,
+        helicopters: false,
+        jets: false,
+        karts: false,
+        lawsofwar: false,
+        marksmen: false,
+        tacops: false,
+        tanks: false
+      },
       missionEditSuppressNotifications: false,
       missionEditDetailedDescriptionQuillEditorOptions: {
         modules: {
@@ -509,6 +556,21 @@ export default {
         this.missionEditData.techSupport = null
       }
 
+      const updatedMissionRequiredDLCs = []
+      _.each(_.keys(this.missionEditRequiredDLCs), (dlc) => {
+        if (!this.missionEditRequiredDLCs[dlc]) {
+          return
+        }
+
+        if (dlc === 'lawsofwar') {
+          updatedMissionRequiredDLCs.push('laws-of-war')
+        } else if (dlc === 'tacops') {
+          updatedMissionRequiredDLCs.push('tac-ops')
+        } else {
+          updatedMissionRequiredDLCs.push(dlc)
+        }
+      })
+
       const updatedMissionDetails = {}
       _.each(this.missionEditData, (value, key) => {
         if (!_.isEqual(value, this.missionDetails[key])) {
@@ -549,6 +611,10 @@ export default {
         }
       })
 
+      if (!_.isEqual(this.missionDetails.requiredDLCs, updatedMissionRequiredDLCs)) {
+        updatedMissionDetails.requiredDLCs = updatedMissionRequiredDLCs
+      }
+
       this.hideMissionEditModal()
 
       if (_.isEmpty(_.keys(updatedMissionDetails))) {
@@ -561,6 +627,17 @@ export default {
         missionTitle: this.missionDetails.title,
         suppressNotifications: this.missionEditSuppressNotifications
       })
+    },
+    hasMissionRequiredDLC(dlc) {
+      if (_.isNil(this.missionDetails)) {
+        return false
+      }
+
+      if (_.isEmpty(this.missionDetails.requiredDLCs)) {
+        return false
+      }
+
+      return (_.indexOf(this.missionDetails.requiredDLCs, dlc) >= 0)
     },
     hideMissionEditModal() {
       this.$refs.missionEditModal.hide()
@@ -582,6 +659,7 @@ export default {
           name: _.isNil(this.missionDetails.gameServer) ? null : this.missionDetails.gameServer.name,
           password: _.isNil(this.missionDetails.gameServer) ? null : this.missionDetails.gameServer.password,
         },
+        slotsAutoAssignable: this.missionDetails.slotsAutoAssignable,
         slottingTime: moment(this.missionDetails.slottingTime).format('Y-MM-DD HH:mm'),
         startTime: moment(this.missionDetails.startTime).format('Y-MM-DD HH:mm'),
         techSupport: this.missionDetails.techSupport,
@@ -593,6 +671,17 @@ export default {
           name: _.isNil(this.missionDetails.voiceComms) ? null : this.missionDetails.voiceComms.name,
           password: _.isNil(this.missionDetails.voiceComms) ? null : this.missionDetails.voiceComms.password,
         }
+      }
+
+      this.missionEditRequiredDLCs = {
+        apex: this.hasMissionRequiredDLC('apex'),
+        helicopters: this.hasMissionRequiredDLC('helicopters'),
+        jets: this.hasMissionRequiredDLC('jets'),
+        karts: this.hasMissionRequiredDLC('karts'),
+        lawsofwar: this.hasMissionRequiredDLC('laws-of-war'),
+        marksmen: this.hasMissionRequiredDLC('marksmen'),
+        tacops: this.hasMissionRequiredDLC('tac-ops'),
+        tanks: this.hasMissionRequiredDLC('tanks')
       }
 
       this.missionEditCommunityGameServersSelected = null

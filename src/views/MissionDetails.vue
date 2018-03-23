@@ -24,6 +24,15 @@
             </p>
           </div>
           <div class="col">
+            <h5>{{ $t('mission.requiredDLCs') }}</h5>
+            <p>
+              <span v-if="missionRequiredDLCs && missionRequiredDLCs.length > 0">
+                <i v-for="requiredDLC in missionRequiredDLCs" :key="requiredDLC" :class="requiredDLC" style="font-size: large"></i>
+              </span>
+              <span v-else class="text-muted font-italic">{{ $t('mission.requiredDLCs.none') }}</span>
+            </p>
+          </div>
+          <div class="col">
             <h5>{{ $t('mission.visibility') }}</h5>
             <p v-html="formattedMissionVisibility"></p>
           </div>
@@ -324,6 +333,32 @@
                   {{ $t('mission.slotlist.filter.open') }}
                 </b-form-checkbox>
               </div>
+              <div class="group" id="missionSlotlistRequiredDLCsFilter" v-if="haveMissionSlotsAnyRequiredDLCs || (missionSlotlistRequiredDLCsFilter && missionSlotlistRequiredDLCsFilter.length > 0)">
+                <b-form-checkbox v-model="missionSlotlistRequiredDLCsFilter" name="apex" value="apex">
+                  <i class="icon-arma-3-apex-dlc"></i> {{ $t('mission.requiredDLCs.apex') }}
+                </b-form-checkbox>
+                <b-form-checkbox v-model="missionSlotlistRequiredDLCsFilter" name="helicopters" value="helicopters">
+                  <i class="icon-arma-3-helicopters-dlc"></i> {{ $t('mission.requiredDLCs.helicopters') }}
+                </b-form-checkbox>
+                <b-form-checkbox v-model="missionSlotlistRequiredDLCsFilter" name="jets" value="jets">
+                  <i class="icon-arma-3-jets-dlc"></i> {{ $t('mission.requiredDLCs.jets') }}
+                </b-form-checkbox>
+                <b-form-checkbox v-model="missionSlotlistRequiredDLCsFilter" name="karts" value="karts">
+                  <i class="icon-arma-3-karts-dlc"></i> {{ $t('mission.requiredDLCs.karts') }}
+                </b-form-checkbox>
+                <b-form-checkbox v-model="missionSlotlistRequiredDLCsFilter" name="laws-of-war" value="laws-of-war">
+                  <i class="icon-arma-3-laws-of-war-dlc"></i> {{ $t('mission.requiredDLCs.laws-of-war') }}
+                </b-form-checkbox>
+                <b-form-checkbox v-model="missionSlotlistRequiredDLCsFilter" name="marksmen" value="marksmen">
+                  <i class="icon-arma-3-marksmen-dlc"></i> {{ $t('mission.requiredDLCs.marksmen') }}
+                </b-form-checkbox>
+                <b-form-checkbox v-model="missionSlotlistRequiredDLCsFilter" name="tac-ops" value="tac-ops">
+                  <i class="icon-arma-3-tac-ops-dlc"></i> {{ $t('mission.requiredDLCs.tac-ops') }}
+                </b-form-checkbox>
+                <b-form-checkbox v-model="missionSlotlistRequiredDLCsFilter" name="tanks" value="tanks">
+                  <i class="icon-arma-3-tanks-dlc"></i> {{ $t('mission.requiredDLCs.tanks') }}
+                </b-form-checkbox>
+              </div>
             </b-form-group>
           </div>
           <mission-slotlist></mission-slotlist>
@@ -403,6 +438,7 @@ export default {
   },
   created: function() {
     this.missionSlotlistFilter = this.$store.getters.missionSlotlistFilter
+    this.missionSlotlistRequiredDLCsFilter = this.$store.getters.missionSlotlistRequiredDLCsFilter
   },
   beforeDestroy: function() {
     this.$store.dispatch('clearMissionDetails')
@@ -422,6 +458,7 @@ export default {
         { text: this.$t('mission.repository.kind.other'), value: 'other' }
       ],
       missionSlotlistFilter: [],
+      missionSlotlistRequiredDLCsFilter: [],
       communityRepositoriesSelected: null,
       missionCollapsedDescriptionExtended: false,
       missionRepositoriesExtended: false
@@ -470,6 +507,17 @@ export default {
       }
 
       return moment().isAfter(moment(this.missionDetails.endTime))
+    },
+    haveMissionSlotsAnyRequiredDLCs() {
+      if (_.isNil(this.missionSlotGroups)) {
+        return false
+      }
+
+      return _.some(this.missionSlotGroups, (slotGroup) => {
+        return _.some(slotGroup.slots, (slot) => {
+          return !_.isEmpty(slot.requiredDLCs)
+        })
+      })
     },
     isCommunityMember() {
       if (_.isNil(this.user)) {
@@ -565,6 +613,22 @@ export default {
       }
 
       return this.isMissionRepositoryUrlValid ? 'success' : 'danger'
+    },
+    missionRequiredDLCs() {
+      if (_.isNil(this.missionDetails)) {
+        return []
+      }
+
+      if (_.isEmpty(this.missionDetails.requiredDLCs)) {
+        return []
+      }
+
+      return _.map(this.missionDetails.requiredDLCs, (requiredDLC) => {
+        return `icon-arma-3-${requiredDLC.toLowerCase()}-dlc`
+      })
+    },
+    missionSlotGroups() {
+      return this.$store.getters.missionSlotGroups
     },
     optionalRules() {
       return this.missionDetails.rules || `<div class='text-muted font-italic'>${this.$t('misc.notSpecified')}</div>`
@@ -694,6 +758,9 @@ export default {
   watch: {
     missionSlotlistFilter(val) {
       this.$store.dispatch('filterMissionSlotlist', val)
+    },
+    missionSlotlistRequiredDLCsFilter(val) {
+      this.$store.dispatch('filterMissionSlotlistRequiredDLCs', val)
     },
     communityRepositoriesSelected(val) {
       const repository = this.communityRepositories[val];
