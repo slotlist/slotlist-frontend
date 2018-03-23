@@ -18,6 +18,32 @@
             {{ $t('mission.list.filter.registered') }}
           </b-form-checkbox>
         </div>
+        <div role="group" id="missionListRequiredDLCsFilter" v-if="haveMissionsAnyRequiredDLCs || (missionListRequiredDLCsFilter && missionListRequiredDLCsFilter.length > 0)">
+          <b-form-checkbox v-model="missionListRequiredDLCsFilter" name="apex" value="apex">
+            <i class="icon-arma-3-apex-dlc"></i> {{ $t('mission.requiredDLCs.apex') }}
+          </b-form-checkbox>
+          <b-form-checkbox v-model="missionListRequiredDLCsFilter" name="helicopters" value="helicopters">
+            <i class="icon-arma-3-helicopters-dlc"></i> {{ $t('mission.requiredDLCs.helicopters') }}
+          </b-form-checkbox>
+          <b-form-checkbox v-model="missionListRequiredDLCsFilter" name="jets" value="jets">
+            <i class="icon-arma-3-jets-dlc"></i> {{ $t('mission.requiredDLCs.jets') }}
+          </b-form-checkbox>
+          <b-form-checkbox v-model="missionListRequiredDLCsFilter" name="karts" value="karts">
+            <i class="icon-arma-3-karts-dlc"></i> {{ $t('mission.requiredDLCs.karts') }}
+          </b-form-checkbox>
+          <b-form-checkbox v-model="missionListRequiredDLCsFilter" name="laws-of-war" value="laws-of-war">
+            <i class="icon-arma-3-laws-of-war-dlc"></i> {{ $t('mission.requiredDLCs.laws-of-war') }}
+          </b-form-checkbox>
+          <b-form-checkbox v-model="missionListRequiredDLCsFilter" name="marksmen" value="marksmen">
+            <i class="icon-arma-3-marksmen-dlc"></i> {{ $t('mission.requiredDLCs.marksmen') }}
+          </b-form-checkbox>
+          <b-form-checkbox v-model="missionListRequiredDLCsFilter" name="tac-ops" value="tac-ops">
+            <i class="icon-arma-3-tac-ops-dlc"></i> {{ $t('mission.requiredDLCs.tac-ops') }}
+          </b-form-checkbox>
+          <b-form-checkbox v-model="missionListRequiredDLCsFilter" name="tanks" value="tanks">
+            <i class="icon-arma-3-tanks-dlc"></i> {{ $t('mission.requiredDLCs.tanks') }}
+          </b-form-checkbox>
+        </div>
       </b-form-group>
     </div>
     <div class="text-center">
@@ -56,15 +82,26 @@ export default {
   },
   created: function() {
     this.missionListFilter = this.$store.getters.missionListFilter
+    this.missionListRequiredDLCsFilter = this.$store.getters.missionListRequiredDLCsFilter
 
     utils.setTitle(this.$t('nav.missions'))
   },
   data() {
     return {
-      missionListFilter: []
+      missionListFilter: [],
+      missionListRequiredDLCsFilter: []
     }
   },
   computed: {
+    haveMissionsAnyRequiredDLCs() {
+      if (_.isNil(this.missions)) {
+        return false
+      }
+
+      return _.some(this.missions, (mission) => {
+        return !_.isEmpty(mission.requiredDLCs)
+      })
+    },
     loggedIn() {
       return this.$store.getters.loggedIn
     },
@@ -92,6 +129,9 @@ export default {
   watch: {
     missionListFilter(val) {
       this.$store.dispatch('filterMissionList', val)
+    },
+    missionListRequiredDLCsFilter(val) {
+      this.$store.dispatch('filterMissionListRequiredDLCs', val)
     }
   }
 }
