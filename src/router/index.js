@@ -12,6 +12,8 @@ import MissionSlotTemplateList from '../views/MissionSlotTemplateList'
 import MissionSlotTemplateDetails from '../views/MissionSlotTemplateDetails'
 import MissionSlotTemplateCreator from '../views/MissionSlotTemplateCreator'
 import NotificationList from '../views/NotificationList'
+import AnnouncementList from '../views/AnnouncementList'
+import AnnouncementCreator from '../views/AnnouncementCreator'
 import UserDetails from '../views/UserDetails'
 import UserList from '../views/UserList'
 import Account from '../views/Account'
@@ -91,6 +93,27 @@ export const router = new Router({
       component: NotificationList,
       meta: {
         authenticated: true // only logged in users can access this page
+      }
+    },
+    {
+      path: '/announcements',
+      name: 'announcementList',
+      component: AnnouncementList
+    },
+    {
+      path: '/announcement-creator',
+      name: 'announcementCreator',
+      component: AnnouncementCreator,
+      meta: {
+        authenticated: true // only logged in users can access this page
+      },
+      beforeEnter: (to, from, next) => {
+        // Check user permissions, only allow access to admins
+        if (!Vue.acl.can(['admin.announcement'])) {
+          return next(false)
+        }
+
+        next()
       }
     },
     {

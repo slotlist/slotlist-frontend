@@ -39,6 +39,11 @@
               <i class="fa fa-bell" aria-hidden="true"></i> {{ unseenNotificationCount }} {{ $t('nav.notifications') }}
             </router-link>
           </li>
+          <li class="nav-item">
+            <router-link class="nav-link" :to="{name:'announcementList'}">
+              <i class="fa fa-bullhorn" aria-hidden="true"></i> {{ $t('nav.announcements') }}
+            </router-link>
+          </li>
           <li class="nav-item" v-if="loggedIn">
             <router-link class="nav-link" :to="{name:'account'}">
               <i class="fa fa-user" aria-hidden="true"></i> {{ $t('nav.account') }}
