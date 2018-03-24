@@ -7,7 +7,7 @@
       </b-collapse>
     </td>
     <td>
-      <span :class="{'text-muted': isAnnouncementNotVisibleYet, 'font-italic': isAnnouncementNotVisibleYet}">{{ announcement.title }}</span>
+      <span :class="announcementTitleClass">{{ announcement.title }}</span>
       <b-collapse :id="announcementCollapseId" class="html ql-editor" style="padding: 0px;" v-html="announcement.content" :visible="isAnnouncementUidInQuery"></b-collapse>
     </td>
     <td class="text-center">
@@ -39,6 +39,20 @@ export default {
   computed: {
     announcementCollapseId() {
       return `announcementCollapse_${this.announcement.uid}`
+    },
+    announcementTitleClass() {
+      if (!_.isNil(this.announcement.visibleFrom) && moment(this.announcement.visibleFrom).isAfter(moment())) {
+        return 'text-muted font-italic'
+      }
+
+      switch (this.announcement.announcementType) {
+        case 'generic':
+          return 'text-info'
+        case 'update':
+          return 'text-primary'
+        default:
+          return ''
+      }
     },
     isAnnouncementAdmin() {
       return this.$acl.can(['admin.announcement'])

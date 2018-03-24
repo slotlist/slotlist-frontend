@@ -25,6 +25,9 @@ export default {
   computed: {
     notificationTarget() {
       switch (this.notification.notificationType) {
+        case 'announcement.generic':
+        case 'announcement.update':
+          return {name: 'announcementList', query: {uid: this.notification.data.announcementUid}}
         case 'community.application.accepted':
         case 'community.application.denied':
         case 'community.application.new':
