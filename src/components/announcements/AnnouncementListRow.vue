@@ -7,7 +7,7 @@
       </b-collapse>
     </td>
     <td>
-      {{ announcement.title }}
+      <span :class="{'text-muted': isAnnouncementNotVisibleYet, 'font-italic': isAnnouncementNotVisibleYet}">{{ announcement.title }}</span>
       <b-collapse :id="announcementCollapseId" class="html ql-editor" style="padding: 0px;" v-html="announcement.content" :visible="isAnnouncementUidInQuery"></b-collapse>
     </td>
     <td class="text-center">
@@ -29,6 +29,9 @@
 </template>
 
 <script>
+import * as _ from 'lodash';
+import moment from 'moment-timezone'
+
 export default {
   props: [
     'announcement'
@@ -39,6 +42,13 @@ export default {
     },
     isAnnouncementAdmin() {
       return this.$acl.can(['admin.announcement'])
+    },
+    isAnnouncementNotVisibleYet() {
+      if (_.isNil(this.announcement.visibleFrom)) {
+        return false
+      }
+
+      return moment(this.announcement.visibleFrom).isAfter(moment())
     },
     isAnnouncementUidInQuery() {
       return this.$route.query.uid === this.announcement.uid

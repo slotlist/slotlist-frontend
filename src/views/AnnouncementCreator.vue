@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import * as _ from 'lodash'
 import moment from 'moment-timezone'
 import utils from '../utils'
 
@@ -55,10 +56,10 @@ export default {
   data() {
     return {
       announcementCreateData: {
+        announcementType: 'generic',
         content: null,
         sendNotifications: true,
         title: null,
-        announcementType: 'generic',
         visibleFrom: null
       },
       announcementCreateAnnouncementTypeOptions: [
@@ -148,7 +149,15 @@ export default {
         this.announcementCreateData.visibleFrom = null
       }
 
-      this.$store.dispatch('createAnnouncement', { announcementDetails: this.announcementCreateData })
+      const announcementDetails = {
+        announcementType: this.announcementCreateData.announcementType,
+        content: this.announcementCreateData.content,
+        sendNotifications: this.announcementCreateData.sendNotifications,
+        title: this.announcementCreateData.title,
+        visibleFrom: _.isNil(this.announcementCreateData.visibleFrom) ? null : moment(this.announcementCreateData.visibleFrom).utc().format()
+      }
+
+      this.$store.dispatch('createAnnouncement', { announcementDetails })
     }
   }
 }

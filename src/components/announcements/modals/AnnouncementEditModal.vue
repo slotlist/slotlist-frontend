@@ -43,6 +43,7 @@
 
 <script>
 import * as _ from 'lodash'
+import moment from 'moment-timezone'
 
 export default {
   data() {
@@ -126,7 +127,19 @@ export default {
       const updatedAnnouncementDetails = {}
       _.each(this.announcementEditData, (value, key) => {
         if (!_.isEqual(value, this.announcementDetails[key])) {
-          updatedAnnouncementDetails[key] = value
+          let skip = false
+
+          if (key.toLowerCase() === 'visiblefrom') {
+            value = moment(value).utc().format()
+
+            if (moment(value).utc().isSame(moment(this.announcementDetails[key]).utc())) {
+              skip = true
+            }
+          }
+
+          if (!skip) {
+            updatedMissionDetails[key] = value
+          }
         }
       })
 
