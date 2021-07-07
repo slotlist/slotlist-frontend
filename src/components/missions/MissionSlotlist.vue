@@ -37,14 +37,19 @@
     </div>
     <br v-if="hasMissionAnyRequiredDLCs">
     <div v-if="hasMissionAnyRequiredDLCs" class="text-center small text-muted">
-      <i class="icon-arma-3-apex-dlc"></i> {{ $t('mission.requiredDLCs.apex') }} |
-      <i class="icon-arma-3-helicopters-dlc"></i> {{ $t('mission.requiredDLCs.helicopters') }} |
-      <i class="icon-arma-3-jets-dlc"></i> {{ $t('mission.requiredDLCs.jets') }} |
-      <i class="icon-arma-3-karts-dlc"></i> {{ $t('mission.requiredDLCs.karts') }} |
-      <i class="icon-arma-3-laws-of-war-dlc"></i> {{ $t('mission.requiredDLCs.laws-of-war') }} |
-      <i class="icon-arma-3-marksmen-dlc"></i> {{ $t('mission.requiredDLCs.marksmen') }} |
-      <i class="icon-arma-3-tac-ops-dlc"></i> {{ $t('mission.requiredDLCs.tac-ops') }} |
-      <i class="icon-arma-3-tanks-dlc"></i> {{ $t('mission.requiredDLCs.tanks') }}
+      <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/aow.png" width="12px" alt="Art of War" /> {{ $t('mission.requiredDLCs.aow') }} | 
+      <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/apex.png" width="12px" alt="Apex" /> {{ $t('mission.requiredDLCs.apex') }} | 
+      <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/contact.png" width="12px" alt="Contact" /> {{ $t('mission.requiredDLCs.contact') }} | 
+      <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/csla.png" width="12px" alt="CSLA Iron Curtain" /> {{ $t('mission.requiredDLCs.csla') }} | 
+      <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/gm.png" width="12px" alt="Global Mobilization" /> {{ $t('mission.requiredDLCs.gm') }} | 
+      <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/helicopters.png" width="12px" alt="Helicopters" /> {{ $t('mission.requiredDLCs.helicopters') }} | 
+      <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/jets.png" width="12px" alt="Jets" /> {{ $t('mission.requiredDLCs.jets') }} | 
+      <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/karts.png" width="12px" alt="Karts" /> {{ $t('mission.requiredDLCs.karts') }} | 
+      <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/laws-of-war.png" width="12px" alt="Laws of War" /> {{ $t('mission.requiredDLCs.laws-of-war') }} | 
+      <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/marksmen.png" width="12px" alt="Marksmen" /> {{ $t('mission.requiredDLCs.marksmen') }} | 
+      <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/tac-ops.png" width="12px" alt="Tac-Ops" /> {{ $t('mission.requiredDLCs.tac-ops') }} | 
+      <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/tanks.png" width="12px" alt="Tanks" /> {{ $t('mission.requiredDLCs.tanks') }} | 
+      <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/vn.png" width="12px" alt="S.O.G. Prairie Fire" /> {{ $t('mission.requiredDLCs.vn') }}
     </div>
   </div>
 </template>

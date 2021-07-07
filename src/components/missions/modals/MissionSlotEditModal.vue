@@ -69,30 +69,51 @@
           <span class="text-success" style="font-size: 1rem; font-weight: 400; line-height: 1.5">{{ $t('mission.requiredDLCs') }}</span>
           <div class="row">
             <div class="col">
-              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.apex"><i class="icon-arma-3-apex-dlc"></i> {{ $t('mission.requiredDLCs.apex') }}</b-form-checkbox>
+              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.aow"><img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/aow.png" width="16px" alt="Art of War" /> {{ $t('mission.requiredDLCs.aow') }}</b-form-checkbox>
             </div>
             <div class="col">
-              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.helicopters"><i class="icon-arma-3-helicopters-dlc"></i> {{ $t('mission.requiredDLCs.helicopters') }}</b-form-checkbox>
+              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.apex"><img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/apex.png" width="16px" alt="Apex" /> {{ $t('mission.requiredDLCs.apex') }}</b-form-checkbox>
             </div>
             <div class="col">
-              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.jets"><i class="icon-arma-3-jets-dlc"></i> {{ $t('mission.requiredDLCs.jets') }}</b-form-checkbox>
-            </div>
-            <div class="col">
-              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.karts"><i class="icon-arma-3-karts-dlc"></i> {{ $t('mission.requiredDLCs.karts') }}</b-form-checkbox>
+              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.contact"><img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/contact.png" width="16px" alt="Contact" /> {{ $t('mission.requiredDLCs.contact') }}</b-form-checkbox>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.lawsofwar"><i class="icon-arma-3-laws-of-war-dlc"></i> {{ $t('mission.requiredDLCs.laws-of-war') }}</b-form-checkbox>
+              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.csla"><img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/csla.png" width="16px" alt="CSLA Iron Curtain" /> {{ $t('mission.requiredDLCs.csla') }}</b-form-checkbox>
             </div>
             <div class="col">
-              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.marksmen"><i class="icon-arma-3-marksmen-dlc"></i> {{ $t('mission.requiredDLCs.marksmen') }}</b-form-checkbox>
+              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.gm"><img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/gm.png" width="16px" alt="Global Mobilization" /> {{ $t('mission.requiredDLCs.gm') }}</b-form-checkbox>
             </div>
             <div class="col">
-              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.tacops"><i class="icon-arma-3-tac-ops-dlc"></i> {{ $t('mission.requiredDLCs.tac-ops') }}</b-form-checkbox>
+              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.helicopters"><img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/helicopters.png" width="16px" alt="Helicopters" /> {{ $t('mission.requiredDLCs.helicopters') }}</b-form-checkbox>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.jets"><img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/jets.png" width="16px" alt="Jets" /> {{ $t('mission.requiredDLCs.jets') }}</b-form-checkbox>
             </div>
             <div class="col">
-              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.tanks"><i class="icon-arma-3-tanks-dlc"></i> {{ $t('mission.requiredDLCs.tanks') }}</b-form-checkbox>
+              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.karts"><img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/karts.png" width="16px" alt="Karts" /> {{ $t('mission.requiredDLCs.karts') }}</b-form-checkbox>
+            </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.lawsofwar"><img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/laws-of-war.png" width="16px" alt="Laws of War" /> {{ $t('mission.requiredDLCs.laws-of-war') }}</b-form-checkbox>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.marksmen"><img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/marksmen.png" width="16px" alt="Marksmen" /> {{ $t('mission.requiredDLCs.marksmen') }}</b-form-checkbox>
+            </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.tacops"><img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/tac-ops.png" width="16px" alt="Tac-Ops" /> {{ $t('mission.requiredDLCs.tac-ops') }}</b-form-checkbox>
+            </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.tanks"><img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/tanks.png" width="16px" alt="Tanks" /> {{ $t('mission.requiredDLCs.tanks') }}</b-form-checkbox>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.vn"><img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/vn.png" width="16px" alt="S.O.G. Prairie Fire" /> {{ $t('mission.requiredDLCs.vn') }}</b-form-checkbox>
             </div>
           </div>
           <div class="row">
@@ -137,14 +158,19 @@ export default {
         externalAssignee: null
       },
       missionSlotEditRequiredDLCs: {
+        aow: false,
         apex: false,
+        contact: false,
+        csla: false,
+        gm: false,
         helicopters: false,
         jets: false,
         karts: false,
         lawsofwar: false,
         marksmen: false,
         tacops: false,
-        tanks: false
+        tanks: false,
+        vn: false
       },
       missionSlotEditDetailedDescriptionEditorOptions: {
         modules: {
@@ -258,14 +284,19 @@ export default {
       }
 
       this.missionSlotEditRequiredDLCs = {
+        aow: this.hasSlotRequiredDLC('aow'),
         apex: this.hasSlotRequiredDLC('apex'),
+        contact: this.hasSlotRequiredDLC('contact'),
+        csla: this.hasSlotRequiredDLC('csla'),
+        gm: this.hasSlotRequiredDLC('gm'),
         helicopters: this.hasSlotRequiredDLC('helicopters'),
         jets: this.hasSlotRequiredDLC('jets'),
         karts: this.hasSlotRequiredDLC('karts'),
         lawsofwar: this.hasSlotRequiredDLC('laws-of-war'),
         marksmen: this.hasSlotRequiredDLC('marksmen'),
         tacops: this.hasSlotRequiredDLC('tac-ops'),
-        tanks: this.hasSlotRequiredDLC('tanks')
+        tanks: this.hasSlotRequiredDLC('tanks'),
+        vn: this.hasSlotRequiredDLC('vn')
       }
 
       this.missionSlotEditMoveAfter = this.missionSlotDetails.orderNumber - 1
