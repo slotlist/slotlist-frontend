@@ -9,8 +9,6 @@
         <br>1140, Vienna
         <br>Austria
         <br>
-        <br>
-        <abbr title="Telephone">Tel.:</abbr> +43 676 9044010
         <br>Email:
         <a href="mailto:nick@slotlist.info?subject=slotlist.info - legal inquiry">nick@slotlist.info</a>
       </address>

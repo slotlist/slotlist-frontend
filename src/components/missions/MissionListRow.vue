@@ -5,10 +5,10 @@
       <b-popover v-if="isMissionEditor" :content="$t('mission.list.isMissionEditor')" :triggers="['hover']">
         <span>
           {{ mission.title }}
-          <i v-for="requiredDLC in missionRequiredDLCs" :key="requiredDLC" :class="requiredDLC"></i>
+          <img v-for="requiredDLC in missionRequiredDLCs" :key="requiredDLC" :src="requiredDLC" width="16px" />
         </span>
       </b-popover>
-      <span v-else>{{ mission.title }} <i v-for="requiredDLC in missionRequiredDLCs" :key="requiredDLC" :class="requiredDLC"></i></span>
+      <span v-else>{{ mission.title }} <img v-for="requiredDLC in missionRequiredDLCs" :key="requiredDLC" :src="requiredDLC" width="16px" /></span>
       </td>
     <td>
       <router-link :to="{name: 'userDetails', params: {userUid: mission.creator.uid}}">{{ formatUserWithTag(mission.creator) }}</router-link>
@@ -62,7 +62,7 @@ export default {
       }
 
       return _.map(this.mission.requiredDLCs, (requiredDLC) => {
-        return `icon-arma-3-${requiredDLC.toLowerCase()}-dlc`
+        return `https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/${requiredDLC.toLowerCase()}.png`
       })
     }
   }

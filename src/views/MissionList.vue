@@ -19,29 +19,44 @@
           </b-form-checkbox>
         </div>
         <div role="group" id="missionListRequiredDLCsFilter" v-if="haveMissionsAnyRequiredDLCs || (missionListRequiredDLCsFilter && missionListRequiredDLCsFilter.length > 0)">
+          <b-form-checkbox v-model="missionListRequiredDLCsFilter" name="aow" value="aow">
+            <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/aow.png" width="16px" alt="Art of War" /> {{ $t('mission.requiredDLCs.aow') }}
+          </b-form-checkbox>
           <b-form-checkbox v-model="missionListRequiredDLCsFilter" name="apex" value="apex">
-            <i class="icon-arma-3-apex-dlc"></i> {{ $t('mission.requiredDLCs.apex') }}
+            <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/apex.png" width="16px" alt="Apex" /> {{ $t('mission.requiredDLCs.apex') }}
+          </b-form-checkbox>
+          <b-form-checkbox v-model="missionListRequiredDLCsFilter" name="contact" value="contact">
+            <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/contact.png" width="16px" alt="Contact" /> {{ $t('mission.requiredDLCs.contact') }}
+          </b-form-checkbox>
+          <b-form-checkbox v-model="missionListRequiredDLCsFilter" name="csla" value="csla">
+            <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/csla.png" width="16px" alt="CSLA Iron Curtain" /> {{ $t('mission.requiredDLCs.csla') }}
+          </b-form-checkbox>
+          <b-form-checkbox v-model="missionListRequiredDLCsFilter" name="gm" value="gm">
+            <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/gm.png" width="16px" alt="Global Mobilization" /> {{ $t('mission.requiredDLCs.gm') }}
           </b-form-checkbox>
           <b-form-checkbox v-model="missionListRequiredDLCsFilter" name="helicopters" value="helicopters">
-            <i class="icon-arma-3-helicopters-dlc"></i> {{ $t('mission.requiredDLCs.helicopters') }}
+            <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/helicopters.png" width="16px" alt="Helicopters" /> {{ $t('mission.requiredDLCs.helicopters') }}
           </b-form-checkbox>
           <b-form-checkbox v-model="missionListRequiredDLCsFilter" name="jets" value="jets">
-            <i class="icon-arma-3-jets-dlc"></i> {{ $t('mission.requiredDLCs.jets') }}
+            <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/jets.png" width="16px" alt="Jets" /> {{ $t('mission.requiredDLCs.jets') }}
           </b-form-checkbox>
           <b-form-checkbox v-model="missionListRequiredDLCsFilter" name="karts" value="karts">
-            <i class="icon-arma-3-karts-dlc"></i> {{ $t('mission.requiredDLCs.karts') }}
+            <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/karts.png" width="16px" alt="Karts" /> {{ $t('mission.requiredDLCs.karts') }}
           </b-form-checkbox>
           <b-form-checkbox v-model="missionListRequiredDLCsFilter" name="laws-of-war" value="laws-of-war">
-            <i class="icon-arma-3-laws-of-war-dlc"></i> {{ $t('mission.requiredDLCs.laws-of-war') }}
+            <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/laws-of-war.png" width="16px" alt="Laws of War" /> {{ $t('mission.requiredDLCs.laws-of-war') }}
           </b-form-checkbox>
           <b-form-checkbox v-model="missionListRequiredDLCsFilter" name="marksmen" value="marksmen">
-            <i class="icon-arma-3-marksmen-dlc"></i> {{ $t('mission.requiredDLCs.marksmen') }}
+            <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/marksmen.png" width="16px" alt="Marksmen" /> {{ $t('mission.requiredDLCs.marksmen') }}
           </b-form-checkbox>
           <b-form-checkbox v-model="missionListRequiredDLCsFilter" name="tac-ops" value="tac-ops">
-            <i class="icon-arma-3-tac-ops-dlc"></i> {{ $t('mission.requiredDLCs.tac-ops') }}
+            <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/tac-ops.png" width="16px" alt="Tac-Ops" /> {{ $t('mission.requiredDLCs.tac-ops') }}
           </b-form-checkbox>
           <b-form-checkbox v-model="missionListRequiredDLCsFilter" name="tanks" value="tanks">
-            <i class="icon-arma-3-tanks-dlc"></i> {{ $t('mission.requiredDLCs.tanks') }}
+            <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/tanks.png" width="16px" alt="Tanks" /> {{ $t('mission.requiredDLCs.tanks') }}
+          </b-form-checkbox>
+          <b-form-checkbox v-model="missionListRequiredDLCsFilter" name="vn" value="vn">
+            <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/vn.png" width="16px" alt="S.O.G. Prairie Fire" /> {{ $t('mission.requiredDLCs.vn') }}
           </b-form-checkbox>
         </div>
       </b-form-group>
