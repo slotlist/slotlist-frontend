@@ -5,11 +5,11 @@
     <td>
       <div v-if="!missionSlotDetails.restrictedCommunity && !missionSlotDetails.reserve && !missionSlotDetails.blocked">
         <i :class="difficultyIcon" aria-hidden="true"></i> {{ missionSlotDetails.title }}
-        <img v-for="requiredDLC in missionSlotRequiredDLCs" :key="requiredDLC" :src="requiredDLC" />
+        <img v-for="requiredDLC in missionSlotRequiredDLCs" :key="requiredDLC" :src="requiredDLC" width="16px" />
       </div>
       <b-popover v-if="missionSlotDetails.restrictedCommunity || missionSlotDetails.reserve || missionSlotDetails.blocked" :content="titlePopoverContent" :triggers="['hover']">
         <span :class="titleColor" v-html="formattedTitle"></span>
-        <img v-for="requiredDLC in missionSlotRequiredDLCs" :key="requiredDLC" :src="requiredDLC" />
+        <img v-for="requiredDLC in missionSlotRequiredDLCs" :key="requiredDLC" :src="requiredDLC" width="16px" />
       </b-popover>
     </td>
     <td>
