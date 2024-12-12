@@ -110,6 +110,12 @@
             <div class="col">
               <b-form-checkbox v-model="missionSlotCreateRequiredDLCs.vn"><img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/vn.png" width="16px" alt="S.O.G. Prairie Fire" /> {{ $t('mission.requiredDLCs.vn') }}</b-form-checkbox>
             </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotCreateRequiredDLCs.ef"><img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/ef.png" width="16px" alt="Expeditionary Forces" /> {{ $t('mission.requiredDLCs.es') }}</b-form-checkbox>
+            </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotCreateRequiredDLCs.rf"><img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/rf.png" width="16px" alt="Reaction Forces" /> {{ $t('mission.requiredDLCs.es') }}</b-form-checkbox>
+            </div>
           </div>
           <div class="row">
             <div class="col">
