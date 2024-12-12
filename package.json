@@ -1,7 +1,7 @@
 {
   "name": "slotlist-frontend",
   "main": "src/index.js",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "scripts": {
     "build": "webpack --config build/webpack.prod.js",
     "dev": "cross-env node build/server.js",
