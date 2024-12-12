@@ -160,6 +160,9 @@
               <b-form-checkbox v-model="missionEditRequiredDLCs.csla"><img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/csla.png" width="16px" alt="CSLA Iron Curtain" /> {{ $t('mission.requiredDLCs.csla') }}</b-form-checkbox>
             </div>
             <div class="col">
+              <b-form-checkbox v-model="missionEditRequiredDLCs.ef"><img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/ef.png" width="16px" alt="Expeditionary Forces" /> {{ $t('mission.requiredDLCs.ef') }}</b-form-checkbox>
+            </div>
+            <div class="col">
               <b-form-checkbox v-model="missionEditRequiredDLCs.gm"><img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/gm.png" width="16px" alt="Global Mobilization" /> {{ $t('mission.requiredDLCs.gm') }}</b-form-checkbox>
             </div>
             <div class="col">
