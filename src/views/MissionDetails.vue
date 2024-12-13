@@ -346,6 +346,9 @@
                 <b-form-checkbox v-model="missionSlotlistRequiredDLCsFilter" name="csla" value="csla">
                   <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/csla.png" width="16px" alt="CSLA Iron Curtain" /> {{ $t('mission.requiredDLCs.csla') }}
                 </b-form-checkbox>
+                <b-form-checkbox v-model="missionSlotlistRequiredDLCsFilter" name="ef" value="ef">
+                  <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/ef.png" width="16px" alt="Expeditionary Forces" /> {{ $t('mission.requiredDLCs.ef') }}
+                </b-form-checkbox>
                 <b-form-checkbox v-model="missionSlotlistRequiredDLCsFilter" name="gm" value="gm">
                   <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/gm.png" width="16px" alt="Global Mobilization" /> {{ $t('mission.requiredDLCs.gm') }}
                 </b-form-checkbox>
@@ -364,6 +367,9 @@
                 <br />
                 <b-form-checkbox v-model="missionSlotlistRequiredDLCsFilter" name="marksmen" value="marksmen">
                   <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/marksmen.png" width="16px" alt="Marksmen" /> {{ $t('mission.requiredDLCs.marksmen') }}
+                </b-form-checkbox>
+                <b-form-checkbox v-model="missionSlotlistRequiredDLCsFilter" name="rf" value="rf">
+                  <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/rf.png" width="16px" alt="Reaction Forces" /> {{ $t('mission.requiredDLCs.rf') }}
                 </b-form-checkbox>
                 <b-form-checkbox v-model="missionSlotlistRequiredDLCsFilter" name="tac-ops" value="tac-ops">
                   <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/tac-ops.png" width="16px" alt="Tac-Ops" /> {{ $t('mission.requiredDLCs.tac-ops') }}
