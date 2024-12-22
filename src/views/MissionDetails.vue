@@ -358,13 +358,13 @@
                 <b-form-checkbox v-model="missionSlotlistRequiredDLCsFilter" name="jets" value="jets">
                   <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/jets.png" width="16px" alt="Jets" /> {{ $t('mission.requiredDLCs.jets') }}
                 </b-form-checkbox>
+                <br />
                 <b-form-checkbox v-model="missionSlotlistRequiredDLCsFilter" name="karts" value="karts">
                   <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/karts.png" width="16px" alt="Karts" /> {{ $t('mission.requiredDLCs.karts') }}
                 </b-form-checkbox>
                 <b-form-checkbox v-model="missionSlotlistRequiredDLCsFilter" name="laws-of-war" value="laws-of-war">
                   <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/laws-of-war.png" width="16px" alt="Laws of War" /> {{ $t('mission.requiredDLCs.laws-of-war') }}
                 </b-form-checkbox>
-                <br />
                 <b-form-checkbox v-model="missionSlotlistRequiredDLCsFilter" name="marksmen" value="marksmen">
                   <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/marksmen.png" width="16px" alt="Marksmen" /> {{ $t('mission.requiredDLCs.marksmen') }}
                 </b-form-checkbox>

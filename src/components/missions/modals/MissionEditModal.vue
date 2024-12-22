@@ -596,6 +596,8 @@ export default {
           return
         }
 
+        console.debug("update", dlc)
+
         if (dlc === 'lawsofwar') {
           updatedMissionRequiredDLCs.push('laws-of-war')
         } else if (dlc === 'tacops') {
@@ -712,12 +714,14 @@ export default {
         apex: this.hasMissionRequiredDLC('apex'),
         contact: this.hasMissionRequiredDLC('contact'),
         csla: this.hasMissionRequiredDLC('csla'),
+        ef: this.hasMissionRequiredDLC('ef'),
         gm: this.hasMissionRequiredDLC('gm'),
         helicopters: this.hasMissionRequiredDLC('helicopters'),
         jets: this.hasMissionRequiredDLC('jets'),
         karts: this.hasMissionRequiredDLC('karts'),
         lawsofwar: this.hasMissionRequiredDLC('laws-of-war'),
         marksmen: this.hasMissionRequiredDLC('marksmen'),
+        rf: this.hasMissionRequiredDLC('rf'),
         tacops: this.hasMissionRequiredDLC('tac-ops'),
         tanks: this.hasMissionRequiredDLC('tanks'),
         vn: this.hasMissionRequiredDLC('vn')
