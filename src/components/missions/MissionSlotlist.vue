@@ -45,6 +45,7 @@
       <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/gm.png" width="12px" alt="Global Mobilization" /> {{ $t('mission.requiredDLCs.gm') }} | 
       <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/helicopters.png" width="12px" alt="Helicopters" /> {{ $t('mission.requiredDLCs.helicopters') }} | 
       <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/jets.png" width="12px" alt="Jets" /> {{ $t('mission.requiredDLCs.jets') }} | 
+      <br/>
       <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/karts.png" width="12px" alt="Karts" /> {{ $t('mission.requiredDLCs.karts') }} | 
       <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/laws-of-war.png" width="12px" alt="Laws of War" /> {{ $t('mission.requiredDLCs.laws-of-war') }} | 
       <img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/marksmen.png" width="12px" alt="Marksmen" /> {{ $t('mission.requiredDLCs.marksmen') }} |
