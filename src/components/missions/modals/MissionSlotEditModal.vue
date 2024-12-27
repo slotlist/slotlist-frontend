@@ -115,6 +115,12 @@
             <div class="col">
               <b-form-checkbox v-model="missionSlotEditRequiredDLCs.vn"><img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/vn.png" width="16px" alt="S.O.G. Prairie Fire" /> {{ $t('mission.requiredDLCs.vn') }}</b-form-checkbox>
             </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.ef"><img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/ef.png" width="16px" alt="Expeditionary Forces" /> {{ $t('mission.requiredDLCs.ef') }}</b-form-checkbox>
+            </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionSlotEditRequiredDLCs.rf"><img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/rf.png" width="16px" alt="Reaction Forces" /> {{ $t('mission.requiredDLCs.rf') }}</b-form-checkbox>
+            </div>
           </div>
           <div class="row">
             <div class="col">
@@ -162,12 +168,14 @@ export default {
         apex: false,
         contact: false,
         csla: false,
+        ef: false,
         gm: false,
         helicopters: false,
         jets: false,
         karts: false,
         lawsofwar: false,
         marksmen: false,
+        rf: false,
         tacops: false,
         tanks: false,
         vn: false
@@ -288,12 +296,14 @@ export default {
         apex: this.hasSlotRequiredDLC('apex'),
         contact: this.hasSlotRequiredDLC('contact'),
         csla: this.hasSlotRequiredDLC('csla'),
+        ef: this.hasSlotRequiredDLC('ef'),
         gm: this.hasSlotRequiredDLC('gm'),
         helicopters: this.hasSlotRequiredDLC('helicopters'),
         jets: this.hasSlotRequiredDLC('jets'),
         karts: this.hasSlotRequiredDLC('karts'),
         lawsofwar: this.hasSlotRequiredDLC('laws-of-war'),
         marksmen: this.hasSlotRequiredDLC('marksmen'),
+        rf: this.hasSlotRequiredDLC('rf'),
         tacops: this.hasSlotRequiredDLC('tac-ops'),
         tanks: this.hasSlotRequiredDLC('tanks'),
         vn: this.hasSlotRequiredDLC('vn')

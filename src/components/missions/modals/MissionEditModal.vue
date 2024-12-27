@@ -192,6 +192,12 @@
             <div class="col">
               <b-form-checkbox v-model="missionEditRequiredDLCs.vn"><img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/vn.png" width="16px" alt="S.O.G. Prairie Fire" /> {{ $t('mission.requiredDLCs.vn') }}</b-form-checkbox>
             </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionEditRequiredDLCs.ef"><img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/ef.png" width="16px" alt="Expeditionary Forces" /> {{ $t('mission.requiredDLCs.ef') }}</b-form-checkbox>
+            </div>
+            <div class="col">
+              <b-form-checkbox v-model="missionEditRequiredDLCs.rf"><img src="https://slotlist-info.storage.googleapis.com/images/static/dlc-icons/rf.png" width="16px" alt="Reaction Forces" /> {{ $t('mission.requiredDLCs.rf') }}</b-form-checkbox>
+            </div>
           </div>
           <div class="row text-center">
             <div class="col">
@@ -256,12 +262,14 @@ export default {
         apex: false,
         contact: false,
         csla: false,
+        ef: false,
         gm: false,
         helicopters: false,
         jets: false,
         karts: false,
         lawsofwar: false,
         marksmen: false,
+        rf: false,
         tacops: false,
         tanks: false,
         vn: false
@@ -704,12 +712,14 @@ export default {
         apex: this.hasMissionRequiredDLC('apex'),
         contact: this.hasMissionRequiredDLC('contact'),
         csla: this.hasMissionRequiredDLC('csla'),
+        ef: this.hasMissionRequiredDLC('ef'),
         gm: this.hasMissionRequiredDLC('gm'),
         helicopters: this.hasMissionRequiredDLC('helicopters'),
         jets: this.hasMissionRequiredDLC('jets'),
         karts: this.hasMissionRequiredDLC('karts'),
         lawsofwar: this.hasMissionRequiredDLC('laws-of-war'),
         marksmen: this.hasMissionRequiredDLC('marksmen'),
+        rf: this.hasMissionRequiredDLC('rf'),
         tacops: this.hasMissionRequiredDLC('tac-ops'),
         tanks: this.hasMissionRequiredDLC('tanks'),
         vn: this.hasMissionRequiredDLC('vn')
