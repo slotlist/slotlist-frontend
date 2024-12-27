@@ -596,8 +596,6 @@ export default {
           return
         }
 
-        console.debug("update", dlc)
-
         if (dlc === 'lawsofwar') {
           updatedMissionRequiredDLCs.push('laws-of-war')
         } else if (dlc === 'tacops') {
